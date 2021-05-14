@@ -11,8 +11,8 @@ export const bitswapTheme = extendTheme({
     },
 
     fonts: {
-        body: 'Jost, system-ui, sans-serif',
-        heading: 'Jost, system-ui, sans-serif',
+        body: 'Inter, system-ui, sans-serif',
+        heading: 'Inter, system-ui, sans-serif',
     },
     colors: {
         brand: {
