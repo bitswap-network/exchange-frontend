@@ -1,4 +1,4 @@
-# Exchange Frontend 
+# Exchange Frontend
 
 ## Available Scripts
 
