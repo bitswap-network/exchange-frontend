@@ -1,12 +1,15 @@
 import React from 'react'
 import { Flex } from '@chakra-ui/react'
-import { BlueButton } from '../../components/BlueButton'
+import { Button } from '@chakra-ui/react'
+import { VscArrowRight } from 'react-icons/vsc'
 
 export function StoryBook() {
     return (
         <div>
             <Flex minH="100vh" align="center" justify="center">
-                <BlueButton text={`Let's get started!`} icon />
+                <Button rightIcon={<VscArrowRight />}>
+                    {`Let's get started!`}
+                </Button>
             </Flex>
         </div>
     )

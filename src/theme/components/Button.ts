@@ -10,6 +10,7 @@ const Button = {
             _active: {
                 bg: 'brand.200',
             },
+            color: 'white',
         },
     },
     defaultProps: {
