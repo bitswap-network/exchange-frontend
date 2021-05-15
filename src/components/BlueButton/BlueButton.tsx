@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
 import { Button } from '@chakra-ui/react'
 import { HiArrowRight } from 'react-icons/hi'
 
-export interface BlueButtonProps {
+interface BlueButtonProps {
     /** Text for button */
     text: string
     /** Determines if button should have icon */
