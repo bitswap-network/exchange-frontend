@@ -13,6 +13,7 @@ import {
     MenuItem,
     useDisclosure,
     Stack,
+    Spacer,
     Link,
     Text,
 } from '@chakra-ui/react'
@@ -50,12 +51,17 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     spacing={5}
                     display={{ base: 'none', md: 'flex' }}
                 >
-                    <Logo />
-                </HStack>
-                <Flex alignItems={'center'}>
-                    <Link to="/login">
-                        <Text color="gray.500">LOGIN</Text>
+                    <Link to="/">
+                        <Logo />
                     </Link>
+                </HStack>
+                <Flex alignItems={'center'} mr="5">
+                    <Link to="/login">
+                        <Text fontWeight="bold" size="xs" color="gray.600">
+                            LOGIN
+                        </Text>
+                    </Link>
+                    <Spacer />
                 </Flex>
             </Flex>
         </Box>
