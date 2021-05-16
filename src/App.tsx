@@ -6,6 +6,7 @@ import ChakraDemo from './pages/ChakraDemo'
 import { StoryBook } from './pages/StoryBook'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
+import { Wallet } from './pages/Wallet'
 import { bitswapTheme } from './theme'
 
 export const App = (): React.ReactElement => (
@@ -23,6 +24,9 @@ export const App = (): React.ReactElement => (
                 </Route>
                 <Route path="/login">
                     <Login />
+                </Route>
+                <Route path="/wallet">
+                    <Wallet />
                 </Route>
                 <Route path="/">
                     <Home />

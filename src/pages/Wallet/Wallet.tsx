@@ -2,18 +2,20 @@
 import React from 'react'
 import { NavBar } from '../../components/NavBar'
 import { Box, Flex, Heading, VStack } from '@chakra-ui/react'
+import { BalanceCard } from '../../components/BalanceCard'
 
-export function Home() {
+// TODO: UNFINISHED
+export function Wallet() {
     return (
         <>
             <NavBar loggedOut={false} />
             <Flex bg="background.primary">
                 <VStack>
-                    <Box p="20">
+                    <Box p="15">
                         <Heading size="lg">Wallet</Heading>
                     </Box>
-                    <Box p="20">
-                        <Heading size="lg">Wallet</Heading>
+                    <Box d="flex" mt="20" ml="120" alignItems="center">
+                        <BalanceCard />
                     </Box>
                 </VStack>
             </Flex>

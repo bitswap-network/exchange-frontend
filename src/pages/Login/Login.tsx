@@ -17,9 +17,9 @@ export function Login() {
                 <Text fontSize="xx-large" fontWeight="bold">
                     Welcome to BitSwap
                 </Text>
-                <Text fontSize="small" fontWeight="light">
+                <Box as="span" ml="2" color="gray.600" fontSize="md">
                     To continue, please login to BitClout
-                </Text>
+                </Box>
                 {/* 📌TODO: Make button wider */}
                 <BlueButton text={`   Login with BitClout   `} />
             </VStack>
