@@ -8,13 +8,18 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Wallet } from './pages/Wallet'
 import { bitswapTheme } from './theme'
+import { Playground } from './pages/Playground'
 
 export const App = (): React.ReactElement => (
     <ChakraProvider theme={bitswapTheme}>
         <BrowserRouter>
             <Switch>
+                {/* TODO: delete storybook, demo, chakrahome, playground */}
                 <Route path="/storybook">
                     <StoryBook />
+                </Route>
+                <Route path="/playground">
+                    <Playground />
                 </Route>
                 <Route exact path="/demo">
                     <ChakraDemo />
