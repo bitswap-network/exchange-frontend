@@ -42,7 +42,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
         </>
     )
 
-    // 📌 TODO: ADD LOGIN OPTION
+    // 📌 TODO: Connect all functionality
     const welcomeMarkup = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -57,9 +57,9 @@ export function NavBar({ loggedOut }: NavBarProps) {
                 </HStack>
                 <Flex alignItems={'center'} mr="5">
                     <Link to="/login">
-                        <Text fontWeight="bold" size="xs" color="gray.600">
+                        <Button fontWeight="bold" size="xs" color="gray.600">
                             LOGIN
-                        </Text>
+                        </Button>
                     </Link>
                     <Spacer />
                 </Flex>
