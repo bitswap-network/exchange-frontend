@@ -3,6 +3,7 @@ import React from 'react'
 import { NavBar } from '../../components/NavBar'
 import { Box, Flex, Heading, VStack } from '@chakra-ui/react'
 import { BalanceCard } from '../../components/BalanceCard'
+import { CryptoCard } from '../../components/CryptoCard'
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
@@ -18,6 +19,10 @@ export function Wallet(): React.ReactElement {
                         <Heading size="lg">Wallet</Heading>
                     </Box>
                     <Box d="flex" mt="20" ml="120" alignItems="center">
+                        <VStack p="15">
+                            <CryptoCard />
+                            <CryptoCard />
+                        </VStack>
                         <BalanceCard />
                     </Box>
                 </VStack>
