@@ -60,8 +60,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     spacing={5}
                     display={{ base: 'none', md: 'flex' }}
                 >
-                    <Logo />
-                    {/* LEAVING THESE AS TEXT FOR NOW until we have all the pages and proper routing */}
+                    <Logo as={Link} to="/" />
                     {LINKS.map((link) => (
                         <Text
                             textTransform="capitalize"
