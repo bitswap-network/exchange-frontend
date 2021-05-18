@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { Box, Container, ChakraProvider, Grid } from '@chakra-ui/react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
-import ChakraHome from './pages/ChakraHome'
-import ChakraDemo from './pages/ChakraDemo'
 import { StoryBook } from './pages/StoryBook'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
