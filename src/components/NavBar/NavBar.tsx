@@ -18,8 +18,9 @@ import {
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
 import { Logo } from './components/Logo'
+import { Link } from 'react-router-dom'
 
-const LINKS = ['Home', 'Orders', 'Wallet']
+const LINKS = ['home', 'orders', 'wallet']
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 
@@ -32,7 +33,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const welcomeMarkup = (
         <Box px={4}>
-            <Flex h={16} aignItems={'center'} justifyContent={'space-between'}>
+            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <HStack
                     as={'nav'}
                     spacing={5}
@@ -46,7 +47,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
 
     const loggedInMarkup = (
         <Box px={4}>
-            <Flex h={16} aignItems={'center'} justifyContent={'space-between'}>
+            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <IconButton
                     size={'lg'}
                     icon={isOpen ? <RiCloseFill /> : <HiMenu />}
@@ -62,7 +63,14 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     <Logo />
                     {/* LEAVING THESE AS TEXT FOR NOW until we have all the pages and proper routing */}
                     {LINKS.map((link) => (
-                        <Text key={link}>{link}</Text>
+                        <Text
+                            textTransform="capitalize"
+                            as={Link}
+                            to={`/${link}`}
+                            key={link}
+                        >
+                            {link}
+                        </Text>
                     ))}
                 </HStack>
                 <Flex alignItems={'center'}>
