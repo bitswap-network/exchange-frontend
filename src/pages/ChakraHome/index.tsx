@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import { Box, Code, Grid, Link, Text, VStack } from '@chakra-ui/react'
-import { ColorModeSwitcher } from '../../components/ColorModeSwitcher'
+import { ColorModeSwitcher } from '../../components/ColorModeSwitcher/ColorModeSwitcher'
 import { Logo } from '../../Logo'
 
 const ChakraHome: React.FC<Record<string, never>> = (): ReactElement => (
