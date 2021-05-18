@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
-import { NavBar } from '../../components/NavBar'
 import { BlueButton } from '../../components/BlueButton/BlueButton'
 import { VStack, Box, Text, Image } from '@chakra-ui/react'
 
