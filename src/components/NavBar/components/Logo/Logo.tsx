@@ -1,10 +1,11 @@
 import React from 'react'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Text } from '@chakra-ui/react'
+import { LinkProps } from 'react-router-dom'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function Logo() {
+type LogoProps = Partial<LinkProps & BoxProps>
+export function Logo(props: LogoProps): React.ReactElement {
     return (
-        <Box>
+        <Box {...props}>
             <Text fontSize="lg" fontWeight="bold">
                 BITSWAP
             </Text>

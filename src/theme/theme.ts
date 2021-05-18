@@ -22,7 +22,7 @@ export const bitswapTheme = extendTheme({
             error: '#C70E0E',
         },
         background: {
-            primary: '#FAFAFA',
+            primary: '#faf9f8',
             secondary: '#262626',
             login: '#e5e5e5',
         },

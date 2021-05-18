@@ -9,7 +9,7 @@ import { BlueButton } from '../../components/BlueButton/BlueButton'
 export function StoryBook() {
     return (
         <div>
-            <NavBar />
+            <NavBar loggedOut={false} />
             <Flex minH="100vh" align="center" justify="center">
                 <Button rightIcon={<HiArrowRight />}>
                     {`Let's get started!`}
