@@ -7,7 +7,6 @@ import { VStack, Box, Text, Image } from '@chakra-ui/react'
 export function Login() {
     return (
         <>
-            <NavBar loggedOut />
             <VStack spacing={4}>
                 {/* 📌TODO: Change BitSwap 3D thing to have white background */}
 
