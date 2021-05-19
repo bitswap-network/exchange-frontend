@@ -2,14 +2,16 @@ import * as React from 'react'
 import { Box, Container, ChakraProvider, Grid } from '@chakra-ui/react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+import { bitswapTheme } from './theme'
+
 import { StoryBook } from './pages/StoryBook'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
-import { bitswapTheme } from './theme'
-import { NavBar } from './components/NavBar'
-import { Orders } from './pages/Orders/Orders'
 import { Wallet } from './pages/Wallet'
+import { Orders } from './pages/Orders'
 import { Profile } from './pages/Profile'
+
+import { NavBar } from './components/NavBar'
 
 export const App = (): React.ReactElement => (
     <RecoilRoot>
