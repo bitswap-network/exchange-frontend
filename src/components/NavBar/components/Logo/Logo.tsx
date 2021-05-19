@@ -6,15 +6,15 @@ type LogoProps = Partial<LinkProps & BoxProps>
 export function Logo(props: LogoProps): React.ReactElement {
     return (
         <Box {...props}>
-            <HStack>
+            <HStack ml="10" mr="5">
                 <Image
                     src="./bitswapLogo.png"
                     alt="Bitswap Logo"
-                    htmlWidth="30px"
+                    htmlWidth="25px"
                     objectFit="cover"
                 />
-                <Text fontSize="lg" fontWeight="bold">
-                    BITSWAP
+                <Text fontSize="lg" fontWeight="600">
+                    BitSwap
                 </Text>
             </HStack>
         </Box>
