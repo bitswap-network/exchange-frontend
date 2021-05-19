@@ -9,13 +9,10 @@ import { CryptoCard } from '../../components/CryptoCard'
 export function Wallet(): React.ReactElement {
     return (
         <>
-            <Box>
+            <Box bg="background.primary">
                 <Heading> Wallet Page </Heading>
             </Box>
-            <NavBar loggedOut={false} />
-            <Box bg="background.primary" p="10">
-                <Heading size="xl">Wallet</Heading>
-            </Box>
+
             <Flex
                 direction={{ base: 'column-reverse', md: 'row' }}
                 bg="background.primary"

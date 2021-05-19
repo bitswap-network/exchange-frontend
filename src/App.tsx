@@ -7,17 +7,11 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Wallet } from './pages/Wallet'
 import { bitswapTheme } from './theme'
-<<<<<<< HEAD
-import { NavBar } from './components/NavBar'
-import { Orders } from './pages/Orders/Orders'
-import { Wallet } from './pages/Wallet'
+import { Orders } from './pages/Orders'
 import { Profile } from './pages/Profile'
-=======
-import { Playground } from './pages/Playground'
->>>>>>> c86e104 (Add Login to NavBar)
+import { NavBar } from './components/NavBar'
 
 export const App = (): React.ReactElement => (
-<<<<<<< HEAD
     <RecoilRoot>
         <ChakraProvider theme={bitswapTheme}>
             <BrowserRouter>
@@ -55,34 +49,4 @@ export const App = (): React.ReactElement => (
             </BrowserRouter>
         </ChakraProvider>
     </RecoilRoot>
-=======
-    <ChakraProvider theme={bitswapTheme}>
-        <BrowserRouter>
-            <Switch>
-                {/* TODO: delete storybook, demo, chakrahome, playground */}
-                <Route path="/storybook">
-                    <StoryBook />
-                </Route>
-                <Route path="/playground">
-                    <Playground />
-                </Route>
-                <Route exact path="/demo">
-                    <ChakraDemo />
-                </Route>
-                <Route exact path="/chakrahome">
-                    <ChakraHome />
-                </Route>
-                <Route path="/login">
-                    <Login />
-                </Route>
-                <Route path="/wallet">
-                    <Wallet />
-                </Route>
-                <Route path="/">
-                    <Home />
-                </Route>
-            </Switch>
-        </BrowserRouter>
-    </ChakraProvider>
->>>>>>> a31581c (Add BalanceCard)
 )

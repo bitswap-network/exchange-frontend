@@ -14,7 +14,6 @@ import {
     useDisclosure,
     Stack,
     Spacer,
-    Link,
     Text,
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
