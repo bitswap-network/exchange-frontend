@@ -5,7 +5,6 @@ import {
     Flex,
     Avatar,
     HStack,
-    Text,
     IconButton,
     Button,
     Menu,
@@ -14,6 +13,8 @@ import {
     MenuItem,
     useDisclosure,
     Stack,
+    Link,
+    Text,
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
@@ -32,7 +33,15 @@ interface NavBarProps {
 export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    // ADD LOGIN OPTION WHERE PROFILE NORMALLY LIVES <3
+    const linkMarkup = (
+        <>
+            <Link to="/">Home</Link>
+            <Link to="/Orders">Orders</Link>
+            <Link to="/Wallet">Wallet</Link>
+        </>
+    )
+
+    // 📌 TODO: ADD LOGIN OPTION
     const welcomeMarkup = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -43,6 +52,11 @@ export function NavBar({ loggedOut }: NavBarProps) {
                 >
                     <Logo />
                 </HStack>
+                <Flex alignItems={'center'}>
+                    <Link to="/login">
+                        <Text color="gray.500">LOGIN</Text>
+                    </Link>
+                </Flex>
             </Flex>
         </Box>
     )
@@ -100,9 +114,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
             {isOpen ? (
                 <Box pb={4} display={{ md: 'none' }}>
                     <Stack as={'nav'} spacing={4}>
-                        {LINKS.map((link) => (
-                            <Text key={link}> {link}</Text>
-                        ))}
+                        {linkMarkup}
                     </Stack>
                 </Box>
             ) : null}

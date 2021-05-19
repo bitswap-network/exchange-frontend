@@ -7,10 +7,14 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Wallet } from './pages/Wallet'
 import { bitswapTheme } from './theme'
+<<<<<<< HEAD
 import { NavBar } from './components/NavBar'
 import { Orders } from './pages/Orders/Orders'
 import { Wallet } from './pages/Wallet'
 import { Profile } from './pages/Profile'
+=======
+import { Playground } from './pages/Playground'
+>>>>>>> c86e104 (Add Login to NavBar)
 
 export const App = (): React.ReactElement => (
 <<<<<<< HEAD
@@ -55,8 +59,12 @@ export const App = (): React.ReactElement => (
     <ChakraProvider theme={bitswapTheme}>
         <BrowserRouter>
             <Switch>
+                {/* TODO: delete storybook, demo, chakrahome, playground */}
                 <Route path="/storybook">
                     <StoryBook />
+                </Route>
+                <Route path="/playground">
+                    <Playground />
                 </Route>
                 <Route exact path="/demo">
                     <ChakraDemo />
