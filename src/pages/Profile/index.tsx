@@ -75,9 +75,9 @@ export function Profile() {
                 </Flex>
                 <Flex
                     mt="50px"
-                    w="600px"
+                    w={{ sm: '80%', md: '600px' }}
                     p="20px"
-                    flexDir="row"
+                    flexDir={{ sm: 'column', md: 'row' }}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                 >
@@ -94,7 +94,7 @@ export function Profile() {
                             color="#44423D"
                             fontWeight="300"
                             fontSize="15"
-                            mt="15"
+                            mt="12px"
                         >
                             Important updates will be sent to this address.
                         </Text>
@@ -102,7 +102,7 @@ export function Profile() {
                             color="#44423D"
                             fontWeight="500"
                             fontSize="18"
-                            mt="15"
+                            mt="12px"
                         >
                             elonmusk@gmail.com
                         </Text>
@@ -111,11 +111,12 @@ export function Profile() {
                         flex="0.35"
                         align="flex-end"
                         justify="space-between"
-                        flexDir="column"
+                        flexDir={{ sm: 'row', md: 'column' }}
+                        mt={{ sm: '15px', md: '0' }}
                     >
                         <Button
                             bg="#407BFF"
-                            w="90%"
+                            w={{ sm: '45%', md: '90%' }}
                             p="10px 0"
                             color="white"
                             fontWeight="600"
@@ -127,7 +128,7 @@ export function Profile() {
                         </Button>
                         <Button
                             bg="#407BFF"
-                            w="90%"
+                            w={{ sm: '45%', md: '90%' }}
                             p="10px 0"
                             color="white"
                             fontWeight="600"
@@ -142,11 +143,12 @@ export function Profile() {
 
                 <Flex
                     mt="50px"
-                    w="600px"
+                    w={{ sm: '80%', md: '600px' }}
                     p="20px"
-                    flexDir="row"
+                    flexDir={{ sm: 'column', md: 'row' }}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
+                    mb={{ sm: '50px', md: '0' }}
                 >
                     <Flex
                         flex="0.65"
@@ -166,7 +168,7 @@ export function Profile() {
                             color="#44423D"
                             fontWeight="300"
                             fontSize="15"
-                            mt="15"
+                            mt="12px"
                         >
                             You must make a BitClout post to verify your account
                             before making any exchanges.
@@ -175,8 +177,9 @@ export function Profile() {
                     <Flex
                         flex="0.35"
                         align="flex-end"
-                        justify="space-between"
-                        flexDir="column"
+                        justify={{ sm: 'center', md: 'space-between' }}
+                        flexDir={{ sm: 'row', md: 'column' }}
+                        mt={{ sm: '15px', md: '0' }}
                     >
                         <Button
                             bg="#407BFF"
