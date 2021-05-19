@@ -4,12 +4,16 @@ import { Flex } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { HiArrowRight } from 'react-icons/hi'
 import { NavBar } from '../../components/NavBar'
-import { BlueButton } from '../../components/BlueButton/BlueButton'
+import { BlueButton } from '../../components/BlueButton'
+import { BalanceCard } from '../../components/BalanceCard'
+import { CryptoCard } from '../../components/CryptoCard'
 
 export function StoryBook() {
     return (
         <div>
-            <NavBar />
+            <NavBar loggedOut={false} />
+            <BalanceCard />
+            <CryptoCard />
             <Flex minH="100vh" align="center" justify="center">
                 <Button rightIcon={<HiArrowRight />}>
                     {`Let's get started!`}
