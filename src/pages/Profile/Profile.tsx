@@ -7,6 +7,7 @@ import { Box, Text } from '@chakra-ui/react'
 export function Profile(): React.ReactElement {
     const user = {
         username: '@elonmusk',
+        email:'elonmusk@gmail.com',
         followers: '15839',
         coin_price: '69,420',
     }
@@ -106,7 +107,7 @@ export function Profile(): React.ReactElement {
                             fontSize="18"
                             mt="12px"
                         >
-                            elonmusk@gmail.com
+                            {user.email}
                         </Text>
                     </Flex>
                     <Flex
