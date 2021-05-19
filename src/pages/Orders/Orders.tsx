@@ -1,12 +1,8 @@
 import {
     Box,
     Heading,
-    HStack,
-    Button,
     Flex,
     Spacer,
-    Text,
-    Link,
     VStack,
     Tabs,
     TabList,
@@ -14,50 +10,147 @@ import {
     TabPanels,
     TabPanel,
     Center,
+    Stack,
+    HStack,
 } from '@chakra-ui/react'
 import React from 'react'
-import Table from '../../components/Table/Table'
-
-const OrderCard = () => (
-    <Box bg="white" w="sm" borderRadius="lg" boxShadow="xs" p={6}>
-        <Flex>
-            <Text fontSize="lg">Ongoing Orders</Text>
-            <Spacer />
-            <Link variant="">Learn More</Link>
-        </Flex>
-        <Text>Status</Text>
-    </Box>
-)
+import { Column } from 'react-table'
+import { BlueButton } from '../../components/BlueButton'
+import { OrderCard } from './OrderCard'
+import { AiOutlineSearch, AiOutlineInfoCircle } from 'react-icons/ai'
+import { Order, OrderType } from '../../types/Order'
+import { OrderTable } from './OrderTable'
 
 export function Orders(): React.ReactElement {
+    const data = React.useMemo(
+        () => [
+            {
+                id: 1,
+                type: OrderType.Buy,
+                quantity: 20,
+                price: 12.5,
+            },
+            {
+                id: 2,
+                type: OrderType.Sell,
+                quantity: 5,
+                price: 12.5,
+            },
+            {
+                id: 3,
+                type: OrderType.Buy,
+                quantity: 15,
+                price: 12.5,
+            },
+        ],
+        []
+    )
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: 'Order ID',
+                accessor: 'id',
+                isNumeric: true,
+            },
+            {
+                Header: 'Order Type',
+                accessor: 'type',
+            },
+            {
+                Header: 'Quantity',
+                accessor: 'quantity',
+                isNumeric: true,
+            },
+            {
+                Header: 'Price',
+                accessor: 'price',
+                isNumeric: true,
+            },
+        ],
+        []
+    ) as Column<Order>[]
+
     return (
         <VStack spacing={8}>
             <Flex w="100%">
                 <Heading> Orders </Heading>
                 <Spacer />
-                <Button> New Order </Button>
+                <BlueButton text="New Order" />
             </Flex>
-            <Flex w="100%">
-                <OrderCard />
+            <Flex w="100%" wrap="wrap">
+                {/* TODO: Replace links and statuses with data here  */}
+                <OrderCard
+                    title="Ongoing Orders"
+                    linkText="Review"
+                    linkSrc="/home"
+                    status="Ordered two minutes ago"
+                    icon={<AiOutlineSearch />}
+                />
                 <Spacer />
-                <OrderCard />
+                <OrderCard
+                    title="Pending Orders"
+                    linkText="Learn More"
+                    linkSrc="/home"
+                    status="This order has not been processed"
+                    icon={<AiOutlineInfoCircle />}
+                />
                 <Spacer />
-                <OrderCard />
+                <OrderCard
+                    title="Ongoing Orders"
+                    linkText="Learn More"
+                    linkSrc="/home"
+                    status="You can no longer cancel this offer"
+                    icon={<AiOutlineInfoCircle />}
+                />
             </Flex>
             <Tabs w="100%" variant="enclosed-colored">
                 <Center>
                     <TabList>
-                        <Tab>One</Tab>
-                        <Tab>Two</Tab>
+                        <Tab>All Orders</Tab>
+                        <Tab>Active Orders</Tab>
+                        <Tab>Pending Orders</Tab>
+                        <Tab>Fulfilled Orders</Tab>
                     </TabList>
                 </Center>
                 <TabPanels>
                     <TabPanel>
-                        <Table />
+                        <Stack spacing={4}>
+                            <Heading as="h2" size="md">
+                                All Orders ({data.length})
+                            </Heading>
+                            <OrderTable data={data} columns={columns} />
+                            <HStack spacing={4} alignItems="flex-start">
+                                <Stack spacing={4} w="100%">
+                                    <Heading as="h2" size="md">
+                                        Buy Orders
+                                    </Heading>
+                                    <OrderTable
+                                        data={data.filter(
+                                            (order) =>
+                                                order.type == OrderType.Buy
+                                        )}
+                                        columns={columns}
+                                    />
+                                </Stack>
+                                <Spacer />
+                                <Stack spacing={4} w="100%">
+                                    <Heading as="h2" size="md">
+                                        Sell Orders
+                                    </Heading>
+                                    <OrderTable
+                                        data={data.filter(
+                                            (order) =>
+                                                order.type == OrderType.Sell
+                                        )}
+                                        columns={columns}
+                                    />
+                                </Stack>
+                            </HStack>
+                        </Stack>
                     </TabPanel>
-                    <TabPanel>
-                        <p>two!</p>
-                    </TabPanel>
+                    <TabPanel>Tab 2</TabPanel>
+                    <TabPanel>Tab 3</TabPanel>
+                    <TabPanel>Tab 4</TabPanel>
                 </TabPanels>
             </Tabs>
         </VStack>
