@@ -3,13 +3,16 @@ import { Flex } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { HiExclamationCircle } from 'react-icons/hi'
 import { Box, Text } from '@chakra-ui/react'
+import { profile } from 'console'
 
 export function Profile(): React.ReactElement {
     const user = {
         username: '@elonmusk',
-        email:'elonmusk@gmail.com',
+        email: 'elonmusk@gmail.com',
         followers: '15839',
         coin_price: '69,420',
+        profile_picture:
+            'https://res.cloudinary.com/crunchbase-production/image/upload/c_thumb,h_256,w_256,f_auto,g_faces,z_0.7,q_auto:eco/hevy6dvk7gien0rmg37n',
     }
 
     return (
@@ -21,7 +24,10 @@ export function Profile(): React.ReactElement {
                 flexDirection="column"
                 mt="20px"
             >
-                <Box bg="blue" w="80px" height="80px" borderRadius="80"></Box>
+                <img
+                    src={user.profile_picture}
+                    style={{ width: 80, height: 80, borderRadius: 80 }}
+                />
                 <Text color="#000" fontWeight="700" fontSize="20" mt="15">
                     {user.username}
                 </Text>
