@@ -31,6 +31,8 @@ interface NavBarProps {
 
 export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    // ADD LOGIN OPTION WHERE PROFILE NORMALLY LIVES <3
     const welcomeMarkup = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>

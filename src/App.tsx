@@ -5,6 +5,7 @@ import { RecoilRoot } from 'recoil'
 import { StoryBook } from './pages/StoryBook'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
+import { Wallet } from './pages/Wallet'
 import { bitswapTheme } from './theme'
 import { NavBar } from './components/NavBar'
 import { Orders } from './pages/Orders/Orders'
@@ -12,6 +13,7 @@ import { Wallet } from './pages/Wallet'
 import { Profile } from './pages/Profile'
 
 export const App = (): React.ReactElement => (
+<<<<<<< HEAD
     <RecoilRoot>
         <ChakraProvider theme={bitswapTheme}>
             <BrowserRouter>
@@ -49,4 +51,30 @@ export const App = (): React.ReactElement => (
             </BrowserRouter>
         </ChakraProvider>
     </RecoilRoot>
+=======
+    <ChakraProvider theme={bitswapTheme}>
+        <BrowserRouter>
+            <Switch>
+                <Route path="/storybook">
+                    <StoryBook />
+                </Route>
+                <Route exact path="/demo">
+                    <ChakraDemo />
+                </Route>
+                <Route exact path="/chakrahome">
+                    <ChakraHome />
+                </Route>
+                <Route path="/login">
+                    <Login />
+                </Route>
+                <Route path="/wallet">
+                    <Wallet />
+                </Route>
+                <Route path="/">
+                    <Home />
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    </ChakraProvider>
+>>>>>>> a31581c (Add BalanceCard)
 )
