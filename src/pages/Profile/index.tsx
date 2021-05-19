@@ -8,6 +8,12 @@ import { BlueButton } from '../../components/BlueButton/BlueButton'
 import { Box, Text } from '@chakra-ui/react'
 
 export function Profile() {
+    const user = {
+        username: '@elonmusk',
+        followers: '15839',
+        coin_price: '69,420',
+    }
+
     return (
         <div>
             <NavBar />
@@ -20,7 +26,7 @@ export function Profile() {
             >
                 <Box bg="blue" w="80px" height="80px" borderRadius="80"></Box>
                 <Text color="#000" fontWeight="700" fontSize="20" mt="15">
-                    @elonmusk
+                    {user.username}
                 </Text>
                 <Flex flexDirection="row" width="100%">
                     <Box
@@ -37,7 +43,7 @@ export function Profile() {
                             fontWeight="700"
                             mr="1"
                         >
-                            15839
+                            {user.followers}
                         </Text>
                         <Text
                             color="#5B5B5B"
@@ -61,7 +67,7 @@ export function Profile() {
                             fontWeight="700"
                             mr="1"
                         >
-                            ~$69,420
+                            ~${user.coin_price}
                         </Text>
                         <Text
                             color="#5B5B5B"
