@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
 import { NavBar } from '../../components/NavBar'
-import { Box, Flex, Heading, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, VStack, SimpleGrid } from '@chakra-ui/react'
 import { BalanceCard } from '../../components/BalanceCard'
 import { CryptoCard } from '../../components/CryptoCard'
 
@@ -13,19 +13,20 @@ export function Wallet(): React.ReactElement {
                 <Heading> Wallet Page </Heading>
             </Box>
             <NavBar loggedOut={false} />
-            <Flex bg="background.primary">
-                <VStack>
-                    <Box p="15">
-                        <Heading size="lg">Wallet</Heading>
-                    </Box>
-                    <Box d="flex" mt="20" ml="120" alignItems="center">
-                        <VStack p="15">
-                            <CryptoCard />
-                            <CryptoCard />
-                        </VStack>
-                        <BalanceCard />
-                    </Box>
-                </VStack>
+            <Box bg="background.primary" p="10">
+                <Heading size="xl">Wallet</Heading>
+            </Box>
+            <Flex
+                direction={{ base: 'column-reverse', md: 'row' }}
+                bg="background.primary"
+            >
+                <SimpleGrid columns={2} spacing={10}>
+                    <VStack p="15">
+                        <CryptoCard />
+                        <CryptoCard />
+                    </VStack>
+                    <BalanceCard />
+                </SimpleGrid>
             </Flex>
         </>
     )

@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
     Box,
-    Button,
     Flex,
     Image,
     Heading,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -69,11 +67,12 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                     md: 'space-around',
                     xl: 'space-between',
                 }}
-                direction={{ base: 'column-reverse', md: 'row' }}
+                direction={{ base: 'column', md: 'row' }}
                 minH="70vh"
                 px={8}
                 mb={16}
                 {...rest}
+                bg="background.primary"
             >
                 <Stack
                     spacing={4}
