@@ -1,4 +1,7 @@
-import React from 'react'
+/* eslint-disable react/jsx-key */
+// jsx-key is disabled because it fails to apply to the spread operator with typed object [as of May 2021]
+
+import React, { PropsWithChildren } from 'react'
 import {
     Table as ChakraTable,
     Thead,
@@ -9,70 +12,22 @@ import {
     chakra,
 } from '@chakra-ui/react'
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
-import { useTable, useSortBy, Column } from 'react-table'
+import { useTable, useSortBy, TableOptions } from 'react-table'
 
-interface Example {
-    fromUnit: string
-    toUnit: string
-    factor: number
-}
-
-function Table(): React.ReactElement {
-    const data = React.useMemo<Example[]>(
-        () => [
-            {
-                fromUnit: 'inches',
-                toUnit: 'millimetres (mm)',
-                factor: 25.4,
-            },
-            {
-                fromUnit: 'feet',
-                toUnit: 'centimetres (cm)',
-                factor: 30.48,
-            },
-            {
-                fromUnit: 'yards',
-                toUnit: 'metres (m)',
-                factor: 0.91444,
-            },
-        ],
-        []
-    )
-
-    const columns = React.useMemo(
-        () =>
-            [
-                {
-                    Header: 'To convert',
-                    accessor: 'fromUnit',
-                },
-                {
-                    Header: 'Into',
-                    accessor: 'toUnit',
-                },
-                {
-                    Header: 'Multiply by',
-                    accessor: 'factor',
-                    isNumeric: true,
-                },
-            ] as Column<Example>[],
-        []
-    )
-
+export function Table<T extends Record<string, unknown>>({
+    data,
+    columns,
+}: PropsWithChildren<TableOptions<T>>): React.ReactElement {
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable<Example>({ columns, data }, useSortBy)
+        useTable<T>({ columns, data }, useSortBy)
 
     return (
         <ChakraTable {...getTableProps()}>
             <Thead>
                 {headerGroups.map((headerGroup) => (
-                    <Tr
-                        key={headerGroup.id}
-                        {...headerGroup.getHeaderGroupProps()}
-                    >
+                    <Tr {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map((column) => (
                             <Th
-                                key={column.id}
                                 {...column.getHeaderProps(
                                     column.getSortByToggleProps()
                                 )}
@@ -97,10 +52,9 @@ function Table(): React.ReactElement {
                 {rows.map((row) => {
                     prepareRow(row)
                     return (
-                        <Tr key={row.id} {...row.getRowProps()}>
+                        <Tr {...row.getRowProps()}>
                             {row.cells.map((cell) => (
                                 <Td
-                                    key={cell}
                                     {...cell.getCellProps()}
                                     isNumeric={cell.column.isNumeric}
                                 >
@@ -114,5 +68,3 @@ function Table(): React.ReactElement {
         </ChakraTable>
     )
 }
-
-export default Table
