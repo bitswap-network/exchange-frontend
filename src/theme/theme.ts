@@ -1,6 +1,7 @@
 import { extendTheme } from '@chakra-ui/react'
 import Button from './components/Button'
 import Link from './components/Link'
+import Tabs from './components/Tabs'
 
 export const bitswapTheme = extendTheme({
     styles: {
@@ -31,5 +32,6 @@ export const bitswapTheme = extendTheme({
     components: {
         Button,
         Link,
+        Tabs,
     },
 })
