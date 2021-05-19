@@ -10,24 +10,26 @@ interface OrderCardProps {
     icon?: React.ReactElement
 }
 
-export const OrderCard: React.FC<OrderCardProps> = ({
+export function OrderCard({
     title,
     linkText,
     linkSrc,
     status,
     icon,
-}: OrderCardProps) => (
-    <Box bg="white" w="sm" borderRadius="lg" boxShadow="xs" p={6}>
-        <Flex>
-            <Text fontSize="lg">{title}</Text>
-            <Spacer />
-            <Link as={RouterLink} to={linkSrc} variant="">
-                {linkText}
-            </Link>
-        </Flex>
-        <HStack>
-            {icon}
-            <Text>{status}</Text>
-        </HStack>
-    </Box>
-)
+}: OrderCardProps): React.ReactElement {
+    return (
+        <Box bg="white" w="sm" borderRadius="lg" boxShadow="xs" p={6}>
+            <Flex>
+                <Text fontSize="lg">{title}</Text>
+                <Spacer />
+                <Link as={RouterLink} to={linkSrc} variant="">
+                    {linkText}
+                </Link>
+            </Flex>
+            <HStack>
+                {icon}
+                <Text>{status}</Text>
+            </HStack>
+        </Box>
+    )
+}
