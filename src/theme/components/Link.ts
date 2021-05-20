@@ -1,10 +1,9 @@
 const Link = {
     variants: {
         default: {
-            bg: 'brand.100',
             _hover: {
                 textDecoration: 'none',
-                bg: 'brand.200',
+                bg: 'background.100',
             },
             color: 'black',
             rounded: 'md',

@@ -5,7 +5,6 @@ import {
     Flex,
     Avatar,
     HStack,
-    Text,
     IconButton,
     Button,
     Menu,
@@ -14,6 +13,8 @@ import {
     MenuItem,
     useDisclosure,
     Stack,
+    Spacer,
+    Text,
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
@@ -31,6 +32,9 @@ interface NavBarProps {
 
 export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    // 📌 TODO: Connect all functionality
     const welcomeMarkup = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -39,8 +43,18 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     spacing={5}
                     display={{ base: 'none', md: 'flex' }}
                 >
-                    <Logo />
+                    <Link to="/">
+                        <Logo />
+                    </Link>
                 </HStack>
+                <Flex alignItems={'center'} mr="5">
+                    <Link to="/login">
+                        <Button fontWeight="bold" size="xs" color="gray.600">
+                            LOGIN
+                        </Button>
+                    </Link>
+                    <Spacer />
+                </Flex>
             </Flex>
         </Box>
     )
@@ -96,7 +110,14 @@ export function NavBar({ loggedOut }: NavBarProps) {
                 <Box pb={4} display={{ md: 'none' }}>
                     <Stack as={'nav'} spacing={4}>
                         {LINKS.map((link) => (
-                            <Text key={link}> {link}</Text>
+                            <Text
+                                textTransform="capitalize"
+                                as={Link}
+                                to={`/${link}`}
+                                key={link}
+                            >
+                                {link}
+                            </Text>
                         ))}
                     </Stack>
                 </Box>
