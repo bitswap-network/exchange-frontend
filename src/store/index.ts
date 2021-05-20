@@ -33,7 +33,7 @@ export const loggedInState = selector({
 
 export const identityUsers = atom({
     key: 'identityUsers',
-    default: JSON.parse(getData('identityUsers')),
+    default: getData('identityUsers'),
 })
 export const currentPublicKey = atom({
     key: 'publicKey',

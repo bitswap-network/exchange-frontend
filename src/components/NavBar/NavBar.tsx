@@ -18,45 +18,41 @@ import {
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
+import { useRecoilValue } from 'recoil'
 import { Logo } from './components/Logo'
 import { Link } from 'react-router-dom'
+import { loggedInState } from '../../store'
 
 const LINKS = ['home', 'orders', 'wallet']
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
-
-interface NavBarProps {
-    /** Determines if it should be the naked NavBar with just the Logo*/
-    loggedOut: boolean
-}
-
-export function NavBar({ loggedOut }: NavBarProps) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // 📌 TODO: Connect all functionality
-    const welcomeMarkup = (
-        <Box px={4}>
-            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-                <HStack
-                    as={'nav'}
-                    spacing={5}
-                    display={{ base: 'none', md: 'flex' }}
-                >
-                    <Link to="/">
-                        <Logo />
-                    </Link>
-                </HStack>
-                <Flex alignItems={'center'} mr="5">
-                    <Link to="/login">
-                        <Button fontWeight="bold" size="xs" color="gray.600">
-                            LOGIN
-                        </Button>
-                    </Link>
-                    <Spacer />
-                </Flex>
+export const DefaultNavBar = (
+    <Box px={4}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <HStack
+                as={'nav'}
+                spacing={5}
+                display={{ base: 'none', md: 'flex' }}
+            >
+                <Link to="/">
+                    <Logo />
+                </Link>
+            </HStack>
+            <Flex alignItems={'center'} mr="5">
+                <Link to="/login">
+                    <Button fontWeight="bold" size="xs" color="gray.600">
+                        LOGIN
+                    </Button>
+                </Link>
+                <Spacer />
             </Flex>
-        </Box>
-    )
+        </Flex>
+    </Box>
+)
+export function NavBar() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const isLoggedIn = useRecoilValue(loggedInState)
+    // 📌 TODO: Connect all functionality
 
     const loggedInMarkup = (
         <Box px={4}>
@@ -124,5 +120,5 @@ export function NavBar({ loggedOut }: NavBarProps) {
         </Box>
     )
 
-    return <>{loggedOut ? welcomeMarkup : loggedInMarkup}</>
+    return <>{isLoggedIn ? DefaultNavBar : loggedInMarkup}</>
 }

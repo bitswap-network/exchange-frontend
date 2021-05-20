@@ -19,6 +19,7 @@
     },
     "plugins": ["react", "@typescript-eslint", "prettier"],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "@typescript-eslint/ban-ts-comment": "off"
     }
 }

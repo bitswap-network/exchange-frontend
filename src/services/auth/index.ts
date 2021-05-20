@@ -2,7 +2,8 @@ import { client, authClient } from '../index'
 
 export const verifyToken = async () => {
     try {
-        const response = await authClient.post('/auth/verifytoken')
+        const response = await authClient.get('/auth/verifytoken')
+        console.log(response)
         return response.status === 204
     } catch (e) {
         console.error(e)

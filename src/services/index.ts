@@ -1,9 +1,4 @@
-import axios, {
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-} from 'axios'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { getData } from '../helpers/persistence'
 import { api } from '../config'
 
