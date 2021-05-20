@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Text } from '@chakra-ui/react'
 
 import { HiArrowRight } from 'react-icons/hi'
 
-interface BlueButtonProps {
+interface BlueButtonProps extends ButtonProps {
     /** Text for button */
     text: string
     /** Determines if button should have icon */
     icon?: boolean
-    /** */
+    /** width */
     width?: string
 }
 
-export function BlueButton({
+export const BlueButton: React.FC<BlueButtonProps> = ({
     text,
     icon,
+    width,
     ...rest
-}: BlueButtonProps & ButtonProps) {
+}: BlueButtonProps) => {
     return (
         <Button
             boxShadow="lg"

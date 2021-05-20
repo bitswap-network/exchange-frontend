@@ -33,7 +33,6 @@ interface NavBarProps {
 export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-
     // 📌 TODO: Connect all functionality
     const welcomeMarkup = (
         <Box px={4}>

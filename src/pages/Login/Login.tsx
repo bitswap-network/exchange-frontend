@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { BlueButton } from '../../components/BlueButton/BlueButton'
 import { VStack, Box, Text, Image } from '@chakra-ui/react'

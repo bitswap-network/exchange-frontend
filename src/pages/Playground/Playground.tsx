@@ -69,13 +69,11 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                     md: 'space-around',
                     xl: 'space-between',
                 }}
-
                 direction={{ base: 'column', md: 'row' }}
                 minH="70vh"
                 px={8}
                 mb={16}
                 {...rest}
-
                 bg="background.primary"
             >
                 <Stack

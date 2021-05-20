@@ -6,7 +6,6 @@ import { LinkProps } from 'react-router-dom'
 type LogoProps = Partial<LinkProps & BoxProps>
 export function Logo(props: LogoProps): React.ReactElement {
     return (
-
         <Box {...props}>
             <HStack>
                 <Image
