@@ -14,12 +14,14 @@ import {
     useDisclosure,
     Stack,
     Spacer,
-    Link,
     Text,
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
 import { Logo } from './components/Logo'
+import { Link } from 'react-router-dom'
+
+const LINKS = ['home', 'orders', 'wallet']
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 
@@ -31,18 +33,11 @@ interface NavBarProps {
 export function NavBar({ loggedOut }: NavBarProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const linkMarkup = (
-        <>
-            <Link to="/">Home</Link>
-            <Link to="/Orders">Orders</Link>
-            <Link to="/Wallet">Wallet</Link>
-        </>
-    )
 
     // 📌 TODO: Connect all functionality
     const welcomeMarkup = (
         <Box px={4}>
-            <Flex h={16} aignItems={'center'} justifyContent={'space-between'}>
+            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <HStack
                     as={'nav'}
                     spacing={5}
@@ -66,7 +61,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
 
     const loggedInMarkup = (
         <Box px={4}>
-            <Flex h={16} aignItems={'center'} justifyContent={'space-between'}>
+            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <IconButton
                     size={'lg'}
                     icon={isOpen ? <RiCloseFill /> : <HiMenu />}
@@ -79,9 +74,17 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     spacing={5}
                     display={{ base: 'none', md: 'flex' }}
                 >
-                    <Logo />
-                    {/* TODO: Fix these <3 */}
-                    {linkMarkup}
+                    <Logo as={Link} to="/" />
+                    {LINKS.map((link) => (
+                        <Text
+                            textTransform="capitalize"
+                            as={Link}
+                            to={`/${link}`}
+                            key={link}
+                        >
+                            {link}
+                        </Text>
+                    ))}
                 </HStack>
                 <Flex alignItems={'center'}>
                     <Menu>
@@ -109,7 +112,16 @@ export function NavBar({ loggedOut }: NavBarProps) {
             {isOpen ? (
                 <Box pb={4} display={{ md: 'none' }}>
                     <Stack as={'nav'} spacing={4}>
-                        {linkMarkup}
+                        {LINKS.map((link) => (
+                            <Text
+                                textTransform="capitalize"
+                                as={Link}
+                                to={`/${link}`}
+                                key={link}
+                            >
+                                {link}
+                            </Text>
+                        ))}
                     </Stack>
                 </Box>
             ) : null}

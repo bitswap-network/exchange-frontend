@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import React from 'react'
-import { NavBar } from '../../components/NavBar'
 import { BlueButton } from '../../components/BlueButton/BlueButton'
 import { VStack, Box, Text, Image } from '@chakra-ui/react'
 
-export function Login() {
+export function Login(): React.ReactElement {
     return (
         <>
-            <NavBar loggedOut />
             <VStack spacing={4}>
                 {/* 📌TODO: Change to BitSwap 3D thing with white background */}
                 <Image src="./bitswapLogo.png" />
