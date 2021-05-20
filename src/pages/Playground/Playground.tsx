@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 // TODO: delete this file later <3 this is just Gina playing around
 import React from 'react'
 import { Link } from 'react-router-dom'
