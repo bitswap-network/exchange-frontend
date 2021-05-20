@@ -14,7 +14,7 @@ export function CryptoCard() {
     }
 
     return (
-        <Box boxShadow="2xl" borderRadius="lg" overflow="hidden">
+
             <Box p="6">
                 <Box d="flex" mt="2" alignItems="center">
                     <Image

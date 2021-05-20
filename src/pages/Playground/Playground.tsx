@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 // TODO: delete this file later <3 this is just Gina playing around
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -68,11 +69,13 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                     md: 'space-around',
                     xl: 'space-between',
                 }}
+
                 direction={{ base: 'column', md: 'row' }}
                 minH="70vh"
                 px={8}
                 mb={16}
                 {...rest}
+
                 bg="background.primary"
             >
                 <Stack

@@ -2,7 +2,9 @@ import * as React from 'react'
 import { Box, Container, ChakraProvider, Grid } from '@chakra-ui/react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+
 import { bitswapTheme } from './theme'
+import { Playground } from './pages/Playground'
 
 import { StoryBook } from './pages/StoryBook'
 import { Home } from './pages/Home'
