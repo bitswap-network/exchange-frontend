@@ -25,8 +25,12 @@ export const login = async (publicKey: string, identityJWT: string) => {
         })
 }
 
-export const register = (publicKey: string, email: string, name: string) => {
-    return client.put('/auth/register', {
+export const register = async (
+    publicKey: string,
+    email: string,
+    name: string
+) => {
+    return await client.put('/auth/register', {
         publicKey: publicKey,
         email: email,
         name: name,
