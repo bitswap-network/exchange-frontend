@@ -5,7 +5,7 @@ import axios, {
     AxiosResponse,
 } from 'axios'
 import { getData } from '../helpers/persistence'
-import { api } from '../config.json'
+import { api } from '../config'
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
     console.info(`[request] [${JSON.stringify(config)}]`)
