@@ -3,14 +3,9 @@ import React from 'react'
 import {
     Box,
     Flex,
-    Avatar,
     HStack,
     IconButton,
     Button,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
     useDisclosure,
     Stack,
     Spacer,
@@ -20,6 +15,7 @@ import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
 import { Logo } from './components/Logo'
 import { Link } from 'react-router-dom'
+import { AiOutlineUser } from 'react-icons/ai'
 
 const LINKS = ['home', 'orders', 'wallet']
 
@@ -47,11 +43,19 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     </Link>
                 </HStack>
                 <Flex alignItems={'center'} mr="5">
-                    <Link to="/login">
-                        <Button fontWeight="bold" size="xs" color="gray.600">
-                            LOGIN
-                        </Button>
-                    </Link>
+                    <Button
+                        bg="#4978F0"
+                        p="0px 40px"
+                        color="white"
+                        fontWeight="600"
+                        fontSize="16"
+                        borderRadius="6"
+                        boxShadow="0px 3px 6px 0px #00000040"
+                        as={Link}
+                        to="/login"
+                    >
+                        Login
+                    </Button>
                     <Spacer />
                 </Flex>
             </Flex>
@@ -80,29 +84,21 @@ export function NavBar({ loggedOut }: NavBarProps) {
                             as={Link}
                             to={`/${link}`}
                             key={link}
+                            pt="3px"
                         >
                             {link}
                         </Text>
                     ))}
                 </HStack>
-                <Flex alignItems={'center'}>
-                    <Menu>
-                        <MenuButton
-                            as={Button}
-                            rounded={'full'}
-                            variant={'link'}
-                            cursor={'pointer'}
-                        >
-                            {/* PROFILE ...  */}
-                            <HStack spacing="24px">
-                                <Avatar size="xs" src="" />
-                            </HStack>
-                        </MenuButton>
-                        {/* Not sure if we need this? Can remove if not */}
-                        <MenuList>
-                            <MenuItem>Edit Profile</MenuItem>
-                        </MenuList>
-                    </Menu>
+                <Flex mr={{ sm: '5px', md: '40px' }}>
+                    <Link to="/profile">
+                        <HStack spacing="5px" color="black" fontWeight="400">
+                            <AiOutlineUser size="20" />
+                            <Text textTransform="capitalize" pt="2px">
+                                Profile
+                            </Text>
+                        </HStack>
+                    </Link>
                 </Flex>
             </Flex>
             {isOpen ? (
