@@ -4,7 +4,7 @@ import axios, {
     AxiosRequestConfig,
     AxiosResponse,
 } from 'axios'
-import { getData } from '../store'
+import { getData } from '../helpers/persistence'
 import { api } from '../config.json'
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
