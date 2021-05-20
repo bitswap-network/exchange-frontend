@@ -47,19 +47,19 @@ export function NavBar({ loggedOut }: NavBarProps) {
                     </Link>
                 </HStack>
                 <Flex alignItems={'center'} mr="5">
-                    <Link to="/login">
-                        <Button
-                            bg="#4978F0"
-                            p="0px 40px"
-                            color="white"
-                            fontWeight="600"
-                            fontSize="16"
-                            borderRadius="6"
-                            boxShadow="0px 3px 6px 0px #00000040"
-                        >
-                            Login
-                        </Button>
-                    </Link>
+                    <Button
+                        bg="#4978F0"
+                        p="0px 40px"
+                        color="white"
+                        fontWeight="600"
+                        fontSize="16"
+                        borderRadius="6"
+                        boxShadow="0px 3px 6px 0px #00000040"
+                        as={Link}
+                        to="/login"
+                    >
+                        Login
+                    </Button>
                     <Spacer />
                 </Flex>
             </Flex>
