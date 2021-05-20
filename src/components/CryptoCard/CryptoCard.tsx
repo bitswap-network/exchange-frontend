@@ -14,38 +14,36 @@ export function CryptoCard() {
     }
 
     return (
+        <Box p="6">
+            <Box d="flex" mt="2" alignItems="center">
+                <Image
+                    alt="BitClout Logo"
+                    htmlWidth="70px"
+                    objectFit="cover"
+                    src="./bitcloutLogo.png"
+                />
 
-            <Box p="6">
-                <Box d="flex" mt="2" alignItems="center">
-                    <Image
-                        alt="BitClout Logo"
-                        htmlWidth="70px"
-                        objectFit="cover"
-                        src="./bitcloutLogo.png"
-                    />
-
-                    <Box ml="5">
-                        <Box d="flex" alignItems="center">
-                            <Box
-                                color="gray.600"
-                                fontWeight="semibold"
-                                letterSpacing="wide"
-                                fontSize="xs"
-                                textTransform="uppercase"
-                            >
-                                {balance.currency} Balance
-                            </Box>
-                        </Box>
+                <Box ml="5">
+                    <Box d="flex" alignItems="center">
                         <Box
-                            mt="1"
+                            color="gray.600"
                             fontWeight="semibold"
-                            lineHeight="tight"
-                            isTruncated
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
                         >
-                            <Text fontSize="3xl">
-                                {balance.amount} {balance.currency}
-                            </Text>
+                            {balance.currency} Balance
                         </Box>
+                    </Box>
+                    <Box
+                        mt="1"
+                        fontWeight="semibold"
+                        lineHeight="tight"
+                        isTruncated
+                    >
+                        <Text fontSize="3xl">
+                            {balance.amount} {balance.currency}
+                        </Text>
                     </Box>
                 </Box>
             </Box>
