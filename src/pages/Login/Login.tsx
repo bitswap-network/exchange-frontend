@@ -9,7 +9,6 @@ import { setIdentityUsers, saveData } from '../../helpers/persistence'
 import { userState } from '../../store'
 
 export function Login(): ReactElement {
-    const setUser = useSetRecoilState(userState)
     const loginHandler = () => {
         launch('/log-in').subscribe((res) => {
             console.log(res)
@@ -22,12 +21,8 @@ export function Login(): ReactElement {
             }
             jwt(payload).subscribe((token) => {
                 login(res.publicKeyAdded, token.jwt)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            saveData('user', JSON.stringify(response.data))
-                            setUser(response.data)
-                            window.location.assign('/')
-                        }
+                    .then(() => {
+                        window.location.assign('/')
                     })
                     .catch((error: any) => {
                         //TODO: revise response status codes

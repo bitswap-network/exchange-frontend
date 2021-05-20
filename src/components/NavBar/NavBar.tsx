@@ -52,6 +52,7 @@ export const DefaultNavBar = (
 export function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
+    console.log('IS LOGGED IN: ', isLoggedIn)
     // 📌 TODO: Connect all functionality
 
     const loggedInMarkup = (
@@ -120,5 +121,5 @@ export function NavBar() {
         </Box>
     )
 
-    return <>{isLoggedIn ? DefaultNavBar : loggedInMarkup}</>
+    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar}</>
 }

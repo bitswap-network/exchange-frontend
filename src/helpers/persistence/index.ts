@@ -13,5 +13,5 @@ export const removeData = (key: string) => {
 }
 
 export const setIdentityUsers = (users: IdentityUser) => {
-    saveData('identityUsers', JSON.stringify(users))
+    saveData('identityUsers', users)
 }

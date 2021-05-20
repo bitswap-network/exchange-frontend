@@ -12,17 +12,17 @@ import { Wallet } from './pages/Wallet'
 import { Orders } from './pages/Orders'
 import { Profile } from './pages/Profile'
 
-import { DefaultNavBar } from './components/NavBar'
+import { DefaultNavBar, NavBar } from './components/NavBar'
 
 import * as config from './config'
 import { identityHandler } from './services/identity'
 
 window.addEventListener('message', identityHandler)
-const NavBar = React.lazy(() =>
-    import('./components/NavBar').then(({ NavBar }) => ({
-        default: NavBar,
-    }))
-)
+// const NavBar = React.lazy(() =>
+//     import('./components/NavBar').then(({ NavBar }) => ({
+//         default: NavBar,
+//     }))
+// )
 
 export const App = (): ReactElement => {
     return (
@@ -38,6 +38,7 @@ export const App = (): ReactElement => {
                 }}
             />
             <RecoilRoot>
+                {/* <Suspense fallback={<></>}> */}
                 <ChakraProvider theme={bitswapTheme}>
                     <BrowserRouter>
                         <Grid h="100vh" templateRows={'64px 1fr'}>
@@ -76,6 +77,7 @@ export const App = (): ReactElement => {
                         </Grid>
                     </BrowserRouter>
                 </ChakraProvider>
+                {/* </Suspense> */}
             </RecoilRoot>
         </>
     )

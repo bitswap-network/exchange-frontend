@@ -1,4 +1,5 @@
 import { client, authClient } from '../index'
+import { saveData } from '../../helpers/persistence'
 
 export const verifyToken = async () => {
     try {
@@ -6,16 +7,22 @@ export const verifyToken = async () => {
         console.log(response)
         return response.status === 204
     } catch (e) {
-        console.error(e)
         return false
     }
 }
 
-export const login = (publicKey: string, identityJWT: string) => {
-    return client.post('/auth/login', {
-        publicKey: publicKey,
-        identityJWT: identityJWT,
-    })
+export const login = async (publicKey: string, identityJWT: string) => {
+    return await client
+        .post('/auth/login', {
+            publicKey: publicKey,
+            identityJWT: identityJWT,
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                saveData('user', response.data.user)
+                saveData('token', response.data.token)
+            }
+        })
 }
 
 export const register = (publicKey: string, email: string, name: string) => {
