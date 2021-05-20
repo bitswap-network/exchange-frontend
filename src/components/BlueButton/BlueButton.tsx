@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
-import { Button, Text } from '@chakra-ui/react'
+import { Button, ButtonProps } from '@chakra-ui/react'
+
 import { HiArrowRight } from 'react-icons/hi'
 
 interface BlueButtonProps {
@@ -12,7 +13,11 @@ interface BlueButtonProps {
     width?: string
 }
 
-export function BlueButton({ text, icon, width }: BlueButtonProps) {
+export function BlueButton({
+    text,
+    icon,
+    ...rest
+}: BlueButtonProps & ButtonProps) {
     return (
         <Button
             boxShadow="lg"
@@ -26,6 +31,7 @@ export function BlueButton({ text, icon, width }: BlueButtonProps) {
             width={width ? width : ''}
             color="white"
             rightIcon={icon ? <HiArrowRight /> : undefined}
+            {...rest}
         >
             <Text fontSize="15px">{text}</Text>
         </Button>

@@ -96,10 +96,7 @@ export function NavBar({ loggedOut }: NavBarProps) {
                         >
                             {/* PROFILE ...  */}
                             <HStack spacing="24px">
-                                <Avatar
-                                    size="xs"
-                                    src="https://bit.ly/broken-link"
-                                />
+                                <Avatar size="xs" src="" />
                             </HStack>
                         </MenuButton>
                         {/* Not sure if we need this? Can remove if not */}

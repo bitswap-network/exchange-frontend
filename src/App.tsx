@@ -23,7 +23,7 @@ export const App = (): React.ReactElement => (
                     {/* TODO: implement auth to set loggedOut */}
                     <NavBar loggedOut={false} />
                     <Box bg="background.primary" p={8}>
-                        <Container centerContent>
+                        <Container maxW="container.xl">
                             <Switch>
                                 <Route path="/storybook">
                                     <StoryBook />
