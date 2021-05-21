@@ -22,7 +22,6 @@ export const loggedInState = selector({
         } else {
             removeData('user')
             removeData('token')
-            window.location.assign('/login')
             return false
         }
     },
