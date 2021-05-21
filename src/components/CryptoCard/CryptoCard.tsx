@@ -22,8 +22,9 @@ export const CryptoCard = (props: any) => {
             background="white"
             borderRadius="8"
             w="400px"
-            boxShadow="1px 4px 8px 0px #00000040"
+            boxShadow="xs"
             h="-moz-initial"
+            opacity={props.active ? 1 : 0.6}
         >
             <Image
                 alt="BitClout Logo"
@@ -50,7 +51,7 @@ export const CryptoCard = (props: any) => {
                     lineHeight="tight"
                     isTruncated
                 >
-                    <Text fontSize="3xl">
+                    <Text fontSize="3xl" color="gray.600">
                         {balance.amount} {balance.currency}
                     </Text>
                 </Box>

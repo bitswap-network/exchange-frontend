@@ -16,7 +16,7 @@ export const BalanceCard = (props: any) => {
 
     return (
         <Box
-            boxShadow="1px 4px 8px 0px #00000040"
+            boxShadow="xs"
             maxW="sm"
             borderRadius="lg"
             overflow="hidden"
@@ -52,7 +52,7 @@ export const BalanceCard = (props: any) => {
                     lineHeight="tight"
                     isTruncated
                 >
-                    <Text fontSize="3xl">
+                    <Text fontSize="3xl" color="gray.600">
                         {balance.amount} {balance.currency}
                     </Text>
                     <Text fontSize="1xl" color="gray.500">
