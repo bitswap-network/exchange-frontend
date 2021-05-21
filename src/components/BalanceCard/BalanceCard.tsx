@@ -1,23 +1,41 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, Image } from '@chakra-ui/react'
 import { BlueButton } from '../BlueButton'
 
-export function BalanceCard() {
+export const BalanceCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
     const balance = {
-        imageUrl:
-            'https://www.google.com/search?q=bitclout+png&rlz=1C5CHFA_enCA914CA914&tbm=isch&source=iu&ictx=1&fir=bObvfUw3tml4xM%252CLscjq3ngbNgZVM%252C_&vet=1&usg=AI4_-kR8kPv28H_ew_XNZjrX4u1arEi-Lg&sa=X&ved=2ahUKEwiNiemG_8zwAhU7ElkFHbyyDQUQ9QF6BAgSEAE&biw=890&bih=1009#imgrc=bObvfUw3tml4xM',
-        imageAlt: 'BitClout Logo',
-        currency: 'BCLT',
-        amount: 0.00021,
-        publicKey: '<bitclout public key>',
+        imageUrl: props.imageUrl,
+        imageAlt: props.imageAlt,
+        currency: props.currency,
+        amount: props.amount,
+        usdValue: props.usdValue,
+        publicKey: props.publicKey,
     }
 
     return (
-        <Box boxShadow="2xl" maxW="sm" borderRadius="lg" overflow="hidden">
-            <Box p="6">
-                <Box d="flex" alignItems="baseline">
+        <Box
+            boxShadow="1px 4px 8px 0px #00000040"
+            maxW="sm"
+            borderRadius="lg"
+            overflow="hidden"
+            bg="white"
+            d="flex"
+            w="full"
+            pos="relative"
+        >
+            <Image
+                alt="BitClout Logo"
+                htmlWidth="50px"
+                objectFit="cover"
+                pos="absolute"
+                top="4"
+                right="4"
+                src={balance.imageUrl}
+            />
+            <Box p="6" w="100%">
+                <Box d="flex">
                     <Box
                         color="gray.600"
                         fontWeight="semibold"
@@ -37,17 +55,18 @@ export function BalanceCard() {
                     <Text fontSize="3xl">
                         {balance.amount} {balance.currency}
                     </Text>
+                    <Text fontSize="1xl" color="gray.500">
+                        ~{balance.usdValue} USD
+                    </Text>
                 </Box>
                 <Box>
                     <Box as="span" color="gray.400" fontSize="xs">
                         {balance.publicKey}
                     </Box>
                 </Box>
-                <Box d="flex" mt="2" alignItems="center">
-                    <BlueButton text={'Withdraw'} width="200px" />
-                    <Box ml="5">
-                        <BlueButton text={'Deposit'} width="200px" />
-                    </Box>
+                <Box d="flex" mt="8" justifyContent="center">
+                    <BlueButton text={'Withdraw'} width="45%" />
+                    <BlueButton ml="5" text={'Deposit'} width="45%" />
                 </Box>
             </Box>
         </Box>

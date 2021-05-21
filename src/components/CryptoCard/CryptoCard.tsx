@@ -1,52 +1,60 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react'
-import { Box, Text, Image } from '@chakra-ui/react'
+import { Box, Text, Image, Button } from '@chakra-ui/react'
 
-export function CryptoCard() {
+export const CryptoCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
     const balance = {
-        imageUrl:
-            'https://www.google.com/search?q=bitclout+png&rlz=1C5CHFA_enCA914CA914&tbm=isch&source=iu&ictx=1&fir=bObvfUw3tml4xM%252CLscjq3ngbNgZVM%252C_&vet=1&usg=AI4_-kR8kPv28H_ew_XNZjrX4u1arEi-Lg&sa=X&ved=2ahUKEwiNiemG_8zwAhU7ElkFHbyyDQUQ9QF6BAgSEAE&biw=890&bih=1009#imgrc=bObvfUw3tml4xM',
-        imageAlt: 'BitClout Logo',
-        currency: 'BCLT',
-        amount: 0.00021,
-        publicKey: '<bitclout public key>',
+        imageUrl: props.imageUrl,
+        imageAlt: props.imageAlt,
+        currency: props.currency,
+        amount: props.amount,
+        publicKey: props.publicKey,
     }
 
     return (
-        <Box p="6">
-            <Box d="flex" mt="2" alignItems="center">
-                <Image
-                    alt="BitClout Logo"
-                    htmlWidth="70px"
-                    objectFit="cover"
-                    src="./bitcloutLogo.png"
-                />
+        <Button
+            d="flex"
+            alignItems="center"
+            justifyContent="flex-start"
+            p="5"
+            pr="9"
+            background="white"
+            borderRadius="8"
+            w="400px"
+            boxShadow="1px 4px 8px 0px #00000040"
+            h="-moz-initial"
+        >
+            <Image
+                alt="BitClout Logo"
+                htmlWidth="70px"
+                objectFit="cover"
+                src={balance.imageUrl}
+            />
 
-                <Box ml="5">
-                    <Box d="flex" alignItems="center">
-                        <Box
-                            color="gray.600"
-                            fontWeight="semibold"
-                            letterSpacing="wide"
-                            fontSize="xs"
-                            textTransform="uppercase"
-                        >
-                            {balance.currency} Balance
-                        </Box>
-                    </Box>
+            <Box ml="5">
+                <Box d="flex" alignItems="center">
                     <Box
-                        mt="1"
+                        color="gray.600"
                         fontWeight="semibold"
-                        lineHeight="tight"
-                        isTruncated
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
                     >
-                        <Text fontSize="3xl">
-                            {balance.amount} {balance.currency}
-                        </Text>
+                        {balance.currency} Balance
                     </Box>
                 </Box>
+                <Box
+                    mt="1"
+                    fontWeight="semibold"
+                    lineHeight="tight"
+                    isTruncated
+                >
+                    <Text fontSize="3xl">
+                        {balance.amount} {balance.currency}
+                    </Text>
+                </Box>
             </Box>
-        </Box>
+        </Button>
     )
 }
