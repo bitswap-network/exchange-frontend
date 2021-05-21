@@ -13,24 +13,16 @@ import {
 } from '@chakra-ui/react'
 import { RiCloseFill } from 'react-icons/ri'
 import { HiMenu } from 'react-icons/hi'
+import { useRecoilValue } from 'recoil'
 import { Logo } from './components/Logo'
 import { Link } from 'react-router-dom'
+import { loggedInState } from '../../store'
 import { AiOutlineUser } from 'react-icons/ai'
 
 const LINKS = ['home', 'orders', 'wallet']
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
-
-interface NavBarProps {
-    /** Determines if it should be the naked NavBar with just the Logo*/
-    loggedOut: boolean
-}
-
-export function NavBar({ loggedOut }: NavBarProps) {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // 📌 TODO: Connect all functionality
-    const welcomeMarkup = (
+export const DefaultNavBar = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <HStack
@@ -61,7 +53,11 @@ export function NavBar({ loggedOut }: NavBarProps) {
             </Flex>
         </Box>
     )
-
+export function NavBar() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const isLoggedIn = useRecoilValue(loggedInState)
+    console.log('IS LOGGED IN: ', isLoggedIn)
+    // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <Box px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -120,5 +116,5 @@ export function NavBar({ loggedOut }: NavBarProps) {
         </Box>
     )
 
-    return <>{loggedOut ? welcomeMarkup : loggedInMarkup}</>
+    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar}</>
 }

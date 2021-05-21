@@ -1,9 +1,4 @@
-import axios, {
-    AxiosError,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-} from 'axios'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { getData } from '../helpers/persistence'
 import { api } from '../config'
 
@@ -17,10 +12,13 @@ const onRequestError = (error: AxiosError): Promise<AxiosError> => {
     return Promise.reject(error)
 }
 
-const onAuthRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
-    const user = getData('user')
-    if (user.token) {
-        config.headers['Authorization'] = 'Bearer ' + user.token
+const onAuthRequest = async (
+    config: AxiosRequestConfig
+): Promise<AxiosRequestConfig> => {
+    const token = getData('token')
+    console.log(token)
+    if (token) {
+        config.headers['x-access-token'] = token
     }
     console.info(`[request] [${JSON.stringify(config)}]`)
     return config

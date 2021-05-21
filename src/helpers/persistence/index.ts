@@ -5,11 +5,7 @@ export const saveData = (key: string, data: any) => {
 
 export const getData = (key: string) => {
     const data: string | null = localStorage.getItem(key)
-    if (data) {
-        return JSON.parse(data)
-    } else {
-        return null
-    }
+    return data ? JSON.parse(data) : null
 }
 
 export const removeData = (key: string) => {
@@ -17,5 +13,5 @@ export const removeData = (key: string) => {
 }
 
 export const setIdentityUsers = (users: IdentityUser) => {
-    saveData('identityUsers', JSON.stringify(users))
+    saveData('identityUsers', users)
 }
