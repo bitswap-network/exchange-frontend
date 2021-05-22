@@ -13,6 +13,7 @@ import { Orders } from './pages/Orders'
 import { Profile } from './pages/Profile'
 
 import { DefaultNavBar, NavBar } from './components/NavBar'
+import { PrivateRoute } from './components/PrivateRoute'
 
 import * as config from './config'
 import { identityHandler } from './services/identity'
@@ -56,15 +57,15 @@ export const App = (): ReactElement => {
                                         <Route path="/login">
                                             <Login />
                                         </Route>
-                                        <Route path="/orders">
+                                        <PrivateRoute path="/orders">
                                             <Orders />
-                                        </Route>
-                                        <Route path="/wallet">
+                                        </PrivateRoute>
+                                        <PrivateRoute path="/wallet">
                                             <Wallet />
-                                        </Route>
-                                        <Route path="/profile">
+                                        </PrivateRoute>
+                                        <PrivateRoute path="/profile">
                                             <Profile />
-                                        </Route>
+                                        </PrivateRoute>
                                         <Route path="/home">
                                             <Redirect to="/" />
                                         </Route>
