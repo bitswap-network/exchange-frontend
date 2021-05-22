@@ -23,36 +23,36 @@ const LINKS = ['home', 'orders', 'wallet']
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (
-        <Box px={4}>
-            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-                <HStack
-                    as={'nav'}
-                    spacing={5}
-                    display={{ base: 'none', md: 'flex' }}
+    <Box px={4}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <HStack
+                as={'nav'}
+                spacing={5}
+                display={{ base: 'none', md: 'flex' }}
+            >
+                <Link to="/">
+                    <Logo />
+                </Link>
+            </HStack>
+            <Flex alignItems={'center'} mr="5">
+                <Button
+                    bg="#4978F0"
+                    p="0px 40px"
+                    color="white"
+                    fontWeight="600"
+                    fontSize="16"
+                    borderRadius="6"
+                    boxShadow="0px 3px 6px 0px #00000040"
+                    as={Link}
+                    to="/login"
                 >
-                    <Link to="/">
-                        <Logo />
-                    </Link>
-                </HStack>
-                <Flex alignItems={'center'} mr="5">
-                    <Button
-                        bg="#4978F0"
-                        p="0px 40px"
-                        color="white"
-                        fontWeight="600"
-                        fontSize="16"
-                        borderRadius="6"
-                        boxShadow="0px 3px 6px 0px #00000040"
-                        as={Link}
-                        to="/login"
-                    >
-                        Login
-                    </Button>
-                    <Spacer />
-                </Flex>
+                    Login
+                </Button>
+                <Spacer />
             </Flex>
-        </Box>
-    )
+        </Flex>
+    </Box>
+)
 export function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
