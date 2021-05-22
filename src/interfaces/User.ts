@@ -9,7 +9,6 @@ export interface User {
         bitclout: number
         ether: number
     }
-    onGoingDeposit: TransactionSchema | string | null
     transactions: string[]
     verification: {
         email: boolean
