@@ -15,3 +15,9 @@ export const removeData = (key: string) => {
 export const setIdentityUsers = (users: IdentityUser) => {
     saveData('identityUsers', users)
 }
+
+export const logout = () => {
+    removeData('user')
+    removeData('identityUsers')
+    removeData('token')
+}

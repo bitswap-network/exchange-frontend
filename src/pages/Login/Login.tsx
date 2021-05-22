@@ -40,7 +40,7 @@ export function Login(): ReactElement {
     const [nameErr, setNameErr] = useState(false)
     const [termsErr, setTermsErr] = useState(false)
     const [registrationSuccess, setRegistrationSuccess] = useState(false)
-
+    const [errText, setErrText] = useState('')
     const [checked, setChecked] = useState(false)
 
     const registerHandler = () => {
@@ -50,10 +50,19 @@ export function Login(): ReactElement {
                 createProfile.publicKey,
                 createProfile.email,
                 createProfile.name
-            ).then(() => {
-                setLoading(false)
-                setRegistrationSuccess(true)
-            })
+            )
+                .then(() => {
+                    setErrText('')
+                    setLoading(false)
+                    setRegistrationSuccess(true)
+                })
+                .catch((error: any) => {
+                    if (error.response) {
+                        setErrText(error.response.data)
+                    } else {
+                        setErrText('Something went wrong, try again later.')
+                    }
+                })
         } else {
             setLoading(false)
         }
@@ -155,53 +164,66 @@ export function Login(): ReactElement {
             <Text fontSize="md" fontWeight="bold">
                 Name
             </Text>
-            <HStack spacing={4} w="full">
-                <Input
-                    isInvalid={nameErr}
-                    errorBorderColor="red.300"
-                    variant="outline"
-                    placeholder="Mike Wazowski"
-                    size="md"
-                    p="7"
-                    value={createProfile.name}
-                    onChange={nameInputHandler}
-                />
-                {nameErr ? (
-                    <HiExclamationCircle
-                        style={{ display: 'inline' }}
-                        color="#EE0004"
-                        size="24"
+            <VStack>
+                <HStack spacing={4} w="full">
+                    <Input
+                        isInvalid={nameErr}
+                        errorBorderColor="red.300"
+                        variant="outline"
+                        placeholder="Mike Wazowski"
+                        size="md"
+                        p="7"
+                        value={createProfile.name}
+                        onChange={nameInputHandler}
                     />
+                    {nameErr ? (
+                        <HiExclamationCircle
+                            style={{ display: 'inline' }}
+                            color="#EE0004"
+                            size="24"
+                        />
+                    ) : null}
+                </HStack>
+                {nameErr ? (
+                    <Text fontSize="md" color="red.300">
+                        Please provide a valid name.
+                    </Text>
                 ) : null}
-            </HStack>
+            </VStack>
             <Text fontSize="md" fontWeight="bold">
                 Email Address
             </Text>
-            <HStack spacing={4} w="full">
-                <Input
-                    isInvalid={emailErr}
-                    errorBorderColor="red.300"
-                    variant="outline"
-                    placeholder="mikewazowski@bitswap.network"
-                    size="md"
-                    p="7"
-                    value={createProfile.email}
-                    onChange={emailInputHandler}
-                />
-                {emailErr ? (
-                    <HiExclamationCircle
-                        style={{ display: 'inline' }}
-                        color="#EE0004"
-                        size="24"
+            <VStack>
+                <HStack spacing={4} w="full">
+                    <Input
+                        isInvalid={emailErr}
+                        errorBorderColor="red.300"
+                        variant="outline"
+                        placeholder="mikewazowski@bitswap.network"
+                        size="md"
+                        p="7"
+                        value={createProfile.email}
+                        onChange={emailInputHandler}
                     />
+                    {emailErr ? (
+                        <HiExclamationCircle
+                            style={{ display: 'inline' }}
+                            color="#EE0004"
+                            size="24"
+                        />
+                    ) : null}
+                </HStack>
+                {emailErr ? (
+                    <Text fontSize="md" color="red.300">
+                        Please provide a valid email address.
+                    </Text>
                 ) : null}
-            </HStack>
+            </VStack>
             <Checkbox
                 isChecked={checked}
                 onChange={(e) => setChecked(e.target.checked)}
                 isInvalid={termsErr}
             >
-                {/* https://bitswap.network/terms-and-conditions */}
                 <Text fontSize="sm" color="gray.600" maxW="400px">
                     I agree to BitSwap’s{' '}
                     <Link
@@ -214,6 +236,9 @@ export function Login(): ReactElement {
                     </Link>
                 </Text>
             </Checkbox>
+            <Text fontSize="md" color="red.300">
+                {errText}
+            </Text>
             <Flex w="full" justify="center">
                 <BlueButton
                     text={`   Create Account   `}
@@ -235,7 +260,7 @@ export function Login(): ReactElement {
                 account.
             </Text>
             <BlueButton
-                text={`   Go to dashboard   `}
+                text={`   Login   `}
                 width="350px"
                 onClick={loginHandler}
             />

@@ -1,19 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { HiExclamationCircle } from 'react-icons/hi'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, Link } from '@chakra-ui/react'
 import { profile } from 'console'
-
+import { useRecoilValue } from 'recoil'
+import { userState } from '../../store'
+import { fetchBitcloutProfile } from '../../services/auth'
+import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
+import { logout } from '../../helpers/persistence'
 export function Profile(): React.ReactElement {
-    const user = {
-        username: '@elonmusk',
-        email: 'elonmusk@gmail.com',
-        followers: '15839',
-        coin_price: '69,420',
-        profile_picture:
-            'https://res.cloudinary.com/crunchbase-production/image/upload/c_thumb,h_256,w_256,f_auto,g_faces,z_0.7,q_auto:eco/hevy6dvk7gien0rmg37n',
+    const user = useRecoilValue(userState)
+    const [bitcloutProfile, setBitcloutProfile] =
+        useState<BitcloutProfile | null>(null)
+
+    useEffect(() => {
+        if (user) {
+            console.log('s')
+            fetchBitcloutProfile(
+                user.bitclout.publicKey,
+                user.bitclout.username
+            ).then((response) => {
+                setBitcloutProfile(response.data)
+                console.log(response.data)
+            })
+        }
+    }, [])
+
+    const handleLogout = () => {
+        logout()
+        window.location.assign('/login')
     }
+    // user.verification.bitcloutString
 
     return (
         <div>
@@ -25,65 +43,25 @@ export function Profile(): React.ReactElement {
                 mt="20px"
             >
                 <img
-                    src={user.profile_picture}
+                    src={user.bitclout.profilePicture}
                     style={{ width: 80, height: 80, borderRadius: 80 }}
                 />
-                <Text color="#000" fontWeight="700" fontSize="20" mt="15">
-                    {user.username}
+                <Link
+                    isExternal
+                    href={`https://bitclout.com/u/${user.bitclout.username}`}
+                    color="black"
+                    fontWeight="700"
+                    fontSize="20"
+                    mt="15"
+                >
+                    @{user.bitclout.username}
+                </Link>
+                <Text color="gray.700" fontWeight="400" fontSize="16" mt="15">
+                    {user.bitclout.bio}
                 </Text>
-                <Flex flexDirection="row" width="100%">
-                    <Box
-                        display="flex"
-                        flex="0.5"
-                        justifyContent="flex-end"
-                        pr="10px"
-                        flexDir="row"
-                    >
-                        <Text
-                            color="#5B5B5B"
-                            fontSize="16"
-                            mt="15"
-                            fontWeight="700"
-                            mr="1"
-                        >
-                            {user.followers}
-                        </Text>
-                        <Text
-                            color="#5B5B5B"
-                            fontSize="16"
-                            mt="15"
-                            fontWeight="500"
-                        >
-                            Followers
-                        </Text>
-                    </Box>
-                    <Box
-                        display="flex"
-                        flex="0.5"
-                        justifyContent="flex-start"
-                        pl="10px"
-                    >
-                        <Text
-                            color="#5B5B5B"
-                            fontSize="16"
-                            mt="15"
-                            fontWeight="700"
-                            mr="1"
-                        >
-                            ~${user.coin_price}
-                        </Text>
-                        <Text
-                            color="#5B5B5B"
-                            fontSize="16"
-                            mt="15"
-                            fontWeight="500"
-                        >
-                            Coin Price
-                        </Text>
-                    </Box>
-                </Flex>
+
                 <Flex
-                    mt="50px"
+                    mt="20px"
                     w={{ sm: '80%', md: '600px' }}
                     p="20px"
                     flexDir={{ sm: 'column', md: 'row' }}
@@ -203,9 +181,29 @@ export function Profile(): React.ReactElement {
                             boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
-                            Verify
+                            Edit
                         </Button>
                     </Flex>
+                </Flex>
+                <Flex
+                    mt="50px"
+                    w={{ sm: '80%', md: '600px' }}
+                    flexDir="column"
+                    alignItems="center"
+                >
+                    <Button
+                        bg="red.500"
+                        w="125px"
+                        p="10px 0"
+                        color="white"
+                        fontWeight="600"
+                        fontSize="16"
+                        borderRadius="6"
+                        boxShadow="0px 2px 6px 0px #00000030"
+                        onClick={handleLogout}
+                    >
+                        Logout
+                    </Button>
                 </Flex>
             </Flex>
         </div>
