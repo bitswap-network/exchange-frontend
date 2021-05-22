@@ -219,7 +219,6 @@ export function Login(): ReactElement {
                     text={`   Create Account   `}
                     width="350px"
                     onClick={registerHandler}
-                    padding="20px"
                     disabled={!checked}
                 />
             </Flex>
@@ -239,7 +238,6 @@ export function Login(): ReactElement {
                 text={`   Go to dashboard   `}
                 width="350px"
                 onClick={loginHandler}
-                padding="20px"
             />
         </VStack>
     )
