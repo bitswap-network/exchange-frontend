@@ -25,6 +25,16 @@ export const login = async (publicKey: string, identityJWT: string) => {
         })
 }
 
+export const fetchBitcloutProfile = async (
+    publicKey: string,
+    username?: string
+) => {
+    return await client.post('/auth/fetch-profile', {
+        publicKey: publicKey,
+        username: username ? username : '',
+    })
+}
+
 export const register = async (
     publicKey: string,
     email: string,
