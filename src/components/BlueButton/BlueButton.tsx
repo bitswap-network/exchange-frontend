@@ -12,7 +12,6 @@ interface BlueButtonProps extends ButtonProps {
     /** width */
     width?: string
     loading?: boolean
-    padding?: string
     disabled?: boolean
 }
 
@@ -21,7 +20,6 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
     icon,
     width,
     loading,
-    padding,
     disabled,
     ...rest
 }: BlueButtonProps) => {
@@ -38,8 +36,6 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
             }}
             width={width ? width : ''}
             color="white"
-            pt={padding != '' ? padding : 'inherit'}
-            pb={padding != '' ? padding : 'inherit'}
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
         >
