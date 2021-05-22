@@ -32,7 +32,8 @@ export function Profile(): React.ReactElement {
         window.location.assign('/login')
     }
     // user.verification.bitcloutString
-
+    // user.verification.email
+    // user.verification.status
     return (
         <div>
             <Flex
@@ -181,7 +182,7 @@ export function Profile(): React.ReactElement {
                             boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
-                            Edit
+                            Verify
                         </Button>
                     </Flex>
                 </Flex>
