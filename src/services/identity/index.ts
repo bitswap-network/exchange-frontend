@@ -12,7 +12,7 @@ let initialized = false
 let pendingRequests: Subject<any>[] = []
 let identityWindow: Window | null
 let identityWindowSubject: Subject<any> | null
-let iframe: any | null = null
+let iframe: HTMLIFrameElement | null
 
 let importingIdentities: any[]
 
@@ -25,7 +25,7 @@ const launch = (
         url += path
     }
     let prepend = true
-    let httpParams = ``
+    let httpParams = ''
 
     if (params?.publicKey) {
         httpParams = httpParams.concat(
@@ -37,15 +37,16 @@ const launch = (
         httpParams = httpParams.concat(`${prepend ? '?' : '&'}tx=${params.tx}`)
         prepend = false
     }
-    httpParams = httpParams.concat(
-        `${prepend ? '?' : '&'}accessLevelRequest=${accessLevel}`
-    )
-
-    url.concat(httpParams)
-
+    if (path === '/log-in') {
+        httpParams = httpParams.concat(
+            `${prepend ? '?' : '&'}accessLevelRequest=${accessLevel}`
+        )
+    }
+    url += httpParams
+    console.log(url)
     // center the window
-    const h = 1000
-    const w = 800
+    const h = 600
+    const w = 600
     const y = window.outerHeight / 2 + window.screenY - h / 2
     const x = window.outerWidth / 2 + window.screenX - w / 2
     identityWindowSubject = new Subject()
@@ -89,7 +90,7 @@ const handleInitialize = (event: MessageEvent) => {
     if (!initialized) {
         initialized = true
         console.log('initializing identity...')
-        iframe = document.getElementById('identity')
+        iframe = document.getElementById('identity') as HTMLIFrameElement
         for (const request of pendingRequests) {
             postMessage(request)
         }
@@ -152,10 +153,10 @@ const handleResponse = (event: MessageEvent) => {
         data: { id, payload },
     } = event
 
-    const req = outboundRequests.id
+    const req = outboundRequests[id]
     req.next(payload)
     req.complete()
-    delete outboundRequests.id
+    delete outboundRequests[id]
 }
 
 const send = (method: string, payload: any) => {
@@ -175,6 +176,7 @@ const send = (method: string, payload: any) => {
 
 const postMessage = (req: any) => {
     if (initialized && iframe) {
+        // @ts-ignore: Object is possibly 'null'.
         iframe.contentWindow.postMessage(req, '*')
     } else {
         pendingRequests.push(req)
@@ -186,7 +188,7 @@ const respond = (window: Window, id: string, payload: any): void => {
     window.postMessage({ id, service: 'identity', payload }, '*')
 }
 
-const identityHandler = (event: any) => {
+const identityHandler = (event: MessageEvent) => {
     const { service, method } = event.data
     if (service !== 'identity') {
         return

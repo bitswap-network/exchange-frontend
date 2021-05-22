@@ -131,6 +131,7 @@ export function Profile(): React.ReactElement {
                             fontWeight="600"
                             fontSize="16"
                             borderRadius="6"
+                            boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
                             Edit
@@ -143,6 +144,7 @@ export function Profile(): React.ReactElement {
                             fontWeight="600"
                             fontSize="16"
                             borderRadius="6"
+                            boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
                             Verify
@@ -198,6 +200,7 @@ export function Profile(): React.ReactElement {
                             fontWeight="600"
                             fontSize="16"
                             borderRadius="6"
+                            boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
                             Verify

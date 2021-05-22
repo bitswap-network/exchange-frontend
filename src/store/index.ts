@@ -7,12 +7,9 @@ export const userState = atom({
     default: getData('user'),
 })
 
-export const tokenState = selector({
-    key: 'access_token',
-    get: ({ get }) => {
-        const user = get(userState)
-        return user.token
-    },
+export const tokenState = atom({
+    key: 'tokenState',
+    default: getData('token'),
 })
 
 export const loggedInState = selector({
@@ -20,12 +17,11 @@ export const loggedInState = selector({
     get: async ({ get }) => {
         const user = get(userState)
         console.log(user)
-
         if (user) {
             return await verifyToken()
         } else {
-            console.log('remove')
             removeData('user')
+            removeData('token')
             return false
         }
     },
@@ -33,7 +29,7 @@ export const loggedInState = selector({
 
 export const identityUsers = atom({
     key: 'identityUsers',
-    default: JSON.parse(getData('identityUsers')),
+    default: getData('identityUsers'),
 })
 export const currentPublicKey = atom({
     key: 'publicKey',
