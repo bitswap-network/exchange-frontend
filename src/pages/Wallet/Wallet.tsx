@@ -82,6 +82,8 @@ export function Wallet(): React.ReactElement {
                             <Box
                                 pb="4"
                                 onClick={() => setSelectedCurrency('BCLT')}
+                                w="full"
+                                maxW="sm"
                             >
                                 <CryptoCard
                                     active={selectedCurrency == 'BCLT'}
@@ -92,7 +94,11 @@ export function Wallet(): React.ReactElement {
                                     publicKey={BCLT.publicKey}
                                 />
                             </Box>
-                            <Box onClick={() => setSelectedCurrency('ETH')}>
+                            <Box
+                                onClick={() => setSelectedCurrency('ETH')}
+                                w="full"
+                                maxW="sm"
+                            >
                                 <CryptoCard
                                     active={selectedCurrency == 'ETH'}
                                     imageUrl={ETH.imageUri}

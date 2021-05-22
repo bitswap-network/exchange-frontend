@@ -21,7 +21,7 @@ export const CryptoCard = (props: any) => {
             pr="9"
             background="white"
             borderRadius="8"
-            w="400px"
+            w="full"
             boxShadow="xs"
             h="-moz-initial"
             opacity={props.active ? 1 : 0.6}
