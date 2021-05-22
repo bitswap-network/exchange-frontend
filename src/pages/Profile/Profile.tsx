@@ -125,7 +125,7 @@ export function Profile(): React.ReactElement {
                             boxShadow="0px 2px 6px 0px #00000030"
                             onClick={() => console.log('hello')}
                         >
-                            Resend Verification
+                            Verify
                         </Button>
                     </Flex>
                 </Flex>
