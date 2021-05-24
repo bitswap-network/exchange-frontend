@@ -1,4 +1,4 @@
-import { client, authClient } from '../index'
+import { authClient } from '../index'
 
 export const getUserData = async () => {
     return await authClient.get('/user/data')
@@ -12,6 +12,10 @@ export const updateProfile = async (email: string, name: string) => {
         email: email,
         name: name,
     })
+}
+
+export const resendVerificationEmail = async (email: string, name: string) => {
+    return await authClient.get(`/user/resend-verification`)
 }
 
 export const verifyBitclout = async (depth?: number) => {
