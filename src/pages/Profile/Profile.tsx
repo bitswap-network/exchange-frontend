@@ -23,13 +23,15 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react'
-import { profile } from 'console'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store'
 import { BlueButton } from '../../components/BlueButton/BlueButton'
 import { fetchBitcloutProfile } from '../../services/auth'
 import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
 import { logout } from '../../helpers/persistence'
+
+const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
+
 export function Profile(): React.ReactElement {
     const user = useRecoilValue(userState)
     const [bitcloutProfile, setBitcloutProfile] =
@@ -61,26 +63,16 @@ export function Profile(): React.ReactElement {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const emailInputHandler = (e: any) => {
-        if (e.target.value != '') {
-            setUserEmail(e.target.value)
-        } else {
-            setEmailErr(true)
-        }
+        setUserEmail(e.target.value)
     }
 
     useEffect(() => {
-        if (user) {
-            console.log('s')
-            fetchBitcloutProfile(
-                user.bitclout.publicKey,
-                user.bitclout.username
-            ).then((response) => {
-                setBitcloutProfile(response.data)
-                console.log(response.data)
-            })
+        if (!regEmail.test(userEmail)) {
+            setEmailErr(true)
+        } else {
+            setEmailErr(false)
         }
-    }, [])
-
+    }, [userEmail])
 
     const handleLogout = () => {
         logout()
