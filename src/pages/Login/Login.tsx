@@ -29,6 +29,9 @@ interface CreateUserObj {
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
 export function Login(): ReactElement {
+    const [bitcloutProfile, setBitcloutProfile] =
+        useState<BitcloutProfile | null>(null)
+
     const [createProfile, setCreateProfile] = useState<CreateUserObj>({
         publicKey: '',
         email: '',
@@ -87,7 +90,7 @@ export function Login(): ReactElement {
 
     const loginHandler = () => {
         launch('/log-in').subscribe((res) => {
-            console.log(res)
+            setErrText('')
             setIdentityUsers(res.users)
             const payload = {
                 accessLevel: res.users[res.publicKeyAdded].accessLevel,
@@ -103,11 +106,21 @@ export function Login(): ReactElement {
                     .catch((error: any) => {
                         //TODO: revise response status codes
                         if (error.response.status === 406) {
-                            setNewUser(true)
-                            setCreateProfile({
-                                ...createProfile,
-                                publicKey: res.publicKeyAdded,
-                            })
+                            fetchBitcloutProfile(res.publicKeyAdded, '')
+                                .then((response) => {
+                                    console.log(response.data)
+                                    setBitcloutProfile(response.data)
+                                    setNewUser(true)
+                                    setCreateProfile({
+                                        ...createProfile,
+                                        publicKey: res.publicKeyAdded,
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log(error.response.data)
+                                    error.response.data.message &&
+                                        setErrText(error.response.data.message)
+                                })
                         } else {
                             console.log(error)
                         }
@@ -145,6 +158,9 @@ export function Login(): ReactElement {
                 width="350px"
                 onClick={loginHandler}
             />
+            <Text fontSize="md" color="red.300">
+                {errText}
+            </Text>
         </VStack>
     )
 
@@ -155,7 +171,16 @@ export function Login(): ReactElement {
                 New Account
             </Text>
             <Text fontSize="sm" color="gray.600">
-                Public key being imported:<i> {createProfile.publicKey}</i>
+                Account being imported:
+                <Link
+                    isExternal
+                    href={`https://bitclout.com/u/${bitcloutProfile?.Username}`}
+                    fontWeight="bold"
+                    color="brand.100"
+                >
+                    {' '}
+                    {bitcloutProfile?.Username}
+                </Link>
             </Text>
             <Text fontSize="md" color="gray.600">
                 Let’s get you started with BitSwap!

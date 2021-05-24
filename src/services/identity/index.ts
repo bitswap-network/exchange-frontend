@@ -185,7 +185,7 @@ const postMessage = (req: any) => {
 
 // Respond to a received message
 const respond = (window: Window, id: string, payload: any): void => {
-    window.postMessage({ id, service: 'identity', payload }, '*')
+    window && window.postMessage({ id, service: 'identity', payload }, '*')
 }
 
 const identityHandler = (event: MessageEvent) => {

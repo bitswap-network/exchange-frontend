@@ -81,6 +81,7 @@ export function Profile(): React.ReactElement {
         }
     }, [])
 
+
     const handleLogout = () => {
         logout()
         window.location.assign('/login')
