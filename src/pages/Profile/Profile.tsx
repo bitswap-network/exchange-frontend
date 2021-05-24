@@ -14,6 +14,14 @@ import {
     Image,
     InputRightElement,
     InputGroup,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
 } from '@chakra-ui/react'
 import { profile } from 'console'
 import { useRecoilValue } from 'recoil'
@@ -23,25 +31,25 @@ import { fetchBitcloutProfile } from '../../services/auth'
 import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
 import { logout } from '../../helpers/persistence'
 export function Profile(): React.ReactElement {
-    // const user = useRecoilValue(userState)
+    const user = useRecoilValue(userState)
     const [bitcloutProfile, setBitcloutProfile] =
         useState<BitcloutProfile | null>(null)
 
-    const user = {
-        email: 'eshchock1@gmail.com',
+    // const user = {
+    //     email: 'eshchock1@gmail.com',
 
-        bitclout: {
-            profilePicture:
-                'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
-            username: 'eshwara',
-            bio: 'hello there',
-        },
-        verification: {
-            bitcloutString: 'iwud19823jdus8fkdks',
-            email: false,
-            status: false,
-        },
-    }
+    //     bitclout: {
+    //         profilePicture:
+    //             'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
+    //         username: 'eshwara',
+    //         bio: 'hello there',
+    //     },
+    //     verification: {
+    //         bitcloutString: 'iwud19823jdus8fkdks',
+    //         email: false,
+    //         status: false,
+    //     },
+    // }
 
     let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
@@ -49,6 +57,8 @@ export function Profile(): React.ReactElement {
     const [userEmail, setUserEmail] = useState(user.email)
     const [currentPage, setCurrentPage] = useState('profile')
     const [textCopied, setTextCopied] = useState('copy')
+    const [verificationErrText, setVerificationErrText] = useState('')
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const emailInputHandler = (e: any) => {
         if (e.target.value != '') {
@@ -75,17 +85,25 @@ export function Profile(): React.ReactElement {
         logout()
         window.location.assign('/login')
     }
-    // user.verification.bitcloutString
-    // user.verification.email
-    // user.verification.status
 
     const resendEmailVerification = () => {
-        console.log('resent email verification')
+        onOpen()
     }
 
     const updateEmail = () => {
         console.log('email updated')
         window.location.assign('/profile')
+    }
+
+    const checkBitcloutVerification = () => {
+        if (!user.verification.status) {
+            setVerificationErrText(
+                'You did not make your verification post yet!'
+            )
+        } else {
+            setVerificationErrText('')
+            setCurrentPage('complete')
+        }
     }
 
     const copyToClipboard = (e: any) => {
@@ -100,6 +118,28 @@ export function Profile(): React.ReactElement {
 
     const profilePage = (
         <>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Verification Email Sent</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        An email was sent to {user.email} for verification.
+                        Check your spam folder if you cannot find the email.
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button
+                            bgColor="brand.100"
+                            color="white"
+                            mr={3}
+                            onClick={onClose}
+                        >
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
             <Flex
                 minH="100%"
                 align="center"
@@ -435,11 +475,14 @@ export function Profile(): React.ReactElement {
                     </InputRightElement>
                 </InputGroup>
                 <Image src="./bitclout_verification.png" />
-                <Flex alignSelf="center">
+                <Flex w="full" align="center" flexDir="column">
+                    <Text fontSize="md" color="red.300" mb="4">
+                        {verificationErrText}
+                    </Text>
                     <BlueButton
                         text={`   Verify   `}
                         width="350px"
-                        onClick={() => setCurrentPage('complete')}
+                        onClick={checkBitcloutVerification}
                     />
                 </Flex>
             </VStack>
