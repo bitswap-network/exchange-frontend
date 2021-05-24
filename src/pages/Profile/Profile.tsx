@@ -11,21 +11,6 @@ import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
 import { logout } from '../../helpers/persistence'
 export function Profile(): React.ReactElement {
     const user = useRecoilValue(userState)
-    const [bitcloutProfile, setBitcloutProfile] =
-        useState<BitcloutProfile | null>(null)
-
-    useEffect(() => {
-        if (user) {
-            console.log('s')
-            fetchBitcloutProfile(
-                user.bitclout.publicKey,
-                user.bitclout.username
-            ).then((response) => {
-                setBitcloutProfile(response.data)
-                console.log(response.data)
-            })
-        }
-    }, [])
 
     const handleLogout = () => {
         logout()
