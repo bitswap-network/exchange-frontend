@@ -60,11 +60,10 @@ export function Login(): ReactElement {
                     setRegistrationSuccess(true)
                 })
                 .catch((error: any) => {
-                    if (error.response) {
-                        setErrText(error.response.data)
-                    } else {
-                        setErrText('Something went wrong, try again later.')
-                    }
+                    console.log(error)
+                    error.response.data
+                        ? setErrText(error.response.data)
+                        : setErrText('Something went wrong, try again later.')
                 })
         } else {
             setLoading(false)
@@ -166,7 +165,7 @@ export function Login(): ReactElement {
     )
 
     const newUserView = (
-        <VStack spacing={5} align="flex-start" maxW="450px">
+        <VStack spacing={5} align="flex-start" maxW="400px">
             {/* 📌TODO: Change to BitSwap 3D thing with white background */}
             <Text fontSize="xx-large" fontWeight="bold">
                 New Account
@@ -189,7 +188,7 @@ export function Login(): ReactElement {
             <Text fontSize="md" fontWeight="bold">
                 Name
             </Text>
-            <VStack>
+            <VStack w="full">
                 <HStack spacing={4} w="full">
                     <Input
                         isInvalid={nameErr}
@@ -218,7 +217,7 @@ export function Login(): ReactElement {
             <Text fontSize="md" fontWeight="bold">
                 Email Address
             </Text>
-            <VStack>
+            <VStack w="full">
                 <HStack spacing={4} w="full">
                     <Input
                         isInvalid={emailErr}

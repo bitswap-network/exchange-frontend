@@ -39,46 +39,48 @@ export const App = (): ReactElement => {
                 }}
             />
             <RecoilRoot>
-                {/* <Suspense fallback={<></>}> */}
-                <ChakraProvider theme={bitswapTheme}>
-                    <BrowserRouter>
-                        <Grid h="100vh" templateRows={'64px 1fr'}>
-                            {/* TODO: implement auth to set loggedOut */}
-                            <Suspense fallback={DefaultNavBar}>
-                                <NavBar />
-                            </Suspense>
+                <Suspense fallback={<></>}>
+                    <ChakraProvider theme={bitswapTheme}>
+                        <BrowserRouter>
+                            <Grid h="100vh" templateRows={'64px 1fr'}>
+                                {/* TODO: implement auth to set loggedOut */}
+                                <Suspense fallback={DefaultNavBar}>
+                                    <NavBar />
+                                </Suspense>
 
-                            <Box bg="background.primary" p={8}>
-                                <Container maxW="container.xl">
-                                    <Switch>
-                                        <Route path="/storybook">
-                                            <StoryBook />
-                                        </Route>
-                                        <Route path="/login">
-                                            <Login />
-                                        </Route>
-                                        <PrivateRoute path="/orders">
-                                            <Orders />
-                                        </PrivateRoute>
-                                        <PrivateRoute path="/wallet">
-                                            <Wallet />
-                                        </PrivateRoute>
-                                        <PrivateRoute path="/profile">
-                                            <Profile />
-                                        </PrivateRoute>
-                                        <Route path="/home">
-                                            <Redirect to="/" />
-                                        </Route>
-                                        <Route path="/">
-                                            <Home />
-                                        </Route>
-                                    </Switch>
-                                </Container>
-                            </Box>
-                        </Grid>
-                    </BrowserRouter>
-                </ChakraProvider>
-                {/* </Suspense> */}
+                                <Box bg="background.primary" p={8}>
+                                    <Container maxW="container.xl">
+                                        <Switch>
+                                            <Route path="/storybook">
+                                                <StoryBook />
+                                            </Route>
+                                            <Route path="/login">
+                                                <Login />
+                                            </Route>
+                                            <PrivateRoute path="/orders">
+                                                <Orders />
+                                            </PrivateRoute>
+                                            <PrivateRoute path="/wallet">
+                                                <Wallet />
+                                            </PrivateRoute>
+                                            <PrivateRoute path="/profile">
+                                                {/* <Route path="/profile"> */}
+                                                <Profile />
+                                                {/* </Route> */}
+                                            </PrivateRoute>
+                                            <Route path="/home">
+                                                <Redirect to="/" />
+                                            </Route>
+                                            <Route path="/">
+                                                <Home />
+                                            </Route>
+                                        </Switch>
+                                    </Container>
+                                </Box>
+                            </Grid>
+                        </BrowserRouter>
+                    </ChakraProvider>
+                </Suspense>
             </RecoilRoot>
         </>
     )
