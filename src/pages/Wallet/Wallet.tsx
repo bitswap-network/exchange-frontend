@@ -7,11 +7,13 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store'
 import { getEthUSD, getBitcloutUSD } from '../../services/utility'
+import { launch, sign } from '../../services/identity'
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
     const user = useRecoilValue(userState)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
     const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
+    const [selectedCurrency, setSelectedCurrency] = useState('BCLT')
     useEffect(() => {
         getEthUSD().then((response) => {
             console.log(response.data.data)
@@ -40,7 +42,10 @@ export function Wallet(): React.ReactElement {
         publicKey: '<ethereum public key>',
     }
 
-    const [selectedCurrency, setSelectedCurrency] = useState('BCLT')
+    const depositCurrency = () => {
+        if (selectedCurrency === 'BCLT') {
+        }
+    }
     const data = [
         {
             id: '<11235813>',
