@@ -1,10 +1,12 @@
+export interface IdentityUsers {
+    [index: string]: IdentityUser
+}
+
 export interface IdentityUser {
-    [index: string]: {
-        hasExtraText: boolean
-        btcDepositAddress: string
-        encryptedSeedHex: string
-        network: string
-        accessLevel: number
-        accessLevelHmac: string
-    }
+    hasExtraText: boolean
+    btcDepositAddress: string
+    encryptedSeedHex: string
+    network: string
+    accessLevel: number
+    accessLevelHmac: string
 }
