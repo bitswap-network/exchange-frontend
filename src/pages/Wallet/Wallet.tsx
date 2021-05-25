@@ -1,27 +1,33 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Flex, Heading, VStack, SimpleGrid } from '@chakra-ui/react'
 import { BalanceCard } from '../../components/BalanceCard'
 import { CryptoCard } from '../../components/CryptoCard'
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-} from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
+import { useRecoilValue } from 'recoil'
+import { userState } from '../../store'
+import { getEthUSD, getBitcloutUSD } from '../../services/utility'
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
+    const user = useRecoilValue(userState)
+    const [ethUsd, setEthUsd] = useState<number | null>(null)
+    const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
+    useEffect(() => {
+        getEthUSD().then((response) => {
+            console.log(response.data.data)
+            setEthUsd(response.data.data)
+        })
+        getBitcloutUSD().then((response) => {
+            setBitcloutUsd(response.data.data)
+        })
+    }, [])
     const BCLT = {
         imageUri: './bitcloutLogo.png',
         imageAlt: 'BitClout Logo',
         currency: 'BCLT',
-        amount: 0.00021,
-        usdValue: 23.344,
-        publicKey: 'bitclout public key>',
+        amount: user.balance.bitclout,
+        usdValue: bitcloutUsd ? bitcloutUsd * user.balance.bitclout : null,
+        publicKey: user.bitclout.publicKey,
     }
 
     const ETH = {
@@ -29,8 +35,8 @@ export function Wallet(): React.ReactElement {
             'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png',
         imageAlt: 'Ether Logo',
         currency: 'ETH',
-        amount: 0.231,
-        usdValue: 1323.344,
+        amount: user.balance.ether,
+        usdValue: ethUsd ? ethUsd * user.balance.ether : null,
         publicKey: '<ethereum public key>',
     }
 
@@ -119,8 +125,12 @@ export function Wallet(): React.ReactElement {
                                     imageAlt={BCLT.imageAlt}
                                     currency={BCLT.currency}
                                     amount={BCLT.amount}
-                                    usdValue={BCLT.usdValue}
-                                    publicKey={BCLT.publicKey}
+                                    usdValue={
+                                        bitcloutUsd
+                                            ? bitcloutUsd *
+                                              user.balance.bitclout
+                                            : null
+                                    }
                                 />
                             ) : (
                                 <BalanceCard
@@ -128,8 +138,11 @@ export function Wallet(): React.ReactElement {
                                     imageAlt={ETH.imageAlt}
                                     currency={ETH.currency}
                                     amount={ETH.amount}
-                                    usdValue={ETH.usdValue}
-                                    publicKey={ETH.publicKey}
+                                    usdValue={
+                                        ethUsd
+                                            ? ethUsd * user.balance.ether
+                                            : null
+                                    }
                                 />
                             )}
                         </Flex>

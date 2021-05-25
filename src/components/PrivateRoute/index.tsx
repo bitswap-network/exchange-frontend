@@ -1,18 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Redirect, Route, RouteProps } from 'react-router'
-import { loggedInState } from '../../store'
-import { useRecoilValue } from 'recoil'
+import { loggedInState, userState } from '../../store'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { getUserData } from '../../services/user'
 
-type PrivateRouteProps = {
-    authenticationPath?: string
-} & RouteProps
+type PrivateRouteProps = RouteProps
 
-export function PrivateRoute({
-    authenticationPath,
-    ...routeProps
-}: PrivateRouteProps) {
+export function PrivateRoute({ ...routeProps }: PrivateRouteProps) {
     const isLoggedIn = useRecoilValue(loggedInState)
-    const redirectPath = authenticationPath ? authenticationPath : '/login'
+    const setUser = useSetRecoilState(userState)
+    useEffect(() => {
+        getUserData()
+            .then((response) => {
+                setUser(response.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+
+    const redirectPath = '/login'
     if (isLoggedIn) {
         return <Route {...routeProps} />
     } else {

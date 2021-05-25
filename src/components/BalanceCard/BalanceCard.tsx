@@ -10,7 +10,6 @@ export const BalanceCard = (props: any) => {
         imageAlt: props.imageAlt,
         currency: props.currency,
         amount: props.amount,
-        usdValue: props.usdValue,
         publicKey: props.publicKey,
     }
 
@@ -26,8 +25,8 @@ export const BalanceCard = (props: any) => {
             pos="relative"
         >
             <Image
-                alt="BitClout Logo"
-                htmlWidth="50px"
+                alt="Currency Logo"
+                htmlWidth="90px"
                 objectFit="cover"
                 pos="absolute"
                 top="4"
@@ -56,15 +55,12 @@ export const BalanceCard = (props: any) => {
                         {balance.amount} {balance.currency}
                     </Text>
                     <Text fontSize="1xl" color="gray.500">
-                        ~{balance.usdValue} USD
+                        {props.usdValue !== null
+                            ? `~${props.usdValue.toFixed(2)} USD`
+                            : 'Fetching...'}
                     </Text>
                 </Box>
-                <Box>
-                    <Box as="span" color="gray.400" fontSize="xs">
-                        {balance.publicKey}
-                    </Box>
-                </Box>
-                <Box d="flex" mt="8" justifyContent="center">
+                <Box paddingTop="5" d="flex" mt="8" justifyContent="center">
                     <BlueButton text={'Withdraw'} width="45%" />
                     <BlueButton ml="5" text={'Deposit'} width="45%" />
                 </Box>

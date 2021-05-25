@@ -14,7 +14,7 @@ export const updateProfile = async (email: string, name: string) => {
     })
 }
 
-export const resendVerificationEmail = async (email: string, name: string) => {
+export const resendVerificationEmail = async () => {
     return await authClient.get(`/user/resend-verification`)
 }
 

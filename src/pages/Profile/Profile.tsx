@@ -26,32 +26,13 @@ import {
 import { useRecoilValue } from 'recoil'
 import { userState } from '../../store'
 import { BlueButton } from '../../components/BlueButton/BlueButton'
-import { fetchBitcloutProfile } from '../../services/auth'
-import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
+import { verifyBitclout, updateProfile } from '../../services/user'
 import { logout } from '../../helpers/persistence'
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
 export function Profile(): React.ReactElement {
-    // const user = useRecoilValue(userState)
-    const [bitcloutProfile, setBitcloutProfile] =
-        useState<BitcloutProfile | null>(null)
-
-    const user = {
-        email: 'eshchock1@gmail.com',
-
-        bitclout: {
-            profilePicture:
-                'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
-            username: 'eshwara',
-            bio: 'hello there',
-        },
-        verification: {
-            bitcloutString: 'iwud19823jdus8fkdks',
-            email: false,
-            status: false,
-        },
-    }
+    const user = useRecoilValue(userState)
 
     let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
@@ -60,6 +41,7 @@ export function Profile(): React.ReactElement {
     const [currentPage, setCurrentPage] = useState('profile')
     const [textCopied, setTextCopied] = useState('copy')
     const [verificationErrText, setVerificationErrText] = useState('')
+    const [loading, setLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const emailInputHandler = (e: any) => {
@@ -84,19 +66,30 @@ export function Profile(): React.ReactElement {
     }
 
     const updateEmail = () => {
-        console.log('email updated')
-        window.location.assign('/profile')
+        setLoading(true)
+        updateProfile(userEmail, user.name)
+            .then(() => {
+                setLoading(false)
+                window.location.reload()
+            })
+            .catch((error) => {
+                setLoading(false)
+                console.error(error)
+            })
     }
 
     const checkBitcloutVerification = () => {
-        if (!user.verification.status) {
-            setVerificationErrText(
-                'You did not make your verification post yet!'
-            )
-        } else {
-            setVerificationErrText('')
-            setCurrentPage('complete')
-        }
+        setLoading(true)
+        verifyBitclout()
+            .then(() => {
+                setLoading(false)
+                setVerificationErrText('')
+                setCurrentPage('complete')
+            })
+            .catch(() => {
+                setLoading(false)
+                setVerificationErrText('Unable to verify profile.')
+            })
     }
 
     const copyToClipboard = (e: any) => {
@@ -272,16 +265,18 @@ export function Profile(): React.ReactElement {
                                     Cancel
                                 </Button>
                                 <BlueButton
+                                    isDisabled={emailErr}
                                     text={`   Update   `}
                                     width={{ sm: '45%', md: '90%' }}
                                     onClick={updateEmail}
+                                    loading={loading}
                                 />
                             </>
                         )}
                     </Flex>
                 </Flex>
 
-                {user.verification.status ? (
+                {user.verification.status === 'verified' ? (
                     <Flex
                         mt="50px"
                         w={{ sm: '80%', md: '650px' }}
@@ -440,6 +435,7 @@ export function Profile(): React.ReactElement {
                         text={`   Verify   `}
                         width="350px"
                         onClick={checkBitcloutVerification}
+                        loading={loading}
                     />
                 </Flex>
             </VStack>
