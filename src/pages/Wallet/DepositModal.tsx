@@ -131,7 +131,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                             placeholder="0.0"
                             value={depositValue}
                             onChange={valueHandler}
-                            precision={2}
+                            precision={4}
                             step={0.1}
                             min={0}
                         >
