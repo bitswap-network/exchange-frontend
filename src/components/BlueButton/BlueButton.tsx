@@ -10,7 +10,7 @@ interface BlueButtonProps extends ButtonProps {
     /** Determines if button should have icon */
     icon?: boolean
     /** width */
-    width?: string
+    width?: any
     loading?: boolean
     disabled?: boolean
 }

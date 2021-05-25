@@ -33,25 +33,25 @@ import { logout } from '../../helpers/persistence'
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
 export function Profile(): React.ReactElement {
-    const user = useRecoilValue(userState)
+    // const user = useRecoilValue(userState)
     const [bitcloutProfile, setBitcloutProfile] =
         useState<BitcloutProfile | null>(null)
 
-    // const user = {
-    //     email: 'eshchock1@gmail.com',
+    const user = {
+        email: 'eshchock1@gmail.com',
 
-    //     bitclout: {
-    //         profilePicture:
-    //             'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
-    //         username: 'eshwara',
-    //         bio: 'hello there',
-    //     },
-    //     verification: {
-    //         bitcloutString: 'iwud19823jdus8fkdks',
-    //         email: false,
-    //         status: false,
-    //     },
-    // }
+        bitclout: {
+            profilePicture:
+                'https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
+            username: 'eshwara',
+            bio: 'hello there',
+        },
+        verification: {
+            bitcloutString: 'iwud19823jdus8fkdks',
+            email: false,
+            status: false,
+        },
+    }
 
     let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
@@ -122,14 +122,11 @@ export function Profile(): React.ReactElement {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button
-                            bgColor="brand.100"
-                            color="white"
-                            mr={3}
+                        <BlueButton
+                            text={`   Close   `}
                             onClick={onClose}
-                        >
-                            Close
-                        </Button>
+                            mr="3"
+                        />
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -138,7 +135,6 @@ export function Profile(): React.ReactElement {
                 align="center"
                 justify="center"
                 flexDirection="column"
-                mt="20px"
             >
                 <Image
                     src={user.bitclout.profilePicture}
@@ -247,33 +243,17 @@ export function Profile(): React.ReactElement {
                     >
                         {!emailEdit ? (
                             <>
-                                <Button
-                                    bg="brand.100"
-                                    w={{ sm: '45%', md: '90%' }}
-                                    p="10px 0"
-                                    color="white"
-                                    fontWeight="600"
-                                    fontSize="16"
-                                    borderRadius="6"
-                                    boxShadow="0px 2px 6px 0px #00000030"
+                                <BlueButton
+                                    text={`   Edit   `}
+                                    width={{ sm: '45%', md: '90%' }}
                                     onClick={() => setEmailEdit(true)}
-                                >
-                                    Edit
-                                </Button>
+                                />
                                 {user.verification.email ? null : (
-                                    <Button
-                                        bg="brand.100"
-                                        w={{ sm: '45%', md: '90%' }}
-                                        p="10px 0"
-                                        color="white"
-                                        fontWeight="600"
-                                        fontSize="sm"
-                                        borderRadius="6"
-                                        boxShadow="0px 2px 6px 0px #00000030"
+                                    <BlueButton
+                                        text={`   Resend Verification   `}
+                                        width={{ sm: '45%', md: '90%' }}
                                         onClick={resendEmailVerification}
-                                    >
-                                        Resend Verification
-                                    </Button>
+                                    />
                                 )}
                             </>
                         ) : (
@@ -291,19 +271,11 @@ export function Profile(): React.ReactElement {
                                 >
                                     Cancel
                                 </Button>
-                                <Button
-                                    bg="brand.100"
-                                    w={{ sm: '45%', md: '90%' }}
-                                    p="10px 0"
-                                    color="white"
-                                    fontWeight="600"
-                                    fontSize="16"
-                                    borderRadius="6"
-                                    boxShadow="0px 2px 6px 0px #00000030"
+                                <BlueButton
+                                    text={`   Update   `}
+                                    width={{ sm: '45%', md: '90%' }}
                                     onClick={updateEmail}
-                                >
-                                    Update
-                                </Button>
+                                />
                             </>
                         )}
                     </Flex>
@@ -386,19 +358,11 @@ export function Profile(): React.ReactElement {
                             flexDir={{ sm: 'row', md: 'column' }}
                             mt={{ sm: '15px', md: '0' }}
                         >
-                            <Button
-                                bg="brand.100"
-                                w="90%"
-                                p="10px 0"
-                                color="white"
-                                fontWeight="600"
-                                fontSize="16"
-                                borderRadius="6"
-                                boxShadow="0px 2px 6px 0px #00000030"
+                            <BlueButton
+                                text={`   Verify   `}
+                                width="90%"
                                 onClick={() => setCurrentPage('verify')}
-                            >
-                                Verify
-                            </Button>
+                            />
                         </Flex>
                     </Flex>
                 )}
