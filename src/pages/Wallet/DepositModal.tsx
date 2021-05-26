@@ -23,10 +23,12 @@ import { TransactionAPIInterface } from '../../interfaces/bitclout/Transaction'
 
 interface ModalProps {
     disclosure: any
+    currency: string
 }
 
 export const DepositModal: React.FC<ModalProps> = ({
     disclosure,
+    currency,
 }: ModalProps) => {
     const user = useRecoilValue(userState)
     const identityUserData = useRecoilValue(identityUsers)
@@ -125,7 +127,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         mt="4"
                         mb="2"
                     >
-                        Amount of BCLT to Deposit: {depositValue}
+                        Amount of {currency} to Deposit: {depositValue}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -167,7 +169,10 @@ export const DepositModal: React.FC<ModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {user.balance.bitclout} BCLT
+                    {currency == 'ETH'
+                        ? user.balance.ether
+                        : user.balance.bitclout}{' '}
+                    {currency}
                 </Text>
                 <Text
                     textAlign="center"
@@ -196,7 +201,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         fontWeight="600"
                         mt="6"
                     >
-                        Amount of BCLT to Deposit
+                        Amount of {currency} to Deposit
                     </Text>
                     <NumberInput
                         mt="4"

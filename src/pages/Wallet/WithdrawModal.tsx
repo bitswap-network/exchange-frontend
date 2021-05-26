@@ -23,10 +23,12 @@ import { TransactionAPIInterface } from '../../interfaces/bitclout/Transaction'
 
 interface ModalProps {
     disclosure: any
+    currency: string
 }
 
 export const WithdrawModal: React.FC<ModalProps> = ({
     disclosure,
+    currency,
 }: ModalProps) => {
     const user = useRecoilValue(userState)
     const identityUserData = useRecoilValue(identityUsers)
@@ -62,7 +64,10 @@ export const WithdrawModal: React.FC<ModalProps> = ({
     }
 
     const valueHandler = async (valueString: string) => {
-        const max = (await getMaxBitclout()) as number
+        const max =
+            currency == 'ETH'
+                ? ((await getMaxEth()) as number)
+                : ((await getMaxBitclout()) as number)
         if (max) {
             if (parseFloat(valueString) > max) {
                 setWithdrawValue(max.toFixed(4))
@@ -99,7 +104,30 @@ export const WithdrawModal: React.FC<ModalProps> = ({
         }
     }
 
-    // user.balance.bitclout
+    const getMaxEth = () => {
+        if (user.balance.ether > 0) {
+            bitcloutPreflightTxn(user.balance.ether)
+                .then((response) => {
+                    setWithdrawValue(
+                        (
+                            user.balance.ether -
+                            parseFloat(response.data.FeeNanos) / 1e9
+                        ).toString()
+                    )
+                    return (
+                        user.balance.ether -
+                        parseFloat(response.data.FeeNanos) / 1e9
+                    )
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return 0
+                })
+        } else {
+            setWithdrawValue('0.0000')
+            return 0
+        }
+    }
 
     const completed = (
         <ModalContent>
@@ -148,7 +176,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         mb="2"
                         color="gray.700"
                     >
-                        Confirm Withdrawl
+                        Confirm Withdrawal
                     </Text>
                     <Text color="gray.500" fontSize="sm">
                         The following amount will be withdrawn from your BitSwap
@@ -161,7 +189,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         mt="4"
                         mb="2"
                     >
-                        Amount of BCLT to Withdraw: {withdrawValue}
+                        Amount of {currency} to Withdraw: {withdrawValue}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -203,7 +231,10 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {user.balance.bitclout} BCLT
+                    {currency == 'ETH'
+                        ? user.balance.ether
+                        : user.balance.bitclout}{' '}
+                    {currency}
                 </Text>
                 <Text
                     textAlign="center"
@@ -232,14 +263,16 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         fontWeight="600"
                         mt="6"
                     >
-                        Amount of BCLT to Withdraw{' '}
+                        Amount of {currency} to Withdraw{' '}
                         <Button
                             variant="solid"
                             fontSize="sm"
                             p="3"
                             h="30px"
                             ml="2"
-                            onClick={getMaxBitclout}
+                            onClick={
+                                currency == 'ETH' ? getMaxEth : getMaxBitclout
+                            }
                         >
                             Max
                         </Button>

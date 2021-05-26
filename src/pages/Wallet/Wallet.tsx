@@ -79,6 +79,7 @@ export function Wallet(): React.ReactElement {
     return (
         <>
             <DepositModal
+                currency={selectedCurrency}
                 disclosure={{
                     isOpen: isOpenDepositModal,
                     onOpen: onOpenDepositModal,
@@ -86,6 +87,7 @@ export function Wallet(): React.ReactElement {
                 }}
             />
             <WithdrawModal
+                currency={selectedCurrency}
                 disclosure={{
                     isOpen: isOpenWithdrawModal,
                     onOpen: onOpenWithdrawModal,
