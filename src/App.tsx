@@ -64,9 +64,7 @@ export const App = (): ReactElement => {
                                                 <Wallet />
                                             </PrivateRoute>
                                             <PrivateRoute path="/profile">
-                                                {/* <Route path="/profile"> */}
                                                 <Profile />
-                                                {/* </Route> */}
                                             </PrivateRoute>
                                             <Route path="/home">
                                                 <Redirect to="/" />

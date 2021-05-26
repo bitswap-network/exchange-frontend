@@ -32,7 +32,7 @@ export const DepositModal: React.FC<ModalProps> = ({
 }: ModalProps) => {
     const user = useRecoilValue(userState)
     const identityUserData = useRecoilValue(identityUsers)
-    const [depositValue, setDepositValue] = useState<string>('0.0000')
+    const [depositValue, setDepositValue] = useState<string>('0.000000')
     const [preflight, setPreflight] =
         useState<TransactionAPIInterface | null>(null)
     const [page, setPage] = useState('deposit')
@@ -209,7 +209,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         placeholder="0.0"
                         value={depositValue}
                         onChange={valueHandler}
-                        precision={4}
+                        precision={6}
                         step={0.1}
                         min={0}
                     >

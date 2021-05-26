@@ -32,7 +32,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
 }: ModalProps) => {
     const user = useRecoilValue(userState)
     const identityUserData = useRecoilValue(identityUsers)
-    const [withdrawValue, setWithdrawValue] = useState<string>('0.0000')
+    const [withdrawValue, setWithdrawValue] = useState<string>('0.000000')
     const [preflight, setPreflight] =
         useState<TransactionAPIInterface | null>(null)
     const [page, setPage] = useState('withdraw')
@@ -75,7 +75,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                 setWithdrawValue(valueString.replace(/^\$/, ''))
             }
         } else {
-            setWithdrawValue('0.0000')
+            setWithdrawValue('0.000000')
         }
     }
 
@@ -99,7 +99,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                     return 0
                 })
         } else {
-            setWithdrawValue('0.0000')
+            setWithdrawValue('0.000000')
             return 0
         }
     }
@@ -124,7 +124,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                     return 0
                 })
         } else {
-            setWithdrawValue('0.0000')
+            setWithdrawValue('0.000000')
             return 0
         }
     }
@@ -283,7 +283,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         placeholder="0.0"
                         value={withdrawValue}
                         onChange={valueHandler}
-                        precision={4}
+                        precision={6}
                         step={0.1}
                         min={0}
                     >
