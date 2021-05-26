@@ -1,4 +1,5 @@
 import { IdentityUser } from '../../interfaces/identity/User'
+
 export const saveData = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data))
 }
