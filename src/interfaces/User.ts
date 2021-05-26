@@ -1,8 +1,6 @@
-import { TransactionSchema } from './Transaction'
-
 export interface User {
     _id: string
-    username: string
+    name: string
     email: string
     password: string
     balance: {
@@ -19,9 +17,10 @@ export interface User {
     }
     bitclout: {
         publicKey: string
-        bio: string | undefined
+        bio: string
         verified: boolean
-        profilePicture: string | undefined
+        profilePicture: string
+        username: string
     }
     created: Date
     admin: boolean

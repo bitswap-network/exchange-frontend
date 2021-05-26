@@ -61,8 +61,17 @@ export const BalanceCard = (props: any) => {
                     </Text>
                 </Box>
                 <Box paddingTop="5" d="flex" mt="8" justifyContent="center">
-                    <BlueButton text={'Withdraw'} width="45%" />
-                    <BlueButton ml="5" text={'Deposit'} width="45%" />
+                    <BlueButton
+                        onClick={props.openWithdrawModal}
+                        text={'Withdraw'}
+                        width="45%"
+                    />
+                    <BlueButton
+                        onClick={props.openDepositModal}
+                        ml="5"
+                        text={'Deposit'}
+                        width="45%"
+                    />
                 </Box>
             </Box>
         </Box>
