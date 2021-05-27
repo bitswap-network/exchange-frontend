@@ -14,7 +14,7 @@ export function OrderTable({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" w="100%" borderRadius="lg" boxShadow="xs">
+        <Box bg="white" maxW="full" w="full" borderRadius="lg" boxShadow="xs">
             <Table<Order> data={data} columns={columns} />
         </Box>
     )
