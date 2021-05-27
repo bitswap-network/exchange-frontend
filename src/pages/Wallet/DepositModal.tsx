@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Modal,
     Text,
@@ -21,15 +21,22 @@ import { handleBitcloutDeposit } from '../../services/identity/helper'
 import { BlueButton } from '../../components/BlueButton'
 import { TransactionAPIInterface } from '../../interfaces/bitclout/Transaction'
 
-interface ModalProps {
-    disclosure: any
-    currency: string
+interface DepositModalProps {
+    disclosure: {
+        isOpen: boolean
+        onOpen: () => void
+        onClose: () => void
+    }
+    currency: {
+        type: string
+        maxWithdraw: number
+    }
 }
 
-export const DepositModal: React.FC<ModalProps> = ({
+export const DepositModal: React.FC<DepositModalProps> = ({
     disclosure,
     currency,
-}: ModalProps) => {
+}: DepositModalProps) => {
     const user = useRecoilValue(userState)
     const identityUserData = useRecoilValue(identityUsers)
     const [depositValue, setDepositValue] = useState<string>('0.0000')
@@ -47,19 +54,31 @@ export const DepositModal: React.FC<ModalProps> = ({
     }
 
     const submitDeposit = () => {
-        if (preflight) {
-            const depositObj = {
-                accessLevel:
-                    identityUserData[user.bitclout.publicKey].accessLevel,
-                accessLevelHmac:
-                    identityUserData[user.bitclout.publicKey].accessLevelHmac,
-                encryptedSeedHex:
-                    identityUserData[user.bitclout.publicKey].encryptedSeedHex,
-                transactionHex: preflight.TransactionHex,
-                transactionIDBase58Check: preflight.TransactionIDBase58Check,
-                value: parseFloat(depositValue),
+        console.log(currency)
+        if (currency.type === 'BCLT') {
+            if (preflight) {
+                const depositObj = {
+                    accessLevel:
+                        identityUserData[user.bitclout.publicKey].accessLevel,
+                    accessLevelHmac:
+                        identityUserData[user.bitclout.publicKey]
+                            .accessLevelHmac,
+                    encryptedSeedHex:
+                        identityUserData[user.bitclout.publicKey]
+                            .encryptedSeedHex,
+                    transactionHex: preflight.TransactionHex,
+                    transactionIDBase58Check:
+                        preflight.TransactionIDBase58Check,
+                    value: parseFloat(depositValue),
+                }
+                handleBitcloutDeposit(depositObj)
+                    .then((response) => {
+                        setPage('completed')
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    })
             }
-            handleBitcloutDeposit(depositObj)
         }
     }
 
@@ -82,19 +101,19 @@ export const DepositModal: React.FC<ModalProps> = ({
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Your transaction has been completed successfully. Click
-                        confirm to return to your wallet.
+                        Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
                         w="70%"
                         mt="6"
                         mb="8"
                         ml="15%"
-                        text={`   Confirm   `}
+                        text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
                             setPage('deposit')
                             setDepositValue('0')
+                            window.location.reload()
                         }}
                     />
                 </Flex>
@@ -127,7 +146,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         mt="4"
                         mb="2"
                     >
-                        Amount of {currency} to Deposit: {depositValue}
+                        Amount of {currency.type} to Deposit: {depositValue}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -148,9 +167,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         <BlueButton
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={() => {
-                                setPage('completed')
-                            }}
+                            onClick={submitDeposit}
                         />
                     </Flex>
                 </Flex>
@@ -169,10 +186,10 @@ export const DepositModal: React.FC<ModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {currency == 'ETH'
+                    {currency.type == 'ETH'
                         ? user.balance.ether
                         : user.balance.bitclout}{' '}
-                    {currency}
+                    {currency.type}
                 </Text>
                 <Text
                     textAlign="center"
@@ -201,7 +218,7 @@ export const DepositModal: React.FC<ModalProps> = ({
                         fontWeight="600"
                         mt="6"
                     >
-                        Amount of {currency} to Deposit
+                        Amount of {currency.type} to Deposit
                     </Text>
                     <NumberInput
                         mt="4"
@@ -233,14 +250,22 @@ export const DepositModal: React.FC<ModalProps> = ({
                         <Button
                             w="47%"
                             variant="solid"
-                            onClick={disclosure.onClose}
+                            onClick={() => {
+                                disclosure.onClose()
+                                setDepositValue('0')
+                                setPreflight(null)
+                                setPage('deposit')
+                            }}
                         >
                             Cancel
                         </Button>
                         <BlueButton
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={() => setPage('confirmDeposit')}
+                            onClick={() => {
+                                setPage('confirmDeposit')
+                                currency.type === 'BCLT' && getPreflight()
+                            }}
                         />
                     </Flex>
                 </Flex>

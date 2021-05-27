@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Modal,
     Text,
@@ -16,117 +16,44 @@ import {
 } from '@chakra-ui/react'
 import { useRecoilValue } from 'recoil'
 import { userState, identityUsers } from '../../store'
-import { bitcloutPreflightTxn } from '../../services/gateway'
-import { handleBitcloutDeposit } from '../../services/identity/helper'
+import { withdrawBitclout, bitcloutPreflightTxn } from '../../services/gateway'
 import { BlueButton } from '../../components/BlueButton'
 import { TransactionAPIInterface } from '../../interfaces/bitclout/Transaction'
 
-interface ModalProps {
-    disclosure: any
-    currency: string
+interface WithdrawModalProps {
+    disclosure: {
+        isOpen: boolean
+        onOpen: () => void
+        onClose: () => void
+    }
+    currency: {
+        type: string
+        maxWithdraw: number
+    }
 }
 
-export const WithdrawModal: React.FC<ModalProps> = ({
+export const WithdrawModal: React.FC<WithdrawModalProps> = ({
     disclosure,
     currency,
-}: ModalProps) => {
+}: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
-    const identityUserData = useRecoilValue(identityUsers)
-    const [withdrawValue, setWithdrawValue] = useState<string>('0.0000')
-    const [preflight, setPreflight] =
-        useState<TransactionAPIInterface | null>(null)
+    const [withdrawValue, setWithdrawValue] = useState<string>('0')
     const [page, setPage] = useState('withdraw')
-    const getPreflight = () => {
-        bitcloutPreflightTxn(parseFloat(withdrawValue))
-            .then((response) => {
-                setPreflight(response.data.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
 
-    const submitDeposit = () => {
-        if (preflight) {
-            const depositObj = {
-                accessLevel:
-                    identityUserData[user.bitclout.publicKey].accessLevel,
-                accessLevelHmac:
-                    identityUserData[user.bitclout.publicKey].accessLevelHmac,
-                encryptedSeedHex:
-                    identityUserData[user.bitclout.publicKey].encryptedSeedHex,
-                transactionHex: preflight.TransactionHex,
-                transactionIDBase58Check: preflight.TransactionIDBase58Check,
-                value: parseFloat(withdrawValue),
-            }
-            handleBitcloutDeposit(depositObj)
+    const submitWithdrawBitclout = () => {
+        if (withdrawValue) {
+            withdrawBitclout(parseFloat(withdrawValue))
+                .then((response) => {
+                    setPage('completed')
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
     }
 
     const valueHandler = async (valueString: string) => {
-        const max =
-            currency == 'ETH'
-                ? ((await getMaxEth()) as number)
-                : ((await getMaxBitclout()) as number)
-        if (max) {
-            if (parseFloat(valueString) > max) {
-                setWithdrawValue(max.toFixed(4))
-            } else {
-                setWithdrawValue(valueString.replace(/^\$/, ''))
-            }
-        } else {
-            setWithdrawValue('0.0000')
-        }
-    }
-
-    const getMaxBitclout = () => {
-        if (user.balance.bitclout > 0) {
-            bitcloutPreflightTxn(user.balance.bitclout)
-                .then((response) => {
-                    setWithdrawValue(
-                        (
-                            user.balance.bitclout -
-                            parseFloat(response.data.FeeNanos) / 1e9
-                        ).toString()
-                    )
-                    return (
-                        user.balance.bitclout -
-                        parseFloat(response.data.FeeNanos) / 1e9
-                    )
-                })
-                .catch((error) => {
-                    console.log(error)
-                    return 0
-                })
-        } else {
-            setWithdrawValue('0.0000')
-            return 0
-        }
-    }
-
-    const getMaxEth = () => {
-        if (user.balance.ether > 0) {
-            bitcloutPreflightTxn(user.balance.ether)
-                .then((response) => {
-                    setWithdrawValue(
-                        (
-                            user.balance.ether -
-                            parseFloat(response.data.FeeNanos) / 1e9
-                        ).toString()
-                    )
-                    return (
-                        user.balance.ether -
-                        parseFloat(response.data.FeeNanos) / 1e9
-                    )
-                })
-                .catch((error) => {
-                    console.log(error)
-                    return 0
-                })
-        } else {
-            setWithdrawValue('0.0000')
-            return 0
-        }
+        setWithdrawValue(valueString.replace(/^\$/, ''))
     }
 
     const completed = (
@@ -144,19 +71,19 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Your transaction has been completed successfully. Click
-                        confirm to return to your wallet.
+                        Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
                         w="70%"
                         mt="6"
                         mb="8"
                         ml="15%"
-                        text={`   Confirm   `}
+                        text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
                             setPage('withdraw')
                             setWithdrawValue('0')
+                            window.location.reload()
                         }}
                     />
                 </Flex>
@@ -189,7 +116,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         mt="4"
                         mb="2"
                     >
-                        Amount of {currency} to Withdraw: {withdrawValue}
+                        Amount of {currency.type} to Withdraw: {withdrawValue}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -210,9 +137,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         <BlueButton
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={() => {
-                                setPage('completed')
-                            }}
+                            onClick={submitWithdrawBitclout}
                         />
                     </Flex>
                 </Flex>
@@ -231,10 +156,10 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {currency == 'ETH'
+                    {currency.type == 'ETH'
                         ? user.balance.ether
                         : user.balance.bitclout}{' '}
-                    {currency}
+                    {currency.type}
                 </Text>
                 <Text
                     textAlign="center"
@@ -263,15 +188,17 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         fontWeight="600"
                         mt="6"
                     >
-                        Amount of {currency} to Withdraw{' '}
+                        Amount of {currency.type} to withdraw{' '}
                         <Button
                             variant="solid"
                             fontSize="sm"
                             p="3"
                             h="30px"
                             ml="2"
-                            onClick={
-                                currency == 'ETH' ? getMaxEth : getMaxBitclout
+                            onClick={() =>
+                                setWithdrawValue(
+                                    currency.maxWithdraw.toString()
+                                )
                             }
                         >
                             Max
@@ -286,6 +213,7 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                         precision={4}
                         step={0.1}
                         min={0}
+                        max={currency.maxWithdraw}
                     >
                         <NumberInputField />
                         <NumberInputStepper>
@@ -312,6 +240,9 @@ export const WithdrawModal: React.FC<ModalProps> = ({
                             Cancel
                         </Button>
                         <BlueButton
+                            isDisabled={
+                                parseFloat(withdrawValue) > currency.maxWithdraw
+                            }
                             w="47%"
                             text={`   Confirm   `}
                             onClick={() => setPage('confirmWithdraw')}

@@ -18,11 +18,12 @@ import {
 import { BalanceCard } from '../../components/BalanceCard'
 import { CryptoCard } from '../../components/CryptoCard'
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
-import { useRecoilValue } from 'recoil'
+import { readOnlySelector, useRecoilValue } from 'recoil'
 import { userState } from '../../store'
 import { getEthUSD, getBitcloutUSD } from '../../services/utility'
 import { TransactionSchema } from '../../interfaces/Transaction'
 import { getTransactions } from '../../services/user'
+import { bitcloutPreflightTxn } from '../../services/gateway'
 import { WithdrawModal } from './WithdrawModal'
 import { DepositModal } from './DepositModal'
 // TODO: UNFINISHED
@@ -30,7 +31,13 @@ export function Wallet(): React.ReactElement {
     const user = useRecoilValue(userState)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
     const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
-    const [selectedCurrency, setSelectedCurrency] = useState('BCLT')
+    const [selectedCurrency, setSelectedCurrency] = useState<{
+        type: string
+        maxWithdraw: number
+    }>({
+        type: 'BCLT',
+        maxWithdraw: 0,
+    })
     const [transactions, setTransactions] = useState<TransactionSchema[]>([])
     const {
         isOpen: isOpenDepositModal,
@@ -56,6 +63,23 @@ export function Wallet(): React.ReactElement {
             setTransactions(response.data.data)
         })
     }, [])
+    useEffect(() => {
+        if (selectedCurrency.type === 'BCLT') {
+            getMaxBitclout().then((max) => {
+                setSelectedCurrency({
+                    type: 'BCLT',
+                    maxWithdraw: max,
+                })
+            })
+        } else {
+            getMaxEth().then((max) => {
+                setSelectedCurrency({
+                    type: 'ETH',
+                    maxWithdraw: max,
+                })
+            })
+        }
+    }, [user])
 
     const BCLT = {
         imageUri: './bitcloutLogo.png',
@@ -74,6 +98,54 @@ export function Wallet(): React.ReactElement {
         amount: user.balance.ether,
         usdValue: ethUsd ? ethUsd * user.balance.ether : null,
         publicKey: '<ethereum public key>',
+    }
+
+    const getMaxBitclout = async (): Promise<number> => {
+        return new Promise<number>((resolve, reject) => {
+            if (user.balance.bitclout > 0) {
+                bitcloutPreflightTxn(user.balance.bitclout)
+                    .then((response) => {
+                        resolve(
+                            user.balance.bitclout -
+                                parseFloat(response.data.data.FeeNanos) / 1e9
+                        )
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        reject(error)
+                    })
+            } else {
+                resolve(0)
+            }
+        })
+    }
+
+    const getMaxEth = (): Promise<number> => {
+        return new Promise<number>((resolve, reject) => {
+            if (user.balance.ether > 0) {
+                resolve(0)
+            } else {
+                resolve(0)
+            }
+        })
+    }
+
+    const handleCurrencyChange = (type: string) => {
+        if (type === 'BCLT') {
+            getMaxBitclout().then((max) => {
+                setSelectedCurrency({
+                    type: 'BCLT',
+                    maxWithdraw: max,
+                })
+            })
+        } else {
+            getMaxEth().then((max) => {
+                setSelectedCurrency({
+                    type: 'ETH',
+                    maxWithdraw: max,
+                })
+            })
+        }
     }
 
     return (
@@ -115,12 +187,12 @@ export function Wallet(): React.ReactElement {
                             >
                                 <Box
                                     pb="4"
-                                    onClick={() => setSelectedCurrency('BCLT')}
+                                    onClick={() => handleCurrencyChange('BCLT')}
                                     w="full"
                                     maxW="sm"
                                 >
                                     <CryptoCard
-                                        active={selectedCurrency == 'BCLT'}
+                                        active={selectedCurrency.type == 'BCLT'}
                                         imageUrl={BCLT.imageUri}
                                         imageAlt={BCLT.imageAlt}
                                         currency={BCLT.currency}
@@ -129,12 +201,12 @@ export function Wallet(): React.ReactElement {
                                     />
                                 </Box>
                                 <Box
-                                    onClick={() => setSelectedCurrency('ETH')}
+                                    onClick={() => handleCurrencyChange('ETH')}
                                     w="full"
                                     maxW="sm"
                                 >
                                     <CryptoCard
-                                        active={selectedCurrency == 'ETH'}
+                                        active={selectedCurrency.type == 'ETH'}
                                         imageUrl={ETH.imageUri}
                                         imageAlt={ETH.imageAlt}
                                         currency={ETH.currency}
@@ -150,7 +222,7 @@ export function Wallet(): React.ReactElement {
                                 }}
                                 w="full"
                             >
-                                {selectedCurrency == 'BCLT' ? (
+                                {selectedCurrency.type == 'BCLT' ? (
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
@@ -202,9 +274,9 @@ export function Wallet(): React.ReactElement {
                                         <Th color="gray.700" pt="5">
                                             Timestamp
                                         </Th>
-                                        <Th color="gray.700" pt="5">
+                                        {/* <Th color="gray.700" pt="5">
                                             Asset
-                                        </Th>
+                                        </Th> */}
                                         <Th color="gray.700" pt="5">
                                             Value
                                         </Th>
@@ -222,12 +294,12 @@ export function Wallet(): React.ReactElement {
                                             <Td color="gray.500" fontSize="14">
                                                 {transaction.created}
                                             </Td>
-                                            <Td color="gray.500" fontSize="14">
+                                            {/* <Td color="gray.500" fontSize="14">
                                                 {transaction.assetType}
-                                            </Td>
+                                            </Td> */}
                                             <Td color="gray.500" fontSize="14">
                                                 {transaction.value
-                                                    ? transaction.value
+                                                    ? `${transaction.value} ${transaction.assetType}`
                                                     : 'N/A'}
                                             </Td>
                                             <Td color="gray.500" fontSize="14">
