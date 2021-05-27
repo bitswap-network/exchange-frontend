@@ -10,23 +10,18 @@ import {
     TabPanel,
     Center,
     Stack,
-    Text,
     Box,
     useDisclosure,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    HStack,
 } from '@chakra-ui/react'
 import React from 'react'
 import { Column } from 'react-table'
 import { BlueButton } from '../../components/BlueButton'
-import { OrderCard } from './OrderCard'
-import { AiOutlineSearch, AiOutlineInfoCircle } from 'react-icons/ai'
 import { Order, OrderType } from '../../types/Order'
 import { OrderTable } from './OrderTable'
 import { OrderModal } from './OrderModal'
@@ -134,105 +129,12 @@ export function Orders(): React.ReactElement {
         },
     ]
 
-    const headerData = {
-        recentOrderBCLT: 40,
-        recentOrderETH: 10,
-        BCLTPrice: 123.45,
-        ETHPrice: 3123.45,
-        BCLTChange: 17.5,
-        ETHChange: -10.2,
-    }
-
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
             <VStack spacing={6}>
-                <Flex
-                    w="full"
-                    h="30px"
-                    border="2px solid black"
-                    flexDir="row"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                >
-                    <Text fontWeight="600" fontSize="sm">
-                        MOST RECENT ORDER:{' '}
-                        <span style={{ fontWeight: 500 }}>
-                            {headerData.recentOrderBCLT} BCLT |{' '}
-                            {headerData.recentOrderETH} ETH
-                        </span>
-                    </Text>
-
-                    <Text fontWeight="600" fontSize="sm">
-                        HIGHEST ORDER TODAY
-                    </Text>
-
-                    <HStack spacing={1}>
-                        <Text fontWeight="600" fontSize="sm">
-                            BCLT:
-                        </Text>
-                        <Text fontWeight="500" fontSize="sm">
-                            ${headerData.BCLTPrice}
-                        </Text>
-                        {headerData.BCLTChange >= 0 ? (
-                            <Text
-                                fontWeight="400"
-                                fontSize="xs"
-                                pl="2"
-                                pr="2"
-                                bg="#B7F0D4"
-                            >
-                                <span style={{ color: '#3B775A' }}>▲</span>{' '}
-                                {headerData.BCLTChange}%
-                            </Text>
-                        ) : (
-                            <Text
-                                fontWeight="400"
-                                fontSize="xs"
-                                pl="2"
-                                pr="2"
-                                bg="#F9C3BF"
-                            >
-                                <span style={{ color: '#EB5347' }}>▼</span>{' '}
-                                {headerData.BCLTChange}%
-                            </Text>
-                        )}
-                    </HStack>
-
-                    <HStack spacing={1}>
-                        <Text fontWeight="600" fontSize="sm">
-                            ETH:
-                        </Text>
-                        <Text fontWeight="500" fontSize="sm">
-                            ${headerData.ETHPrice}
-                        </Text>
-                        {headerData.ETHChange >= 0 ? (
-                            <Text
-                                fontWeight="400"
-                                fontSize="xs"
-                                pl="2"
-                                pr="2"
-                                bg="#B7F0D4"
-                            >
-                                <span style={{ color: '#3B775A' }}>▲</span>{' '}
-                                {headerData.ETHChange}%
-                            </Text>
-                        ) : (
-                            <Text
-                                fontWeight="400"
-                                fontSize="xs"
-                                pl="2"
-                                pr="2"
-                                bg="#F9C3BF"
-                            >
-                                <span style={{ color: '#EB5347' }}>▼</span>{' '}
-                                {headerData.ETHChange}%
-                            </Text>
-                        )}
-                    </HStack>
-                </Flex>
                 <Flex w="full">
                     <Heading> Your Orders </Heading>
                     <Spacer />
