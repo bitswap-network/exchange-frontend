@@ -1,4 +1,4 @@
-import { IdentityUser } from '../../interfaces/identity/User'
+import { IdentityUser } from "../../interfaces/identity/User"
 export const saveData = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data))
 }
@@ -13,11 +13,11 @@ export const removeData = (key: string) => {
 }
 
 export const setIdentityUsers = (users: IdentityUser) => {
-    saveData('identityUsers', users)
+    saveData("identityUsers", users)
 }
 
 export const logout = () => {
-    removeData('user')
-    removeData('identityUsers')
-    removeData('token')
+    removeData("user")
+    removeData("identityUsers")
+    removeData("token")
 }

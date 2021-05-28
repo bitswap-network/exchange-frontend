@@ -1,7 +1,7 @@
-import { authClient } from '../index'
+import { authClient } from "../index"
 
 export const getUserData = async () => {
-    return await authClient.get('/user/data')
+    return await authClient.get("/user/data")
 }
 export const getUserProfile = async (username: string) => {
     return await authClient.get(`/user/profile/${username}`)
@@ -9,6 +9,10 @@ export const getUserProfile = async (username: string) => {
 
 export const getTransactions = async () => {
     return await authClient.get(`/user/transactions`)
+}
+
+export const getTransactionById = async (id: string) => {
+    return await authClient.get(`/user/transaction/${id}`)
 }
 
 export const getOrders = async () => {

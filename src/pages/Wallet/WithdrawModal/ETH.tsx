@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 import {
     Modal,
     Text,
@@ -13,80 +13,64 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-} from '@chakra-ui/react'
-import { useRecoilValue } from 'recoil'
-import { userState, identityUsers } from '../../store'
-import { bitcloutPreflightTxn } from '../../services/gateway'
-import { handleBitcloutDeposit } from '../../services/identity/helper'
-import { BlueButton } from '../../components/BlueButton'
-import { TransactionAPIInterface } from '../../interfaces/bitclout/Transaction'
+} from "@chakra-ui/react"
+import { useRecoilValue } from "recoil"
+import { userState, identityUsers } from "../../../store"
+import {
+    withdrawBitclout,
+    bitcloutPreflightTxn,
+} from "../../../services/gateway"
+import { BlueButton } from "../../../components/BlueButton"
+import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
+import * as globalVars from "../../../globalVars"
 
-interface DepositModalProps {
+interface WithdrawModalProps {
     disclosure: {
         isOpen: boolean
         onOpen: () => void
         onClose: () => void
     }
-    currency: {
-        type: string
-        maxWithdraw: number
-    }
+    maxWithdraw: number
 }
 
-export const DepositModal: React.FC<DepositModalProps> = ({
+const WithdrawModal: React.FC<WithdrawModalProps> = ({
     disclosure,
-    currency,
-}: DepositModalProps) => {
+    maxWithdraw,
+}: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
-    const identityUserData = useRecoilValue(identityUsers)
-    const [depositValue, setDepositValue] = useState<string>('0.0000')
-    const [preflight, setPreflight] =
-        useState<TransactionAPIInterface | null>(null)
-    const [page, setPage] = useState('deposit')
-    const getPreflight = () => {
-        bitcloutPreflightTxn(parseFloat(depositValue))
-            .then((response) => {
-                setPreflight(response.data.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
+    const [withdrawValue, setWithdrawValue] = useState<string>("0")
+    const [page, setPage] = useState(0)
 
-    const submitDeposit = () => {
-        console.log(currency)
-        if (currency.type === 'BCLT') {
-            if (preflight) {
-                const depositObj = {
-                    accessLevel:
-                        identityUserData[user.bitclout.publicKey].accessLevel,
-                    accessLevelHmac:
-                        identityUserData[user.bitclout.publicKey]
-                            .accessLevelHmac,
-                    encryptedSeedHex:
-                        identityUserData[user.bitclout.publicKey]
-                            .encryptedSeedHex,
-                    transactionHex: preflight.TransactionHex,
-                    transactionIDBase58Check:
-                        preflight.TransactionIDBase58Check,
-                    value: parseFloat(depositValue),
-                }
-                handleBitcloutDeposit(depositObj)
-                    .then((response) => {
-                        setPage('completed')
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                    })
-            }
+    const submitWithdrawBitclout = () => {
+        if (withdrawValue) {
+            withdrawBitclout(parseFloat(withdrawValue))
+                .then(() => {
+                    setPage(2)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
         }
     }
 
-    const valueHandler = (valueString: string) => {
-        setDepositValue(valueString.replace(/^\$/, ''))
+    const valueHandler = async (valueString: string) => {
+        setWithdrawValue(valueString.replace(/^\$/, ""))
     }
 
-    const completed = (
+    const renderHandler = () => {
+        switch (page) {
+            case 0:
+                return withdrawStartView
+            case 1:
+                return withdrawConfirmView
+            case 2:
+                return withdrawCompleteView
+            default:
+                return withdrawStartView
+        }
+    }
+
+    const withdrawCompleteView = (
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
@@ -111,8 +95,8 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
-                            setPage('deposit')
-                            setDepositValue('0')
+                            setPage(0)
+                            setWithdrawValue("0")
                             window.location.reload()
                         }}
                     />
@@ -121,7 +105,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({
         </ModalContent>
     )
 
-    const confirmDeposit = (
+    const withdrawConfirmView = (
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
@@ -133,10 +117,10 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         mb="2"
                         color="gray.700"
                     >
-                        Confirm Deposit
+                        Confirm Withdrawal
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        The following amount will be deposited to your BitSwap
+                        The following amount will be withdrawn from your BitSwap
                         account
                     </Text>
                     <Text
@@ -146,7 +130,8 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         mt="4"
                         mb="2"
                     >
-                        Amount of {currency.type} to Deposit: {depositValue}
+                        Amount of {globalVars.ETHER} to Withdraw:{" "}
+                        {withdrawValue}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -159,7 +144,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                             w="47%"
                             variant="solid"
                             onClick={() => {
-                                setPage('deposit')
+                                setPage(0)
                             }}
                         >
                             Modify
@@ -167,7 +152,8 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         <BlueButton
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={submitDeposit}
+                            isDisabled={parseFloat(withdrawValue) <= 0}
+                            onClick={submitWithdrawBitclout}
                         />
                     </Flex>
                 </Flex>
@@ -175,7 +161,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({
         </ModalContent>
     )
 
-    const deposit = (
+    const withdrawStartView = (
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
@@ -186,10 +172,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {currency.type == 'ETH'
-                        ? user.balance.ether
-                        : user.balance.bitclout}{' '}
-                    {currency.type}
+                    {user.balance.ether} {globalVars.ETHER}
                 </Text>
                 <Text
                     textAlign="center"
@@ -207,10 +190,10 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         mb="2"
                         color="gray.700"
                     >
-                        Deposit Funds
+                        Withdraw Funds
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Add funds to your BitSwap wallet!
+                        Withdraw funds from your BitSwap wallet!
                     </Text>
                     <Text
                         color="gray.600"
@@ -218,17 +201,30 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         fontWeight="600"
                         mt="6"
                     >
-                        Amount of {currency.type} to Deposit
+                        Amount of {globalVars.ETHER} to withdraw{" "}
+                        <Button
+                            variant="solid"
+                            fontSize="sm"
+                            p="3"
+                            h="30px"
+                            ml="2"
+                            onClick={() =>
+                                setWithdrawValue(maxWithdraw.toString())
+                            }
+                        >
+                            Max
+                        </Button>
                     </Text>
                     <NumberInput
                         mt="4"
                         type="text"
                         placeholder="0.0"
-                        value={depositValue}
+                        value={withdrawValue}
                         onChange={valueHandler}
                         precision={4}
                         step={0.1}
                         min={0}
+                        max={maxWithdraw}
                     >
                         <NumberInputField />
                         <NumberInputStepper>
@@ -250,22 +246,15 @@ export const DepositModal: React.FC<DepositModalProps> = ({
                         <Button
                             w="47%"
                             variant="solid"
-                            onClick={() => {
-                                disclosure.onClose()
-                                setDepositValue('0')
-                                setPreflight(null)
-                                setPage('deposit')
-                            }}
+                            onClick={disclosure.onClose}
                         >
                             Cancel
                         </Button>
                         <BlueButton
+                            isDisabled={parseFloat(withdrawValue) > maxWithdraw}
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={() => {
-                                setPage('confirmDeposit')
-                                currency.type === 'BCLT' && getPreflight()
-                            }}
+                            onClick={() => setPage(1)}
                         />
                     </Flex>
                 </Flex>
@@ -276,11 +265,9 @@ export const DepositModal: React.FC<DepositModalProps> = ({
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
-            {page == 'deposit'
-                ? deposit
-                : page == 'confirmDeposit'
-                ? confirmDeposit
-                : completed}
+            {renderHandler()}
         </Modal>
     )
 }
+
+export default WithdrawModal

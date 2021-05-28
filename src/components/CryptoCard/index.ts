@@ -1,1 +1,1 @@
-export { CryptoCard } from './CryptoCard'
+export { CryptoCard } from "./CryptoCard"

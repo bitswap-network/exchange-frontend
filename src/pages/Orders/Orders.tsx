@@ -12,15 +12,15 @@ import {
     Stack,
     HStack,
     useDisclosure,
-} from '@chakra-ui/react'
-import React from 'react'
-import { Column } from 'react-table'
-import { BlueButton } from '../../components/BlueButton'
-import { OrderCard } from './OrderCard'
-import { AiOutlineSearch, AiOutlineInfoCircle } from 'react-icons/ai'
-import { Order, OrderType } from '../../types/Order'
-import { OrderTable } from './OrderTable'
-import { OrderModal } from './OrderModal'
+} from "@chakra-ui/react"
+import React from "react"
+import { Column } from "react-table"
+import { BlueButton } from "../../components/BlueButton"
+import { OrderCard } from "./OrderCard"
+import { AiOutlineSearch, AiOutlineInfoCircle } from "react-icons/ai"
+import { Order, OrderType } from "../../types/Order"
+import { OrderTable } from "./OrderTable"
+import { OrderModal } from "./OrderModal"
 
 export function Orders(): React.ReactElement {
     const data = React.useMemo(
@@ -49,22 +49,22 @@ export function Orders(): React.ReactElement {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'Order ID',
-                accessor: 'id',
+                Header: "Order ID",
+                accessor: "id",
                 isNumeric: true,
             },
             {
-                Header: 'Order Type',
-                accessor: 'type',
+                Header: "Order Type",
+                accessor: "type",
             },
             {
-                Header: 'Quantity',
-                accessor: 'quantity',
+                Header: "Quantity",
+                accessor: "quantity",
                 isNumeric: true,
             },
             {
-                Header: 'Price',
-                accessor: 'price',
+                Header: "Price",
+                accessor: "price",
                 isNumeric: true,
             },
         ],

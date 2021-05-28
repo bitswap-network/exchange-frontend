@@ -1,6 +1,6 @@
-import * as identity from './index'
-import { depositBitclout } from '../gateway'
-import { AxiosResponse } from 'axios'
+import * as identity from "./index"
+import { depositBitclout } from "../gateway"
+import { AxiosResponse } from "axios"
 
 interface handleBitcloutDepositInterface {
     accessLevel: number

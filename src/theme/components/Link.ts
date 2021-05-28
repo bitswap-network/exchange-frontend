@@ -2,15 +2,15 @@ const Link = {
     variants: {
         default: {
             _hover: {
-                textDecoration: 'none',
-                bg: 'background.100',
+                textDecoration: "none",
+                bg: "background.100",
             },
-            color: 'black',
-            rounded: 'md',
+            color: "black",
+            rounded: "md",
         },
     },
     defaultProps: {
-        variant: 'default',
+        variant: "default",
     },
 }
 

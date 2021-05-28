@@ -1,6 +1,6 @@
-import React from 'react'
-import { Box, Flex, Spacer, Text, Link, HStack } from '@chakra-ui/react'
-import { Link as RouterLink } from 'react-router-dom'
+import React from "react"
+import { Box, Flex, Spacer, Text, Link, HStack } from "@chakra-ui/react"
+import { Link as RouterLink } from "react-router-dom"
 
 interface OrderCardProps {
     title: string

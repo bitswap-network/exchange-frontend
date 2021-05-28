@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useState } from "react"
 import {
     VStack,
     Box,
@@ -9,17 +9,17 @@ import {
     Checkbox,
     Link,
     HStack,
-} from '@chakra-ui/react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { HiExclamationCircle } from 'react-icons/hi'
+} from "@chakra-ui/react"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { HiExclamationCircle } from "react-icons/hi"
 
-import { BlueButton } from '../../components/BlueButton/BlueButton'
-import { launch, jwt } from '../../services/identity'
-import { login, fetchBitcloutProfile, register } from '../../services/auth'
-import { BitcloutProfile } from '../../interfaces/bitclout/Profile'
+import { BlueButton } from "../../components/BlueButton/BlueButton"
+import { launch, jwt } from "../../services/identity"
+import { login, fetchBitcloutProfile, register } from "../../services/auth"
+import { BitcloutProfile } from "../../interfaces/bitclout/Profile"
 
-import { setIdentityUsers, saveData } from '../../helpers/persistence'
-import { userState } from '../../store'
+import { setIdentityUsers, saveData } from "../../helpers/persistence"
+import { userState } from "../../store"
 
 interface CreateUserObj {
     publicKey: string
@@ -33,9 +33,9 @@ export function Login(): ReactElement {
         useState<BitcloutProfile | null>(null)
 
     const [createProfile, setCreateProfile] = useState<CreateUserObj>({
-        publicKey: '',
-        email: '',
-        name: '',
+        publicKey: "",
+        email: "",
+        name: "",
     })
     const [newUser, setNewUser] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -43,7 +43,7 @@ export function Login(): ReactElement {
     const [nameErr, setNameErr] = useState(false)
     const [termsErr, setTermsErr] = useState(false)
     const [registrationSuccess, setRegistrationSuccess] = useState(false)
-    const [errText, setErrText] = useState('')
+    const [errText, setErrText] = useState("")
     const [checked, setChecked] = useState(false)
 
     const registerHandler = () => {
@@ -55,7 +55,7 @@ export function Login(): ReactElement {
                 createProfile.name
             )
                 .then(() => {
-                    setErrText('')
+                    setErrText("")
                     setLoading(false)
                     setRegistrationSuccess(true)
                 })
@@ -63,7 +63,7 @@ export function Login(): ReactElement {
                     console.log(error)
                     error.response.data
                         ? setErrText(error.response.data)
-                        : setErrText('Something went wrong, try again later.')
+                        : setErrText("Something went wrong, try again later.")
                 })
         } else {
             setLoading(false)
@@ -89,8 +89,8 @@ export function Login(): ReactElement {
     }
 
     const loginHandler = () => {
-        launch('/log-in').subscribe((res) => {
-            setErrText('')
+        launch("/log-in").subscribe((res) => {
+            setErrText("")
             setIdentityUsers(res.users)
             const payload = {
                 accessLevel: res.users[res.publicKeyAdded].accessLevel,
@@ -101,12 +101,12 @@ export function Login(): ReactElement {
             jwt(payload).subscribe((token) => {
                 login(res.publicKeyAdded, token.jwt)
                     .then(() => {
-                        window.location.assign('/')
+                        window.location.assign("/")
                     })
                     .catch((error: any) => {
                         //TODO: revise response status codes
                         if (error.response.status === 406) {
-                            fetchBitcloutProfile(res.publicKeyAdded, '')
+                            fetchBitcloutProfile(res.publicKeyAdded, "")
                                 .then((response) => {
                                     console.log(response.data)
                                     setBitcloutProfile(response.data)
@@ -178,7 +178,7 @@ export function Login(): ReactElement {
                     fontWeight="bold"
                     color="brand.100"
                 >
-                    {' '}
+                    {" "}
                     {bitcloutProfile?.Username}
                 </Link>
             </Text>
@@ -202,7 +202,7 @@ export function Login(): ReactElement {
                     />
                     {nameErr ? (
                         <HiExclamationCircle
-                            style={{ display: 'inline' }}
+                            style={{ display: "inline" }}
                             color="#EE0004"
                             size="24"
                         />
@@ -231,7 +231,7 @@ export function Login(): ReactElement {
                     />
                     {emailErr ? (
                         <HiExclamationCircle
-                            style={{ display: 'inline' }}
+                            style={{ display: "inline" }}
                             color="#EE0004"
                             size="24"
                         />
@@ -249,7 +249,7 @@ export function Login(): ReactElement {
                 isInvalid={termsErr}
             >
                 <Text fontSize="sm" color="gray.600" maxW="400px">
-                    I agree to BitSwap’s{' '}
+                    I agree to BitSwap’s{" "}
                     <Link
                         isExternal
                         href="https://bitswap.network/terms-and-conditions"

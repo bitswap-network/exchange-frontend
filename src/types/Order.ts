@@ -1,6 +1,6 @@
 export enum OrderType {
-    Buy = 'buy',
-    Sell = 'sell',
+    Buy = "buy",
+    Sell = "sell",
 }
 
 export type Order = {

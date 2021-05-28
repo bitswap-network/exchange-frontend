@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { getData } from '../helpers/persistence'
-import { api } from '../config'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
+import { getData } from "../helpers/persistence"
+import { api } from "../globalVars"
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
     console.info(`[request] [${JSON.stringify(config)}]`)
@@ -15,10 +15,10 @@ const onRequestError = (error: AxiosError): Promise<AxiosError> => {
 const onAuthRequest = async (
     config: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
-    const token = getData('token')
+    const token = getData("token")
     console.log(token)
     if (token) {
-        config.headers['x-access-token'] = token
+        config.headers["x-access-token"] = token
     }
     console.info(`[request] [${JSON.stringify(config)}]`)
     return config

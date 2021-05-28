@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
-import { Button, ButtonProps, Text, Spinner } from '@chakra-ui/react'
+import React from "react"
+import { Button, ButtonProps, Text, Spinner } from "@chakra-ui/react"
 
-import { HiArrowRight } from 'react-icons/hi'
+import { HiArrowRight } from "react-icons/hi"
 
 interface BlueButtonProps extends ButtonProps {
     /** Text for button */
@@ -29,12 +29,12 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
             bg="brand.100"
             opacity={disabled ? 0.6 : 1}
             _hover={{
-                bg: 'brand.100',
+                bg: "brand.100",
             }}
             _active={{
-                bg: 'brand.200',
+                bg: "brand.200",
             }}
-            width={width ? width : ''}
+            width={width ? width : ""}
             color="white"
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
