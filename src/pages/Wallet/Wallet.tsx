@@ -96,7 +96,7 @@ export function Wallet(): React.ReactElement {
         usdValue: ethUsd ? ethUsd * user.balance.ether : null,
         publicKey: "",
     }
-
+    //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
             if (user.balance.bitclout > 0) {
