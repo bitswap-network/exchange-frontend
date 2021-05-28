@@ -13,6 +13,7 @@ import Style from "styled-jsx"
 
 export function Home(): React.ReactElement {
     const [depth, setDepth] = useState([])
+    const [loading, setLoading] = useState(true)
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
     useEffect(() => {
@@ -23,6 +24,7 @@ export function Home(): React.ReactElement {
                 })
                 console.log("response", depthResponse.data.data)
                 setDepth(depthResponse.data.data)
+                setLoading(false)
             }
         )
     }, [])
@@ -56,7 +58,13 @@ export function Home(): React.ReactElement {
                         <Heading as="h2" size="md">
                             BitClout Market Value
                         </Heading>
-                        <BitcloutChart data={depth} width={500} height={500} />
+                        {loading ? null : (
+                            <BitcloutChart
+                                data={depth}
+                                width={500}
+                                height={500}
+                            />
+                        )}
                     </Flex>
                     <Spacer />
                     <Flex flexDirection="column" w="50%" padding={4}>
