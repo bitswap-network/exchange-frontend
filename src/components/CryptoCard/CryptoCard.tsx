@@ -53,8 +53,7 @@ export const CryptoCard = (props: any) => {
                     isTruncated
                 >
                     <Text fontSize="3xl" color="gray.600">
-                        {globalVars.formatBalanceSmall(balance.amount)}{" "}
-                        {balance.currency}
+                        {balance.amount.toFixed(6)} {balance.currency}
                     </Text>
                 </Box>
             </Box>

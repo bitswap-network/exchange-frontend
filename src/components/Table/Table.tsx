@@ -31,7 +31,7 @@ export function Table<T extends Record<string, unknown>>({
                                 {...column.getHeaderProps(
                                     column.getSortByToggleProps()
                                 )}
-                                isNumeric={column.isNumeric}
+                                // isNumeric={column.isNumeric}
                             >
                                 {column.render("Header")}
                                 <chakra.span pl="4">
@@ -55,8 +55,9 @@ export function Table<T extends Record<string, unknown>>({
                         <Tr {...row.getRowProps()}>
                             {row.cells.map((cell) => (
                                 <Td
+                                    color="gray.500"
                                     {...cell.getCellProps()}
-                                    isNumeric={cell.column.isNumeric}
+                                    // isNumeric={cell.column.isNumeric}
                                 >
                                     {cell.render("Cell")}
                                 </Td>
