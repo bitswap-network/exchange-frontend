@@ -1,6 +1,6 @@
-import { Observable, Subject } from 'rxjs'
-import { v4 as uuid } from 'uuid'
-import * as config from '../../config'
+import { Observable, Subject } from "rxjs"
+import { v4 as uuid } from "uuid"
+import * as config from "../../globalVars"
 
 //Require approval for buy/sell/sending bitclout
 const accessLevel = 3
@@ -25,21 +25,21 @@ const launch = (
         url += path
     }
     let prepend = true
-    let httpParams = ''
+    let httpParams = ""
 
     if (params?.publicKey) {
         httpParams = httpParams.concat(
-            `${prepend ? '?' : '&'}publicKey=${params.publicKey}`
+            `${prepend ? "?" : "&"}publicKey=${params.publicKey}`
         )
         prepend = false
     }
     if (params?.tx) {
-        httpParams = httpParams.concat(`${prepend ? '?' : '&'}tx=${params.tx}`)
+        httpParams = httpParams.concat(`${prepend ? "?" : "&"}tx=${params.tx}`)
         prepend = false
     }
-    if (path === '/log-in') {
+    if (path === "/log-in") {
         httpParams = httpParams.concat(
-            `${prepend ? '?' : '&'}accessLevelRequest=${accessLevel}`
+            `${prepend ? "?" : "&"}accessLevelRequest=${accessLevel}`
         )
     }
     url += httpParams
@@ -65,7 +65,7 @@ const sign = (payload: {
     encryptedSeedHex: string
     transactionHex: string
 }): Observable<any> => {
-    return send('sign', payload)
+    return send("sign", payload)
 }
 
 const decrypt = (payload: {
@@ -74,7 +74,7 @@ const decrypt = (payload: {
     encryptedSeedHex: string
     encryptedHexes: string[]
 }): Observable<any> => {
-    return send('decrypt', payload)
+    return send("decrypt", payload)
 }
 
 const jwt = (payload: {
@@ -83,14 +83,14 @@ const jwt = (payload: {
     encryptedSeedHex: string
 }): Observable<any> => {
     console.log(payload)
-    return send('jwt', payload)
+    return send("jwt", payload)
 }
 
 const handleInitialize = (event: MessageEvent) => {
     if (!initialized) {
         initialized = true
-        console.log('initializing identity...')
-        iframe = document.getElementById('identity') as HTMLIFrameElement
+        console.log("initializing identity...")
+        iframe = document.getElementById("identity") as HTMLIFrameElement
         for (const request of pendingRequests) {
             postMessage(request)
         }
@@ -132,18 +132,18 @@ const handleRequest = (event: MessageEvent) => {
         data: { id, method, payload },
     } = event
 
-    if (method === 'initialize') {
+    if (method === "initialize") {
         handleInitialize(event)
-    } else if (method === 'storageGranted') {
+    } else if (method === "storageGranted") {
         handleStorageGranted()
-    } else if (method === 'login') {
+    } else if (method === "login") {
         handleLogin(payload)
-    } else if (method === 'import') {
+    } else if (method === "import") {
         handleImport(id)
-    } else if (method === 'info') {
+    } else if (method === "info") {
         handleInfo(id)
     } else {
-        console.error('Unhandled identity request')
+        console.error("Unhandled identity request")
         console.error(event)
     }
 }
@@ -164,7 +164,7 @@ const send = (method: string, payload: any) => {
         id: uuid(),
         method,
         payload,
-        service: 'identity',
+        service: "identity",
     }
 
     const subject = new Subject()
@@ -177,7 +177,7 @@ const send = (method: string, payload: any) => {
 const postMessage = (req: any) => {
     if (initialized && iframe) {
         // @ts-ignore: Object is possibly 'null'.
-        iframe.contentWindow.postMessage(req, '*')
+        iframe.contentWindow.postMessage(req, "*")
     } else {
         pendingRequests.push(req)
     }
@@ -185,12 +185,12 @@ const postMessage = (req: any) => {
 
 // Respond to a received message
 const respond = (window: Window, id: string, payload: any): void => {
-    window && window.postMessage({ id, service: 'identity', payload }, '*')
+    window && window.postMessage({ id, service: "identity", payload }, "*")
 }
 
 const identityHandler = (event: MessageEvent) => {
     const { service, method } = event.data
-    if (service !== 'identity') {
+    if (service !== "identity") {
         return
     }
     if (method) {

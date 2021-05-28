@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import {
     Modal,
     ModalOverlay,
@@ -18,10 +18,10 @@ import {
     NumberDecrementStepper,
     Text,
     Stack,
-} from '@chakra-ui/react'
-import { BlueButton } from '../../../components/BlueButton'
+} from "@chakra-ui/react"
+import { BlueButton } from "../../../components/BlueButton"
 
-type OrderModalProps = Omit<ModalProps, 'children'>
+type OrderModalProps = Omit<ModalProps, "children">
 
 export function OrderModal({
     isOpen,

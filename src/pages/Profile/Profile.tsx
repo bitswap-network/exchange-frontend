@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 import {
     HiExclamationCircle,
     HiBadgeCheck,
     HiChevronLeft,
-} from 'react-icons/hi'
+} from "react-icons/hi"
 import {
     Flex,
     Button,
@@ -22,12 +22,12 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-} from '@chakra-ui/react'
-import { useRecoilValue } from 'recoil'
-import { userState } from '../../store'
-import { BlueButton } from '../../components/BlueButton/BlueButton'
-import { verifyBitclout, updateProfile } from '../../services/user'
-import { logout } from '../../helpers/persistence'
+} from "@chakra-ui/react"
+import { useRecoilValue } from "recoil"
+import { userState } from "../../store"
+import { BlueButton } from "../../components/BlueButton/BlueButton"
+import { verifyBitclout, updateProfile } from "../../services/user"
+import { logout } from "../../helpers/persistence"
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
@@ -38,9 +38,9 @@ export function Profile(): React.ReactElement {
     const [emailEdit, setEmailEdit] = useState(false)
     const [emailErr, setEmailErr] = useState(false)
     const [userEmail, setUserEmail] = useState(user.email)
-    const [currentPage, setCurrentPage] = useState('profile')
-    const [textCopied, setTextCopied] = useState('copy')
-    const [verificationErrText, setVerificationErrText] = useState('')
+    const [currentPage, setCurrentPage] = useState("profile")
+    const [textCopied, setTextCopied] = useState("copy")
+    const [verificationErrText, setVerificationErrText] = useState("")
     const [loading, setLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -58,7 +58,7 @@ export function Profile(): React.ReactElement {
 
     const handleLogout = () => {
         logout()
-        window.location.assign('/login')
+        window.location.assign("/login")
     }
 
     const resendEmailVerification = () => {
@@ -83,21 +83,21 @@ export function Profile(): React.ReactElement {
         verifyBitclout()
             .then(() => {
                 setLoading(false)
-                setVerificationErrText('')
-                setCurrentPage('complete')
+                setVerificationErrText("")
+                setCurrentPage("complete")
             })
             .catch(() => {
                 setLoading(false)
-                setVerificationErrText('Unable to verify profile.')
+                setVerificationErrText("Unable to verify profile.")
             })
     }
 
     const copyToClipboard = (e: any) => {
         BitcloutCode.select()
-        document.execCommand('copy')
-        setTextCopied('copied')
+        document.execCommand("copy")
+        setTextCopied("copied")
         setTimeout(function () {
-            setTextCopied('copy')
+            setTextCopied("copy")
         }, 3000)
         e.target.focus()
     }
@@ -151,9 +151,9 @@ export function Profile(): React.ReactElement {
 
                 <Flex
                     mt="20px"
-                    w={{ sm: '80%', md: '650px' }}
+                    w={{ sm: "80%", md: "650px" }}
                     p="20px"
-                    flexDir={{ sm: 'column', md: 'row' }}
+                    flexDir={{ sm: "column", md: "row" }}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                 >
@@ -164,16 +164,16 @@ export function Profile(): React.ReactElement {
                         flexDir="column"
                     >
                         <Text color="#44423D" fontWeight="700" fontSize="18">
-                            Email{' '}
+                            Email{" "}
                             {user.verification.email ? (
                                 <HiBadgeCheck
-                                    style={{ display: 'inline' }}
+                                    style={{ display: "inline" }}
                                     color="#5388fe"
                                     size="20"
                                 />
                             ) : (
                                 <HiExclamationCircle
-                                    style={{ display: 'inline' }}
+                                    style={{ display: "inline" }}
                                     color="#EE0004"
                                     size="20"
                                 />
@@ -231,20 +231,20 @@ export function Profile(): React.ReactElement {
                         flex="0.35"
                         align="flex-end"
                         justify="space-between"
-                        flexDir={{ sm: 'row', md: 'column' }}
-                        mt={{ sm: '15px', md: '0' }}
+                        flexDir={{ sm: "row", md: "column" }}
+                        mt={{ sm: "15px", md: "0" }}
                     >
                         {!emailEdit ? (
                             <>
                                 <BlueButton
                                     text={`   Edit   `}
-                                    width={{ sm: '45%', md: '90%' }}
+                                    width={{ sm: "45%", md: "90%" }}
                                     onClick={() => setEmailEdit(true)}
                                 />
                                 {user.verification.email ? null : (
                                     <BlueButton
                                         text={`   Resend Verification   `}
-                                        width={{ sm: '45%', md: '90%' }}
+                                        width={{ sm: "45%", md: "90%" }}
                                         onClick={resendEmailVerification}
                                     />
                                 )}
@@ -253,7 +253,7 @@ export function Profile(): React.ReactElement {
                             <>
                                 <Button
                                     bg="gray.400"
-                                    w={{ sm: '45%', md: '90%' }}
+                                    w={{ sm: "45%", md: "90%" }}
                                     p="10px 0"
                                     color="white"
                                     fontWeight="600"
@@ -267,7 +267,7 @@ export function Profile(): React.ReactElement {
                                 <BlueButton
                                     isDisabled={emailErr}
                                     text={`   Update   `}
-                                    width={{ sm: '45%', md: '90%' }}
+                                    width={{ sm: "45%", md: "90%" }}
                                     onClick={updateEmail}
                                     loading={loading}
                                 />
@@ -276,22 +276,22 @@ export function Profile(): React.ReactElement {
                     </Flex>
                 </Flex>
 
-                {user.verification.status === 'verified' ? (
+                {user.verification.status === "verified" ? (
                     <Flex
                         mt="50px"
-                        w={{ sm: '80%', md: '650px' }}
+                        w={{ sm: "80%", md: "650px" }}
                         p="20px"
                         flexDir="column"
                         align="flex-start"
                         justify="center"
                         borderRadius="10"
                         boxShadow="1px 4px 6px 0px #00000040"
-                        mb={{ sm: '50px', md: '0' }}
+                        mb={{ sm: "50px", md: "0" }}
                     >
                         <Text color="#44423D" fontWeight="700" fontSize="18">
-                            BitClout Verification{' '}
+                            BitClout Verification{" "}
                             <HiBadgeCheck
-                                style={{ display: 'inline' }}
+                                style={{ display: "inline" }}
                                 color="#5388fe"
                                 size="20"
                             />
@@ -311,12 +311,12 @@ export function Profile(): React.ReactElement {
                 ) : (
                     <Flex
                         mt="50px"
-                        w={{ sm: '80%', md: '650px' }}
+                        w={{ sm: "80%", md: "650px" }}
                         p="20px"
-                        flexDir={{ sm: 'column', md: 'row' }}
+                        flexDir={{ sm: "column", md: "row" }}
                         borderRadius="10"
                         boxShadow="1px 4px 6px 0px #00000040"
-                        mb={{ sm: '50px', md: '0' }}
+                        mb={{ sm: "50px", md: "0" }}
                     >
                         <Flex
                             flex="0.65"
@@ -329,9 +329,9 @@ export function Profile(): React.ReactElement {
                                 fontWeight="700"
                                 fontSize="18"
                             >
-                                BitClout Verification{' '}
+                                BitClout Verification{" "}
                                 <HiExclamationCircle
-                                    style={{ display: 'inline' }}
+                                    style={{ display: "inline" }}
                                     color="#EE0004"
                                     size="20"
                                 />
@@ -349,14 +349,14 @@ export function Profile(): React.ReactElement {
                         <Flex
                             flex="0.35"
                             align="flex-end"
-                            justify={{ sm: 'center', md: 'space-between' }}
-                            flexDir={{ sm: 'row', md: 'column' }}
-                            mt={{ sm: '15px', md: '0' }}
+                            justify={{ sm: "center", md: "space-between" }}
+                            flexDir={{ sm: "row", md: "column" }}
+                            mt={{ sm: "15px", md: "0" }}
                         >
                             <BlueButton
                                 text={`   Verify   `}
                                 width="90%"
-                                onClick={() => setCurrentPage('verify')}
+                                onClick={() => setCurrentPage("verify")}
                             />
                         </Flex>
                     </Flex>
@@ -364,7 +364,7 @@ export function Profile(): React.ReactElement {
 
                 <Flex
                     mt="50px"
-                    w={{ sm: '80%', md: '600px' }}
+                    w={{ sm: "80%", md: "600px" }}
                     flexDir="column"
                     alignItems="center"
                 >
@@ -394,13 +394,13 @@ export function Profile(): React.ReactElement {
                     fontWeight="500"
                     fontSize="16"
                     p="0"
-                    onClick={() => setCurrentPage('profile')}
+                    onClick={() => setCurrentPage("profile")}
                 >
                     <HiChevronLeft
-                        style={{ display: 'inline' }}
+                        style={{ display: "inline" }}
                         color="gray.600"
                         size="24"
-                    />{' '}
+                    />{" "}
                     Back
                 </Button>
                 <Text fontSize="xx-large" fontWeight="bold">
@@ -455,15 +455,15 @@ export function Profile(): React.ReactElement {
                 <BlueButton
                     text={`   Return To Profile   `}
                     width="350px"
-                    onClick={() => setCurrentPage('profile')}
+                    onClick={() => setCurrentPage("profile")}
                 />
             </VStack>
         </Flex>
     )
 
-    return currentPage == 'profile'
+    return currentPage == "profile"
         ? profilePage
-        : currentPage == 'verify'
+        : currentPage == "verify"
         ? VerifyBitclout
         : VerificationComplete
 }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 // TODO: delete this file later <3 this is just Gina playing around
-import React from 'react'
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import React from "react"
+import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
 import {
     Box,
     Flex,
@@ -17,8 +17,8 @@ import {
     Td,
     TableCaption,
     Stack,
-} from '@chakra-ui/react'
-import { NavBar } from '../../components/NavBar'
+} from "@chakra-ui/react"
+import { NavBar } from "../../components/NavBar"
 
 Playground.propTypes = {
     title: PropTypes.string,
@@ -29,10 +29,10 @@ Playground.propTypes = {
 }
 
 Playground.defaultProps = {
-    title: 'Home',
-    image: 'https://source.unsplash.com/collection/404339/800x600',
-    ctaText: 'BitClout MarketValue',
-    ctaLink: '/',
+    title: "Home",
+    image: "https://source.unsplash.com/collection/404339/800x600",
+    ctaText: "BitClout MarketValue",
+    ctaLink: "/",
 }
 
 export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
@@ -65,11 +65,11 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
             <Flex
                 align="top"
                 justify={{
-                    base: 'normal',
-                    md: 'space-around',
-                    xl: 'space-between',
+                    base: "normal",
+                    md: "space-around",
+                    xl: "space-between",
                 }}
-                direction={{ base: 'column', md: 'row' }}
+                direction={{ base: "column", md: "row" }}
                 minH="70vh"
                 px={8}
                 mb={16}
@@ -78,15 +78,15 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
             >
                 <Stack
                     spacing={4}
-                    w={{ base: '80%', md: '40%' }}
-                    align={['center', 'center', 'flex-start', 'flex-start']}
+                    w={{ base: "80%", md: "40%" }}
+                    align={["center", "center", "flex-start", "flex-start"]}
                 >
                     <Heading
                         as="h1"
                         size="xl"
                         fontWeight="bold"
                         color="primary.800"
-                        textAlign={['center', 'center', 'left', 'left']}
+                        textAlign={["center", "center", "left", "left"]}
                     >
                         {title}
                     </Heading>
@@ -98,7 +98,7 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                         mt="-1"
                         fontWeight="normal"
                         lineHeight={1.5}
-                        textAlign={['center', 'center', 'left', 'left']}
+                        textAlign={["center", "center", "left", "left"]}
                     >
                         BitClout MarketValue
                     </Heading>
@@ -112,7 +112,7 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                     />
                 </Stack>
                 <Box
-                    w={{ base: '80%', sm: '60%', md: '50%' }}
+                    w={{ base: "80%", sm: "60%", md: "50%" }}
                     mb={{ base: 12, md: 0 }}
                 >
                     <Heading
@@ -120,7 +120,7 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                         size="xl"
                         fontWeight="bold"
                         color="primary.800"
-                        textAlign={['center', 'center', 'left', 'left']}
+                        textAlign={["center", "center", "left", "left"]}
                     >
                         Order Book
                     </Heading>
@@ -131,7 +131,7 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                         opacity="0.8"
                         fontWeight="normal"
                         lineHeight={1.5}
-                        textAlign={['center', 'center', 'left', 'left']}
+                        textAlign={["center", "center", "left", "left"]}
                     >
                         Sell Order
                     </Heading>
@@ -153,7 +153,7 @@ export function Playground({ title, image, ctaLink, ctaText, ...rest }) {
                         opacity="0.8"
                         fontWeight="normal"
                         lineHeight={1.5}
-                        textAlign={['center', 'center', 'left', 'left']}
+                        textAlign={["center", "center", "left", "left"]}
                         mt="5"
                     >
                         Buy Order

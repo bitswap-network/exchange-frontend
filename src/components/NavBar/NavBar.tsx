@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
+import React from "react"
 import {
     Box,
     Flex,
@@ -10,31 +10,31 @@ import {
     Stack,
     Spacer,
     Text,
-} from '@chakra-ui/react'
-import { RiCloseFill } from 'react-icons/ri'
-import { HiMenu } from 'react-icons/hi'
-import { useRecoilValue } from 'recoil'
-import { Logo } from './components/Logo'
-import { Link } from 'react-router-dom'
-import { loggedInState } from '../../store'
-import { AiOutlineUser } from 'react-icons/ai'
+} from "@chakra-ui/react"
+import { RiCloseFill } from "react-icons/ri"
+import { HiMenu } from "react-icons/hi"
+import { useRecoilValue } from "recoil"
+import { Logo } from "./components/Logo"
+import { Link } from "react-router-dom"
+import { loggedInState } from "../../store"
+import { AiOutlineUser } from "react-icons/ai"
 
-const LINKS = ['home', 'orders', 'wallet']
+const LINKS = ["home", "orders", "wallet"]
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (
     <Box px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
             <HStack
-                as={'nav'}
+                as={"nav"}
                 spacing={5}
-                display={{ base: 'none', md: 'flex' }}
+                display={{ base: "none", md: "flex" }}
             >
                 <Link to="/">
                     <Logo />
                 </Link>
             </HStack>
-            <Flex alignItems={'center'} mr="5">
+            <Flex alignItems={"center"} mr="5">
                 <Button
                     bg="#4978F0"
                     p="0px 40px"
@@ -53,25 +53,26 @@ export const DefaultNavBar = (
         </Flex>
     </Box>
 )
+
 export function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
-    console.log('IS LOGGED IN: ', isLoggedIn)
+    console.log("IS LOGGED IN: ", isLoggedIn)
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <Box px={4}>
-            <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
                 <IconButton
-                    size={'lg'}
+                    size={"lg"}
                     icon={isOpen ? <RiCloseFill /> : <HiMenu />}
-                    aria-label={'Open Menu'}
-                    display={{ md: 'none' }}
+                    aria-label={"Open Menu"}
+                    display={{ md: "none" }}
                     onClick={isOpen ? onClose : onOpen}
                 />
                 <HStack
-                    as={'nav'}
+                    as={"nav"}
                     spacing={5}
-                    display={{ base: 'none', md: 'flex' }}
+                    display={{ base: "none", md: "flex" }}
                 >
                     <Logo as={Link} to="/" />
                     {LINKS.map((link) => (
@@ -86,7 +87,7 @@ export function NavBar() {
                         </Text>
                     ))}
                 </HStack>
-                <Flex mr={{ sm: '5px', md: '40px' }}>
+                <Flex mr={{ sm: "5px", md: "40px" }}>
                     <Link to="/profile">
                         <HStack spacing="5px" color="black" fontWeight="400">
                             <AiOutlineUser size="20" />
@@ -98,8 +99,8 @@ export function NavBar() {
                 </Flex>
             </Flex>
             {isOpen ? (
-                <Box pb={4} display={{ md: 'none' }}>
-                    <Stack as={'nav'} spacing={4}>
+                <Box pb={4} display={{ md: "none" }}>
+                    <Stack as={"nav"} spacing={4}>
                         {LINKS.map((link) => (
                             <Text
                                 textTransform="capitalize"

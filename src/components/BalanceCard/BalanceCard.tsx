@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
-import { Box, Text, Image } from '@chakra-ui/react'
-import { BlueButton } from '../BlueButton'
+import React from "react"
+import { Box, Text, Image } from "@chakra-ui/react"
+import { BlueButton } from "../BlueButton"
+
+import * as globalVars from "../../globalVars"
 
 export const BalanceCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
@@ -56,19 +58,19 @@ export const BalanceCard = (props: any) => {
                     <Text fontSize="1xl" color="gray.500">
                         {props.usdValue !== null
                             ? `~${props.usdValue.toFixed(2)} USD`
-                            : 'Fetching...'}
+                            : "Fetching..."}
                     </Text>
                 </Box>
                 <Box paddingTop="5" d="flex" mt="8" justifyContent="center">
                     <BlueButton
                         onClick={props.openWithdrawModal}
-                        text={'Withdraw'}
+                        text={"Withdraw"}
                         width="45%"
                     />
                     <BlueButton
                         onClick={props.openDepositModal}
                         ml="5"
-                        text={'Deposit'}
+                        text={"Deposit"}
                         width="45%"
                     />
                 </Box>

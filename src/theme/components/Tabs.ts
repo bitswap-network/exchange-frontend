@@ -1,6 +1,6 @@
 const Tabs = {
     // The parts of the component
-    parts: ['tablist', 'tab'],
+    parts: ["tablist", "tab"],
     // The base styles for each part
     baseStyle: {},
     // The size styles for each part
@@ -9,20 +9,20 @@ const Tabs = {
     variants: {
         order: {
             tablist: {
-                border: '1px',
-                borderColor: 'gray.200',
-                bg: 'white',
-                boxShadow: 'sm',
-                borderRadius: 'sm',
+                border: "1px",
+                borderColor: "gray.200",
+                bg: "white",
+                boxShadow: "sm",
+                borderRadius: "sm",
             },
             tab: {
-                borderRadius: 'sm',
-                fontWeight: 'semibold',
-                color: 'gray.300',
+                borderRadius: "sm",
+                fontWeight: "semibold",
+                color: "gray.300",
                 _selected: {
-                    border: '2px',
-                    borderColor: 'blue.300',
-                    color: 'gray.800',
+                    border: "2px",
+                    borderColor: "blue.300",
+                    color: "gray.800",
                 },
             },
         },

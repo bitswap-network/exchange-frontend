@@ -1,8 +1,8 @@
-import React from 'react'
-import { Box } from '@chakra-ui/react'
-import { Table } from '../../../components/Table'
-import { Order } from '../../../types/Order'
-import { Column } from 'react-table'
+import React from "react"
+import { Box } from "@chakra-ui/react"
+import { Table } from "../../../components/Table"
+import { Order } from "../../../types/Order"
+import { Column } from "react-table"
 
 interface OrderTableProps {
     data: Order[]

@@ -18,13 +18,13 @@ import {
     Tr,
     Th,
     Td,
-} from '@chakra-ui/react'
-import React from 'react'
-import { Column } from 'react-table'
-import { BlueButton } from '../../components/BlueButton'
-import { Order, OrderType } from '../../types/Order'
-import { OrderTable } from './OrderTable'
-import { OrderModal } from './OrderModal'
+} from "@chakra-ui/react"
+import React from "react"
+import { Column } from "react-table"
+import { BlueButton } from "../../components/BlueButton"
+import { Order, OrderType } from "../../types/Order"
+import { OrderTable } from "./OrderTable"
+import { OrderModal } from "./OrderModal"
 
 export function Orders(): React.ReactElement {
     const data = React.useMemo(
@@ -34,27 +34,27 @@ export function Orders(): React.ReactElement {
                 type: OrderType.Buy,
                 quantity: 20,
                 price: 12.5,
-                date_posted: '15/02/2021',
-                date_fullfiled: '-',
-                status: 'active',
+                date_posted: "15/02/2021",
+                date_fullfiled: "-",
+                status: "active",
             },
             {
                 id: 2,
                 type: OrderType.Sell,
                 quantity: 5,
                 price: 12.5,
-                date_posted: '15/02/2021',
-                date_fullfiled: '15/02/2021',
-                status: 'fullfiled',
+                date_posted: "15/02/2021",
+                date_fullfiled: "15/02/2021",
+                status: "fullfiled",
             },
             {
                 id: 3,
                 type: OrderType.Buy,
                 quantity: 15,
                 price: 12.5,
-                date_posted: '15/02/2021',
-                date_fullfiled: '-',
-                status: 'active',
+                date_posted: "15/02/2021",
+                date_fullfiled: "-",
+                status: "active",
             },
         ],
         []
@@ -62,35 +62,35 @@ export function Orders(): React.ReactElement {
     const columns = React.useMemo(
         () => [
             {
-                Header: 'Order ID',
-                accessor: 'id',
+                Header: "Order ID",
+                accessor: "id",
                 isNumeric: true,
             },
             {
-                Header: 'Order Type',
-                accessor: 'type',
+                Header: "Order Type",
+                accessor: "type",
             },
             {
-                Header: 'Quantity',
-                accessor: 'quantity',
+                Header: "Quantity",
+                accessor: "quantity",
                 isNumeric: true,
             },
             {
-                Header: 'Price',
-                accessor: 'price',
+                Header: "Price",
+                accessor: "price",
                 isNumeric: true,
             },
             {
-                Header: 'Date Posted',
-                accessor: 'date_posted',
+                Header: "Date Posted",
+                accessor: "date_posted",
             },
             {
-                Header: 'Date Fullfiled',
-                accessor: 'date_fullfiled',
+                Header: "Date Fullfiled",
+                accessor: "date_fullfiled",
             },
             {
-                Header: 'Status',
-                accessor: 'status',
+                Header: "Status",
+                accessor: "status",
             },
         ],
         []
@@ -99,31 +99,31 @@ export function Orders(): React.ReactElement {
     const orderBook = [
         {
             id: 1,
-            type: 'buy',
+            type: "buy",
             price: 100,
             quantity: 10,
         },
         {
             id: 2,
-            type: 'sell',
+            type: "sell",
             price: 120,
             quantity: 3.4,
         },
         {
             id: 3,
-            type: 'buy',
+            type: "buy",
             price: 99,
             quantity: 5.6,
         },
         {
             id: 4,
-            type: 'buy',
+            type: "buy",
             price: 125,
             quantity: 2.3,
         },
         {
             id: 5,
-            type: 'sell',
+            type: "sell",
             price: 90,
             quantity: 10.6,
         },
@@ -159,7 +159,7 @@ export function Orders(): React.ReactElement {
                                         {
                                             data.filter(
                                                 (order) =>
-                                                    order.status == 'active'
+                                                    order.status == "active"
                                             ).length
                                         }
                                         )
@@ -169,7 +169,7 @@ export function Orders(): React.ReactElement {
                                         {
                                             data.filter(
                                                 (order) =>
-                                                    order.status == 'fullfiled'
+                                                    order.status == "fullfiled"
                                             ).length
                                         }
                                         )
@@ -190,19 +190,19 @@ export function Orders(): React.ReactElement {
                                         <OrderTable
                                             data={data.filter(
                                                 (order) =>
-                                                    order.status == 'active'
+                                                    order.status == "active"
                                             )}
                                             columns={columns}
                                         />
                                     </Stack>
                                 </TabPanel>
                                 <TabPanel>
-                                    {' '}
+                                    {" "}
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
                                             data={data.filter(
                                                 (order) =>
-                                                    order.status == 'fullfiled'
+                                                    order.status == "fullfiled"
                                             )}
                                             columns={columns}
                                         />

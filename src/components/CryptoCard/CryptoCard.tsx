@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from 'react'
-import { Box, Text, Image, Button } from '@chakra-ui/react'
+import React from "react"
+import { Box, Text, Image, Button } from "@chakra-ui/react"
+import * as globalVars from "../../globalVars"
 
 export const CryptoCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
