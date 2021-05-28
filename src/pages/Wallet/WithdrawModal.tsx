@@ -37,8 +37,53 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
     currency,
 }: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
-    const [withdrawValue, setWithdrawValue] = useState<string>('0')
+    const identityUserData = useRecoilValue(identityUsers)
+    const [withdrawValue, setWithdrawValue] = useState<string>('0.000000')
+    const [preflight, setPreflight] =
+        useState<TransactionAPIInterface | null>(null)
     const [page, setPage] = useState('withdraw')
+    const getPreflight = () => {
+        bitcloutPreflightTxn(parseFloat(withdrawValue))
+            .then((response) => {
+                setPreflight(response.data.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }
+
+    const submitDeposit = () => {
+        if (preflight) {
+            const depositObj = {
+                accessLevel:
+                    identityUserData[user.bitclout.publicKey].accessLevel,
+                accessLevelHmac:
+                    identityUserData[user.bitclout.publicKey].accessLevelHmac,
+                encryptedSeedHex:
+                    identityUserData[user.bitclout.publicKey].encryptedSeedHex,
+                transactionHex: preflight.TransactionHex,
+                transactionIDBase58Check: preflight.TransactionIDBase58Check,
+                value: parseFloat(withdrawValue),
+            }
+            handleBitcloutDeposit(depositObj)
+        }
+    }
+
+    const valueHandler = async (valueString: string) => {
+        const max =
+            currency == 'ETH'
+                ? ((await getMaxEth()) as number)
+                : ((await getMaxBitclout()) as number)
+        if (max) {
+            if (parseFloat(valueString) > max) {
+                setWithdrawValue(max.toFixed(4))
+            } else {
+                setWithdrawValue(valueString.replace(/^\$/, ''))
+            }
+        } else {
+            setWithdrawValue('0.000000')
+        }
+    }
 
     const submitWithdrawBitclout = () => {
         if (withdrawValue) {
@@ -49,11 +94,36 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
                 .catch((error) => {
                     console.error(error)
                 })
+        } else {
+            setWithdrawValue('0.000000')
+            return 0
         }
     }
 
-    const valueHandler = async (valueString: string) => {
-        setWithdrawValue(valueString.replace(/^\$/, ''))
+    const getMaxEth = () => {
+        if (user.balance.ether > 0) {
+            bitcloutPreflightTxn(user.balance.ether)
+                .then((response) => {
+                    setWithdrawValue(
+                        (
+                            user.balance.ether -
+                            parseFloat(response.data.FeeNanos) / 1e9
+                        ).toString()
+                    )
+                    return (
+                        user.balance.ether -
+                        parseFloat(response.data.FeeNanos) / 1e9
+                    )
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return 0
+                })
+        } else {
+            setWithdrawValue('0.000000')
+            return 0
+        }
+
     }
 
     const completed = (
@@ -210,7 +280,7 @@ export const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         placeholder="0.0"
                         value={withdrawValue}
                         onChange={valueHandler}
-                        precision={4}
+                        precision={6}
                         step={0.1}
                         min={0}
                         max={currency.maxWithdraw}
