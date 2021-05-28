@@ -15,6 +15,5 @@ export const getDepth = async (startAt: number, endAt: number) => {
 }
 
 export const getCurrentDepth = async () => {
-    console
     return await client.get("/utility/depth-current")
 }

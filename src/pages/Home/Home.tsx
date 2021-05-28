@@ -9,10 +9,10 @@ import { Order, OrderType } from "../../types/Order"
 import { OrderTable } from "../Orders/OrderTable"
 import { getDepth } from "../../services/utility"
 import { useOrderBook } from "../../hooks"
-import Style from "styled-jsx"
 
 export function Home(): React.ReactElement {
     const [depth, setDepth] = useState([])
+    const [dateRange, setDateRange] = useState("max")
     const [loading, setLoading] = useState(true)
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
@@ -27,7 +27,7 @@ export function Home(): React.ReactElement {
                 setLoading(false)
             }
         )
-    }, [])
+    }, [dateRange])
 
     const columns = React.useMemo(
         () => [
@@ -49,6 +49,7 @@ export function Home(): React.ReactElement {
         ],
         []
     ) as Column<Order>[]
+
     return (
         <>
             <VStack spacing={8} marginTop="40px">
@@ -81,9 +82,7 @@ export function Home(): React.ReactElement {
                         </Heading>
                         <OrderTable
                             data={
-                                !orderbookIsLoading &&
-                                !orderbookIsError &&
-                                orderbook.asks
+                                !orderbookIsLoading && !orderbookIsError
                                     ? orderbook.asks
                                     : []
                             }
@@ -99,9 +98,7 @@ export function Home(): React.ReactElement {
                         </Heading>
                         <OrderTable
                             data={
-                                !orderbookIsLoading &&
-                                !orderbookIsError &&
-                                orderbook.bids
+                                !orderbookIsLoading && !orderbookIsError
                                     ? orderbook.bids
                                     : []
                             }

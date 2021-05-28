@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 
 export const api =
     process.env.NODE_ENV === "development"
-        ? "https://bitswap-core-api-staging.herokuapp.com/"
+        ? "http://localhost:5000/"
         : "https://bitwap-core-api.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
