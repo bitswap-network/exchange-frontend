@@ -17,16 +17,14 @@ export function Home(): React.ReactElement {
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
     useEffect(() => {
-        getDepth(Date.now() - 1000 * 60 * 60 * 24 * 7, Date.now()).then(
-            (depthResponse) => {
-                depthResponse.data.data.forEach((depthItem: any) => {
-                    depthItem.timestamp = new Date(depthItem.timestamp)
-                })
-                console.log("response", depthResponse.data.data)
-                setDepth(depthResponse.data.data)
-                setLoading(false)
-            }
-        )
+        getDepth(dateRange).then((depthResponse) => {
+            depthResponse.data.data.forEach((depthItem: any) => {
+                depthItem.timestamp = new Date(depthItem.timestamp)
+            })
+            console.log("response", depthResponse.data.data)
+            setDepth(depthResponse.data.data)
+            setLoading(false)
+        })
     }, [dateRange])
 
     const columns = React.useMemo(
@@ -64,6 +62,7 @@ export function Home(): React.ReactElement {
                                 data={depth}
                                 width={500}
                                 height={500}
+                                dateRange={dateRange}
                             />
                         )}
                     </Flex>

@@ -7,9 +7,15 @@ interface BitCloutChartInterface {
     data: { timestamp: Date; marketBuy: number; marketSell: number }[]
     width: number
     height: number
+    dateRange: string
 }
 
-export function BitcloutChart({ data, width, height }: BitCloutChartInterface) {
+export function BitcloutChart({
+    data,
+    width,
+    height,
+    dateRange,
+}: BitCloutChartInterface) {
     const prices = data.map((k: any) => ({
         timestamp: k.timestamp,
         price: (k.marketBuy + k.marketSell) / 2,
@@ -20,13 +26,26 @@ export function BitcloutChart({ data, width, height }: BitCloutChartInterface) {
     const diffPrice = currentPrice - firstPrice
     const hasIncreased = diffPrice > 0
 
+    const dateRangeFormat = (dateRange: string) => {
+        switch (dateRange) {
+            case "max":
+                return "Entire history"
+            case "1m":
+                return "Last 30 days"
+            case "1w":
+                return "Last 7 days"
+            case "1d":
+                return "Last 24 hours"
+        }
+    }
+
     return (
         <div className="bitcoin">
             <div className="title">
                 <div>
                     Bitcoin Price
                     <br />
-                    <small>last 30 days</small>
+                    <small>{dateRangeFormat(dateRange)}</small>
                 </div>
                 <div className="spacer" />
                 <div className="stats">

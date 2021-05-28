@@ -7,11 +7,8 @@ export const getBitcloutUSD = async () => {
     return await client.get("/utility/bitclout-usd")
 }
 
-export const getDepth = async (startAt: number, endAt: number) => {
-    return await client.post("/utility/depth", {
-        startAt: startAt,
-        endAt: endAt,
-    })
+export const getDepth = async (dateRange: string) => {
+    return await client.get(`/utility/depth?dateRange=${dateRange}`)
 }
 
 export const getCurrentDepth = async () => {

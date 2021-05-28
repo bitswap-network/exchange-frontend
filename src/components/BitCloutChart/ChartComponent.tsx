@@ -53,6 +53,7 @@ export const Chart: React.FC<ChartProps> = ({
     parentHeight,
     margin,
 }: ChartProps) => {
+    console.log("chart", data)
     const width = parentWidth - margin.left - margin.right
     const height = parentHeight - margin.top - margin.bottom
     const x = (d: any) => new Date(d.timestamp)
