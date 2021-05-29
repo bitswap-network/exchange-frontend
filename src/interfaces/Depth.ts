@@ -7,7 +7,6 @@ export interface Depth {
 }
 
 export interface ChartData {
-    timestamp: string
-    marketBuy: number
-    marketSell: number
+    timestamp: Date
+    price: number
 }

@@ -14,6 +14,7 @@ import {
     ChartData as ChartDataInterface,
 } from "../../interfaces/Depth"
 import ParentSize from "@visx/responsive/lib/components/ParentSize"
+import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 
 export function Home(): React.ReactElement {
     const [depth, setDepth] = useState<ChartDataInterface[]>([])
@@ -26,9 +27,8 @@ export function Home(): React.ReactElement {
             const parsedCopy: ChartDataInterface[] = []
             depthResponse.data.data.forEach((depthItem: DepthInterface) => {
                 parsedCopy.push({
-                    timestamp: new Date(depthItem.timestamp).toString(),
-                    marketSell: depthItem.marketSell as number,
-                    marketBuy: depthItem.marketBuy as number,
+                    timestamp: new Date(depthItem.timestamp),
+                    price: (depthItem.marketSell + depthItem.marketBuy) / 2,
                 })
             })
             console.log("parsed depth", parsedCopy)
@@ -69,7 +69,8 @@ export function Home(): React.ReactElement {
                         </Heading>
                         {loading ? null : (
                             <>
-                                <ParentSize>
+                                <BitCloutChart data={depth} />
+                                {/* <ParentSize>
                                     {({ width, height }) => (
                                         <BitcloutChart
                                             data={depth}
@@ -78,7 +79,7 @@ export function Home(): React.ReactElement {
                                             dateRange={dateRange}
                                         />
                                     )}
-                                </ParentSize>
+                                </ParentSize> */}
                             </>
                         )}
                     </Flex>

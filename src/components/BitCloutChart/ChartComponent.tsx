@@ -192,13 +192,15 @@ export default withTooltip<ChartProps, DataInterface>(
                     yScale={yScale}
                     fill="url(#dLines)"
                 /> */}
-                    {/* <LinePath
+                    <LinePath
                         data={data}
                         stroke="#6086d6"
                         strokeOpacity="0.8"
                         strokeWidth={1}
+                        y={(data) => yScale(x(data)) ?? 50}
+                        x={(data) => xScale(x(data)) ?? 50}
                     />
-                    <MaxMinPrice
+                    {/* <MaxMinPrice
                         data={minData}
                         yText={yScale(minPrice).toString()}
                         label={formatFunc(minPrice)}
