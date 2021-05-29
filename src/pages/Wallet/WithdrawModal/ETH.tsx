@@ -314,8 +314,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         </Button>
                         <BlueButton
                             isDisabled={
-                                (parseFloat(withdrawValue) > maxWithdraw &&
-                                    parseFloat(withdrawValue) > 0) ||
+                                parseFloat(withdrawValue) > maxWithdraw ||
+                                parseFloat(withdrawValue) <= 0 ||
                                 !isAddress(ethAddressInput)
                             }
                             w="47%"
