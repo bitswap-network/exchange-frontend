@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from "react"
+import React, { useMemo } from "react"
 import { Box } from "@chakra-ui/react"
 import {
     LineChart,
@@ -17,24 +17,30 @@ import {
     AreaClosed,
     LinePath,
     Bar,
-    withParentSize,
     LinearGradient,
-    PatternLines,
+    appleStock,
     AxisBottom,
     withTooltip,
     localPoint,
     Text,
     scaleTime,
     scaleLinear,
+    GridRows,
+    GridColumns,
+    curveMonotoneX,
 } from "@visx/visx"
-import { bisector } from "d3-array"
+import { bisector, extent, max } from "d3-array"
 import { format } from "d3-format"
 import { MaxMinPrice } from "./MaxMinPrice"
 
+export const background = "#3b6978"
+export const background2 = "#204051"
+export const accentColor = "#edffea"
+export const accentColorDark = "#75daad"
 export const formatFunc = format("$,.2f")
 
 interface ChartProps {
-    data: any[]
+    data: DataInterface[]
     dateRange?: string
     parentWidth: number
     parentHeight: number
@@ -46,19 +52,24 @@ interface ChartProps {
     }
 }
 
+interface DataInterface {
+    timestamp: string
+    price: number
+}
+
 export const Chart: React.FC<ChartProps> = ({
     data,
     dateRange = "max",
     parentWidth,
     parentHeight,
-    margin,
+    margin = { top: 0, right: 0, bottom: 0, left: 0 },
 }: ChartProps) => {
-    console.log("chart", data)
     const width = parentWidth - margin.left - margin.right
     const height = parentHeight - margin.top - margin.bottom
-    const x = (d: any) => new Date(d.timestamp)
-    const y = (d: any) => d.price
-    const bisectDate = bisector((d) => x(d)).left
+    const x = (d: DataInterface) => new Date(d.timestamp)
+    const y = (d: DataInterface) => d.price as number
+    console.log("chart")
+    // const bisectDate = bisector((d) => x(d)).left
     const firstPoint = data[0]
     const currentPoint = data[data.length - 1]
     const minPrice = Math.min(...data.map(y))
@@ -73,69 +84,104 @@ export const Chart: React.FC<ChartProps> = ({
         { timestamp: x(firstPoint), price: minPrice },
         { timestamp: x(currentPoint), price: minPrice },
     ]
-    const xScale = scaleTime({
-        domain: [data[0].timestamp, data[data.length - 1].timestamp], // x-coordinate data values
-        range: [0, width], // svg x-coordinates, svg x-coordinates increase left to right
-        round: true,
-    })
-    const yScale = scaleLinear({
-        domain: [data[0].price, data[1].price], // y-coordinate data values
-        // svg y-coordinates, these increase from top to bottom so we reverse the order
-        // so that minY in data space maps to graphHeight in svg y-coordinate space
-        range: [0, data[1].price * 1.1],
-        round: true,
-    })
-    let svgRef: SVGSVGElement | null = null
+    const xScale = useMemo(
+        () =>
+            scaleTime({
+                range: [margin.left, width],
+                domain: extent(data, x) as [Date, Date],
+            }),
+        [width, margin.left]
+    )
+    const yScale = useMemo(
+        () =>
+            scaleLinear({
+                range: [height + margin.top, margin.top],
+                domain: [0, (max(data, y) || 0) + height / 3],
+                nice: true,
+            }),
+        [margin.top, height]
+    )
     return (
         <div>
-            <svg
-                ref={(s) => (svgRef = s)}
-                width={parentWidth}
-                height={parentHeight}
-            >
-                <LinearGradient
-                    id="fill"
-                    from="#6086d6"
-                    to="#6086d6"
-                    fromOpacity={0.2}
-                    toOpacity={0}
+            <svg width={parentWidth} height={parentHeight}>
+                <rect
+                    x={0}
+                    y={0}
+                    width={parentWidth}
+                    height={parentHeight}
+                    fill="url(#area-background-gradient)"
+                    rx={14}
                 />
-                <PatternLines
+                <LinearGradient
+                    id="area-background-gradient"
+                    from={background}
+                    to={background2}
+                />
+                <LinearGradient
+                    id="area-gradient"
+                    from={accentColor}
+                    to={accentColor}
+                    toOpacity={0.1}
+                />
+                <GridRows
+                    left={margin.left}
+                    scale={yScale}
+                    width={width}
+                    strokeDasharray="1,3"
+                    stroke={accentColor}
+                    strokeOpacity={0}
+                    pointerEvents="none"
+                />
+                <GridColumns
+                    top={margin.top}
+                    scale={xScale}
+                    height={height}
+                    strokeDasharray="1,3"
+                    stroke={accentColor}
+                    strokeOpacity={0.2}
+                    pointerEvents="none"
+                />
+                {/* <PatternLines
                     id="dLines"
                     height={6}
                     width={6}
                     stroke="#27273f"
                     strokeWidth={1}
                     orientation={["diagonal"]}
-                />
-                <Group top={margin.top} left={margin.left}>
-                    <AxisBottom
+                /> */}
+                {/* <Group top={margin.top} left={margin.left}> */}
+                {/* <AxisBottom
                         scale={xScale}
                         top={height}
                         left={margin.left + 18}
                         numTicks={3}
                         hideTicks
                         hideAxisLine
-                    />
-                    <MaxMinPrice
+                    /> */}
+                {/* <MaxMinPrice
                         data={maxData}
                         yText={yScale(maxPrice).toString()}
                         label={formatFunc(maxPrice)}
                         max={true}
-                    />
-                    <AreaClosed
-                        stroke="transparent"
-                        data={data}
-                        yScale={yScale}
-                        fill="url(#fill)"
-                    />
-                    <AreaClosed
-                        stroke="transparent"
-                        data={data}
-                        yScale={yScale}
-                        fill="url(#dLines)"
-                    />
-                    <LinePath
+                    /> */}
+                <AreaClosed<DataInterface>
+                    // stroke="transparent"
+                    data={data}
+                    x={(data) => xScale(x(data)) ?? 0}
+                    y={(data) => yScale(x(data)) ?? 0}
+                    yScale={yScale}
+                    strokeWidth={1}
+                    stroke="url(#area-gradient)"
+                    fill="url(#fill)"
+                    curve={curveMonotoneX}
+                />
+                {/* <AreaClosed
+                    stroke="transparent"
+                    data={data}
+                    yScale={yScale}
+                    fill="url(#dLines)"
+                /> */}
+                {/* <LinePath
                         data={data}
                         stroke="#6086d6"
                         strokeOpacity="0.8"
@@ -146,31 +192,16 @@ export const Chart: React.FC<ChartProps> = ({
                         yText={yScale(minPrice).toString()}
                         label={formatFunc(minPrice)}
                         max={false}
-                    />
-                    {/* <Bar
-                        data={data}
-                        width={width}
-                        height={height - margin.bottom}
-                        fill="transparent"
-                        onMouseLeave={(data) => (event) => hideTooltip()}
-                        onMouseMove={(data) => (event) => {
-                            const { x: xPoint } = localPoint(this.svg, event)
-                            const x0 = xScale.invert(xPoint)
-                            const index = bisectDate(data, x0, 1)
-                            const d0 = data[index - 1]
-                            const d1 = data[index]
-                            const d =
-                                x0 - xScale(x(d0)) > xScale(x(d1)) - x0
-                                    ? d1
-                                    : d0
-                            showTooltip({
-                                tooltipData: d,
-                                tooltipLeft: xScale(x(d)),
-                                tooltipTop: yScale(y(d)),
-                            })
-                        }}
                     /> */}
-                </Group>
+                <Bar
+                    x={margin.left}
+                    y={margin.top}
+                    width={width}
+                    height={height}
+                    fill="transparent"
+                    rx={14}
+                />
+                {/* </Group> */}
                 {/* {tooltipData && (
                     <HoverLine
                         from={{
