@@ -40,6 +40,7 @@
         "swr": "^0.5.6",
         "typescript": "^3.9.5",
         "uuid": "^8.3.2",
+        "victory": "^35.8.2",
         "web-vitals": "^0.2.2"
     },
     "scripts": {

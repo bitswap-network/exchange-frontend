@@ -5,3 +5,8 @@ export interface Depth {
     asks: { price: number; quantity: number }[]
     bids: { price: number; quantity: number }[]
 }
+
+export interface ChartData {
+    timestamp: Date
+    price: number
+}

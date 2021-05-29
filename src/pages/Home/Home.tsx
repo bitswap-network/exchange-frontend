@@ -9,24 +9,32 @@ import { Order, OrderType } from "../../types/Order"
 import { OrderTable } from "../Orders/OrderTable"
 import { getDepth } from "../../services/utility"
 import { useOrderBook } from "../../hooks"
+import {
+    Depth as DepthInterface,
+    ChartData as ChartDataInterface,
+} from "../../interfaces/Depth"
+import ParentSize from "@visx/responsive/lib/components/ParentSize"
+import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 
 export function Home(): React.ReactElement {
-    const [depth, setDepth] = useState([])
+    const [depth, setDepth] = useState<ChartDataInterface[]>([])
     const [dateRange, setDateRange] = useState("max")
     const [loading, setLoading] = useState(true)
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
     useEffect(() => {
-        getDepth(Date.now() - 1000 * 60 * 60 * 24 * 7, Date.now()).then(
-            (depthResponse) => {
-                depthResponse.data.data.forEach((depthItem: any) => {
-                    depthItem.timestamp = new Date(depthItem.timestamp)
+        getDepth(dateRange).then((depthResponse) => {
+            const parsedCopy: ChartDataInterface[] = []
+            depthResponse.data.data.forEach((depthItem: DepthInterface) => {
+                parsedCopy.push({
+                    timestamp: new Date(depthItem.timestamp),
+                    price: (depthItem.marketSell + depthItem.marketBuy) / 2,
                 })
-                console.log("response", depthResponse.data.data)
-                setDepth(depthResponse.data.data)
-                setLoading(false)
-            }
-        )
+            })
+            console.log("parsed depth", parsedCopy)
+            setDepth(parsedCopy)
+            setLoading(false)
+        })
     }, [dateRange])
 
     const columns = React.useMemo(
@@ -60,11 +68,19 @@ export function Home(): React.ReactElement {
                             BitClout Market Value
                         </Heading>
                         {loading ? null : (
-                            <BitcloutChart
-                                data={depth}
-                                width={500}
-                                height={500}
-                            />
+                            <>
+                                <BitCloutChart data={depth} />
+                                {/* <ParentSize>
+                                    {({ width, height }) => (
+                                        <BitcloutChart
+                                            data={depth}
+                                            width={width}
+                                            height={height}
+                                            dateRange={dateRange}
+                                        />
+                                    )}
+                                </ParentSize> */}
+                            </>
                         )}
                     </Flex>
                     <Spacer />
