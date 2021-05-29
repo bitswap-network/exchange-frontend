@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
-import { Chart, formatFunc } from "./ChartComponent"
+import Chart, { formatFunc } from "./ChartComponent"
 import { ChartData } from "../../interfaces/Depth"
 
 interface BitCloutChartInterface {
