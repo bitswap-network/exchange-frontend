@@ -13,8 +13,14 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
+    Input,
+    Spinner,
+    HStack,
+    Link,
+    VStack,
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
+import { HiCheckCircle } from "react-icons/hi"
 import { userState, identityUsers } from "../../../store"
 import {
     withdrawBitclout,
@@ -22,6 +28,8 @@ import {
 } from "../../../services/gateway"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
+import { isAddress } from "ethereum-address"
+// const ethereum_address = require("ethereum-address")
 import * as globalVars from "../../../globalVars"
 
 interface WithdrawModalProps {
@@ -40,21 +48,33 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
     const user = useRecoilValue(userState)
     const [withdrawValue, setWithdrawValue] = useState<string>("0")
     const [page, setPage] = useState(0)
+    const [ethAddressInput, setEthAddressInput] = useState<string>("")
+    const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("")
+    const [withdrawSuccessful, setWithdrawSuccessful] = useState<boolean>(false)
+    const [etherscanID, setEtherscanID] = useState<string>("")
+    const submitWithdrawETH = () => {
+        // submit eth withdraw stuff here
+        setTimeout(function () {
+            setWithdrawSuccessful(true)
+            setEtherscanID(
+                "0x6ba2848cfa36b4a67339985bb98843f4a039d3e43865efcd288d1f52078e9f93"
+            )
+        }, 3000)
 
-    const submitWithdrawBitclout = () => {
-        if (withdrawValue) {
-            withdrawBitclout(parseFloat(withdrawValue))
-                .then(() => {
-                    setPage(2)
-                })
-                .catch((error) => {
-                    console.error(error)
-                })
-        }
+        setPage(1)
     }
 
     const valueHandler = async (valueString: string) => {
         setWithdrawValue(valueString.replace(/^\$/, ""))
+    }
+
+    const ethAddressValueHandler = (e: any) => {
+        if (!isAddress(e.target.value)) {
+            setEthAddressInputErr("Invalid ETH address")
+        } else {
+            setEthAddressInputErr("")
+        }
+        setEthAddressInput(e.target.value)
     }
 
     const renderHandler = () => {
@@ -88,10 +108,10 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
-                        w="70%"
+                        w="90%"
                         mt="6"
                         mb="8"
-                        ml="15%"
+                        ml="5%"
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
@@ -117,43 +137,62 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         mb="2"
                         color="gray.700"
                     >
-                        Confirm Withdrawal
+                        Transaction In Process
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        The following amount will be withdrawn from your BitSwap
-                        account
+                        {withdrawValue} {globalVars.ETHER} will be withdrawn
+                        from your BitSwap account. Once the transaction has gone
+                        through, a link will be displayed below for you to
+                        review.
                     </Text>
-                    <Text
-                        color="gray.700"
-                        fontSize="md"
-                        fontWeight="600"
-                        mt="4"
-                        mb="2"
-                    >
-                        Amount of {globalVars.ETHER} to Withdraw:{" "}
-                        {withdrawValue}
-                    </Text>
+                    <HStack spacing={4} mt="4">
+                        {!withdrawSuccessful ? (
+                            <>
+                                <Spinner
+                                    thickness="3px"
+                                    speed="0.65s"
+                                    emptyColor="gray.200"
+                                    color="gray.600"
+                                    size="lg"
+                                />
+                                <Text color="gray.700" fontSize="md">
+                                    Awaiting transfer
+                                </Text>
+                            </>
+                        ) : (
+                            <>
+                                <HiCheckCircle size="36" color="#1dce9e" />
+                                <VStack spacing={1} alignItems="flex-start">
+                                    <Text color="gray.800" fontSize="md">
+                                        Withdrawal successful
+                                    </Text>
+                                    <Link
+                                        isExternal
+                                        href={`https://etherscan.io/tx/${etherscanID}`}
+                                        color="brand.100"
+                                        fontWeight="600"
+                                        textDecor="underline"
+                                        fontSize="xs"
+                                    >
+                                        View on etherscan
+                                    </Link>
+                                </VStack>
+                            </>
+                        )}
+                    </HStack>
                     <Flex
                         flexDir="row"
                         justifyContent="space-between"
                         w="full"
-                        mt="6%"
-                        mb="8%"
+                        mt="6"
+                        mb="8"
                     >
-                        <Button
-                            w="47%"
-                            variant="solid"
-                            onClick={() => {
-                                setPage(0)
-                            }}
-                        >
-                            Modify
-                        </Button>
                         <BlueButton
-                            w="47%"
+                            w="90%"
+                            ml="5%"
                             text={`   Confirm   `}
-                            isDisabled={parseFloat(withdrawValue) <= 0}
-                            onClick={submitWithdrawBitclout}
+                            isDisabled={!withdrawSuccessful}
+                            onClick={() => setPage(2)}
                         />
                     </Flex>
                 </Flex>
@@ -232,9 +271,31 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                             <NumberDecrementStepper />
                         </NumberInputStepper>
                     </NumberInput>
-                    <Text color="gray.500" fontSize="sm" mt="6">
-                        You will be able to review this transaction before it’s
-                        complete.
+                    <Text
+                        color="gray.600"
+                        fontSize="sm"
+                        fontWeight="400"
+                        mt="6"
+                    >
+                        Enter the {globalVars.ETHER} address you would like to
+                        transfer the funds to
+                    </Text>
+                    <Input
+                        mt="4"
+                        type="text"
+                        value={ethAddressInput}
+                        placeholder={"Address"}
+                        isInvalid={ethAddressInputErr != ""}
+                        onChange={ethAddressValueHandler}
+                    />
+                    <Text color="red.300" fontSize="sm" fontWeight="400" mt="4">
+                        {ethAddressInputErr}
+                    </Text>
+
+                    <Text color="gray.500" fontSize="xs" mt="2">
+                        Please verify carefully that your address has been
+                        entered correctly. Once the confirm button is clicked,
+                        the transaction can no longer be modified.
                     </Text>
                     <Flex
                         flexDir="row"
@@ -251,10 +312,14 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                             Cancel
                         </Button>
                         <BlueButton
-                            isDisabled={parseFloat(withdrawValue) > maxWithdraw}
+                            isDisabled={
+                                (parseFloat(withdrawValue) > maxWithdraw &&
+                                    parseFloat(withdrawValue) > 0) ||
+                                !isAddress(ethAddressInput)
+                            }
                             w="47%"
                             text={`   Confirm   `}
-                            onClick={() => setPage(1)}
+                            onClick={submitWithdrawETH}
                         />
                     </Flex>
                 </Flex>

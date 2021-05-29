@@ -23,6 +23,7 @@
         "axios": "^0.21.1",
         "d3-array": "^2.12.1",
         "d3-format": "^3.0.0",
+        "ethereum-address": "^0.0.4",
         "framer-motion": "^4.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",

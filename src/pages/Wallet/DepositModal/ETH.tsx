@@ -11,11 +11,6 @@ import {
     InputRightElement,
     InputGroup,
     Input,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
     Spinner,
     VStack,
 } from "@chakra-ui/react"
@@ -145,10 +140,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
                         Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
-                        w="70%"
+                        w="90%"
                         mt="6"
                         mb="8"
-                        ml="15%"
+                        ml="5%"
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
