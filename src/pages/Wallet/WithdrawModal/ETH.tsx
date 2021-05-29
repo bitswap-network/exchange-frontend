@@ -52,6 +52,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
     const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("")
     const [withdrawSuccessful, setWithdrawSuccessful] = useState<boolean>(false)
     const [etherscanID, setEtherscanID] = useState<string>("")
+
     const submitWithdrawETH = () => {
         // submit eth withdraw stuff here
         setTimeout(function () {
@@ -190,7 +191,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         <BlueButton
                             w="90%"
                             ml="5%"
-                            text={`   Confirm   `}
+                            text={`   Continue   `}
                             isDisabled={!withdrawSuccessful}
                             onClick={() => setPage(2)}
                         />
