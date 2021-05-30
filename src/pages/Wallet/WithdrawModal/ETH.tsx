@@ -22,10 +22,7 @@ import {
 import { useRecoilValue } from "recoil"
 import { HiCheckCircle } from "react-icons/hi"
 import { userState, identityUsers } from "../../../store"
-import {
-    withdrawBitclout,
-    bitcloutPreflightTxn,
-} from "../../../services/gateway"
+import { withdrawEth } from "../../../services/gateway"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
 import { isAddress } from "ethereum-address"
@@ -55,12 +52,20 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
 
     const submitWithdrawETH = () => {
         // submit eth withdraw stuff here
-        setTimeout(function () {
-            setWithdrawSuccessful(true)
-            setEtherscanID(
-                "0x6ba2848cfa36b4a67339985bb98843f4a039d3e43865efcd288d1f52078e9f93"
-            )
-        }, 3000)
+        withdrawEth(parseFloat(withdrawValue), ethAddressInput)
+            .then((response) => {
+                setWithdrawSuccessful(true)
+                setEtherscanID(response.data.data.txnHash)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+        // setTimeout(function () {
+        //     setWithdrawSuccessful(true)
+        //     setEtherscanID(
+        //         "0x6ba2848cfa36b4a67339985bb98843f4a039d3e43865efcd288d1f52078e9f93"
+        //     )
+        // }, 3000)
 
         setPage(1)
     }
@@ -212,7 +217,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {user.balance.ether} {globalVars.ETHER}
+                    {globalVars.formatBalanceSmall(user.balance.ether)}{" "}
+                    {globalVars.ETHER}
                 </Text>
                 <Text
                     textAlign="center"

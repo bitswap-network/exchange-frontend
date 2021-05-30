@@ -192,7 +192,8 @@ const DepositModal: React.FC<DepositModalProps> = ({
                     w="full"
                     mt="6"
                 >
-                    {user.balance.bitclout} {globalVars.BITCLOUT}
+                    {globalVars.formatBalanceSmall(user.balance.bitclout)}{" "}
+                    {globalVars.BITCLOUT}
                 </Text>
                 <Text
                     textAlign="center"

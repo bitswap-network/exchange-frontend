@@ -45,7 +45,6 @@ const DepositModal: React.FC<DepositModalProps> = ({
     const [depositSuccessful, setDepositSuccessful] = useState(false)
     const [depositTransaction, setDepositTransaction] =
         useState<TransactionSchema | null>(null)
-
     const [page, setPage] = useState<number>(0)
 
     const cancelDepositHandler = () => {
@@ -86,12 +85,12 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
     const checkDeposit = () => {
         console.log("hello")
-        if (page === 1 && depositTransaction) {
+        if (depositTransaction) {
             console.log("checking")
             getTransactionById(depositTransaction._id)
                 .then((response) => {
                     console.log(response.data.data)
-                    if (response.data.data.status === "done") {
+                    if (response.data.data.state === "done") {
                         setDepositSuccessful(true)
                     }
                 })
@@ -100,7 +99,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
                 })
         }
     }
+
     globalVars.useInterval(checkDeposit, 5000)
+
     const renderHandler = () => {
         switch (page) {
             case 0:
@@ -115,9 +116,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
     const copyToClipboard = (e: any) => {
         ETHTransferAddress && ETHTransferAddress.select()
         document.execCommand("copy")
-        setTextCopied("copied")
+        setTextCopied("Copied!")
         setTimeout(function () {
-            setTextCopied("copy")
+            setTextCopied("Copy")
         }, 3000)
         e.target.focus()
     }

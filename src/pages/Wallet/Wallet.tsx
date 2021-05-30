@@ -104,7 +104,7 @@ export function Wallet(): React.ReactElement {
                     .then((response) => {
                         resolve(
                             user.balance.bitclout -
-                                parseFloat(response.data.data.FeeNanos) / 1e9
+                                response.data.data.FeeNanos / 1e9
                         )
                     })
                     .catch((error) => {
@@ -120,7 +120,7 @@ export function Wallet(): React.ReactElement {
     const getMaxEth = (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
             if (user.balance.ether > 0) {
-                resolve(0)
+                resolve(user.balance.ether)
             } else {
                 resolve(0)
             }
