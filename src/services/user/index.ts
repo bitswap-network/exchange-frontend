@@ -19,6 +19,18 @@ export const getOrders = async () => {
     return await authClient.get(`/user/orders`)
 }
 
+export const updateName = async (name: string) => {
+    return await authClient.put(`/user/update-name`, {
+        name: name,
+    })
+}
+
+export const updateEmail = async (email: string) => {
+    return await authClient.put(`/user/update-email`, {
+        email: email,
+    })
+}
+
 export const updateProfile = async (email: string, name: string) => {
     return await authClient.put(`/user/update-profile`, {
         email: email,

@@ -17,25 +17,25 @@ import ParentSize from "@visx/responsive/lib/components/ParentSize"
 import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 
 export function Home(): React.ReactElement {
-    const [depth, setDepth] = useState<ChartDataInterface[]>([])
-    const [dateRange, setDateRange] = useState("max")
-    const [loading, setLoading] = useState(true)
+    // const [depth, setDepth] = useState<ChartDataInterface[]>([])
+    // const [dateRange, setDateRange] = useState("max")
+    // const [loading, setLoading] = useState(true)
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
-    useEffect(() => {
-        getDepth(dateRange).then((depthResponse) => {
-            const parsedCopy: ChartDataInterface[] = []
-            depthResponse.data.data.forEach((depthItem: DepthInterface) => {
-                parsedCopy.push({
-                    timestamp: new Date(depthItem.timestamp),
-                    price: (depthItem.marketSell + depthItem.marketBuy) / 2,
-                })
-            })
-            console.log("parsed depth", parsedCopy)
-            setDepth(parsedCopy)
-            setLoading(false)
-        })
-    }, [dateRange])
+    // useEffect(() => {
+    //     getDepth(dateRange).then((depthResponse) => {
+    //         const parsedCopy: ChartDataInterface[] = []
+    //         depthResponse.data.data.forEach((depthItem: DepthInterface) => {
+    //             parsedCopy.push({
+    //                 timestamp: new Date(depthItem.timestamp),
+    //                 price: (depthItem.marketSell + depthItem.marketBuy) / 2,
+    //             })
+    //         })
+    //         console.log("parsed depth", parsedCopy)
+    //         setDepth(parsedCopy)
+    //         setLoading(false)
+    //     })
+    // }, [dateRange])
 
     const columns = React.useMemo(
         () => [
@@ -67,32 +67,20 @@ export function Home(): React.ReactElement {
                         <Heading as="h2" size="md">
                             BitClout Market Value
                         </Heading>
-                        {loading ? (
-                            <Box
-                                boxShadow="xs"
-                                borderRadius="lg"
-                                overflow="hidden"
-                                bg="white"
-                                d="flex"
-                                w="100%"
-                                pos="relative"
-                                marginTop={4}
-                                padding={4}
-                            />
-                        ) : (
-                            <Box
-                                boxShadow="xs"
-                                borderRadius="lg"
-                                overflow="hidden"
-                                bg="white"
-                                d="flex"
-                                w="100%"
-                                pos="relative"
-                                marginTop={4}
-                                padding={4}
-                            >
-                                <BitCloutChart data={depth} />
-                                {/* <ParentSize>
+
+                        <Box
+                            boxShadow="xs"
+                            borderRadius="lg"
+                            overflow="hidden"
+                            bg="white"
+                            d="flex"
+                            w="100%"
+                            pos="relative"
+                            marginTop={4}
+                            padding={4}
+                        >
+                            <BitCloutChart />
+                            {/* <ParentSize>
                                     {({ width, height }) => (
                                         <BitcloutChart
                                             data={depth}
@@ -102,8 +90,7 @@ export function Home(): React.ReactElement {
                                         />
                                     )}
                                 </ParentSize> */}
-                            </Box>
-                        )}
+                        </Box>
                     </Flex>
                     <Spacer />
                     <Flex flexDirection="column" w="50%" padding={4}>
