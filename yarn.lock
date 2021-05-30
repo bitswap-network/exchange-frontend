@@ -13552,7 +13552,7 @@ victory-zoom-container@^35.8.1:
 
 victory@^35.8.2:
   version "35.8.2"
-  resolved "https://registry.npmjs.org/victory/-/victory-35.8.2.tgz"
+  resolved "https://registry.yarnpkg.com/victory/-/victory-35.8.2.tgz#e461af4e113b4c5ae878e005eccc553a529e7751"
   integrity sha512-hwLPD6e6Qzu5TzCBA/o7LXZK/vyQNfs1Z6Fd/sM7VXV0bEiw+qvjAp6g8OiVlvOAfMeir2w9eCTb0cWD6DxQAQ==
   dependencies:
     victory-area "^35.8.2"
