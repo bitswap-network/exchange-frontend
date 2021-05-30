@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useState } from "react"
 
-import { Flex, Heading, Spacer, VStack } from "@chakra-ui/react"
+import { Flex, Heading, Spacer, VStack, Box } from "@chakra-ui/react"
 import { BitcloutChart } from "../../components/BitCloutChart/Chart"
 import { Background } from "../../components/BitCloutChart/Background"
 import { Column } from "react-table"
@@ -67,8 +67,30 @@ export function Home(): React.ReactElement {
                         <Heading as="h2" size="md">
                             BitClout Market Value
                         </Heading>
-                        {loading ? null : (
-                            <>
+                        {loading ? (
+                            <Box
+                                boxShadow="xs"
+                                borderRadius="lg"
+                                overflow="hidden"
+                                bg="white"
+                                d="flex"
+                                w="100%"
+                                pos="relative"
+                                marginTop={4}
+                                padding={4}
+                            />
+                        ) : (
+                            <Box
+                                boxShadow="xs"
+                                borderRadius="lg"
+                                overflow="hidden"
+                                bg="white"
+                                d="flex"
+                                w="100%"
+                                pos="relative"
+                                marginTop={4}
+                                padding={4}
+                            >
                                 <BitCloutChart data={depth} />
                                 {/* <ParentSize>
                                     {({ width, height }) => (
@@ -80,7 +102,7 @@ export function Home(): React.ReactElement {
                                         />
                                     )}
                                 </ParentSize> */}
-                            </>
+                            </Box>
                         )}
                     </Flex>
                     <Spacer />
