@@ -73,8 +73,6 @@ export function Orders(): React.ReactElement {
     ) as Column<Order>[]
 
     const [orders, setOrders] = useState([])
-    const [depth, setDepth] = useState<ChartDataInterface[]>([])
-    const [loading, setLoading] = useState(true)
 
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
@@ -83,19 +81,6 @@ export function Orders(): React.ReactElement {
     useEffect(() => {
         getOrders().then((response) => {
             setOrders(response.data.data)
-        })
-
-        getDepth("max").then((depthResponse) => {
-            const parsedCopy: ChartDataInterface[] = []
-            depthResponse.data.data.forEach((depthItem: DepthInterface) => {
-                parsedCopy.push({
-                    timestamp: new Date(depthItem.timestamp),
-                    price: (depthItem.marketSell + depthItem.marketBuy) / 2,
-                })
-            })
-            console.log("parsed depth", parsedCopy)
-            setDepth(parsedCopy)
-            setLoading(false)
         })
     }, [])
 
@@ -193,12 +178,9 @@ export function Orders(): React.ReactElement {
                             <Heading as="h2" size="md">
                                 BitClout Market Value
                             </Heading>
-                            {loading ? (
-                                <Box bg="#F3F7FF" w="90%" h="200px"></Box>
-                            ) : (
-                                <>
-                                    <BitCloutChart data={depth} />
-                                    {/* <ParentSize>
+                            <>
+                                <BitCloutChart />
+                                {/* <ParentSize>
                                     {({ width, height }) => (
                                         <BitcloutChart
                                             data={depth}
@@ -208,8 +190,7 @@ export function Orders(): React.ReactElement {
                                         />
                                     )}
                                 </ParentSize> */}
-                                </>
-                            )}
+                            </>
 
                             <Table variant="simple">
                                 <Thead>
