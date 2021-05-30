@@ -19,46 +19,16 @@ import {
     Th,
     Td,
 } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Column } from "react-table"
 import { BlueButton } from "../../components/BlueButton"
 import { Order, OrderType } from "../../types/Order"
 import { OrderTable } from "./OrderTable"
 import { OrderModal } from "./OrderModal"
+import { useOrderBook } from "../../hooks"
+import { getOrders } from "../../services/user"
 
 export function Orders(): React.ReactElement {
-    const data = React.useMemo(
-        () => [
-            {
-                id: 1,
-                type: OrderType.Buy,
-                quantity: 20,
-                price: 12.5,
-                date_posted: "15/02/2021",
-                date_fullfiled: "-",
-                status: "active",
-            },
-            {
-                id: 2,
-                type: OrderType.Sell,
-                quantity: 5,
-                price: 12.5,
-                date_posted: "15/02/2021",
-                date_fullfiled: "15/02/2021",
-                status: "fullfiled",
-            },
-            {
-                id: 3,
-                type: OrderType.Buy,
-                quantity: 15,
-                price: 12.5,
-                date_posted: "15/02/2021",
-                date_fullfiled: "-",
-                status: "active",
-            },
-        ],
-        []
-    )
     const columns = React.useMemo(
         () => [
             {
@@ -96,40 +66,17 @@ export function Orders(): React.ReactElement {
         []
     ) as Column<Order>[]
 
-    const orderBook = [
-        {
-            id: 1,
-            type: "buy",
-            price: 100,
-            quantity: 10,
-        },
-        {
-            id: 2,
-            type: "sell",
-            price: 120,
-            quantity: 3.4,
-        },
-        {
-            id: 3,
-            type: "buy",
-            price: 99,
-            quantity: 5.6,
-        },
-        {
-            id: 4,
-            type: "buy",
-            price: 125,
-            quantity: 2.3,
-        },
-        {
-            id: 5,
-            type: "sell",
-            price: 90,
-            quantity: 10.6,
-        },
-    ]
+    const [orders, setOrders] = useState([])
+
+    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    useEffect(() => {
+        getOrders().then((response) => {
+            setOrders(response.data.data)
+        })
+    }, [])
 
     return (
         <>
@@ -152,12 +99,12 @@ export function Orders(): React.ReactElement {
                                     justifyContent="space-evenly"
                                 >
                                     <Tab w="33%" pt="3" pb="3">
-                                        All Orders ({data.length})
+                                        All Orders ({orders.length})
                                     </Tab>
                                     <Tab w="33%" pt="3" pb="3">
                                         Active Orders (
                                         {
-                                            data.filter(
+                                            orders.filter(
                                                 (order) =>
                                                     order.status == "active"
                                             ).length
@@ -167,7 +114,7 @@ export function Orders(): React.ReactElement {
                                     <Tab w="33%" pt="3" pb="3">
                                         Fulfilled Orders (
                                         {
-                                            data.filter(
+                                            orders.filter(
                                                 (order) =>
                                                     order.status == "fullfiled"
                                             ).length
@@ -180,7 +127,7 @@ export function Orders(): React.ReactElement {
                                 <TabPanel>
                                     <Stack spacing={4}>
                                         <OrderTable
-                                            data={data}
+                                            data={orders}
                                             columns={columns}
                                         />
                                     </Stack>
@@ -188,7 +135,7 @@ export function Orders(): React.ReactElement {
                                 <TabPanel>
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
-                                            data={data.filter(
+                                            data={orders.filter(
                                                 (order) =>
                                                     order.status == "active"
                                             )}
@@ -200,7 +147,7 @@ export function Orders(): React.ReactElement {
                                     {" "}
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
-                                            data={data.filter(
+                                            data={orders.filter(
                                                 (order) =>
                                                     order.status == "fullfiled"
                                             )}
@@ -241,22 +188,70 @@ export function Orders(): React.ReactElement {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {orderBook.map((order) => (
-                                        <Tr key={order.id}>
-                                            <Td color="gray.500" fontSize="sm">
-                                                {order.type}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="sm">
-                                                ${order.price}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="sm">
-                                                {order.quantity}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="sm">
-                                                ${order.price * order.quantity}
-                                            </Td>
-                                        </Tr>
-                                    ))}
+                                    {!orderbookIsLoading &&
+                                        !orderbookIsError &&
+                                        orderbook.asks.map((order) => (
+                                            <Tr key={order.id}>
+                                                <Td
+                                                    color="red.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {"Sell"}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.price}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {order.quantity}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    $
+                                                    {order.price *
+                                                        order.quantity}
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    {!orderbookIsLoading &&
+                                        !orderbookIsError &&
+                                        orderbook.bids.map((order) => (
+                                            <Tr key={order.id}>
+                                                <Td
+                                                    color="green.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {"Buy"}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.price}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {order.quantity}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    $
+                                                    {order.price *
+                                                        order.quantity}
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                 </Tbody>
                             </Table>
                         </Flex>
