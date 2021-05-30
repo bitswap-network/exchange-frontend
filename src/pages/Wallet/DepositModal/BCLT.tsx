@@ -109,10 +109,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
                         Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
-                        w="90%"
+                        w="100%"
                         mt="6"
                         mb="8"
-                        ml="5%"
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
@@ -265,7 +264,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
                         </Button>
                         <BlueButton
                             w="47%"
-                            text={`   Confirm   `}
+                            text={`   Continue   `}
                             onClick={() => {
                                 setPage(page + 1)
                                 getPreflight()

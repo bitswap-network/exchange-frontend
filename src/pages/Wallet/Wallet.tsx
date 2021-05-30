@@ -7,6 +7,12 @@ import {
     VStack,
     SimpleGrid,
     useDisclosure,
+    Modal,
+    Text,
+    ModalOverlay,
+    ModalContent,
+    ModalBody,
+    ModalCloseButton,
 } from "@chakra-ui/react"
 import { BalanceCard } from "../../components/BalanceCard"
 import { CryptoCard } from "../../components/CryptoCard"
@@ -17,11 +23,13 @@ import { getEthUSD, getBitcloutUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
 import { bitcloutPreflightTxn } from "../../services/gateway"
+import TransactionModal from "./transactionModal"
 import WithdrawBCLTModal from "./WithdrawModal/BCLT"
 import WithdrawETHModal from "./WithdrawModal/ETH"
 import DepositBCLTModal from "./DepositModal/BCLT"
 import DepositETHModal from "./DepositModal/ETH"
 import * as globalVars from "../../globalVars"
+import { BlueButton } from "../../components/BlueButton"
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
@@ -36,6 +44,15 @@ export function Wallet(): React.ReactElement {
         maxWithdraw: 0,
     })
     const [transactions, setTransactions] = useState<TransactionSchema[]>([])
+    const [currentTransaction, setCurrentTransaction] =
+        useState<TransactionSchema | null>(null)
+
+    const {
+        isOpen: isOpenTransactionModal,
+        onOpen: onOpenTransactionModal,
+        onClose: onCloseTransactionModal,
+    } = useDisclosure()
+
     const {
         isOpen: isOpenDepositModal,
         onOpen: onOpenDepositModal,
@@ -145,8 +162,21 @@ export function Wallet(): React.ReactElement {
         }
     }
 
+    const openTransactionModal = (transaction: TransactionSchema) => {
+        setCurrentTransaction(transaction)
+        onOpenTransactionModal()
+    }
+
     return (
         <>
+            <TransactionModal
+                disclosure={{
+                    isOpen: isOpenTransactionModal,
+                    onOpen: onOpenTransactionModal,
+                    onClose: onCloseTransactionModal,
+                }}
+                transaction={currentTransaction}
+            />
             {selectedCurrency.type == "BCLT" ? (
                 <>
                     <DepositBCLTModal
@@ -292,9 +322,9 @@ export function Wallet(): React.ReactElement {
                                         <Th color="gray.700" pt="5">
                                             Timestamp
                                         </Th>
-                                        {/* <Th color="gray.700" pt="5">
+                                        <Th color="gray.700" pt="5">
                                             Asset
-                                        </Th> */}
+                                        </Th>
                                         <Th color="gray.700" pt="5">
                                             Value
                                         </Th>
@@ -305,18 +335,26 @@ export function Wallet(): React.ReactElement {
                                 </Thead>
                                 <Tbody>
                                     {transactions.map((transaction) => (
-                                        <Tr key={transaction._id}>
+                                        <Tr
+                                            onClick={() =>
+                                                openTransactionModal(
+                                                    transaction
+                                                )
+                                            }
+                                            cursor="pointer"
+                                            key={transaction._id}
+                                        >
                                             <Td color="gray.500" fontSize="14">
-                                                {transaction.transactionType}
+                                                {transaction.transactionType.toUpperCase()}
                                             </Td>
                                             <Td color="gray.500" fontSize="14">
                                                 {new Date(
                                                     transaction.created
                                                 ).toLocaleString()}
                                             </Td>
-                                            {/* <Td color="gray.500" fontSize="14">
+                                            <Td color="gray.500" fontSize="14">
                                                 {transaction.assetType}
-                                            </Td> */}
+                                            </Td>
                                             <Td color="gray.500" fontSize="14">
                                                 {transaction.value
                                                     ? `${globalVars.formatBalanceLarge(
@@ -327,7 +365,7 @@ export function Wallet(): React.ReactElement {
                                                     : "N/A"}
                                             </Td>
                                             <Td color="gray.500" fontSize="14">
-                                                {transaction.state}
+                                                {transaction.state.toUpperCase()}
                                             </Td>
                                         </Tr>
                                     ))}
