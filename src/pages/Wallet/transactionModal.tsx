@@ -19,13 +19,15 @@ interface TransactionModalProps {
         onOpen: () => void
         onClose: () => void
     }
-    transaction: TransactionSchema | null
+    transaction: TransactionSchema
 }
 
 const DepositModal: React.FC<TransactionModalProps> = ({
     disclosure,
     transaction,
 }: TransactionModalProps) => {
+    const created = new Date(transaction.created)
+    const completed = new Date(transaction.created)
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
@@ -74,17 +76,30 @@ const DepositModal: React.FC<TransactionModalProps> = ({
                                     fontWeight="600"
                                     mt="2"
                                 >
-                                    ETH TXN HASH{" "}
-                                    <Link
-                                        isExternal
-                                        href={`https://etherscan.io/tx/${transaction.txnHash}`}
-                                        color="brand.100"
-                                        fontWeight="600"
-                                        textDecor="underline"
-                                        fontSize="xs"
-                                    >
-                                        (View on etherscan)
-                                    </Link>
+                                    TXN HASH{" "}
+                                    {transaction?.assetType == "ETH" ? (
+                                        <Link
+                                            isExternal
+                                            href={`https://etherscan.io/tx/${transaction.txnHash}`}
+                                            color="brand.100"
+                                            fontWeight="600"
+                                            textDecor="underline"
+                                            fontSize="xs"
+                                        >
+                                            (View on etherscan)
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            isExternal
+                                            href={`https://explorer.bitclout.com/?transaction-id=${transaction.txnHash}`}
+                                            color="brand.100"
+                                            fontWeight="600"
+                                            textDecor="underline"
+                                            fontSize="xs"
+                                        >
+                                            (View on bitclout explorer)
+                                        </Link>
+                                    )}
                                 </Text>
                                 <Text color="gray.500" fontSize="xs" mt="1">
                                     {transaction?.txnHash}
@@ -126,19 +141,25 @@ const DepositModal: React.FC<TransactionModalProps> = ({
                             DATE CREATED
                         </Text>
                         <Text color="gray.500" fontSize="sm" mt="1">
-                            {transaction?.created}
+                            {created.toDateString()}{" "}
+                            {created.toLocaleTimeString()}
                         </Text>
-                        <Text
-                            color="gray.600"
-                            fontSize="sm"
-                            fontWeight="600"
-                            mt="2"
-                        >
-                            DATE COMPLETED
-                        </Text>
-                        <Text color="gray.500" fontSize="sm" mt="1">
-                            {transaction?.completionDate}
-                        </Text>
+                        {transaction?.completed ? (
+                            <>
+                                <Text
+                                    color="gray.600"
+                                    fontSize="sm"
+                                    fontWeight="600"
+                                    mt="2"
+                                >
+                                    DATE COMPLETED
+                                </Text>
+                                <Text color="gray.500" fontSize="sm" mt="1">
+                                    {completed.toDateString()}{" "}
+                                    {completed.toLocaleTimeString()}
+                                </Text>
+                            </>
+                        ) : null}
                         {transaction?.error ? (
                             <>
                                 <Text
@@ -169,6 +190,9 @@ const DepositModal: React.FC<TransactionModalProps> = ({
                             <Button
                                 w="47%"
                                 variant="solid"
+                                as={Link}
+                                isExternal
+                                href={"https://discord.com/invite/bitswap"}
                                 onClick={disclosure.onClose}
                             >
                                 Support

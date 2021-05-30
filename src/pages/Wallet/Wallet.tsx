@@ -345,7 +345,7 @@ export function Wallet(): React.ReactElement {
                                             key={transaction._id}
                                         >
                                             <Td color="gray.500" fontSize="14">
-                                                {transaction.transactionType}
+                                                {transaction.transactionType.toUpperCase()}
                                             </Td>
                                             <Td color="gray.500" fontSize="14">
                                                 {new Date(
@@ -365,7 +365,7 @@ export function Wallet(): React.ReactElement {
                                                     : "N/A"}
                                             </Td>
                                             <Td color="gray.500" fontSize="14">
-                                                {transaction.state}
+                                                {transaction.state.toUpperCase()}
                                             </Td>
                                         </Tr>
                                     ))}
