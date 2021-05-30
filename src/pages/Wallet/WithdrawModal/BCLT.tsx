@@ -89,10 +89,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
-                        w="90%"
+                        w="100%"
                         mt="6"
                         mb="8"
-                        ml="5%"
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()
@@ -255,7 +254,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         <BlueButton
                             isDisabled={parseFloat(withdrawValue) > maxWithdraw}
                             w="47%"
-                            text={`   Confirm   `}
+                            text={`   Continue   `}
                             onClick={() => setPage(1)}
                         />
                     </Flex>

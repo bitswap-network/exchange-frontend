@@ -114,10 +114,9 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
                         Your transaction has been completed successfully.
                     </Text>
                     <BlueButton
-                        w="90%"
+                        w="100%"
                         mt="6"
                         mb="8"
-                        ml="5%"
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose()

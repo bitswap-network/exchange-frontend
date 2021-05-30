@@ -37,7 +37,7 @@ export function Profile(): React.ReactElement {
     let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
     const [emailErr, setEmailErr] = useState(false)
-    const [userEmail, setUserEmail] = useState(user.email)
+    const [userEmail, setUserEmail] = useState("")
     const [currentPage, setCurrentPage] = useState("profile")
     const [textCopied, setTextCopied] = useState("copy")
     const [verificationErrText, setVerificationErrText] = useState("")
@@ -55,6 +55,10 @@ export function Profile(): React.ReactElement {
             setEmailErr(false)
         }
     }, [userEmail])
+
+    useEffect(() => {
+        setUserEmail(user.email)
+    }, [user])
 
     const handleLogout = () => {
         logout()
@@ -218,7 +222,6 @@ export function Profile(): React.ReactElement {
                                 isInvalid={emailErr}
                                 errorBorderColor="red.300"
                                 variant="outline"
-                                placeholder="Mike Wazowski"
                                 size="md"
                                 p="5"
                                 mt="3"

@@ -53,7 +53,7 @@ export const BalanceCard = (props: any) => {
                     isTruncated
                 >
                     <Text fontSize="3xl" color="gray.600">
-                        {globalVars.formatBalanceLarge(balance.amount)}{" "}
+                        ~{globalVars.formatBalanceLarge(balance.amount)}{" "}
                         {balance.currency}
                     </Text>
                     <Text fontSize="1xl" color="gray.500">
