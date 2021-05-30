@@ -26,8 +26,14 @@ const DepositModal: React.FC<TransactionModalProps> = ({
     disclosure,
     transaction,
 }: TransactionModalProps) => {
+    if (!transaction) {
+        return null
+    }
     const created = new Date(transaction.created)
-    const completed = new Date(transaction.created)
+    let completed
+    if (transaction.completionDate) {
+        completed = new Date(transaction.completionDate)
+    }
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
@@ -144,7 +150,7 @@ const DepositModal: React.FC<TransactionModalProps> = ({
                             {created.toDateString()}{" "}
                             {created.toLocaleTimeString()}
                         </Text>
-                        {transaction?.completed ? (
+                        {completed ? (
                             <>
                                 <Text
                                     color="gray.600"
