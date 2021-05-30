@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useState } from "react"
 
-import { Flex, Heading, Spacer, VStack } from "@chakra-ui/react"
+import { Flex, Heading, Spacer, VStack, Box } from "@chakra-ui/react"
 import { BitcloutChart } from "../../components/BitCloutChart/Chart"
 import { Background } from "../../components/BitCloutChart/Background"
 import { Column } from "react-table"
@@ -9,25 +9,33 @@ import { Order, OrderType } from "../../types/Order"
 import { OrderTable } from "../Orders/OrderTable"
 import { getDepth } from "../../services/utility"
 import { useOrderBook } from "../../hooks"
+import {
+    Depth as DepthInterface,
+    ChartData as ChartDataInterface,
+} from "../../interfaces/Depth"
+import ParentSize from "@visx/responsive/lib/components/ParentSize"
+import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 
 export function Home(): React.ReactElement {
-    const [depth, setDepth] = useState([])
-    const [dateRange, setDateRange] = useState("max")
-    const [loading, setLoading] = useState(true)
+    // const [depth, setDepth] = useState<ChartDataInterface[]>([])
+    // const [dateRange, setDateRange] = useState("max")
+    // const [loading, setLoading] = useState(true)
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
-    useEffect(() => {
-        getDepth(Date.now() - 1000 * 60 * 60 * 24 * 7, Date.now()).then(
-            (depthResponse) => {
-                depthResponse.data.data.forEach((depthItem: any) => {
-                    depthItem.timestamp = new Date(depthItem.timestamp)
-                })
-                console.log("response", depthResponse.data.data)
-                setDepth(depthResponse.data.data)
-                setLoading(false)
-            }
-        )
-    }, [dateRange])
+    // useEffect(() => {
+    //     getDepth(dateRange).then((depthResponse) => {
+    //         const parsedCopy: ChartDataInterface[] = []
+    //         depthResponse.data.data.forEach((depthItem: DepthInterface) => {
+    //             parsedCopy.push({
+    //                 timestamp: new Date(depthItem.timestamp),
+    //                 price: (depthItem.marketSell + depthItem.marketBuy) / 2,
+    //             })
+    //         })
+    //         console.log("parsed depth", parsedCopy)
+    //         setDepth(parsedCopy)
+    //         setLoading(false)
+    //     })
+    // }, [dateRange])
 
     const columns = React.useMemo(
         () => [
@@ -59,13 +67,30 @@ export function Home(): React.ReactElement {
                         <Heading as="h2" size="md">
                             BitClout Market Value
                         </Heading>
-                        {loading ? null : (
-                            <BitcloutChart
-                                data={depth}
-                                width={500}
-                                height={500}
-                            />
-                        )}
+
+                        <Box
+                            boxShadow="xs"
+                            borderRadius="lg"
+                            overflow="hidden"
+                            bg="white"
+                            d="flex"
+                            w="100%"
+                            pos="relative"
+                            marginTop={4}
+                            padding={4}
+                        >
+                            <BitCloutChart />
+                            {/* <ParentSize>
+                                    {({ width, height }) => (
+                                        <BitcloutChart
+                                            data={depth}
+                                            width={width}
+                                            height={height}
+                                            dateRange={dateRange}
+                                        />
+                                    )}
+                                </ParentSize> */}
+                        </Box>
                     </Flex>
                     <Spacer />
                     <Flex flexDirection="column" w="50%" padding={4}>

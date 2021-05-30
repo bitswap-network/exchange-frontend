@@ -26,7 +26,12 @@ import {
 import { useRecoilValue } from "recoil"
 import { userState } from "../../store"
 import { BlueButton } from "../../components/BlueButton/BlueButton"
-import { verifyBitclout, updateProfile } from "../../services/user"
+import {
+    verifyBitclout,
+    updateEmail,
+    updateName,
+    resendVerificationEmail,
+} from "../../services/user"
 import { logout } from "../../helpers/persistence"
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
@@ -69,16 +74,30 @@ export function Profile(): React.ReactElement {
 
     const handleLogout = () => {
         logout()
-        window.location.assign("/login")
+        window.location.assign("/")
     }
 
     const resendEmailVerification = () => {
         onOpen()
+        resendVerificationEmail()
     }
 
-    const updateUser = (email: string, name: string) => {
+    const updateEmailFunc = () => {
         setLoading(true)
-        updateProfile(email, name)
+        updateEmail(userEmail)
+            .then(() => {
+                setLoading(false)
+                window.location.reload()
+            })
+            .catch((error) => {
+                setLoading(false)
+                console.error(error)
+            })
+    }
+
+    const updateNameFunc = () => {
+        setLoading(true)
+        updateName(userName)
             .then(() => {
                 setLoading(false)
                 window.location.reload()
@@ -232,9 +251,7 @@ export function Profile(): React.ReactElement {
                                     isDisabled={userName.length <= 1}
                                     text={`   Update   `}
                                     width={{ sm: "45%", md: "90%" }}
-                                    onClick={() =>
-                                        updateUser(user.email, user.name)
-                                    }
+                                    onClick={updateNameFunc}
                                     loading={loading}
                                 />
                             </>
@@ -278,7 +295,7 @@ export function Profile(): React.ReactElement {
                                 fontSize="15"
                                 mt="12px"
                             >
-                                Your email is already verified.
+                                Your email is verified.
                                 <br />
                                 Important updates will be sent to this address.
                             </Text>
@@ -359,9 +376,7 @@ export function Profile(): React.ReactElement {
                                     isDisabled={emailErr}
                                     text={`   Update   `}
                                     width={{ sm: "45%", md: "90%" }}
-                                    onClick={() =>
-                                        updateUser(userEmail, user.name)
-                                    }
+                                    onClick={updateEmailFunc}
                                     loading={loading}
                                 />
                             </>

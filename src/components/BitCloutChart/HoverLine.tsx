@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Line, Group, Point } from "@visx/visx"
+import { Line, Group, Point, Circle } from "@visx/visx"
 
 interface HoverLineInterface {
     from: Point
@@ -25,7 +25,7 @@ export const HoverLine = ({
                 style={{ pointerEvents: "none" }}
                 strokeDasharray="2,2"
             />
-            <circle
+            <Circle
                 cx={tooltipLeft}
                 cy={tooltipTop}
                 r={8}
@@ -33,7 +33,7 @@ export const HoverLine = ({
                 fillOpacity={0.2}
                 style={{ pointerEvents: "none" }}
             />
-            <circle
+            <Circle
                 cx={tooltipLeft}
                 cy={tooltipTop}
                 r={4}
