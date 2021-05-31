@@ -98,6 +98,8 @@ export function Table<T extends Record<string, unknown>>({
                             >
                                 {row.cells.map((cell) => (
                                     <Td
+                                        pt="3"
+                                        pb="3"
                                         color="gray.500"
                                         {...cell.getCellProps()}
                                         isNumeric={cell.column.isNumeric}
