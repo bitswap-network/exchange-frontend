@@ -77,7 +77,7 @@ export function Home(): React.ReactElement {
                     <Spacer />
                     <Flex flexDirection="column" w="50%" padding={4}>
                         <Heading as="h2" size="lg">
-                            Current Depths
+                            Order Book
                         </Heading>
                         <Heading as="h2" size="md" mt={4} mb={4}>
                             Selling

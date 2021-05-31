@@ -270,10 +270,11 @@ export function Wallet(): React.ReactElement {
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
                                         usdValue={
-                                            bitcloutUsd
-                                                ? bitcloutUsd *
-                                                  user.balance.bitclout
-                                                : null
+                                            null
+                                            // bitcloutUsd
+                                            //     ? bitcloutUsd *
+                                            //       user.balance.bitclout
+                                            //     : null
                                         }
                                     />
                                 ) : (

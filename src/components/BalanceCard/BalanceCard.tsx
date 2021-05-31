@@ -73,7 +73,11 @@ export const BalanceCard = (props: any) => {
                             </Text>
                         </Tooltip>
                     ) : (
-                        <Text fontSize="1xl" color="gray.500">
+                        <Text
+                            fontSize="1xl"
+                            color="white"
+                            style={{ userSelect: "none" }}
+                        >
                             Fetching...
                         </Text>
                     )}
