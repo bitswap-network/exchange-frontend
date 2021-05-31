@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import {
     Flex,
     Modal,
@@ -10,8 +10,8 @@ import {
     ModalCloseButton,
     Button,
 } from "@chakra-ui/react"
-import { BlueButton } from "../../components/BlueButton"
-import { TransactionSchema } from "../../interfaces/Transaction"
+import { BlueButton } from "../../../components/BlueButton"
+import { TransactionSchema } from "../../../interfaces/Transaction"
 
 interface TransactionModalProps {
     disclosure: {
@@ -19,10 +19,10 @@ interface TransactionModalProps {
         onOpen: () => void
         onClose: () => void
     }
-    transaction: TransactionSchema
+    transaction: TransactionSchema | null
 }
 
-const DepositModal: React.FC<TransactionModalProps> = ({
+export const TransactionModal: React.FC<TransactionModalProps> = ({
     disclosure,
     transaction,
 }: TransactionModalProps) => {
@@ -210,4 +210,3 @@ const DepositModal: React.FC<TransactionModalProps> = ({
         </Modal>
     )
 }
-export default DepositModal

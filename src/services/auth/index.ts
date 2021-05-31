@@ -4,7 +4,6 @@ import { saveData } from "../../helpers/persistence"
 export const verifyToken = async () => {
     try {
         const response = await authClient.get("/auth/verifytoken")
-        console.log(response)
         return response.status === 204
     } catch (e) {
         return false

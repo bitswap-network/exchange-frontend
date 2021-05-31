@@ -27,3 +27,20 @@ export function useOrderBook() {
         orderbookIsError: error,
     }
 }
+
+export interface orderBookInterface {
+    orderbook: {
+        asks: {
+            total: number
+            price: number
+            quantity: number
+        }[]
+        bids: {
+            total: number
+            price: number
+            quantity: number
+        }[]
+    }
+    orderbookIsLoading: boolean
+    orderbookIsError: any
+}

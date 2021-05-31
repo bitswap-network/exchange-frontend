@@ -25,6 +25,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
 }: BlueButtonProps) => {
     return (
         <Button
+            isLoading={loading}
             boxShadow="md"
             bg="brand.100"
             opacity={disabled ? 0.6 : 1}
@@ -39,7 +40,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
         >
-            {loading ? <Spinner /> : <Text fontSize="15px">{text}</Text>}
+            <Text fontSize="15px">{text}</Text>
         </Button>
     )
 }

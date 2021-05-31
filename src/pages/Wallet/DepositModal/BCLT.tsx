@@ -31,7 +31,7 @@ interface DepositModalProps {
     }
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({
+export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
     disclosure,
 }: DepositModalProps) => {
     const user = useRecoilValue(userState)
@@ -283,4 +283,3 @@ const DepositModal: React.FC<DepositModalProps> = ({
         </Modal>
     )
 }
-export default DepositModal

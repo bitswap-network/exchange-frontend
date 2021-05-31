@@ -16,10 +16,9 @@ import {
 } from "@chakra-ui/react"
 import { HiCheckCircle } from "react-icons/hi"
 import { useRecoilValue } from "recoil"
-import { userState, identityUsers } from "../../../store"
+import { userState } from "../../../store"
 import { depositEth, cancelDeposit } from "../../../services/gateway"
 import { getTransactionById } from "../../../services/user"
-import { handleBitcloutDeposit } from "../../../services/identity/helper"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionSchema } from "../../../interfaces/Transaction"
 
@@ -33,7 +32,7 @@ interface DepositModalProps {
     }
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({
+export const EthDepositModal: React.FC<DepositModalProps> = ({
     disclosure,
 }: DepositModalProps) => {
     let ETHTransferAddress: HTMLInputElement | null = null
@@ -304,4 +303,3 @@ const DepositModal: React.FC<DepositModalProps> = ({
         </Modal>
     )
 }
-export default DepositModal

@@ -1,15 +1,12 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
     Modal,
     ModalOverlay,
     ModalContent,
-    ModalHeader,
     ModalCloseButton,
     ModalBody,
-    ModalFooter,
     ModalProps,
     FormControl,
-    FormLabel,
     Select,
     NumberInput,
     NumberInputField,
@@ -19,9 +16,26 @@ import {
     Text,
     Stack,
     useControllableState,
+    Tab,
+    TabList,
+    Tabs,
+    TabPanel,
+    TabPanels,
+    Flex,
+    Button,
+    HStack,
+    Spacer,
 } from "@chakra-ui/react"
 import { BlueButton } from "../../../components/BlueButton"
-import { createMarketOrder, createLimitOrder } from "../../../services/order"
+import { useRecoilValue } from "recoil"
+import { userState } from "../../../store"
+import {
+    createMarketOrder,
+    createLimitOrder,
+    getMarketPrice,
+} from "../../../services/order"
+import { getEthUSD } from "../../../services/utility"
+import * as globalVars from "../../../globalVars"
 
 type OrderModalProps = Omit<ModalProps, "children">
 
@@ -29,11 +43,19 @@ export function OrderModal({
     isOpen,
     onClose,
 }: OrderModalProps): React.ReactElement {
+    const user = useRecoilValue(userState)
+    const [ethUsd, setEthUsd] = useState<number | null>(null)
     const parseNum = (val: string) => val.replace(/^\$/, "")
-    const [amountBitclout, setAmountBitclout] = useControllableState({
-        defaultValue: "0",
+    const [tabIndex, setTabIndex] = useState<number>(0)
+    const [continueLoading, setContinueLoading] = useState<boolean>(false)
+    const [validateError, setValidateError] = useState<string | null>(null)
+    const [priceError, setPriceError] = useState<string | null>(null)
+    const [totalUsd, setTotalUsd] = useState<number>(0)
+    const [page, setPage] = useState<number>(0)
+    const [orderQuantity, setOrderQuantity] = useControllableState({
+        defaultValue: "1",
     })
-    const [usdPer, setUsdPer] = useControllableState({
+    const [limitPrice, setLimitPrice] = useControllableState({
         defaultValue: "0",
     })
     const [orderType, setOrderType] = useControllableState({
@@ -42,71 +64,669 @@ export function OrderModal({
     const [orderSide, setOrderSide] = useControllableState({
         defaultValue: "buy",
     })
-    return (
+
+    useEffect(() => {
+        if (orderType === "market" && isOpen) {
+            getMarketPrice(parseFloat(orderQuantity), orderSide)
+                .then((response) => {
+                    setPriceError(null)
+                    setTotalUsd(response.data.price)
+                })
+                .catch((error) => {
+                    console.error(error)
+                    setPriceError(
+                        `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} BCLT.`
+                    )
+                })
+        } else if (isOpen) {
+            setTotalUsd(parseFloat(orderQuantity) * parseFloat(limitPrice))
+            setPriceError(null)
+        }
+    }, [orderQuantity, orderSide, orderType, limitPrice])
+
+    useEffect(() => {
+        if (!isOpen) {
+            setValidateError(null)
+            setTabIndex(0)
+            setPage(0)
+            setOrderQuantity("1")
+            setLimitPrice("0")
+        } else {
+            getEthUSD().then((response) => {
+                setEthUsd(response.data.data)
+            })
+            getMarketPrice(parseFloat(orderQuantity), orderSide)
+                .then((response) => {
+                    setPriceError(null)
+                    setTotalUsd(response.data.price)
+                })
+                .catch((error) => {
+                    console.error(error)
+                    orderType === "market"
+                        ? setPriceError(
+                              `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} BCLT.`
+                          )
+                        : setPriceError(null)
+                })
+        }
+    }, [isOpen])
+
+    const handleTabsChange = (index: number) => {
+        setTabIndex(index)
+        setOrderSide(index === 0 ? "buy" : "sell")
+    }
+    const orderBalanceValidate = async () => {
+        console.log(
+            ethUsd,
+            orderType,
+            orderSide,
+            orderQuantity,
+            limitPrice,
+            user.balance.bitclout
+        )
+        if (ethUsd) {
+            if (orderType === "market" && orderSide === "buy") {
+                try {
+                    const totalPriceResp = await getMarketPrice(
+                        parseFloat(orderQuantity),
+                        orderSide
+                    )
+                    const totalEth = totalPriceResp.data.price / ethUsd
+                    return totalEth <= user.balance.ether && !priceError
+                } catch (e) {
+                    console.error(e)
+                    return false
+                }
+            } else if (orderType === "limit" && orderSide === "buy") {
+                const totalPrice =
+                    parseFloat(orderQuantity) * parseFloat(limitPrice)
+                const totalEth = totalPrice / ethUsd
+                return totalEth <= user.balance.ether
+            } else {
+                return parseFloat(orderQuantity) <= user.balance.bitclout
+            }
+        } else {
+            return false
+        }
+    }
+
+    const handleContinue = async () => {
+        setContinueLoading(true)
+        setValidateError(null)
+        const validate = await orderBalanceValidate()
+        if (validate) {
+            setContinueLoading(false)
+            setPage(1)
+        } else {
+            setContinueLoading(false)
+            setValidateError("Unable to place order.")
+        }
+    }
+
+    const handlePlaceOrder = () => {
+        setContinueLoading(true)
+        setValidateError(null)
+        if (orderType === "market") {
+            createMarketOrder(parseFloat(orderQuantity), orderSide)
+                .then(() => {
+                    setContinueLoading(false)
+                    setPage(2)
+                })
+                .catch((error) => {
+                    setContinueLoading(false)
+                    setValidateError(
+                        error.response.data.message
+                            ? `${error.response.status}: ${error.response.data.message}`
+                            : "Error Placing Order"
+                    )
+                })
+        } else {
+            createLimitOrder(
+                parseFloat(orderQuantity),
+                parseFloat(limitPrice),
+                orderSide
+            )
+                .then(() => {
+                    setContinueLoading(false)
+                    setPage(2)
+                })
+                .catch((error) => {
+                    setContinueLoading(false)
+                    setValidateError(
+                        error.response.data.message
+                            ? `${error.response.status}: ${error.response.data.message}`
+                            : "Error Placing Order"
+                    )
+                })
+        }
+    }
+
+    const renderHandler = () => {
+        switch (page) {
+            case 0:
+                return createOrder
+            case 1:
+                return confirmOrder
+            case 2:
+                return orderSuccess
+            default:
+                return createOrder
+        }
+    }
+
+    const createOrder = (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Create New Order</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Stack spacing={4}>
-                        <FormControl id="bcltAmount">
-                            <FormLabel>Amount of BCLT</FormLabel>
-                            <NumberInput
-                                min={0}
-                                value={amountBitclout}
-                                onChange={(valueString) =>
-                                    setAmountBitclout(parseNum(valueString))
-                                }
-                                step={1}
+                    <Flex w="80%" ml="10%" mt="8" flexDir="column">
+                        <Text
+                            fontSize="2xl"
+                            fontWeight="700"
+                            mb="2"
+                            color="gray.700"
+                        >
+                            Create Order
+                        </Text>
+                        <Text color="gray.500" fontSize="sm" mb="4">
+                            Place a new buy or sell order for bitclout!
+                        </Text>
+                        <Tabs
+                            variant="enclosed"
+                            colorScheme="messenger"
+                            mt="0.5em"
+                            size="md"
+                            onChange={handleTabsChange}
+                            index={tabIndex}
+                            isFitted
+                        >
+                            <TabList>
+                                <Tab fontWeight="semibold">Buy</Tab>
+                                <Tab fontWeight="semibold">Sell</Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    <Stack spacing={4}>
+                                        <FormControl id="orderType">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                                mt="2"
+                                                mb="2"
+                                            >
+                                                Order Type
+                                            </Text>
+                                            <Select
+                                                value={orderType}
+                                                onChange={(e) =>
+                                                    setOrderType(e.target.value)
+                                                }
+                                            >
+                                                <option value="market">
+                                                    Market Order
+                                                </option>
+                                                <option value="limit">
+                                                    Limit Order
+                                                </option>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl id="bcltAmount">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                                mt="2"
+                                                mb="2"
+                                            >
+                                                Quantity of BCLT
+                                            </Text>
+                                            <NumberInput
+                                                min={globalVars.MIN_LIMIT}
+                                                max={globalVars.MAX_LIMIT}
+                                                value={orderQuantity}
+                                                onChange={(valueString) =>
+                                                    setOrderQuantity(
+                                                        parseNum(valueString)
+                                                    )
+                                                }
+                                                step={1}
+                                            >
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        </FormControl>
+                                        {orderType === "limit" ? (
+                                            <FormControl id="limitPrice">
+                                                <Text
+                                                    color="gray.600"
+                                                    fontSize="sm"
+                                                    fontWeight="600"
+                                                    mt="2"
+                                                    mb="2"
+                                                >
+                                                    Limit Price (USD)
+                                                </Text>
+                                                {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
+                                                <NumberInput
+                                                    min={globalVars.MIN_LIMIT}
+                                                    value={limitPrice}
+                                                    onChange={(valueString) =>
+                                                        setLimitPrice(
+                                                            parseNum(
+                                                                valueString
+                                                            )
+                                                        )
+                                                    }
+                                                    step={1}
+                                                >
+                                                    <NumberInputField />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                        ) : null}
+                                        <HStack pt="4">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Total ETH{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                {ethUsd
+                                                    ? globalVars.formatBalanceSmall(
+                                                          totalUsd / ethUsd
+                                                      )
+                                                    : "Loading..."}
+                                            </Text>
+                                        </HStack>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Total USD{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                ${totalUsd}
+                                            </Text>
+                                        </HStack>
+                                    </Stack>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Stack spacing={4}>
+                                        <FormControl id="orderType">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                                mt="2"
+                                                mb="2"
+                                            >
+                                                Order Type
+                                            </Text>
+                                            <Select
+                                                value={orderType}
+                                                onChange={(e) =>
+                                                    setOrderType(e.target.value)
+                                                }
+                                            >
+                                                <option value="market">
+                                                    Market Order
+                                                </option>
+                                                <option value="limit">
+                                                    Limit Order
+                                                </option>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl id="bcltAmount">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                                mt="2"
+                                                mb="2"
+                                            >
+                                                Quantity of BCLT
+                                            </Text>
+                                            <NumberInput
+                                                min={globalVars.MIN_LIMIT}
+                                                max={globalVars.MAX_LIMIT}
+                                                value={orderQuantity}
+                                                onChange={(valueString) =>
+                                                    setOrderQuantity(
+                                                        parseNum(valueString)
+                                                    )
+                                                }
+                                                step={1}
+                                            >
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        </FormControl>
+                                        {orderType === "limit" ? (
+                                            <FormControl id="limitPrice">
+                                                <Text
+                                                    color="gray.600"
+                                                    fontSize="sm"
+                                                    fontWeight="600"
+                                                    mt="2"
+                                                    mb="2"
+                                                >
+                                                    Limit Price (USD)
+                                                </Text>
+                                                {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
+                                                <NumberInput
+                                                    min={globalVars.MIN_LIMIT}
+                                                    value={limitPrice}
+                                                    onChange={(valueString) =>
+                                                        setLimitPrice(
+                                                            parseNum(
+                                                                valueString
+                                                            )
+                                                        )
+                                                    }
+                                                    step={1}
+                                                >
+                                                    <NumberInputField />
+                                                    <NumberInputStepper>
+                                                        <NumberIncrementStepper />
+                                                        <NumberDecrementStepper />
+                                                    </NumberInputStepper>
+                                                </NumberInput>
+                                            </FormControl>
+                                        ) : null}
+                                        <HStack pt="4">
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Total ETH{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                {ethUsd
+                                                    ? globalVars.formatBalanceSmall(
+                                                          totalUsd / ethUsd
+                                                      )
+                                                    : "Loading..."}
+                                            </Text>
+                                        </HStack>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Total USD{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                ${totalUsd}
+                                            </Text>
+                                        </HStack>
+                                    </Stack>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                        {priceError && (
+                            <Text
+                                color="red.400"
+                                fontSize="sm"
+                                fontWeight="400"
+                                w="full"
+                                textAlign="center"
+                                mb="4"
                             >
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </FormControl>
-                        <FormControl id="usd">
-                            <FormLabel>$USD per BCLT</FormLabel>
-                            <NumberInput
-                                min={0}
-                                value={usdPer}
-                                onChange={(valueString) =>
-                                    setUsdPer(parseNum(valueString))
-                                }
-                                step={5}
+                                {priceError}
+                            </Text>
+                        )}
+                        <Flex
+                            flexDir="row"
+                            justifyContent="space-between"
+                            w="full"
+                            mt="6"
+                            mb="6"
+                        >
+                            <Button w="47%" variant="solid" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <BlueButton
+                                w="47%"
+                                text={`   Continue   `}
+                                loading={continueLoading}
+                                onClick={handleContinue}
+                                isDisabled={priceError ? true : false}
+                            />
+                        </Flex>
+                        {validateError && (
+                            <Text
+                                color="red.400"
+                                fontSize="md"
+                                fontWeight="400"
+                                w="full"
+                                textAlign="center"
+                                mb="4"
                             >
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </FormControl>
-                        <FormControl id="type">
-                            <FormLabel>Order Type </FormLabel>
-                            <Select>
-                                <option>Market Order</option>
-                                <option>Limit Order</option>
-                            </Select>
-                        </FormControl>
-                        <FormControl id="side">
-                            <FormLabel>Order Side </FormLabel>
-                            <Select>
-                                <option>Buy</option>
-                                <option>Sell</option>
-                            </Select>
-                        </FormControl>
-                        <Text color="gray.600"> Total $ETH </Text>
-                        <Text color="gray.600"> Total $USD </Text>
-                    </Stack>
+                                {validateError}
+                            </Text>
+                        )}
+                    </Flex>
                 </ModalBody>
-
-                <ModalFooter>
-                    <BlueButton w="100%" text="Continue" />
-                </ModalFooter>
             </ModalContent>
         </Modal>
     )
+
+    const confirmOrder = (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Flex w="80%" ml="10%" mt="8" flexDir="column">
+                        <Text
+                            fontSize="2xl"
+                            fontWeight="700"
+                            mb="2"
+                            color="gray.700"
+                        >
+                            Confirm Order
+                        </Text>
+                        <HStack>
+                            <Text
+                                color="gray.600"
+                                fontSize="sm"
+                                fontWeight="600"
+                                mt="2"
+                            >
+                                Order Type
+                            </Text>
+                            <Spacer />
+                            <Text color="gray.500" fontSize="sm" mt="1">
+                                {orderType.substr(0, 1).toUpperCase() +
+                                    orderType.substr(1)}
+                            </Text>
+                        </HStack>
+                        <HStack>
+                            <Text
+                                color="gray.600"
+                                fontSize="sm"
+                                fontWeight="600"
+                                mt="2"
+                            >
+                                Order Side
+                            </Text>
+                            <Spacer />
+                            <Text color="gray.500" fontSize="sm" mt="1">
+                                {orderSide.substr(0, 1).toUpperCase() +
+                                    orderSide.substr(1)}
+                            </Text>
+                        </HStack>
+                        <HStack>
+                            <Text
+                                color="gray.600"
+                                fontSize="sm"
+                                fontWeight="600"
+                                mt="2"
+                            >
+                                Order Quantity
+                            </Text>
+                            <Spacer />
+                            <Text color="gray.500" fontSize="sm" mt="1">
+                                {orderQuantity} BCLT
+                            </Text>
+                        </HStack>
+
+                        {orderType != "market" ? (
+                            <HStack>
+                                <Text
+                                    color="gray.600"
+                                    fontSize="sm"
+                                    fontWeight="600"
+                                    mt="2"
+                                >
+                                    Limit Price
+                                </Text>
+                                <Spacer />
+                                <Text color="gray.500" fontSize="sm" mt="1">
+                                    ${limitPrice}
+                                </Text>
+                            </HStack>
+                        ) : null}
+                        <HStack>
+                            <Text
+                                color="gray.600"
+                                fontSize="sm"
+                                fontWeight="600"
+                                mt="2"
+                            >
+                                Total USD
+                            </Text>
+                            <Spacer />
+                            <Text color="gray.500" fontSize="sm" mt="1">
+                                ${totalUsd}
+                            </Text>
+                        </HStack>
+
+                        <Flex
+                            flexDir="row"
+                            justifyContent="space-between"
+                            w="full"
+                            mt="6"
+                            mb="8"
+                        >
+                            <Button
+                                w="47%"
+                                variant="solid"
+                                onClick={() => setPage(0)}
+                            >
+                                Modify
+                            </Button>
+                            <BlueButton
+                                w="47%"
+                                text={`   Confirm   `}
+                                onClick={handlePlaceOrder}
+                                loading={continueLoading}
+                            />
+                        </Flex>
+                        {validateError && (
+                            <Text
+                                color="red.400"
+                                fontSize="md"
+                                fontWeight="400"
+                                w="full"
+                                textAlign="center"
+                                mb="4"
+                            >
+                                {validateError}
+                            </Text>
+                        )}
+                    </Flex>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+    )
+
+    const orderSuccess = (
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Flex w="80%" ml="10%" flexDir="column">
+                        <Text
+                            fontSize="2xl"
+                            fontWeight="700"
+                            mt="6"
+                            mb="2"
+                            color="gray.700"
+                        >
+                            Order Placed
+                        </Text>
+                        <Text color="gray.500" fontSize="sm">
+                            Your order has been successfully placed. Market
+                            orders will reflect in your balance immediately.
+                            Limit orders will be fulfilled as matching orders
+                            are found.
+                        </Text>
+                        <BlueButton
+                            w="100%"
+                            mt="6"
+                            mb="8"
+                            text={`   Close   `}
+                            onClick={() => {
+                                onClose
+                                window.location.reload()
+                            }}
+                        />
+                    </Flex>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+    )
+
+    return renderHandler()
 }

@@ -5,7 +5,6 @@ import { RecoilRoot } from "recoil"
 
 import { bitswapTheme } from "./theme"
 
-import { StoryBook } from "./pages/StoryBook"
 import { Home } from "./pages/Home"
 import { Login } from "./pages/Login"
 import { Wallet } from "./pages/Wallet"
@@ -19,11 +18,6 @@ import * as config from "./globalVars"
 import { identityHandler } from "./services/identity"
 
 window.addEventListener("message", identityHandler)
-// const NavBar = React.lazy(() =>
-//     import('./components/NavBar').then(({ NavBar }) => ({
-//         default: NavBar,
-//     }))
-// )
 
 export const App = (): ReactElement => {
     return (
@@ -51,9 +45,6 @@ export const App = (): ReactElement => {
                                 <Box bg="background.primary" p={8}>
                                     <Container maxW="container.xl">
                                         <Switch>
-                                            <Route path="/storybook">
-                                                <StoryBook />
-                                            </Route>
                                             <Route path="/login">
                                                 <Login />
                                             </Route>

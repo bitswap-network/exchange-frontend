@@ -4,6 +4,11 @@ import { getData, removeData, saveData } from "../helpers/persistence"
 import { User } from "../interfaces/User"
 import { IdentityUsers } from "../interfaces/identity/User"
 
+export const orderModalState = atom({
+    key: "orderModalState",
+    default: false,
+})
+
 export const userState = atom({
     key: "userState",
     default: getData("user") as User,
@@ -18,7 +23,6 @@ export const loggedInState = selector({
     key: "isLoggedIn",
     get: async ({ get }) => {
         const user = get(userState)
-        console.log(user)
         if (user) {
             return await verifyToken()
         } else {

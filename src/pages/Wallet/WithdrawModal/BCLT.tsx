@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
     Modal,
     Text,
@@ -15,13 +15,9 @@ import {
     NumberDecrementStepper,
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
-import { userState, identityUsers } from "../../../store"
-import {
-    withdrawBitclout,
-    bitcloutPreflightTxn,
-} from "../../../services/gateway"
+import { userState } from "../../../store"
+import { withdrawBitclout } from "../../../services/gateway"
 import { BlueButton } from "../../../components/BlueButton"
-import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
 
 import * as globalVars from "../../../globalVars"
 
@@ -34,7 +30,7 @@ interface WithdrawModalProps {
     maxWithdraw: number
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({
+export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
     disclosure,
     maxWithdraw,
 }: WithdrawModalProps) => {
@@ -270,5 +266,3 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
         </Modal>
     )
 }
-
-export default WithdrawModal
