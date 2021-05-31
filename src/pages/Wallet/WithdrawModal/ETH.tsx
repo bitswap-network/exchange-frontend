@@ -191,6 +191,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             text={`   Continue   `}
                             isDisabled={!withdrawSuccessful}
                             onClick={() => setPage(2)}
+                            icon
                         />
                     </Flex>
                 </Flex>
@@ -305,7 +306,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                     >
                         <Button
                             w="47%"
-                            variant="solid"
+                            variant="ghost"
                             onClick={disclosure.onClose}
                         >
                             Cancel
@@ -319,6 +320,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             w="47%"
                             text={`   Confirm   `}
                             onClick={submitWithdrawETH}
+                            icon
                         />
                     </Flex>
                 </Flex>

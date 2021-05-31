@@ -14,7 +14,7 @@ function OrderTableFunc({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" borderRadius="lg" boxShadow="lg">
+        <Box bg="white" maxW="full" w="full" boxShadow="lg">
             <Table<OrderTableDataInterface>
                 data={data}
                 columns={columns}
@@ -30,7 +30,7 @@ function OrderBookTableFunc({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" borderRadius="lg" boxShadow="lg">
+        <Box bg="white" maxW="full" w="full" boxShadow="lg">
             <Table<OrderTableDataInterface>
                 data={data}
                 columns={columns}
