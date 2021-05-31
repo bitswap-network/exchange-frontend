@@ -182,26 +182,13 @@ export function Orders(): React.ReactElement {
                             borderRadius="8"
                             boxShadow="xs"
                             align="center"
-                            pt="6"
                             flexDir="column"
+                            p="6"
                         >
-                            <Heading as="h2" size="md">
+                            <Heading as="h2" size="md" mb="2">
                                 BitClout Market Value
                             </Heading>
-                            <>
-                                <BitCloutChart />
-                                {/* <ParentSize>
-                                    {({ width, height }) => (
-                                        <BitcloutChart
-                                            data={depth}
-                                            width={width}
-                                            height={height}
-                                            dateRange={dateRange}
-                                        />
-                                    )}
-                                </ParentSize> */}
-                            </>
-
+                            <BitCloutChart />
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>

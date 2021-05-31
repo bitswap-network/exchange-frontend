@@ -69,6 +69,8 @@ export function BitCloutChart() {
             {(parent) => (
                 <Box overflow="hidden" d="flex" w={parent.width} pos="relative">
                     <Skeleton
+                        startColor="gray.100"
+                        endColor="gray.300"
                         isLoaded={!loading}
                         w="full"
                         height={parent.width * 0.7}
