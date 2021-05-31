@@ -146,12 +146,12 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
                     <Text
                         color="gray.700"
                         fontSize="md"
-                        fontWeight="600"
+                        fontWeight="400"
                         mt="4"
                         mb="2"
                     >
-                        Amount of {globalVars.BITCLOUT} to Deposit:{" "}
-                        {depositValue}
+                        <b>Total Amount: </b>
+                        {depositValue} {globalVars.BITCLOUT}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -252,7 +252,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
                     >
                         <Button
                             w="47%"
-                            variant="solid"
+                            variant="ghost"
                             onClick={() => {
                                 disclosure.onClose()
                                 setDepositValue("0")

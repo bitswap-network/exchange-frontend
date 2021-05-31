@@ -38,7 +38,6 @@ export function Table<T extends Record<string, unknown>>({
             <ChakraTable
                 {...getTableProps()}
                 size="sm"
-                colorScheme="messenger"
                 variant="simple"
                 borderRadius="md"
             >
@@ -55,9 +54,9 @@ export function Table<T extends Record<string, unknown>>({
                                     )}
                                     isNumeric={column.isNumeric}
                                     pt="4"
+                                    pb="4"
                                 >
                                     {column.render("Header")}
-                                    <br></br>
                                     <chakra.span>
                                         {column.isSorted ? (
                                             column.isSortedDesc ? (
@@ -94,7 +93,7 @@ export function Table<T extends Record<string, unknown>>({
                                 }}
                                 _hover={{
                                     backgroundColor: "background.primary",
-                                    cursor: "pointer",
+                                    cursor: isOrderTable && "pointer",
                                 }}
                             >
                                 {row.cells.map((cell) => (

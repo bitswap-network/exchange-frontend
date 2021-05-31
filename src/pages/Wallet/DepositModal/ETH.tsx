@@ -83,9 +83,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
     }
 
     const checkDeposit = () => {
-        console.log("hello")
         if (depositTransaction) {
-            console.log("checking")
             getTransactionById(depositTransaction._id)
                 .then((response) => {
                     console.log(response.data.data)
@@ -274,7 +272,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
                             <>
                                 <Button
                                     w="47%"
-                                    variant="solid"
+                                    variant="ghost"
                                     onClick={() => {
                                         disclosure.onClose()
                                         setPage(0)
@@ -284,9 +282,10 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
                                 </Button>
                                 <BlueButton
                                     w="47%"
-                                    text={`   Confirm   `}
+                                    text={`   Continue   `}
                                     onClick={startDeposit}
                                     isDisabled={confirmButtonState == 1}
+                                    icon
                                 />
                             </>
                         )}
