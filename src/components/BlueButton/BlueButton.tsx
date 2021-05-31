@@ -30,7 +30,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
             bg="brand.100"
             opacity={disabled ? 0.6 : 1}
             _hover={{
-                bg: "brand.100",
+                bg: "brand.150",
             }}
             _active={{
                 bg: "brand.200",

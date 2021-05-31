@@ -122,12 +122,12 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                     <Text
                         color="gray.700"
                         fontSize="md"
-                        fontWeight="600"
+                        fontWeight="400"
                         mt="4"
                         mb="2"
                     >
-                        Amount of {globalVars.BITCLOUT} to Withdraw:{" "}
-                        {withdrawValue}
+                        <b>Total Amount: </b>
+                        {withdrawValue} {globalVars.BITCLOUT}
                     </Text>
                     <Flex
                         flexDir="row"
@@ -138,7 +138,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                     >
                         <Button
                             w="47%"
-                            variant="solid"
+                            variant="ghost"
                             onClick={() => {
                                 setPage(0)
                             }}
@@ -150,6 +150,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             text={`   Confirm   `}
                             isDisabled={parseFloat(withdrawValue) <= 0}
                             onClick={submitWithdrawBitclout}
+                            icon
                         />
                     </Flex>
                 </Flex>
@@ -242,16 +243,20 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                     >
                         <Button
                             w="47%"
-                            variant="solid"
+                            variant="ghost"
                             onClick={disclosure.onClose}
                         >
                             Cancel
                         </Button>
                         <BlueButton
-                            isDisabled={parseFloat(withdrawValue) > maxWithdraw}
+                            isDisabled={
+                                parseFloat(withdrawValue) > maxWithdraw ||
+                                parseFloat(withdrawValue) <= 0
+                            }
                             w="47%"
                             text={`   Continue   `}
                             onClick={() => setPage(1)}
+                            icon
                         />
                     </Flex>
                 </Flex>

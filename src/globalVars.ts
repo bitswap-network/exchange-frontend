@@ -29,13 +29,6 @@ export function timeSince(date: Date) {
         ? `${count} ${interval[0]}${count !== 1 ? "s" : ""} ago`
         : "<1 second ago"
 }
-// export const timeAgo = (date: Date) => {
-//     const ago = new Date(date).getTime()
-//     const timeAgoInSeconds = Math.floor((Date.now() - ago) / 1000)
-//     const { interval, epoch } = getDuration(timeAgoInSeconds)
-//     const suffix = interval === 1 ? "" : "s"
-//     return `${interval} ${epoch}${suffix} ago`
-// }
 
 export const formatBalanceSmall = (balance: number) => {
     return +balance.toFixed(4)
@@ -51,6 +44,8 @@ export const formateDateTime = (date: Date) => {
 export const capFirst = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1)
 }
+export const zip = (a1: Array<any>, a2: Array<any>) =>
+    a1.map((x, i) => [x, a2[i]])
 
 export function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef(callback)

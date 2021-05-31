@@ -222,68 +222,57 @@ export function Orders(): React.ReactElement {
                                 <Tbody>
                                     {!orderbookIsLoading &&
                                         !orderbookIsError &&
-                                        orderbook.asks.map((order) => (
-                                            <Tr key={Math.random().toString(4)}>
-                                                <Td
-                                                    color="red.500"
-                                                    fontSize="sm"
-                                                >
-                                                    {"Sell"}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    ${order.price}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    {order.quantity}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    $
-                                                    {order.price *
-                                                        order.quantity}
-                                                </Td>
-                                            </Tr>
-                                        ))}
-                                    {!orderbookIsLoading &&
-                                        !orderbookIsError &&
-                                        orderbook.bids.map((order) => (
-                                            <Tr key={Math.random().toString(4)}>
-                                                <Td
-                                                    color="green.500"
-                                                    fontSize="sm"
-                                                >
-                                                    {"Buy"}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    ${order.price}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    {order.quantity}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="sm"
-                                                >
-                                                    $
-                                                    {order.price *
-                                                        order.quantity}
-                                                </Td>
-                                            </Tr>
-                                        ))}
+                                        orderbook &&
+                                        globalVars
+                                            .zip(orderbook.asks, orderbook.bids)
+                                            .map((orderTuple) =>
+                                                orderTuple.map(
+                                                    (order, index) => (
+                                                        <Tr
+                                                            key={Math.random().toString(
+                                                                4
+                                                            )}
+                                                        >
+                                                            <Td
+                                                                color={
+                                                                    index === 0
+                                                                        ? "red.500"
+                                                                        : "green.500"
+                                                                }
+                                                                fontSize="sm"
+                                                            >
+                                                                {index === 0
+                                                                    ? "Sell"
+                                                                    : "Buy"}
+                                                            </Td>
+                                                            <Td
+                                                                color="gray.500"
+                                                                fontSize="sm"
+                                                            >
+                                                                {
+                                                                    order.priceString
+                                                                }
+                                                            </Td>
+                                                            <Td
+                                                                color="gray.500"
+                                                                fontSize="sm"
+                                                            >
+                                                                {
+                                                                    order.quantityString
+                                                                }
+                                                            </Td>
+                                                            <Td
+                                                                color="gray.500"
+                                                                fontSize="sm"
+                                                            >
+                                                                {
+                                                                    order.totalString
+                                                                }
+                                                            </Td>
+                                                        </Tr>
+                                                    )
+                                                )
+                                            )}
                                 </Tbody>
                             </Table>
                         </Flex>

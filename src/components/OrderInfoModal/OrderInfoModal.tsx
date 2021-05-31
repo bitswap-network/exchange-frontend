@@ -41,19 +41,19 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
 
     const cancelOrderHandler = () => {
         setCancelError(null)
-        // if (!order.complete) {
-        setCancelLoading(true)
-        cancelOrder(order.orderID)
-            .then(() => {
-                setCancelLoading(false)
-                disclosure.onClose()
-                window.location.reload()
-            })
-            .catch((error: any) => {
-                if (error.response.data)
-                    setCancelError(JSON.stringify(error.response.data))
-            })
-        // }
+        if (!order.complete) {
+            setCancelLoading(true)
+            cancelOrder(order.orderID)
+                .then(() => {
+                    setCancelLoading(false)
+                    disclosure.onClose()
+                    window.location.reload()
+                })
+                .catch((error: any) => {
+                    if (error.response.data)
+                        setCancelError(JSON.stringify(error.response.data))
+                })
+        }
     }
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
@@ -70,9 +70,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                         >
                             Order Details
                         </Text>
-                        {/* <Text color="gray.500" fontSize="sm" mb="2">
-                            {order.orderID}
-                        </Text> */}
+
                         <Text color="gray.500" fontSize="sm" mb="2">
                             <b>Created: </b>
                             {globalVars.formateDateTime(created)}
@@ -179,13 +177,13 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                             mt="6"
                             mb="4"
                         >
-                            {order.complete && (
+                            {!order.complete && (
                                 <Button
                                     w="full"
-                                    variant="solid"
                                     onClick={cancelOrderHandler}
                                     isLoading={cancelLoading}
                                     mr="4"
+                                    variant="ghost"
                                 >
                                     Cancel
                                 </Button>

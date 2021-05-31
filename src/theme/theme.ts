@@ -19,6 +19,7 @@ export const bitswapTheme = extendTheme({
     colors: {
         brand: {
             100: "#2e6ded",
+            150: "#2659c7",
             200: "#204cab",
             error: "#C70E0E",
         },

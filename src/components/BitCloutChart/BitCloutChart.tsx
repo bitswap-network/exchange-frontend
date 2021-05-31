@@ -17,7 +17,7 @@ export function BitCloutChart() {
     const [depthHot, setDepth] = useState<Depth[]>([])
     const [loading, setLoading] = useState(true)
     const [minY, setMinY] = useState(0)
-    const [maxY, setMaxY] = useState(0)
+    const [maxY, setMaxY] = useState(100)
 
     useEffect(() => {
         getDepth("max").then((depthResponse) => {
@@ -28,7 +28,7 @@ export function BitCloutChart() {
                     price: (depthItem.marketSell + depthItem.marketBuy) / 2,
                 })
             })
-            console.log("parsed depth", parsedCopy)
+            // console.log("parsed depth", parsedCopy)
             setDepth(depthResponse.data.data)
             setLoading(false)
         })
@@ -79,9 +79,9 @@ export function BitCloutChart() {
                             scale={{ x: "time" }}
                             padding={{
                                 left: 40,
+                                right: 40,
                                 bottom: 50,
                                 top: 20,
-                                right: 40,
                             }}
                             animate={{
                                 duration: 300,
@@ -118,7 +118,9 @@ export function BitCloutChart() {
                                         padding: 40,
                                     },
                                 }}
-                                domain={[0 + minY * 0.4, maxY + maxY * 0.5]}
+                                domain={{
+                                    y: [0 + minY * 0.4, maxY + maxY * 0.5],
+                                }}
                             />
                             <VictoryAxis
                                 // label="Date"
