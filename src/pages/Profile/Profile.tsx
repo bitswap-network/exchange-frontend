@@ -203,7 +203,9 @@ export function Profile(): React.ReactElement {
                                 fontSize="md"
                                 mt="12px"
                             >
-                                {user.name}
+                                {user.name !== ""
+                                    ? user.name
+                                    : "Please add your name"}
                             </Text>
                         ) : (
                             <Input

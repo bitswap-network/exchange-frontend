@@ -43,11 +43,7 @@ export function Orders(): React.ReactElement {
     ) as Column<OrderTableDataInterface>[]
     const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
 
-    const {
-        orderbook,
-        orderbookIsLoading,
-        orderbookIsError,
-    }: orderBookInterface = useOrderBook()
+    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -93,6 +89,10 @@ export function Orders(): React.ReactElement {
     }, [orderModalOpenOnLoad])
 
     const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
+
+    if (!orderbookIsLoading && !orderbookIsError) {
+        console.log("orderbook", orderbook)
+    }
 
     return (
         <>
@@ -178,7 +178,7 @@ export function Orders(): React.ReactElement {
                         <Flex
                             bg="white"
                             w="full"
-                            h="full"
+                            //h="full"
                             borderRadius="8"
                             boxShadow="xs"
                             align="center"

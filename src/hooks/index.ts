@@ -4,19 +4,20 @@ import { api } from "../globalVars"
 
 export function useOrderBook() {
     const { data, error } = useSWR(
-        `${api}utility/depth-current`,
+        `${api}utility/orderbook`,
         (url) =>
             axios.get(url).then((res) => {
+                // console.log("hoook", res)
                 const askArr: orderSideString[] = []
                 const bidArr: orderSideString[] = []
-                res.data.data.asks.forEach((ask: any) =>
+                res.data.asks.forEach((ask: any) =>
                     askArr.push({
                         totalString: `$${ask.price * ask.quantity} USD`,
                         priceString: `$${ask.price} USD`,
                         quantityString: `${ask.quantity} BCLT`,
                     })
                 )
-                res.data.data.bids.forEach((bid: any) =>
+                res.data.bids.forEach((bid: any) =>
                     bidArr.push({
                         ...bid,
                         totalString: `$${bid.price * bid.quantity} USD`,
@@ -24,6 +25,8 @@ export function useOrderBook() {
                         quantityString: `${bid.quantity} BCLT`,
                     })
                 )
+
+                // console.log("hook", { asks: askArr, bids: bidArr })
 
                 return { asks: askArr, bids: bidArr }
             }),
