@@ -41,19 +41,19 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
 
     const cancelOrderHandler = () => {
         setCancelError(null)
-        if (!order.complete) {
-            setCancelLoading(true)
-            cancelOrder(order.orderID)
-                .then(() => {
-                    setCancelLoading(false)
-                    disclosure.onClose()
-                    window.location.reload()
-                })
-                .catch((error: any) => {
-                    if (error.response.data)
-                        setCancelError(JSON.stringify(error.response.data))
-                })
-        }
+        // if (!order.complete) {
+        setCancelLoading(true)
+        cancelOrder(order.orderID)
+            .then(() => {
+                setCancelLoading(false)
+                disclosure.onClose()
+                window.location.reload()
+            })
+            .catch((error: any) => {
+                if (error.response.data)
+                    setCancelError(JSON.stringify(error.response.data))
+            })
+        // }
     }
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
@@ -179,7 +179,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                             mt="6"
                             mb="4"
                         >
-                            {!order.complete && (
+                            {order.complete && (
                                 <Button
                                     w="full"
                                     variant="solid"

@@ -7,17 +7,28 @@ export function useOrderBook() {
         `${api}utility/depth-current`,
         (url) =>
             axios.get(url).then((res) => {
-                res.data.data.asks.forEach(
-                    (ask: any) => (ask.total = ask.price * ask.quantity)
+                const askArr: orderSideString[] = []
+                const bidArr: orderSideString[] = []
+                res.data.data.asks.forEach((ask: any) =>
+                    askArr.push({
+                        totalString: `$${ask.price * ask.quantity} USD`,
+                        priceString: `$${ask.price} USD`,
+                        quantityString: `${ask.quantity} BCLT`,
+                    })
                 )
-                res.data.data.bids.forEach(
-                    (bid: any) => (bid.total = bid.price * bid.quantity)
+                res.data.data.bids.forEach((bid: any) =>
+                    bidArr.push({
+                        ...bid,
+                        totalString: `$${bid.price * bid.quantity} USD`,
+                        priceString: `$${bid.price} USD`,
+                        quantityString: `${bid.quantity} BCLT`,
+                    })
                 )
-                // console.log("orderbook", res.data)
-                return res.data.data
+
+                return { asks: askArr, bids: bidArr }
             }),
         {
-            refreshInterval: 30000,
+            refreshInterval: 5000,
         }
     )
 
@@ -30,17 +41,15 @@ export function useOrderBook() {
 
 export interface orderBookInterface {
     orderbook: {
-        asks: {
-            total: number
-            price: number
-            quantity: number
-        }[]
-        bids: {
-            total: number
-            price: number
-            quantity: number
-        }[]
+        asks: orderSideString[]
+        bids: orderSideString[]
     }
     orderbookIsLoading: boolean
     orderbookIsError: any
+}
+
+interface orderSideString {
+    totalString: string
+    priceString: string
+    quantityString: string
 }

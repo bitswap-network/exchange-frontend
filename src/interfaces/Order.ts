@@ -13,6 +13,7 @@ export type Order = {
     completeTime: Date | undefined
 }
 export interface OrderTableDataInterface extends Order {
+    [index: string]: any
     tldr: string
     status: string
     quantityString: string
@@ -20,7 +21,24 @@ export interface OrderTableDataInterface extends Order {
     orderTypeCapped: string
     createdAgo: string
     completedAgo?: string
+    totalString?: string
 }
+
+export const OrderBookTableColumns = [
+    {
+        Header: "Price",
+        accessor: "priceString",
+    },
+    {
+        Header: "Quantity",
+        accessor: "quantityString",
+    },
+    {
+        Header: "Total",
+        accessor: "totalString",
+    },
+]
+
 export const OrderTableColumns = [
     {
         Header: "Order Details",

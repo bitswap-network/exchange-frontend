@@ -17,32 +17,32 @@ import { useTable, useSortBy, TableOptions } from "react-table"
 import { OrderInfoModal } from "../OrderInfoModal"
 import { OrderTableDataInterface } from "../../interfaces/Order"
 
-export function Table<OrderTableDataInterface extends Record<string, unknown>>({
+export function Table<T extends Record<string, unknown>>({
     data,
     columns,
-}: PropsWithChildren<
-    TableOptions<OrderTableDataInterface>
->): React.ReactElement {
+    type,
+}: PropsWithChildren<TableOptions<T>>): React.ReactElement {
     const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>()
+    const isOrderTable = type === 0
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable<OrderTableDataInterface>({ columns, data }, useSortBy)
+        useTable<T>({ columns, data }, useSortBy)
     const modalDisclosure = useDisclosure()
-
-    rows.map((row) => {
-        prepareRow(row)
-        console.log(row)
-    })
     return (
         <>
-            <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />
+            {isOrderTable && (
+                <OrderInfoModal
+                    disclosure={modalDisclosure}
+                    order={selectOrder}
+                />
+            )}
             <ChakraTable
                 {...getTableProps()}
                 size="sm"
                 colorScheme="messenger"
                 variant="simple"
-                borderRadius="lg"
+                borderRadius="md"
             >
-                <Thead minH="100">
+                <Thead minH={isOrderTable && "100"}>
                     {headerGroups.map((headerGroup) => (
                         <Tr
                             {...headerGroup.getHeaderGroupProps()}
@@ -85,10 +85,12 @@ export function Table<OrderTableDataInterface extends Record<string, unknown>>({
                                 {...row.getRowProps()}
                                 key={Math.random().toString(4)}
                                 onClick={() => {
-                                    setSelectOrder(
-                                        row.original as OrderTableDataInterface
-                                    )
-                                    modalDisclosure.onOpen()
+                                    if (isOrderTable) {
+                                        setSelectOrder(
+                                            row.original as OrderTableDataInterface
+                                        )
+                                        modalDisclosure.onOpen()
+                                    }
                                 }}
                                 _hover={{
                                     backgroundColor: "background.primary",

@@ -4,8 +4,12 @@ import React from "react"
 import { Flex, Heading, Spacer, VStack, Box } from "@chakra-ui/react"
 
 import { Column } from "react-table"
-import { Order } from "../../interfaces/Order"
-import { OrderTable } from "../Orders/OrderTable"
+import {
+    Order,
+    OrderBookTableColumns,
+    OrderTableDataInterface,
+} from "../../interfaces/Order"
+import { OrderBookTable } from "../Orders/OrderTable"
 import { useOrderBook } from "../../hooks"
 
 import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
@@ -32,25 +36,9 @@ export function Home(): React.ReactElement {
     // }, [dateRange])
 
     const columns = React.useMemo(
-        () => [
-            {
-                Header: "Quantity",
-                accessor: "quantity",
-                isNumeric: true,
-            },
-            {
-                Header: "Price",
-                accessor: "price",
-                isNumeric: true,
-            },
-            {
-                Header: "Total",
-                accessor: "total",
-                isNumeric: true,
-            },
-        ],
+        () => OrderBookTableColumns,
         []
-    ) as Column<Order>[]
+    ) as Column<OrderTableDataInterface>[]
 
     return (
         <>
@@ -59,7 +47,7 @@ export function Home(): React.ReactElement {
                     <Flex flexDirection="column" w="50%" padding={4}>
                         <Heading>Home</Heading>
                         <Heading as="h2" size="md">
-                            BitClout Market Value
+                            BitClout Market Price
                         </Heading>
 
                         <Box
@@ -89,36 +77,26 @@ export function Home(): React.ReactElement {
                     <Spacer />
                     <Flex flexDirection="column" w="50%" padding={4}>
                         <Heading as="h2" size="lg">
-                            Order Book
+                            Current Depths
                         </Heading>
-                        <Heading
-                            as="h2"
-                            size="md"
-                            marginTop={2}
-                            marginBottom={4}
-                        >
-                            Sell Orders
+                        <Heading as="h2" size="md" mt={4} mb={4}>
+                            Selling
                         </Heading>
-                        <OrderTable
+                        <OrderBookTable
                             data={
                                 !orderbookIsLoading && !orderbookIsError
-                                    ? orderbook.asks
+                                    ? orderbook!.asks
                                     : []
                             }
                             columns={columns}
                         />
-                        <Heading
-                            as="h2"
-                            size="md"
-                            marginTop={2}
-                            marginBottom={4}
-                        >
-                            Buy Orders
+                        <Heading as="h2" size="md" mt={4} mb={4}>
+                            Buying
                         </Heading>
-                        <OrderTable
+                        <OrderBookTable
                             data={
                                 !orderbookIsLoading && !orderbookIsError
-                                    ? orderbook.bids
+                                    ? orderbook!.bids
                                     : []
                             }
                             columns={columns}
