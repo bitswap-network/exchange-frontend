@@ -325,43 +325,71 @@ export function Wallet(): React.ReactElement {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {transactions.map((transaction) => (
-                                        <Tr
-                                            onClick={() =>
-                                                openTransactionModal(
-                                                    transaction
-                                                )
-                                            }
-                                            cursor="pointer"
-                                            key={transaction._id}
-                                        >
-                                            <Td color="gray.500" fontSize="14">
-                                                {transaction.transactionType.toUpperCase()}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="14">
-                                                {globalVars.timeSince(
-                                                    new Date(
-                                                        transaction.created
+                                    {transactions
+                                        .sort((a, b) => {
+                                            return (
+                                                new Date(
+                                                    b.completionDate ??
+                                                        b.created
+                                                ).getTime() -
+                                                new Date(
+                                                    a.completionDate ??
+                                                        a.created
+                                                ).getTime()
+                                            )
+                                        })
+                                        .map((transaction) => (
+                                            <Tr
+                                                onClick={() =>
+                                                    openTransactionModal(
+                                                        transaction
                                                     )
-                                                )}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="14">
-                                                {transaction.assetType}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="14">
-                                                {transaction.value
-                                                    ? `${globalVars.formatBalanceLarge(
-                                                          transaction.value
-                                                      )} ${
-                                                          transaction.assetType
-                                                      }`
-                                                    : "N/A"}
-                                            </Td>
-                                            <Td color="gray.500" fontSize="14">
-                                                {transaction.state.toUpperCase()}
-                                            </Td>
-                                        </Tr>
-                                    ))}
+                                                }
+                                                cursor="pointer"
+                                                key={transaction._id}
+                                            >
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="14"
+                                                >
+                                                    {transaction.transactionType.toUpperCase()}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="14"
+                                                >
+                                                    {globalVars.timeSince(new Date(
+                                                        transaction.completionDate
+                                                            ? transaction.completionDate
+                                                            : transaction.created
+                                                    ))}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="14"
+                                                >
+                                                    {transaction.assetType}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="14"
+                                                >
+                                                    {transaction.value
+                                                        ? `${globalVars.formatBalanceLarge(
+                                                              transaction.value
+                                                          )} ${
+                                                              transaction.assetType
+                                                          }`
+                                                        : "N/A"}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="14"
+                                                >
+                                                    {transaction.state.toUpperCase()}
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                 </Tbody>
                             </Table>
                         </Box>
