@@ -269,12 +269,7 @@ export function Wallet(): React.ReactElement {
                                         imageAlt={BCLT.imageAlt}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
-                                        usdValue={
-                                            bitcloutUsd
-                                                ? bitcloutUsd *
-                                                  user.balance.bitclout
-                                                : null
-                                        }
+                                        usdValue={null}
                                     />
                                 ) : (
                                     <BalanceCard

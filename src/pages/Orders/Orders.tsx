@@ -278,7 +278,7 @@ export function Orders(): React.ReactElement {
                                                     color="gray.500"
                                                     fontSize="sm"
                                                 >
-                                                    ${order.priceString}
+                                                    {order.priceString}
                                                 </Td>
                                                 <Td
                                                     color="gray.500"
@@ -310,7 +310,7 @@ export function Orders(): React.ReactElement {
                                                     color="gray.500"
                                                     fontSize="sm"
                                                 >
-                                                    ${order.priceString}
+                                                    {order.priceString}
                                                 </Td>
                                                 <Td
                                                     color="gray.500"
