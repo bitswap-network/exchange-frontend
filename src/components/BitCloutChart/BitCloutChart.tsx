@@ -80,9 +80,9 @@ export function BitCloutChart() {
                             width={parent.width}
                             scale={{ x: "time" }}
                             padding={{
-                                left: 40,
-                                right: 40,
-                                bottom: 50,
+                                left: 55,
+                                right: 20,
+                                bottom: 55,
                                 top: 20,
                             }}
                             animate={{
@@ -113,7 +113,7 @@ export function BitCloutChart() {
                                 y="price"
                             />
                             <VictoryAxis
-                                // label="BitClout Price (USD)"
+                                label="BitClout Price (USD)"
                                 dependentAxis
                                 style={{
                                     axisLabel: {
@@ -125,7 +125,7 @@ export function BitCloutChart() {
                                 }}
                             />
                             <VictoryAxis
-                                // label="Date"
+                                label="Date"
                                 style={{
                                     axisLabel: {
                                         padding: 40,
