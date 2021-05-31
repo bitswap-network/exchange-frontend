@@ -3,7 +3,6 @@ import { getData } from "../helpers/persistence"
 import { api } from "../globalVars"
 
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
-    console.info(`[request] [${JSON.stringify(config)}]`)
     return config
 }
 
@@ -16,11 +15,9 @@ const onAuthRequest = async (
     config: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
     const token = getData("token")
-    console.log(token)
     if (token) {
         config.headers["x-access-token"] = token
     }
-    console.info(`[request] [${JSON.stringify(config)}]`)
     return config
 }
 
@@ -30,7 +27,6 @@ const onAuthRequestError = (error: AxiosError): Promise<AxiosError> => {
 }
 
 const onResponse = (response: AxiosResponse): AxiosResponse => {
-    console.info(`[response] [${JSON.stringify(response)}]`)
     return response
 }
 

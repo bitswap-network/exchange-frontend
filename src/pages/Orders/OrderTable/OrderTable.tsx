@@ -1,7 +1,7 @@
 import React from "react"
 import { Box } from "@chakra-ui/react"
 import { Table } from "../../../components/Table"
-import { Order } from "../../../types/Order"
+import { Order } from "../../../interfaces/Order"
 import { Column } from "react-table"
 
 interface OrderTableProps {
@@ -9,13 +9,14 @@ interface OrderTableProps {
     columns: Column<Order>[]
 }
 
-export function OrderTable({
+export function OrderTableFunc({
     data,
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" borderRadius="lg" boxShadow="xs">
-            <Table<Order> data={data} columns={columns} />
+        <Box bg="white" maxW="full" w="full" borderRadius="lg" boxShadow="lg">
+            <Table data={data} columns={columns} />
         </Box>
     )
 }
+export const OrderTable = React.memo(OrderTableFunc)

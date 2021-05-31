@@ -7,12 +7,6 @@ import {
     VStack,
     SimpleGrid,
     useDisclosure,
-    Modal,
-    Text,
-    ModalOverlay,
-    ModalContent,
-    ModalBody,
-    ModalCloseButton,
 } from "@chakra-ui/react"
 import { BalanceCard } from "../../components/BalanceCard"
 import { CryptoCard } from "../../components/CryptoCard"
@@ -23,13 +17,10 @@ import { getEthUSD, getBitcloutUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
 import { bitcloutPreflightTxn } from "../../services/gateway"
-import TransactionModal from "./transactionModal"
-import WithdrawBCLTModal from "./WithdrawModal/BCLT"
-import WithdrawETHModal from "./WithdrawModal/ETH"
-import DepositBCLTModal from "./DepositModal/BCLT"
-import DepositETHModal from "./DepositModal/ETH"
+import { TransactionModal } from "./TransactionModal"
+import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal"
+import { BitcloutDepositModal, EthDepositModal } from "./DepositModal"
 import * as globalVars from "../../globalVars"
-import { BlueButton } from "../../components/BlueButton"
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
@@ -179,14 +170,14 @@ export function Wallet(): React.ReactElement {
             />
             {selectedCurrency.type == "BCLT" ? (
                 <>
-                    <DepositBCLTModal
+                    <BitcloutDepositModal
                         disclosure={{
                             isOpen: isOpenDepositModal,
                             onOpen: onOpenDepositModal,
                             onClose: onCloseDepositModal,
                         }}
                     />
-                    <WithdrawBCLTModal
+                    <BitcloutWithdrawModal
                         maxWithdraw={selectedCurrency.maxWithdraw}
                         disclosure={{
                             isOpen: isOpenWithdrawModal,
@@ -197,14 +188,14 @@ export function Wallet(): React.ReactElement {
                 </>
             ) : (
                 <>
-                    <DepositETHModal
+                    <EthDepositModal
                         disclosure={{
                             isOpen: isOpenDepositModal,
                             onOpen: onOpenDepositModal,
                             onClose: onCloseDepositModal,
                         }}
                     />
-                    <WithdrawETHModal
+                    <EthWithdrawModal
                         maxWithdraw={selectedCurrency.maxWithdraw}
                         disclosure={{
                             isOpen: isOpenWithdrawModal,
@@ -367,11 +358,11 @@ export function Wallet(): React.ReactElement {
                                                     color="gray.500"
                                                     fontSize="14"
                                                 >
-                                                    {new Date(
+                                                    {globalVars.timeSince(new Date(
                                                         transaction.completionDate
                                                             ? transaction.completionDate
                                                             : transaction.created
-                                                    ).toLocaleString()}
+                                                    ))}
                                                 </Td>
                                                 <Td
                                                     color="gray.500"

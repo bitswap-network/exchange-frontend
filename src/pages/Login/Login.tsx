@@ -1,16 +1,13 @@
 import React, { ReactElement, useState } from "react"
 import {
     VStack,
-    Box,
     Text,
-    Image,
     Input,
     Flex,
     Checkbox,
     Link,
     HStack,
 } from "@chakra-ui/react"
-import { useRecoilValue, useSetRecoilState } from "recoil"
 import { HiExclamationCircle } from "react-icons/hi"
 
 import { BlueButton } from "../../components/BlueButton/BlueButton"
@@ -18,8 +15,7 @@ import { launch, jwt } from "../../services/identity"
 import { login, fetchBitcloutProfile, register } from "../../services/auth"
 import { BitcloutProfile } from "../../interfaces/bitclout/Profile"
 
-import { setIdentityUsers, saveData } from "../../helpers/persistence"
-import { userState } from "../../store"
+import { setIdentityUsers } from "../../helpers/persistence"
 
 interface CreateUserObj {
     publicKey: string
@@ -105,22 +101,26 @@ export function Login(): ReactElement {
                     })
                     .catch((error: any) => {
                         //TODO: revise response status codes
-                        if (error.response.status === 406) {
-                            fetchBitcloutProfile(res.publicKeyAdded, "")
-                                .then((response) => {
-                                    console.log(response.data)
-                                    setBitcloutProfile(response.data)
-                                    setNewUser(true)
-                                    setCreateProfile({
-                                        ...createProfile,
-                                        publicKey: res.publicKeyAdded,
+                        if (error.response) {
+                            if (error.response.status === 406) {
+                                fetchBitcloutProfile(res.publicKeyAdded, "")
+                                    .then((response) => {
+                                        console.log(response.data)
+                                        setBitcloutProfile(response.data)
+                                        setNewUser(true)
+                                        setCreateProfile({
+                                            ...createProfile,
+                                            publicKey: res.publicKeyAdded,
+                                        })
                                     })
-                                })
-                                .catch((error) => {
-                                    console.log(error.response.data)
-                                    error.response.data.message &&
-                                        setErrText(error.response.data.message)
-                                })
+                                    .catch((error) => {
+                                        console.log(error.response.data)
+                                        error.response.data.message &&
+                                            setErrText(
+                                                error.response.data.message
+                                            )
+                                    })
+                            }
                         } else {
                             console.log(error)
                         }
@@ -144,17 +144,16 @@ export function Login(): ReactElement {
     }
 
     const loginView = (
-        <VStack spacing={4}>
-            {/* 📌TODO: Change to BitSwap 3D thing with white background */}
-            <Image src="./bitswapLogo.png" />
+        <VStack spacing={6} align="flex-start" maxW="450px">
             <Text fontSize="xx-large" fontWeight="bold">
-                Welcome to BitSwap
+                Welcome to Bitswap 🚀
             </Text>
-            <Box as="span" ml="2" color="gray.600" fontSize="md">
-                To continue, please login to BitClout
-            </Box>
+            <Text fontSize="md" color="gray.600" w="350px">
+                To continue to your account on the platform, login using your
+                BitClout account
+            </Text>
             <BlueButton
-                text={`   Login with BitClout   `}
+                text={`   Login with Bitclout  `}
                 width="350px"
                 onClick={loginHandler}
             />

@@ -1,16 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useMemo } from "react"
 import { Box } from "@chakra-ui/react"
-import {
-    LineChart,
-    XAxis,
-    YAxis,
-    Tooltip,
-    Line,
-    ResponsiveContainer,
-    CartesianGrid,
-    Legend,
-} from "recharts"
 import { Depth } from "../../interfaces/Depth"
 import {
     Group,

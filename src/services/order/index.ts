@@ -26,3 +26,13 @@ export const createMarketOrder = async (
         orderSide: orderSide,
     })
 }
+
+export const getMarketPrice = async (
+    orderQuantity: number,
+    orderSide: string
+) => {
+    return await authClient.post(`/order/market-price`, {
+        orderQuantity: orderQuantity,
+        orderSide: orderSide,
+    })
+}

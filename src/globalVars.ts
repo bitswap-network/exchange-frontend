@@ -9,11 +9,47 @@ export const identityURL = "https://identity.bitclout.com"
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
 
+export const MAX_LIMIT = 200
+export const MIN_LIMIT = 1
+
+const epochs: [string, number][] = [
+    ["year", 31536000],
+    ["month", 2592000],
+    ["day", 86400],
+    ["hour", 3600],
+    ["minute", 60],
+    ["second", 1],
+]
+
+export function timeSince(date: Date) {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
+    const interval = epochs.find((i) => i[1] < seconds)
+    const count = interval ? Math.floor(seconds / interval[1]) : null
+    return interval && count
+        ? `${count} ${interval[0]}${count !== 1 ? "s" : ""} ago`
+        : "<1 second ago"
+}
+// export const timeAgo = (date: Date) => {
+//     const ago = new Date(date).getTime()
+//     const timeAgoInSeconds = Math.floor((Date.now() - ago) / 1000)
+//     const { interval, epoch } = getDuration(timeAgoInSeconds)
+//     const suffix = interval === 1 ? "" : "s"
+//     return `${interval} ${epoch}${suffix} ago`
+// }
+
 export const formatBalanceSmall = (balance: number) => {
     return +balance.toFixed(4)
 }
 export const formatBalanceLarge = (balance: number) => {
     return +balance.toFixed(6)
+}
+
+export const formateDateTime = (date: Date) => {
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+}
+
+export const capFirst = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 export function useInterval(callback: () => void, delay: number | null) {

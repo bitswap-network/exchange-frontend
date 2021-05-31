@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
-import { Box, Text, Image } from "@chakra-ui/react"
+import { Box, Text, Image, Tooltip } from "@chakra-ui/react"
 import { BlueButton } from "../BlueButton"
 
 import * as globalVars from "../../globalVars"
@@ -52,15 +52,31 @@ export const BalanceCard = (props: any) => {
                     lineHeight="tight"
                     isTruncated
                 >
-                    <Text fontSize="3xl" color="gray.600">
-                        ~{globalVars.formatBalanceLarge(balance.amount)}{" "}
-                        {balance.currency}
-                    </Text>
-                    <Text fontSize="1xl" color="gray.500">
-                        {props.usdValue !== null
-                            ? `~${props.usdValue.toFixed(2)} USD`
-                            : "Fetching..."}
-                    </Text>
+                    <Tooltip
+                        label={
+                            balance.amount.toString() + " " + balance.currency
+                        }
+                        aria-label="A tooltip"
+                    >
+                        <Text fontSize="3xl" color="gray.600">
+                            ~{globalVars.formatBalanceLarge(balance.amount)}{" "}
+                            {balance.currency}
+                        </Text>
+                    </Tooltip>
+                    {props.usdValue !== null ? (
+                        <Tooltip
+                            label={props.usdValue.toString() + " USD"}
+                            aria-label="A tooltip"
+                        >
+                            <Text fontSize="1xl" color="gray.500">
+                                ~{props.usdValue.toFixed(2)} USD
+                            </Text>
+                        </Tooltip>
+                    ) : (
+                        <Text fontSize="1xl" color="gray.500">
+                            Fetching...
+                        </Text>
+                    )}
                 </Box>
                 <Box paddingTop="5" d="flex" mt="8" justifyContent="center">
                     <BlueButton

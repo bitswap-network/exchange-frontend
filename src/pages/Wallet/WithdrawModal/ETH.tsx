@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
     Modal,
     Text,
@@ -21,10 +21,9 @@ import {
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { HiCheckCircle } from "react-icons/hi"
-import { userState, identityUsers } from "../../../store"
+import { userState } from "../../../store"
 import { withdrawEth } from "../../../services/gateway"
 import { BlueButton } from "../../../components/BlueButton"
-import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
 import { isAddress } from "ethereum-address"
 // const ethereum_address = require("ethereum-address")
 import * as globalVars from "../../../globalVars"
@@ -38,7 +37,7 @@ interface WithdrawModalProps {
     maxWithdraw: number
 }
 
-const WithdrawModal: React.FC<WithdrawModalProps> = ({
+export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
     disclosure,
     maxWithdraw,
 }: WithdrawModalProps) => {
@@ -334,5 +333,3 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({
         </Modal>
     )
 }
-
-export default WithdrawModal

@@ -1,19 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react"
+import React from "react"
 
 import { Flex, Heading, Spacer, VStack, Box } from "@chakra-ui/react"
-import { BitcloutChart } from "../../components/BitCloutChart/Chart"
-import { Background } from "../../components/BitCloutChart/Background"
+
 import { Column } from "react-table"
-import { Order, OrderType } from "../../types/Order"
+import { Order } from "../../interfaces/Order"
 import { OrderTable } from "../Orders/OrderTable"
-import { getDepth } from "../../services/utility"
 import { useOrderBook } from "../../hooks"
-import {
-    Depth as DepthInterface,
-    ChartData as ChartDataInterface,
-} from "../../interfaces/Depth"
-import ParentSize from "@visx/responsive/lib/components/ParentSize"
+
 import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 
 export function Home(): React.ReactElement {

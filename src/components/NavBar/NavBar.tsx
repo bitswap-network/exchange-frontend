@@ -13,10 +13,10 @@ import {
 } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { Logo } from "./components/Logo"
 import { Link } from "react-router-dom"
-import { loggedInState } from "../../store"
+import { loggedInState, orderModalState } from "../../store"
 import { AiOutlineUser } from "react-icons/ai"
 
 const LINKS = ["home", "orders", "wallet"]
@@ -54,10 +54,13 @@ export const DefaultNavBar = (
     </Box>
 )
 
-export function NavBar() {
+function NavBarFunc() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
+    const setOrderModalState = useSetRecoilState(orderModalState)
+
     console.log("IS LOGGED IN: ", isLoggedIn)
+    console.log(isOpen)
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <Box px={4}>
@@ -67,7 +70,7 @@ export function NavBar() {
                     icon={isOpen ? <RiCloseFill /> : <HiMenu />}
                     aria-label={"Open Menu"}
                     display={{ md: "none" }}
-                    onClick={isOpen ? onClose : onOpen}
+                    onClick={isOpen ? () => onClose() : () => onOpen()}
                 />
                 <HStack
                     as={"nav"}
@@ -88,6 +91,26 @@ export function NavBar() {
                     ))}
                 </HStack>
                 <Flex mr={{ sm: "5px", md: "40px" }}>
+                    <Button
+                        as={Link}
+                        to={{
+                            pathname: "/orders",
+                        }}
+                        onClick={() => setOrderModalState(() => true)}
+                        h="30px"
+                        bgColor="#DBE6FF"
+                        borderRadius="4"
+                        mr="8"
+                    >
+                        <Text
+                            textTransform="capitalize"
+                            fontWeight="500"
+                            color="brand.100"
+                            fontSize="sm"
+                        >
+                            New Order
+                        </Text>
+                    </Button>
                     <Link to="/profile">
                         <HStack spacing="5px" color="black" fontWeight="400">
                             <AiOutlineUser size="20" />
@@ -98,8 +121,8 @@ export function NavBar() {
                     </Link>
                 </Flex>
             </Flex>
-            {isOpen ? (
-                <Box pb={4} display={{ md: "none" }}>
+            {isOpen && (
+                <Box pb={4} display={{ base: "flex", md: "none" }}>
                     <Stack as={"nav"} spacing={4}>
                         {LINKS.map((link) => (
                             <Text
@@ -113,9 +136,10 @@ export function NavBar() {
                         ))}
                     </Stack>
                 </Box>
-            ) : null}
+            )}
         </Box>
     )
 
     return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar}</>
 }
+export const NavBar = React.memo(NavBarFunc)

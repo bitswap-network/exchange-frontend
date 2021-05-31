@@ -154,9 +154,12 @@ const handleResponse = (event: MessageEvent) => {
     } = event
 
     const req = outboundRequests[id]
-    req.next(payload)
-    req.complete()
-    delete outboundRequests[id]
+    console.log(req)
+    if (req) {
+        req.next(payload)
+        req.complete()
+        delete outboundRequests[id]
+    }
 }
 
 const send = (method: string, payload: any) => {

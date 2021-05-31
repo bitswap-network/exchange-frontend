@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 // jsx-key is disabled because it fails to apply to the spread operator with typed object [as of May 2021]
 
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useState, useEffect } from "react"
 import {
     Table as ChakraTable,
     Thead,
@@ -10,62 +10,105 @@ import {
     Th,
     Td,
     chakra,
+    useDisclosure,
 } from "@chakra-ui/react"
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons"
 import { useTable, useSortBy, TableOptions } from "react-table"
+import { OrderInfoModal } from "../OrderInfoModal"
+import { OrderTableDataInterface } from "../../interfaces/Order"
 
-export function Table<T extends Record<string, unknown>>({
+export function Table<OrderTableDataInterface extends Record<string, unknown>>({
     data,
     columns,
-}: PropsWithChildren<TableOptions<T>>): React.ReactElement {
+}: PropsWithChildren<
+    TableOptions<OrderTableDataInterface>
+>): React.ReactElement {
+    const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>()
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable<T>({ columns, data }, useSortBy)
+        useTable<OrderTableDataInterface>({ columns, data }, useSortBy)
+    const modalDisclosure = useDisclosure()
 
+    rows.map((row) => {
+        prepareRow(row)
+        console.log(row)
+    })
     return (
-        <ChakraTable {...getTableProps()}>
-            <Thead>
-                {headerGroups.map((headerGroup) => (
-                    <Tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map((column) => (
-                            <Th
-                                {...column.getHeaderProps(
-                                    column.getSortByToggleProps()
-                                )}
-                                // isNumeric={column.isNumeric}
-                            >
-                                {column.render("Header")}
-                                <chakra.span pl="4">
-                                    {column.isSorted ? (
-                                        column.isSortedDesc ? (
-                                            <TriangleDownIcon aria-label="sorted descending" />
-                                        ) : (
-                                            <TriangleUpIcon aria-label="sorted ascending" />
-                                        )
-                                    ) : null}
-                                </chakra.span>
-                            </Th>
-                        ))}
-                    </Tr>
-                ))}
-            </Thead>
-            <Tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                    prepareRow(row)
-                    return (
-                        <Tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => (
-                                <Td
-                                    color="gray.500"
-                                    {...cell.getCellProps()}
-                                    // isNumeric={cell.column.isNumeric}
+        <>
+            <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />
+            <ChakraTable
+                {...getTableProps()}
+                size="sm"
+                colorScheme="messenger"
+                variant="simple"
+                borderRadius="lg"
+            >
+                <Thead minH="100">
+                    {headerGroups.map((headerGroup) => (
+                        <Tr
+                            {...headerGroup.getHeaderGroupProps()}
+                            key={Math.random().toString(4)}
+                        >
+                            {headerGroup.headers.map((column) => (
+                                <Th
+                                    {...column.getHeaderProps(
+                                        column.getSortByToggleProps()
+                                    )}
+                                    isNumeric={column.isNumeric}
+                                    pt="4"
                                 >
-                                    {cell.render("Cell")}
-                                </Td>
+                                    {column.render("Header")}
+                                    <br></br>
+                                    <chakra.span>
+                                        {column.isSorted ? (
+                                            column.isSortedDesc ? (
+                                                <TriangleDownIcon aria-label="sorted descending" />
+                                            ) : (
+                                                <TriangleUpIcon aria-label="sorted ascending" />
+                                            )
+                                        ) : (
+                                            <TriangleDownIcon
+                                                aria-label="not sorted"
+                                                fillOpacity="0"
+                                            />
+                                        )}
+                                    </chakra.span>
+                                </Th>
                             ))}
                         </Tr>
-                    )
-                })}
-            </Tbody>
-        </ChakraTable>
+                    ))}
+                </Thead>
+                <Tbody {...getTableBodyProps()}>
+                    {rows.map((row) => {
+                        prepareRow(row)
+                        return (
+                            <Tr
+                                {...row.getRowProps()}
+                                key={Math.random().toString(4)}
+                                onClick={() => {
+                                    setSelectOrder(
+                                        row.original as OrderTableDataInterface
+                                    )
+                                    modalDisclosure.onOpen()
+                                }}
+                                _hover={{
+                                    backgroundColor: "background.primary",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {row.cells.map((cell) => (
+                                    <Td
+                                        color="gray.500"
+                                        {...cell.getCellProps()}
+                                        isNumeric={cell.column.isNumeric}
+                                    >
+                                        {cell.render("Cell")}
+                                    </Td>
+                                ))}
+                            </Tr>
+                        )
+                    })}
+                </Tbody>
+            </ChakraTable>
+        </>
     )
 }

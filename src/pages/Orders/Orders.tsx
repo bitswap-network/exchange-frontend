@@ -10,7 +10,6 @@ import {
     TabPanel,
     Center,
     Stack,
-    Box,
     useDisclosure,
     Table,
     Thead,
@@ -19,70 +18,81 @@ import {
     Th,
     Td,
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { Column } from "react-table"
 import { BlueButton } from "../../components/BlueButton"
-import { Order, OrderType } from "../../types/Order"
 import {
-    Depth as DepthInterface,
-    ChartData as ChartDataInterface,
-} from "../../interfaces/Depth"
+    OrderTableDataInterface,
+    OrderTableColumns,
+} from "../../interfaces/Order"
 import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
 import { OrderTable } from "./OrderTable"
 import { OrderModal } from "./OrderModal"
-import { useOrderBook } from "../../hooks"
+import { useOrderBook, orderBookInterface } from "../../hooks"
 import { getOrders } from "../../services/user"
-import { getDepth } from "../../services/utility"
+import * as globalVars from "../../globalVars"
+import { useRecoilState } from "recoil"
+import { orderModalState } from "../../store"
 
 export function Orders(): React.ReactElement {
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: "Order ID",
-                accessor: "id",
-                isNumeric: true,
-            },
-            {
-                Header: "Order Type",
-                accessor: "type",
-            },
-            {
-                Header: "Quantity",
-                accessor: "quantity",
-                isNumeric: true,
-            },
-            {
-                Header: "Price",
-                accessor: "price",
-                isNumeric: true,
-            },
-            {
-                Header: "Date Posted",
-                accessor: "date_posted",
-            },
-            {
-                Header: "Date Fullfiled",
-                accessor: "date_fullfiled",
-            },
-            {
-                Header: "Status",
-                accessor: "status",
-            },
-        ],
+    const [orderModalOpenOnLoad, setOrderOpenOnLoad] =
+        useRecoilState(orderModalState)
+    const columns = useMemo(
+        () => OrderTableColumns,
         []
-    ) as Column<Order>[]
+    ) as Column<OrderTableDataInterface>[]
+    const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
 
-    const [orders, setOrders] = useState([])
-
-    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
+    const {
+        orderbook,
+        orderbookIsLoading,
+        orderbookIsError,
+    }: orderBookInterface = useOrderBook()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const parseOrderData = (orders: OrderTableDataInterface[]) => {
+        const tempOrders: OrderTableDataInterface[] = []
+        orders.forEach((order: OrderTableDataInterface) => {
+            tempOrders.push({
+                ...order,
+                tldr: `${globalVars.capFirst(order.orderSide)} ${
+                    order.orderQuantity
+                } BCLT (${globalVars.capFirst(order.orderType)})`,
+                status: `${
+                    order.complete
+                        ? "Closed"
+                        : order.orderQuantityProcessed > 0
+                        ? "Partial"
+                        : "Active"
+                }`,
+                orderTypeCapped: globalVars.capFirst(order.orderType),
+                quantityString: `${order.orderQuantity} BCLT`,
+                priceString: `${
+                    order.orderPrice ? `$${order.orderPrice}` : "-"
+                }`,
+                createdAgo: globalVars.timeSince(new Date(order.created)),
+                completedAgo: order.completeTime
+                    ? globalVars.timeSince(new Date(order.completeTime))
+                    : "-",
+            })
+        })
+        return tempOrders
+    }
 
     useEffect(() => {
         getOrders().then((response) => {
             setOrders(response.data.data)
         })
     }, [])
+    useEffect(() => {
+        if (orderModalOpenOnLoad) {
+            onOpen()
+            setOrderOpenOnLoad(false)
+        }
+    }, [orderModalOpenOnLoad])
+
+    const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
 
     return (
         <>
@@ -112,17 +122,17 @@ export function Orders(): React.ReactElement {
                                         {
                                             orders.filter(
                                                 (order) =>
-                                                    order.status == "active"
+                                                    order.complete === false
                                             ).length
                                         }
                                         )
                                     </Tab>
                                     <Tab w="33%" pt="3" pb="3">
-                                        Fulfilled Orders (
+                                        Completed Orders (
                                         {
                                             orders.filter(
                                                 (order) =>
-                                                    order.status == "fullfiled"
+                                                    order.complete === true
                                             ).length
                                         }
                                         )
@@ -143,7 +153,7 @@ export function Orders(): React.ReactElement {
                                         <OrderTable
                                             data={orders.filter(
                                                 (order) =>
-                                                    order.status == "active"
+                                                    order.complete === false
                                             )}
                                             columns={columns}
                                         />
@@ -155,7 +165,7 @@ export function Orders(): React.ReactElement {
                                         <OrderTable
                                             data={orders.filter(
                                                 (order) =>
-                                                    order.status == "fullfiled"
+                                                    order.complete === true
                                             )}
                                             columns={columns}
                                         />
@@ -213,7 +223,7 @@ export function Orders(): React.ReactElement {
                                     {!orderbookIsLoading &&
                                         !orderbookIsError &&
                                         orderbook.asks.map((order) => (
-                                            <Tr key={order.id}>
+                                            <Tr key={Math.random().toString(4)}>
                                                 <Td
                                                     color="red.500"
                                                     fontSize="sm"
@@ -245,7 +255,7 @@ export function Orders(): React.ReactElement {
                                     {!orderbookIsLoading &&
                                         !orderbookIsError &&
                                         orderbook.bids.map((order) => (
-                                            <Tr key={order.id}>
+                                            <Tr key={Math.random().toString(4)}>
                                                 <Td
                                                     color="green.500"
                                                     fontSize="sm"
