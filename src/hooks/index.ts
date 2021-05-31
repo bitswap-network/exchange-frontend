@@ -17,7 +17,7 @@ export function useOrderBook() {
                 return res.data.data
             }),
         {
-            refreshInterval: 5000,
+            refreshInterval: 30000,
         }
     )
 

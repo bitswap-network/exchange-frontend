@@ -16,6 +16,16 @@ import { PrivateRoute } from "./components/PrivateRoute"
 
 import * as config from "./globalVars"
 import { identityHandler } from "./services/identity"
+import TagManager from "react-gtm-module"
+
+const tagManagerArgs = {
+    dataLayer: {
+        userId: "001",
+        userProject: "project",
+        page: "home",
+    },
+    dataLayerName: "PageDataLayer",
+}
 
 window.addEventListener("message", identityHandler)
 
