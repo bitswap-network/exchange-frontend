@@ -207,59 +207,125 @@ export function Orders(): React.ReactElement {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {!orderbookIsLoading &&
+                                    {/* {!orderbookIsLoading &&
                                         !orderbookIsError &&
                                         orderbook &&
                                         globalVars
                                             .zip(orderbook.asks, orderbook.bids)
                                             .map((orderTuple) =>
                                                 orderTuple.map(
-                                                    (order, index) => (
-                                                        <Tr
-                                                            key={Math.random().toString(
-                                                                4
-                                                            )}
-                                                        >
-                                                            <Td
-                                                                color={
-                                                                    index === 0
-                                                                        ? "red.500"
-                                                                        : "green.500"
-                                                                }
-                                                                fontSize="sm"
+                                                    (order, index) => {
+                                                        console.log("ok", order)
+                                                        return (
+                                                            <Tr
+                                                                key={Math.random().toString(
+                                                                    4
+                                                                )}
                                                             >
-                                                                {index === 0
-                                                                    ? "Sell"
-                                                                    : "Buy"}
-                                                            </Td>
-                                                            <Td
-                                                                color="gray.500"
-                                                                fontSize="sm"
-                                                            >
-                                                                {
-                                                                    order.priceString
-                                                                }
-                                                            </Td>
-                                                            <Td
-                                                                color="gray.500"
-                                                                fontSize="sm"
-                                                            >
-                                                                {
-                                                                    order.quantityString
-                                                                }
-                                                            </Td>
-                                                            <Td
-                                                                color="gray.500"
-                                                                fontSize="sm"
-                                                            >
-                                                                {
-                                                                    order.totalString
-                                                                }
-                                                            </Td>
-                                                        </Tr>
-                                                    )
+                                                                <Td
+                                                                    color={
+                                                                        index ===
+                                                                        0
+                                                                            ? "red.500"
+                                                                            : "green.500"
+                                                                    }
+                                                                    fontSize="sm"
+                                                                >
+                                                                    {index === 0
+                                                                        ? "Sell"
+                                                                        : "Buy"}
+                                                                </Td>
+                                                                <Td
+                                                                    color="gray.500"
+                                                                    fontSize="sm"
+                                                                >
+                                                                    {
+                                                                        order.priceString
+                                                                    }
+                                                                </Td>
+                                                                <Td
+                                                                    color="gray.500"
+                                                                    fontSize="sm"
+                                                                >
+                                                                    {
+                                                                        order.quantityString
+                                                                    }
+                                                                </Td>
+                                                                <Td
+                                                                    color="gray.500"
+                                                                    fontSize="sm"
+                                                                >
+                                                                    {
+                                                                        order.totalString
+                                                                    }
+                                                                </Td>
+                                                            </Tr>
+                                                        )
+                                                    }
                                                 )
-                                            )}
+                                            )} */}
+                                    {!orderbookIsLoading &&
+                                        !orderbookIsError &&
+                                        orderbook?.asks.map((order, i) => (
+                                            <Tr key={i}>
+                                                <Td
+                                                    color="red.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {"Sell"}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.priceString}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {order.quantityString}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.totalString}
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    {!orderbookIsLoading &&
+                                        !orderbookIsError &&
+                                        orderbook?.bids.map((order, i) => (
+                                            <Tr
+                                                key={i + orderbook?.asks.length}
+                                            >
+                                                <Td
+                                                    color="green.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {"Buy"}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.priceString}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    {order.quantityString}
+                                                </Td>
+                                                <Td
+                                                    color="gray.500"
+                                                    fontSize="sm"
+                                                >
+                                                    ${order.totalString}
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                 </Tbody>
                             </Table>
                         </Flex>
