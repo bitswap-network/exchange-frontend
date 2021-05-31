@@ -38,7 +38,7 @@ export const App = (): ReactElement => {
                         <BrowserRouter>
                             <Grid h="100vh" templateRows={"64px 1fr"}>
                                 {/* TODO: implement auth to set loggedOut */}
-                                <Suspense fallback={DefaultNavBar}>
+                                <Suspense fallback={DefaultNavBar(true)}>
                                     <NavBar />
                                 </Suspense>
 

@@ -358,11 +358,13 @@ export function Wallet(): React.ReactElement {
                                                     color="gray.500"
                                                     fontSize="14"
                                                 >
-                                                    {globalVars.timeSince(new Date(
-                                                        transaction.completionDate
-                                                            ? transaction.completionDate
-                                                            : transaction.created
-                                                    ))}
+                                                    {globalVars.timeSince(
+                                                        new Date(
+                                                            transaction.completionDate
+                                                                ? transaction.completionDate
+                                                                : transaction.created
+                                                        )
+                                                    )}
                                                 </Td>
                                                 <Td
                                                     color="gray.500"

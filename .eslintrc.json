@@ -22,9 +22,9 @@
         "prettier/prettier": [
             "error",
             {
-              "endOfLine": "auto"
+                "endOfLine": "auto"
             }
-          ],
+        ],
         "@typescript-eslint/ban-ts-comment": "off"
     }
 }

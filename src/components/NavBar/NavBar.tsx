@@ -10,6 +10,7 @@ import {
     Stack,
     Spacer,
     Text,
+    Skeleton,
 } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
@@ -22,32 +23,36 @@ import { AiOutlineUser } from "react-icons/ai"
 const LINKS = ["home", "orders", "wallet"]
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
-export const DefaultNavBar = (
+export const DefaultNavBar = (loading: boolean) => (
     <Box px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-            <HStack
-                as={"nav"}
-                spacing={5}
-                display={{ base: "none", md: "flex" }}
-            >
-                <Link to="/">
-                    <Logo />
-                </Link>
-            </HStack>
-            <Flex alignItems={"center"} mr="5">
-                <Button
-                    bg="#4978F0"
-                    p="0px 40px"
-                    color="white"
-                    fontWeight="600"
-                    fontSize="16"
-                    borderRadius="6"
-                    boxShadow="0px 3px 6px 0px #00000040"
-                    as={Link}
-                    to="/login"
+            <Skeleton isLoaded={!loading} m="4">
+                <HStack
+                    as={"nav"}
+                    spacing={5}
+                    display={{ base: "none", md: "flex" }}
                 >
-                    Login
-                </Button>
+                    <Link to="/">
+                        <Logo />
+                    </Link>
+                </HStack>
+            </Skeleton>
+            <Flex alignItems={"center"} mr="5">
+                <Skeleton isLoaded={!loading} m="4">
+                    <Button
+                        bg="#4978F0"
+                        p="0px 40px"
+                        color="white"
+                        fontWeight="600"
+                        fontSize="16"
+                        borderRadius="6"
+                        boxShadow="0px 3px 6px 0px #00000040"
+                        as={Link}
+                        to="/login"
+                    >
+                        Login
+                    </Button>
+                </Skeleton>
                 <Spacer />
             </Flex>
         </Flex>
@@ -140,6 +145,6 @@ function NavBarFunc() {
         </Box>
     )
 
-    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar}</>
+    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar(false)}</>
 }
 export const NavBar = React.memo(NavBarFunc)
