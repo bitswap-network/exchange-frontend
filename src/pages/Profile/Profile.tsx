@@ -41,7 +41,9 @@ export function Profile(): React.ReactElement {
 
     let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
+    const [nameEdit, setNameEdit] = useState(false)
     const [emailErr, setEmailErr] = useState(false)
+    const [userName, setUserName] = useState("")
     const [userEmail, setUserEmail] = useState("")
     const [currentPage, setCurrentPage] = useState("profile")
     const [textCopied, setTextCopied] = useState("copy")
@@ -51,6 +53,10 @@ export function Profile(): React.ReactElement {
 
     const emailInputHandler = (e: any) => {
         setUserEmail(e.target.value)
+    }
+
+    const nameInputHandler = (e: any) => {
+        setUserName(e.target.value)
     }
 
     useEffect(() => {
@@ -63,6 +69,7 @@ export function Profile(): React.ReactElement {
 
     useEffect(() => {
         setUserEmail(user.email)
+        setUserName(user.name)
     }, [user])
 
     const handleLogout = () => {
@@ -78,6 +85,19 @@ export function Profile(): React.ReactElement {
     const updateEmailFunc = () => {
         setLoading(true)
         updateEmail(userEmail)
+            .then(() => {
+                setLoading(false)
+                window.location.reload()
+            })
+            .catch((error) => {
+                setLoading(false)
+                console.error(error)
+            })
+    }
+
+    const updateNameFunc = () => {
+        setLoading(true)
+        updateName(userName)
             .then(() => {
                 setLoading(false)
                 window.location.reload()
@@ -151,14 +171,93 @@ export function Profile(): React.ReactElement {
                     color="black"
                     fontWeight="700"
                     fontSize="20"
-                    mt="15"
+                    mt="3"
                 >
                     @{user.bitclout.username}
                 </Link>
-                <Text color="gray.700" fontWeight="400" fontSize="16" mt="15">
+                <Text color="gray.700" fontWeight="400" fontSize="16" mt="2">
                     {user.bitclout.bio}
                 </Text>
+                <Flex
+                    mt="20px"
+                    w={{ sm: "80%", md: "650px" }}
+                    p="20px"
+                    flexDir={{ sm: "column", md: "row" }}
+                    borderRadius="10"
+                    boxShadow="1px 4px 6px 0px #00000040"
+                >
+                    <Flex
+                        flex="0.65"
+                        align="flex-start"
+                        justify="center"
+                        flexDir="column"
+                    >
+                        <Text color="#44423D" fontWeight="700" fontSize="18">
+                            Name{" "}
+                        </Text>
 
+                        {!nameEdit ? (
+                            <Text
+                                color="#44423D"
+                                fontWeight="500"
+                                fontSize="md"
+                                mt="12px"
+                            >
+                                {user.name}
+                            </Text>
+                        ) : (
+                            <Input
+                                isInvalid={userName.length <= 1}
+                                errorBorderColor="red.300"
+                                variant="outline"
+                                size="md"
+                                p="5"
+                                mt="3"
+                                value={userName}
+                                onChange={nameInputHandler}
+                            />
+                        )}
+                    </Flex>
+                    <Flex
+                        flex="0.35"
+                        align="flex-end"
+                        justify="space-between"
+                        flexDir={{ sm: "row", md: "column" }}
+                        mt={{ sm: "15px", md: "0" }}
+                    >
+                        {!nameEdit ? (
+                            <BlueButton
+                                text={`   Edit   `}
+                                width={{ sm: "45%", md: "90%" }}
+                                onClick={() => setNameEdit(true)}
+                            />
+                        ) : (
+                            <>
+                                <Button
+                                    bg="gray.400"
+                                    w={{ sm: "45%", md: "90%" }}
+                                    p="10px 0"
+                                    color="white"
+                                    fontWeight="600"
+                                    fontSize="16"
+                                    borderRadius="6"
+                                    boxShadow="0px 2px 6px 0px #00000030"
+                                    onClick={() => setNameEdit(false)}
+                                >
+                                    Cancel
+                                </Button>
+                                <BlueButton
+                                    mt="4"
+                                    isDisabled={userName.length <= 1}
+                                    text={`   Update   `}
+                                    width={{ sm: "45%", md: "90%" }}
+                                    onClick={updateNameFunc}
+                                    loading={loading}
+                                />
+                            </>
+                        )}
+                    </Flex>
+                </Flex>
                 <Flex
                     mt="20px"
                     w={{ sm: "80%", md: "650px" }}
