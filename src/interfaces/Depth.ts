@@ -6,7 +6,12 @@ export interface Depth {
     bids: { price: number; quantity: number }[]
 }
 
+export interface ChartDataPoint {
+    x: number | string | Date
+    y: number | string | Date
+}
+
 export interface ChartData {
-    timestamp: Date
-    price: number
+    id: string | number
+    data: ChartDataPoint[]
 }

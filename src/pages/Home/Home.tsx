@@ -13,6 +13,7 @@ import { OrderBookTable } from "../Orders/OrderTable"
 import { useOrderBook } from "../../hooks"
 
 import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
+import { Chart } from "../../components/BitCloutChart/Chart"
 
 export function Home(): React.ReactElement {
     // const [depth, setDepth] = useState<ChartDataInterface[]>([])
@@ -61,7 +62,8 @@ export function Home(): React.ReactElement {
                             marginTop={4}
                             padding={4}
                         >
-                            <BitCloutChart />
+                            {/* <BitCloutChart /> */}
+                            <Chart />
                             {/* <ParentSize>
                                     {({ width, height }) => (
                                         <BitcloutChart
