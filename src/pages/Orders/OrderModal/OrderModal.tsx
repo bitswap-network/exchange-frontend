@@ -192,11 +192,15 @@ export function OrderModal({
                 })
                 .catch((error) => {
                     setContinueLoading(false)
-                    setValidateError(
-                        error.response.data.message
-                            ? `${error.response.status}: ${error.response.data.message}`
-                            : "Error Placing Order"
-                    )
+                    if (error.response) {
+                        setValidateError(
+                            error.response.data.message
+                                ? `${error.response.status}: ${error.response.data.message}`
+                                : "Error Placing Order"
+                        )
+                    } else {
+                        setValidateError("Unknown Error")
+                    }
                 })
         }
     }
