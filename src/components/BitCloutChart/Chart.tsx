@@ -3,8 +3,9 @@ import React, { useEffect, useState, useMemo } from "react"
 import { Box, Skeleton } from "@chakra-ui/react"
 import { ResponsiveLine } from "@nivo/line"
 import { ChartData as ChartDataInterface, Depth } from "../../interfaces/Depth"
-import { getDepth } from "../../services/utility"
+import { getDepth, getOrderHistory } from "../../services/utility"
 import { ParentSize } from "@visx/responsive"
+import { select } from "@storybook/addon-knobs"
 
 export function Chart() {
     const data = {
@@ -16,7 +17,41 @@ export function Chart() {
             },
         ],
     }
-
+    const curveOptions = [
+        "linear",
+        "monotoneX",
+        "step",
+        "stepBefore",
+        "stepAfter",
+    ]
+    interface CustomSymbolInterface {
+        size: number
+        color: string
+        borderWidth: number
+        borderColor: string
+    }
+    const CustomSymbol = ({
+        size,
+        color,
+        borderWidth,
+        borderColor,
+    }: CustomSymbolInterface) => (
+        <g>
+            <circle
+                fill="#fff"
+                r={size / 2}
+                strokeWidth={borderWidth}
+                stroke={borderColor}
+            />
+            <circle
+                r={size / 5}
+                strokeWidth={borderWidth}
+                stroke={borderColor}
+                fill={color}
+                fillOpacity={0.35}
+            />
+        </g>
+    )
     const [depthHot, setDepth] = useState<ChartDataInterface>({
         id: "BitClout Market Price",
         data: [],
@@ -26,63 +61,55 @@ export function Chart() {
     const [maxY, setMaxY] = useState(100)
 
     useEffect(() => {
-        getDepth("max").then((depthResponse) => {
+        getOrderHistory().then((response) => {
+            // console.log("orderhistoryrepsonse", response)
             const parsedData: ChartDataInterface = {
                 id: "BitClout Market Price",
                 data: [],
             }
-            depthResponse.data.data.forEach((depthItem: Depth, i: number) => {
-                const date = new Date(depthItem.timestamp)
-                parsedData.data.push({
-                    x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
-                    y: depthItem.marketSell
-                        ? (depthItem.marketSell + depthItem.marketBuy) / 2
-                        : 100,
-                })
-            })
-            // console.log("parsed depth", parsedCopy)
+            response.data.forEach(
+                (item: { timestamp: Date; price: number }) => {
+                    const date = new Date(item.timestamp)
+                    parsedData.data.push({
+                        x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+                        y: item.price,
+                    })
+                }
+            )
             setDepth(parsedData)
             setLoading(false)
         })
+
+        // getDepth("max").then((depthResponse) => {
+        //     const parsedData: ChartDataInterface = {
+        //         id: "BitClout Market Price",
+        //         data: [],
+        //     }
+        //     depthResponse.data.data.forEach((depthItem: Depth, i: number) => {
+        //         const date = new Date(depthItem.timestamp)
+        //         parsedData.data.push({
+        //             x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+        //             y: depthItem.marketSell
+        //                 ? (depthItem.marketSell + depthItem.marketBuy) / 2
+        //                 : 100,
+        //         })
+        //     })
+        //     console.log("parsed depth", parsedData)
+        //     setDepth(parsedData)
+        //     setLoading(false)
+        // })
     }, [])
-
-    // const parseDepth = (depth: ChartDataInterface) => {
-    //     if (depth.data.length > 0) {
-    //         const tempDepth: ChartDataInterface[] = []
-    //         depthArr.forEach((depthItem: Depth) => {
-    //             tempDepth.push({
-    //                 timestamp: new Date(depthItem.timestamp),
-    //                 price: (depthItem.marketSell + depthItem.marketBuy) / 2,
-    //             })
-    //         })
-    //         setMaxY(
-    //             tempDepth.reduce((a, b) => (a.price > b.price ? a : b)).price
-    //         )
-    //         setMinY(
-    //             tempDepth.reduce((a, b) => (a.price < b.price ? a : b)).price
-    //         )
-    //         return tempDepth
-    //     } else {
-    //         return {
-    //             id: "BitClout Market Price",
-    //             data: [],
-    //         }
-    //     }
-    // }
-
-    // const depthMemo = useMemo(
-    //     () => parseDepth(depthHot),
-    //     [depthHot]
-    // ) as ChartDataInterface
-
-    // if (loading) {
-    //     return null
-    // }
 
     return (
         <ParentSize>
             {(parent) => (
-                <Box overflow="hidden" d="flex" w={parent.width} pos="relative">
+                <Box
+                    overflow="hidden"
+                    d="flex"
+                    w={parent.width}
+                    pos="relative"
+                    p="4"
+                >
                     <Skeleton
                         startColor="gray.100"
                         endColor="gray.300"
@@ -92,8 +119,42 @@ export function Chart() {
                     >
                         <ResponsiveLine
                             data={[depthHot]}
-                            xScale={{ type: "time", format: "%Y-%m-%d" }}
-                            yScale={{ type: "linear" }}
+                            xScale={{
+                                type: "time",
+                                format: "%Y-%m-%d",
+                                useUTC: false,
+                                precision: "day",
+                            }}
+                            yScale={{ type: "linear", min: 50, max: 200 }}
+                            xFormat="time:%Y-%m-%d"
+                            axisLeft={{
+                                legend: "BitClout Market Price ($USD)",
+                                legendOffset: 10,
+                                legendPosition: "middle",
+                                tickSize: 5,
+                            }}
+                            axisBottom={{
+                                format: "%b %d",
+                                tickValues: "every day",
+                                legend: "Date",
+                                legendOffset: -12,
+                                legendPosition: "middle",
+                            }}
+                            curve={"monotoneX"}
+                            enablePointLabel={true}
+                            // pointSymbol={CustomSymbol}
+                            pointSize={8}
+                            pointBorderWidth={1}
+                            pointBorderColor={{
+                                from: "color",
+                                modifiers: [["darker", 0.3]],
+                            }}
+                            useMesh={true}
+                            enableSlices={false}
+                            animate={true}
+                            enableGridX={true}
+                            enableGridY={true}
+                            enableArea={true}
                         />
                         {/* <VictoryChart
                             height={parent.width * 0.7}

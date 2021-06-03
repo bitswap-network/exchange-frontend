@@ -14,3 +14,7 @@ export const getDepth = async (dateRange: string) => {
 export const getCurrentDepth = async () => {
     return await client.get("/utility/depth-current")
 }
+
+export const getOrderHistory = async () => {
+    return await client.get("/utility/order-history")
+}
