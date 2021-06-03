@@ -50,13 +50,20 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                     window.location.reload()
                 })
                 .catch((error: any) => {
-                    if (error.response.data)
-                        setCancelError(JSON.stringify(error.response.data))
+                    if (error.response)
+                        setCancelError(error.response.data.message)
                 })
         }
     }
     return (
-        <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
+        <Modal
+            isOpen={disclosure.isOpen}
+            onClose={() => {
+                disclosure.onClose()
+                setCancelError(null)
+                setCancelLoading(false)
+            }}
+        >
             <ModalOverlay />
             <ModalContent>
                 <ModalCloseButton />
