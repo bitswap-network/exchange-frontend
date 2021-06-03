@@ -9,7 +9,7 @@ export const identityURL = "https://identity.bitclout.com"
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
 
-export const MAX_LIMIT = 200
+export const MAX_LIMIT = 300
 export const MIN_LIMIT = 1
 
 const epochs: [string, number][] = [

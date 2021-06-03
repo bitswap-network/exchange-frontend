@@ -287,8 +287,7 @@ export function OrderModal({
                                                 Quantity of BCLT
                                             </Text>
                                             <NumberInput
-                                                min={globalVars.MIN_LIMIT}
-                                                max={globalVars.MAX_LIMIT}
+                                                min={0.05}
                                                 value={orderQuantity}
                                                 onChange={(valueString) =>
                                                     setOrderQuantity(
@@ -318,6 +317,7 @@ export function OrderModal({
                                                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                                                 <NumberInput
                                                     min={globalVars.MIN_LIMIT}
+                                                    max={globalVars.MAX_LIMIT}
                                                     value={limitPrice}
                                                     onChange={(valueString) =>
                                                         setLimitPrice(
