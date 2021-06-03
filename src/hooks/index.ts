@@ -10,28 +10,28 @@ export function useOrderBook() {
                 // console.log("hoook", res)
                 const askArr: orderSideString[] = []
                 const bidArr: orderSideString[] = []
-                res.data.asks.forEach((ask: any) =>
-                    askArr.push({
-                        totalString: `$${ask.price * ask.quantity} USD`,
-                        priceString: `$${ask.price} USD`,
-                        quantityString: `${ask.quantity} BCLT`,
-                    })
-                )
-                res.data.bids.forEach((bid: any) =>
-                    bidArr.push({
-                        ...bid,
-                        totalString: `$${bid.price * bid.quantity} USD`,
-                        priceString: `$${bid.price} USD`,
-                        quantityString: `${bid.quantity} BCLT`,
-                    })
-                )
 
-                // console.log("hook", { asks: askArr, bids: bidArr })
-
+                res.data.asks &&
+                    res.data.asks.forEach((ask: any) =>
+                        askArr.push({
+                            totalString: `$${ask.price * ask.quantity} USD`,
+                            priceString: `$${ask.price} USD`,
+                            quantityString: `${ask.quantity} BCLT`,
+                        })
+                    )
+                res.data.bids &&
+                    res.data.bids.forEach((bid: any) =>
+                        bidArr.push({
+                            ...bid,
+                            totalString: `$${bid.price * bid.quantity} USD`,
+                            priceString: `$${bid.price} USD`,
+                            quantityString: `${bid.quantity} BCLT`,
+                        })
+                    )
                 return { asks: askArr, bids: bidArr }
             }),
         {
-            refreshInterval: 5000,
+            refreshInterval: 10000,
         }
     )
 
