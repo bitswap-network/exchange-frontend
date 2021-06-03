@@ -46,6 +46,8 @@ export function Table<T extends Record<string, unknown>>({
                         <Tr
                             {...headerGroup.getHeaderGroupProps()}
                             key={Math.random().toString(4)}
+                            display="flex"
+                            flexDir="row"
                         >
                             {headerGroup.headers.map((column) => (
                                 <Th
@@ -55,6 +57,9 @@ export function Table<T extends Record<string, unknown>>({
                                     isNumeric={column.isNumeric}
                                     pt="4"
                                     pb="4"
+                                    display="flex"
+                                    flexDir="row"
+                                    alignItems="flex-start"
                                 >
                                     {column.render("Header")}
                                     <chakra.span>
