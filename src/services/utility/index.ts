@@ -17,5 +17,4 @@ export const getCurrentDepth = async () => {
 
 export const getOrderHistory = async () => {
     return await client.get("/utility/order-history")
-    // return [{ timestamp: new Date("June 04, 2021"), price: 125 }]
 }

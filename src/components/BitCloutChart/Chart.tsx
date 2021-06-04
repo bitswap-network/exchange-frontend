@@ -44,7 +44,7 @@ export function Chart(props: any) {
     const [maxY, setMaxY] = useState(0)
 
     useEffect(() => {
-        getOrderHistory().then((response) => {
+        getOrderHistory().then((r) => {
             // console.log("orderhistoryrepsonse", response)
             const parsedData: ChartDataInterface = {
                 id: "BitClout Market Price",
@@ -52,6 +52,9 @@ export function Chart(props: any) {
             }
             let min = 1000000
             let max = 0
+            const response = {
+                data: [{ timestamp: "June 04, 2021", price: 125 }],
+            }
             response.data.forEach(
                 (item: { timestamp: Date; price: number }) => {
                     const date = new Date(item.timestamp)
