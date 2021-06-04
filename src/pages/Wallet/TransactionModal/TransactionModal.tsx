@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionSchema } from "../../../interfaces/Transaction"
+import * as globalVars from "../../../globalVars"
 
 interface TransactionModalProps {
     disclosure: {
@@ -86,7 +87,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                                     {transaction?.assetType == "ETH" ? (
                                         <Link
                                             isExternal
-                                            href={`https://etherscan.io/tx/${transaction.txnHash}`}
+                                            href={`https://${globalVars.etherscanPrefix}etherscan.io/tx/${transaction.txnHash}`}
                                             color="brand.100"
                                             fontWeight="600"
                                             textDecor="underline"

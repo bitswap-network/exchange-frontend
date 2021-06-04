@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid"
 import * as config from "../../globalVars"
 
 //Require approval for buy/sell/sending bitclout
-const accessLevel = 3
+const accessLevel = 4
 const outboundRequests: {
     [index: string]: Subject<any>
 } = {}
