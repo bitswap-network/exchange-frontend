@@ -265,6 +265,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
                         <BlueButton
                             w="47%"
                             text={`   Continue   `}
+                            isDisabled={parseFloat(depositValue) <= 0}
                             onClick={() => {
                                 setPage(page + 1)
                                 getPreflight()

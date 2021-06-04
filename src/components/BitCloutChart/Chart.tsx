@@ -48,7 +48,7 @@ export function Chart(props: any) {
             // console.log("orderhistoryrepsonse", response)
             const parsedData: ChartDataInterface = {
                 id: "BitClout Market Price",
-                data: [{ timestamp: new Date("June 04, 2021"), price: 125 }],
+                data: [],
             }
             let min = 1000000
             let max = 0
