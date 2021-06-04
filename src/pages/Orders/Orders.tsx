@@ -25,7 +25,7 @@ import {
     OrderTableDataInterface,
     OrderTableColumns,
 } from "../../interfaces/Order"
-import { BitCloutChart } from "../../components/BitCloutChart/BitCloutChart"
+import { Chart } from "../../components/BitCloutChart/Chart"
 import { OrderTable } from "./OrderTable"
 import { OrderModal } from "./OrderModal"
 import { useOrderBook, orderBookInterface } from "../../hooks"
@@ -188,7 +188,7 @@ export function Orders(): React.ReactElement {
                             <Heading as="h2" size="md" mb="2">
                                 BitClout Market Value
                             </Heading>
-                            <BitCloutChart />
+                            <Chart ticks={6} />
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>

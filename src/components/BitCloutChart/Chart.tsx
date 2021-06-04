@@ -7,7 +7,7 @@ import { getDepth, getOrderHistory } from "../../services/utility"
 import { ParentSize } from "@visx/responsive"
 import { select } from "@storybook/addon-knobs"
 
-export function Chart() {
+export function Chart(props: any) {
     const data = {
         id: "BitClout Market Price",
         data: [
@@ -166,6 +166,7 @@ export function Chart() {
                                 legend: "BitClout Market Price ($USD)",
                                 legendOffset: -45,
                                 legendPosition: "middle",
+                                tickValues: props.ticks,
                                 tickSize: 0,
                                 tickPadding: 10,
                                 tickRotation: 0,
