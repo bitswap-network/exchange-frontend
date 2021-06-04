@@ -7,7 +7,7 @@ import { getDepth, getOrderHistory } from "../../services/utility"
 import { ParentSize } from "@visx/responsive"
 import { select } from "@storybook/addon-knobs"
 
-export function Chart() {
+export function Chart(props: any) {
     const data = {
         id: "BitClout Market Price",
         data: [
@@ -58,7 +58,7 @@ export function Chart() {
     })
     const [loading, setLoading] = useState(true)
     const [minY, setMinY] = useState(0)
-    const [maxY, setMaxY] = useState(100)
+    const [maxY, setMaxY] = useState(0)
 
     useEffect(() => {
         getOrderHistory().then((response) => {
@@ -67,6 +67,8 @@ export function Chart() {
                 id: "BitClout Market Price",
                 data: [],
             }
+            let min = 1000000
+            let max = 0
             response.data.forEach(
                 (item: { timestamp: Date; price: number }) => {
                     const date = new Date(item.timestamp)
@@ -74,9 +76,13 @@ export function Chart() {
                         x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
                         y: item.price,
                     })
+                    min = Math.min(min, item.price - 30)
+                    max = Math.max(max, item.price + 30)
                 }
             )
             setDepth(parsedData)
+            setMinY(min)
+            setMaxY(max)
             setLoading(false)
         })
 
@@ -119,28 +125,61 @@ export function Chart() {
                     >
                         <ResponsiveLine
                             data={[depthHot]}
+                            colors="#4483ef"
+                            tooltip={(point) => {
+                                const date = new Date(point.point.data.x)
+                                    .toString()
+                                    .split(" ")
+                                return (
+                                    <Box
+                                        bgColor="white"
+                                        borderRadius="4"
+                                        padding="2"
+                                        boxShadow="md"
+                                        fontSize="xx-small"
+                                    >
+                                        {date[1] +
+                                            " " +
+                                            date[2] +
+                                            " " +
+                                            date[3] +
+                                            ", " +
+                                            point.point.data.y}
+                                    </Box>
+                                )
+                            }}
+                            margin={{
+                                left: 50,
+                                bottom: 50,
+                                right: 20,
+                                top: 20,
+                            }}
                             xScale={{
                                 type: "time",
                                 format: "%Y-%m-%d",
                                 useUTC: false,
                                 precision: "day",
                             }}
-                            yScale={{ type: "linear", min: 50, max: 200 }}
+                            yScale={{ type: "linear", min: minY, max: maxY }}
                             xFormat="time:%Y-%m-%d"
                             axisLeft={{
                                 legend: "BitClout Market Price ($USD)",
-                                legendOffset: 10,
+                                legendOffset: -45,
                                 legendPosition: "middle",
-                                tickSize: 5,
+                                tickValues: props.ticks,
+                                tickSize: 0,
+                                tickPadding: 10,
+                                tickRotation: 0,
                             }}
                             axisBottom={{
                                 format: "%b %d",
-                                tickValues: "every day",
+                                tickValues: "every week",
                                 legend: "Date",
-                                legendOffset: -12,
+                                legendOffset: 35,
                                 legendPosition: "middle",
                             }}
                             curve={"monotoneX"}
+                            areaBaselineValue={minY}
                             enablePointLabel={true}
                             // pointSymbol={CustomSymbol}
                             pointSize={8}

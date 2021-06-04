@@ -348,12 +348,16 @@ export function Wallet(): React.ReactElement {
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
+                                                    textTransform="capitalize"
                                                 >
-                                                    {transaction.transactionType.toUpperCase()}
+                                                    {
+                                                        transaction.transactionType
+                                                    }
                                                 </Td>
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
+                                                    textTransform="capitalize"
                                                 >
                                                     {globalVars.timeSince(
                                                         new Date(
@@ -366,12 +370,14 @@ export function Wallet(): React.ReactElement {
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
+                                                    textTransform="capitalize"
                                                 >
                                                     {transaction.assetType}
                                                 </Td>
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
+                                                    textTransform="capitalize"
                                                 >
                                                     {transaction.value
                                                         ? `${globalVars.formatBalanceLarge(
@@ -384,8 +390,9 @@ export function Wallet(): React.ReactElement {
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
+                                                    textTransform="capitalize"
                                                 >
-                                                    {transaction.state.toUpperCase()}
+                                                    {transaction.state}
                                                 </Td>
                                             </Tr>
                                         ))}

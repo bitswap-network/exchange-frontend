@@ -188,7 +188,7 @@ export function Orders(): React.ReactElement {
                             <Heading as="h2" size="md" mb="2">
                                 BitClout Market Value
                             </Heading>
-                            <Chart />
+                            <Chart ticks={6} />
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>
