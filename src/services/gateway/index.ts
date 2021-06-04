@@ -1,6 +1,11 @@
 import { authClient } from "../index"
 
-export const bitcloutPreflightTxn = async (value: number) => {
+export const depositBitcloutPreflightTxn = async (value: number) => {
+    return await authClient.post("/gateway/withdraw/bitclout-preflight", {
+        value: value,
+    })
+}
+export const withdrawBitcloutPreflightTxn = async (value: number) => {
     return await authClient.post("/gateway/withdraw/bitclout-preflight", {
         value: value,
     })

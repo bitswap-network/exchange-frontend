@@ -2,28 +2,11 @@
 import React, { useEffect, useState, useMemo } from "react"
 import { Box, Skeleton } from "@chakra-ui/react"
 import { ResponsiveLine } from "@nivo/line"
-import { ChartData as ChartDataInterface, Depth } from "../../interfaces/Depth"
-import { getDepth, getOrderHistory } from "../../services/utility"
+import { ChartData as ChartDataInterface } from "../../interfaces/Depth"
+import { getOrderHistory } from "../../services/utility"
 import { ParentSize } from "@visx/responsive"
-import { select } from "@storybook/addon-knobs"
 
 export function Chart(props: any) {
-    const data = {
-        id: "BitClout Market Price",
-        data: [
-            {
-                x: new Date(),
-                y: 100,
-            },
-        ],
-    }
-    const curveOptions = [
-        "linear",
-        "monotoneX",
-        "step",
-        "stepBefore",
-        "stepAfter",
-    ]
     interface CustomSymbolInterface {
         size: number
         color: string
@@ -65,7 +48,7 @@ export function Chart(props: any) {
             // console.log("orderhistoryrepsonse", response)
             const parsedData: ChartDataInterface = {
                 id: "BitClout Market Price",
-                data: [],
+                data: [{ timestamp: new Date("June 04, 2021"), price: 125 }],
             }
             let min = 1000000
             let max = 0
@@ -85,25 +68,6 @@ export function Chart(props: any) {
             setMaxY(max)
             setLoading(false)
         })
-
-        // getDepth("max").then((depthResponse) => {
-        //     const parsedData: ChartDataInterface = {
-        //         id: "BitClout Market Price",
-        //         data: [],
-        //     }
-        //     depthResponse.data.data.forEach((depthItem: Depth, i: number) => {
-        //         const date = new Date(depthItem.timestamp)
-        //         parsedData.data.push({
-        //             x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
-        //             y: depthItem.marketSell
-        //                 ? (depthItem.marketSell + depthItem.marketBuy) / 2
-        //                 : 100,
-        //         })
-        //     })
-        //     console.log("parsed depth", parsedData)
-        //     setDepth(parsedData)
-        //     setLoading(false)
-        // })
     }, [])
 
     return (
@@ -173,7 +137,7 @@ export function Chart(props: any) {
                             }}
                             axisBottom={{
                                 format: "%b %d",
-                                tickValues: "every week",
+                                tickValues: 3,
                                 legend: "Date",
                                 legendOffset: 35,
                                 legendPosition: "middle",
@@ -181,7 +145,7 @@ export function Chart(props: any) {
                             curve={"monotoneX"}
                             areaBaselineValue={minY}
                             enablePointLabel={true}
-                            // pointSymbol={CustomSymbol}
+                            pointSymbol={CustomSymbol}
                             pointSize={8}
                             pointBorderWidth={1}
                             pointBorderColor={{

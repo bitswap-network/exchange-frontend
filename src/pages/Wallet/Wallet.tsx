@@ -16,7 +16,7 @@ import { tokenState, userState } from "../../store"
 import { getEthUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
-import { bitcloutPreflightTxn } from "../../services/gateway"
+import { withdrawBitcloutPreflightTxn } from "../../services/gateway"
 import { TransactionModal } from "./TransactionModal"
 import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal"
 import { BitcloutDepositModal, EthDepositModal } from "./DepositModal"
@@ -110,7 +110,7 @@ export function Wallet(): React.ReactElement {
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
             if (user?.balance.bitclout > 0) {
-                bitcloutPreflightTxn(user.balance.bitclout)
+                withdrawBitcloutPreflightTxn(user.balance.bitclout)
                     .then((response) => {
                         resolve(
                             user.balance.bitclout -

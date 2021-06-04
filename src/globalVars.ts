@@ -13,7 +13,7 @@ export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
 
 export const MAX_LIMIT = 300
-export const MIN_LIMIT = 1
+export const MIN_LIMIT = 0.05
 
 const epochs: [string, number][] = [
     ["year", 31536000],

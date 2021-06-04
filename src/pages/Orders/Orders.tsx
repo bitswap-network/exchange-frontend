@@ -14,6 +14,7 @@ import {
     Table,
     Thead,
     Tbody,
+    Box,
     Tr,
     Th,
     Td,
@@ -178,17 +179,19 @@ export function Orders(): React.ReactElement {
                         <Flex
                             bg="white"
                             w="full"
-                            //h="full"
                             borderRadius="8"
                             boxShadow="xs"
                             align="center"
+                            justify="flex-start"
                             flexDir="column"
                             p="6"
                         >
                             <Heading as="h2" size="md" mb="2">
                                 BitClout Market Value
                             </Heading>
-                            <Chart ticks={6} />
+                            <Box w="full" h="270px">
+                                <Chart ticks={6} />
+                            </Box>
                             <Table variant="simple">
                                 <Thead>
                                     <Tr>
@@ -207,63 +210,6 @@ export function Orders(): React.ReactElement {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {/* {!orderbookIsLoading &&
-                                        !orderbookIsError &&
-                                        orderbook &&
-                                        globalVars
-                                            .zip(orderbook.asks, orderbook.bids)
-                                            .map((orderTuple) =>
-                                                orderTuple.map(
-                                                    (order, index) => {
-                                                        console.log("ok", order)
-                                                        return (
-                                                            <Tr
-                                                                key={Math.random().toString(
-                                                                    4
-                                                                )}
-                                                            >
-                                                                <Td
-                                                                    color={
-                                                                        index ===
-                                                                        0
-                                                                            ? "red.500"
-                                                                            : "green.500"
-                                                                    }
-                                                                    fontSize="sm"
-                                                                >
-                                                                    {index === 0
-                                                                        ? "Sell"
-                                                                        : "Buy"}
-                                                                </Td>
-                                                                <Td
-                                                                    color="gray.500"
-                                                                    fontSize="sm"
-                                                                >
-                                                                    {
-                                                                        order.priceString
-                                                                    }
-                                                                </Td>
-                                                                <Td
-                                                                    color="gray.500"
-                                                                    fontSize="sm"
-                                                                >
-                                                                    {
-                                                                        order.quantityString
-                                                                    }
-                                                                </Td>
-                                                                <Td
-                                                                    color="gray.500"
-                                                                    fontSize="sm"
-                                                                >
-                                                                    {
-                                                                        order.totalString
-                                                                    }
-                                                                </Td>
-                                                            </Tr>
-                                                        )
-                                                    }
-                                                )
-                                            )} */}
                                     {!orderbookIsLoading &&
                                         !orderbookIsError &&
                                         orderbook?.asks.map((order, i) => (

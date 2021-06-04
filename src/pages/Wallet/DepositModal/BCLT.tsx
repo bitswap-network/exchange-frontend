@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { userState, identityUsers } from "../../../store"
-import { bitcloutPreflightTxn } from "../../../services/gateway"
+import { depositBitcloutPreflightTxn } from "../../../services/gateway"
 import { handleBitcloutDeposit } from "../../../services/identity/helper"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
@@ -42,7 +42,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
     const [page, setPage] = useState<number>(0)
 
     const getPreflight = () => {
-        bitcloutPreflightTxn(parseFloat(depositValue))
+        depositBitcloutPreflightTxn(parseFloat(depositValue))
             .then((response) => {
                 setPreflight(response.data.data)
             })

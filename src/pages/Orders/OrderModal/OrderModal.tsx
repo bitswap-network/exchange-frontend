@@ -239,7 +239,7 @@ export function OrderModal({
                             Place a new buy or sell order for BitClout!
                         </Text>
                         <Tabs
-                            variant="enclosed"
+                            variant="soft-rounded"
                             colorScheme="messenger"
                             mt="0.5em"
                             size="md"
@@ -283,15 +283,16 @@ export function OrderModal({
                                             </Text>
                                             <Select
                                                 value={orderType}
+                                                textTransform="capitalize"
                                                 onChange={(e) =>
                                                     setOrderType(e.target.value)
                                                 }
                                             >
                                                 <option value="market">
-                                                    Market Order
+                                                    Market Buy
                                                 </option>
                                                 <option value="limit">
-                                                    Limit Order
+                                                    Limit Buy
                                                 </option>
                                             </Select>
                                         </FormControl>
@@ -306,14 +307,15 @@ export function OrderModal({
                                                 Quantity of BCLT
                                             </Text>
                                             <NumberInput
-                                                min={0.05}
+                                                min={globalVars.MIN_LIMIT}
+                                                max={globalVars.MAX_LIMIT}
                                                 value={orderQuantity}
                                                 onChange={(valueString) =>
                                                     setOrderQuantity(
                                                         parseNum(valueString)
                                                     )
                                                 }
-                                                step={1}
+                                                step={0.1}
                                             >
                                                 <NumberInputField />
                                                 <NumberInputStepper>
@@ -345,7 +347,7 @@ export function OrderModal({
                                                             )
                                                         )
                                                     }
-                                                    step={1}
+                                                    step={0.1}
                                                 >
                                                     <NumberInputField />
                                                     <NumberInputStepper>
@@ -434,15 +436,16 @@ export function OrderModal({
                                             </Text>
                                             <Select
                                                 value={orderType}
+                                                textTransform="capitalize"
                                                 onChange={(e) =>
                                                     setOrderType(e.target.value)
                                                 }
                                             >
                                                 <option value="market">
-                                                    Market Order
+                                                    Market Sell
                                                 </option>
                                                 <option value="limit">
-                                                    Limit Order
+                                                    Limit Sell
                                                 </option>
                                             </Select>
                                         </FormControl>
@@ -465,7 +468,7 @@ export function OrderModal({
                                                         parseNum(valueString)
                                                     )
                                                 }
-                                                step={1}
+                                                step={0.1}
                                             >
                                                 <NumberInputField />
                                                 <NumberInputStepper>
@@ -487,7 +490,7 @@ export function OrderModal({
                                                 </Text>
                                                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                                                 <NumberInput
-                                                    min={globalVars.MIN_LIMIT}
+                                                    min={0}
                                                     value={limitPrice}
                                                     onChange={(valueString) =>
                                                         setLimitPrice(
