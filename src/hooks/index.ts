@@ -56,3 +56,25 @@ interface orderSideString {
     priceString: string
     quantityString: string
 }
+
+export function useUser(token: string) {
+    const { data, error } = useSWR(
+        token ? `${api}user/data` : null,
+        (url) =>
+            axios
+                .get(url, {
+                    headers: {
+                        "x-access-token": token,
+                    },
+                })
+                .then((res) => res.data),
+        {
+            refreshInterval: 10000,
+        }
+    )
+    return {
+        user: data,
+        userIsLoading: !error && !data,
+        userIsError: error,
+    }
+}

@@ -28,7 +28,7 @@ import {
 } from "@chakra-ui/react"
 import { BlueButton } from "../../../components/BlueButton"
 import { useRecoilValue } from "recoil"
-import { userState } from "../../../store"
+import { tokenState, userState } from "../../../store"
 import {
     createMarketOrder,
     createLimitOrder,
@@ -36,6 +36,7 @@ import {
 } from "../../../services/order"
 import { getEthUSD } from "../../../services/utility"
 import * as globalVars from "../../../globalVars"
+import { useUser } from "../../../hooks"
 
 type OrderModalProps = Omit<ModalProps, "children">
 
@@ -43,7 +44,8 @@ export function OrderModal({
     isOpen,
     onClose,
 }: OrderModalProps): React.ReactElement {
-    const user = useRecoilValue(userState)
+    const token = useRecoilValue(tokenState)
+    const { user, userIsLoading, userIsError } = useUser(token)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
     const parseNum = (val: string) => val.replace(/^\$/, "")
     const [tabIndex, setTabIndex] = useState<number>(0)
@@ -234,7 +236,7 @@ export function OrderModal({
                             Create Order
                         </Text>
                         <Text color="gray.500" fontSize="sm" mb="4">
-                            Place a new buy or sell order for bitclout!
+                            Place a new buy or sell order for BitClout!
                         </Text>
                         <Tabs
                             variant="enclosed"
@@ -252,6 +254,23 @@ export function OrderModal({
                             <TabPanels>
                                 <TabPanel>
                                     <Stack spacing={4}>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                Current ETH Balance{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                {user?.balance.ether.toFixed(6)}
+                                            </Text>
+                                        </HStack>
                                         <FormControl id="orderType">
                                             <Text
                                                 color="gray.600"
@@ -384,6 +403,25 @@ export function OrderModal({
                                 </TabPanel>
                                 <TabPanel>
                                     <Stack spacing={4}>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                Current BCLT Balance{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                {user?.balance.bitclout.toFixed(
+                                                    6
+                                                )}
+                                            </Text>
+                                        </HStack>
                                         <FormControl id="orderType">
                                             <Text
                                                 color="gray.600"

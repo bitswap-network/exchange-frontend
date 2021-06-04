@@ -54,12 +54,13 @@ export const BalanceCard = (props: any) => {
                 >
                     <Tooltip
                         label={
-                            balance.amount.toString() + " " + balance.currency
+                            balance.amount?.toString() + " " + balance.currency
                         }
                         aria-label=""
                     >
                         <Text fontSize="3xl" color="gray.600">
-                            ~{globalVars.formatBalanceLarge(balance.amount)}{" "}
+                            ~
+                            {globalVars.formatBalanceLarge(balance.amount ?? 0)}{" "}
                             {balance.currency}
                         </Text>
                     </Tooltip>
