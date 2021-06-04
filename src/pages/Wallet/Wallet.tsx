@@ -12,8 +12,8 @@ import { BalanceCard } from "../../components/BalanceCard"
 import { CryptoCard } from "../../components/CryptoCard"
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
-import { userState } from "../../store"
-import { getEthUSD, getBitcloutUSD } from "../../services/utility"
+import { tokenState, userState } from "../../store"
+import { getEthUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
 import { bitcloutPreflightTxn } from "../../services/gateway"
@@ -21,12 +21,15 @@ import { TransactionModal } from "./TransactionModal"
 import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal"
 import { BitcloutDepositModal, EthDepositModal } from "./DepositModal"
 import * as globalVars from "../../globalVars"
+import { useUser } from "../../hooks"
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
-    const user = useRecoilValue(userState)
+    // const user = useRecoilValue(userState)
+    const token = useRecoilValue(tokenState)
+    const { user, userIsLoading, userIsError } = useUser(token)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
-    const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
+    // const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
     const [selectedCurrency, setSelectedCurrency] = useState<{
         type: string
         maxWithdraw: number
@@ -61,9 +64,9 @@ export function Wallet(): React.ReactElement {
             console.log(response.data.data)
             setEthUsd(response.data.data)
         })
-        getBitcloutUSD().then((response) => {
-            setBitcloutUsd(response.data.data)
-        })
+        // getBitcloutUSD().then((response) => {
+        //     setBitcloutUsd(response.data.data)
+        // })
         getTransactions().then((response) => {
             setTransactions(response.data.data)
         })
@@ -90,9 +93,8 @@ export function Wallet(): React.ReactElement {
         imageUri: "./bitcloutLogo.png",
         imageAlt: "BitClout Logo",
         currency: "BCLT",
-        amount: user.balance.bitclout,
-        usdValue: bitcloutUsd ? bitcloutUsd * user.balance.bitclout : null,
-        publicKey: user.bitclout.publicKey,
+        amount: user?.balance.bitclout,
+        publicKey: user?.bitclout.publicKey,
     }
 
     const ETH = {
@@ -100,14 +102,14 @@ export function Wallet(): React.ReactElement {
             "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
         imageAlt: "Ether Logo",
         currency: "ETH",
-        amount: user.balance.ether,
-        usdValue: ethUsd ? ethUsd * user.balance.ether : null,
+        amount: user?.balance.ether,
+        usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
         publicKey: "",
     }
     //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
-            if (user.balance.bitclout > 0) {
+            if (user?.balance.bitclout > 0) {
                 bitcloutPreflightTxn(user.balance.bitclout)
                     .then((response) => {
                         resolve(
@@ -127,7 +129,7 @@ export function Wallet(): React.ReactElement {
 
     const getMaxEth = (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
-            if (user.balance.ether > 0) {
+            if (user?.balance.ether > 0) {
                 resolve(user.balance.ether)
             } else {
                 resolve(0)
@@ -281,7 +283,7 @@ export function Wallet(): React.ReactElement {
                                         amount={ETH.amount}
                                         usdValue={
                                             ethUsd
-                                                ? ethUsd * user.balance.ether
+                                                ? ethUsd * user?.balance.ether
                                                 : null
                                         }
                                     />

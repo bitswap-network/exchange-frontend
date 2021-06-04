@@ -1,7 +1,7 @@
 import { authClient } from "../index"
 
 export const bitcloutPreflightTxn = async (value: number) => {
-    return await authClient.post("/gateway/deposit/bitclout-preflight", {
+    return await authClient.post("/gateway/withdraw/bitclout-preflight", {
         value: value,
     })
 }
