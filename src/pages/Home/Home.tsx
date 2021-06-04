@@ -59,8 +59,8 @@ export function Home(): React.ReactElement {
                             d="flex"
                             w="100%"
                             pos="relative"
-                            marginTop={4}
-                            padding={4}
+                            marginTop="4"
+                            paddingLeft="2"
                         >
                             {/* <BitCloutChart /> */}
                             <Chart />
