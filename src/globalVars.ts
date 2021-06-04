@@ -6,6 +6,9 @@ export const api =
         : "https://bitswap-core-api-staging.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
+export const etherscanPrefix =
+    process.env.CONTEXT === "production" ? "" : "kovan."
+
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
 
