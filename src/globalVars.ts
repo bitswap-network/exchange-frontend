@@ -1,15 +1,18 @@
 import { useEffect, useRef } from "react"
 
 export const api =
-    process.env.NODE_ENV === "development"
-        ? "https://bitswap-core-api-staging.herokuapp.com/"
-        : "https://bitwap-core-api.herokuapp.com/"
+    process.env.CONTEXT === "production"
+        ? "https://bitwap-core-api.herokuapp.com/"
+        : "https://bitswap-core-api-staging.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
+
+export const etherscanPrefix =
+    process.env.CONTEXT === "production" ? "" : "kovan."
 
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
 
-export const MAX_LIMIT = 200
+export const MAX_LIMIT = 300
 export const MIN_LIMIT = 1
 
 const epochs: [string, number][] = [
@@ -31,10 +34,10 @@ export function timeSince(date: Date) {
 }
 
 export const formatBalanceSmall = (balance: number) => {
-    return +balance.toFixed(4)
+    return +balance?.toFixed(4)
 }
 export const formatBalanceLarge = (balance: number) => {
-    return +balance.toFixed(6)
+    return +balance?.toFixed(6)
 }
 
 export const formateDateTime = (date: Date) => {

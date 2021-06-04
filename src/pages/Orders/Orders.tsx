@@ -90,9 +90,9 @@ export function Orders(): React.ReactElement {
 
     const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
 
-    if (!orderbookIsLoading && !orderbookIsError) {
-        console.log("orderbook", orderbook)
-    }
+    // if (true) {
+    console.log("orderbook", orderbookIsError, orderbookIsLoading, orderbook)
+    // }
 
     return (
         <>
