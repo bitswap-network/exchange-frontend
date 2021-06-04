@@ -99,18 +99,7 @@ export function Home(): React.ReactElement {
                             data={
                                 !orderbookIsLoading && !orderbookIsError
                                     ? orderbook!.bids
-                                    : [
-                                          {
-                                              priceString: "$100 USD",
-                                              quantityString: "1 BCLT",
-                                              totalString: "$100 USD",
-                                          },
-                                          {
-                                              priceString: "$100 USD",
-                                              quantityString: "1 BCLT",
-                                              totalString: "$100 USD",
-                                          },
-                                      ]
+                                    : []
                             }
                             columns={columns}
                         />
