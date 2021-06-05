@@ -15,6 +15,8 @@ export const CryptoCard = (props: any) => {
 
     return (
         <Button
+            border={props.active ? "3px solid #94b5ff" : "0px solid #94b5ff"}
+            boxSizing="border-box"
             d="flex"
             alignItems="center"
             justifyContent="flex-start"

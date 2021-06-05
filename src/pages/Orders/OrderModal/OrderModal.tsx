@@ -61,7 +61,7 @@ export function OrderModal({
         defaultValue: "0",
     })
     const [orderType, setOrderType] = useControllableState({
-        defaultValue: "market",
+        defaultValue: "limit",
     })
     const [orderSide, setOrderSide] = useControllableState({
         defaultValue: "buy",

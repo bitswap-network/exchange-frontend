@@ -18,6 +18,8 @@ import {
     HStack,
     Link,
     VStack,
+    Checkbox,
+    CheckboxGroup,
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { HiCheckCircle } from "react-icons/hi"
@@ -42,6 +44,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
     maxWithdraw,
 }: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
+    const [checked, setChecked] = useState<boolean>(false)
     const [withdrawValue, setWithdrawValue] = useState<string>("0")
     const [page, setPage] = useState(0)
     const [ethAddressInput, setEthAddressInput] = useState<string>("")
@@ -297,6 +300,17 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                         entered correctly. Once the confirm button is clicked,
                         the transaction can no longer be modified.
                     </Text>
+                    <Checkbox
+                        isChecked={checked}
+                        onChange={(e) => setChecked(e.target.checked)}
+                        isInvalid={!checked}
+                        mt="4"
+                    >
+                        <Text fontSize="xs" color="gray.600">
+                            I confirm that the entered information is correct
+                            and valid.
+                        </Text>
+                    </Checkbox>
                     <Flex
                         flexDir="row"
                         justifyContent="space-between"
@@ -315,6 +329,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             isDisabled={
                                 parseFloat(withdrawValue) > maxWithdraw ||
                                 parseFloat(withdrawValue) <= 0 ||
+                                !checked ||
                                 !isAddress(ethAddressInput)
                             }
                             w="47%"

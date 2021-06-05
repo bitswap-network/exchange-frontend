@@ -55,6 +55,7 @@ export function Table<T extends Record<string, unknown>>({
                                     isNumeric={column.isNumeric}
                                     pt="4"
                                     pb="4"
+                                    verticalAlign="top"
                                 >
                                     {column.render("Header")}
                                     <chakra.span>

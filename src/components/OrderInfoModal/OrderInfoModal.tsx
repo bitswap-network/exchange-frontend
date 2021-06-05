@@ -184,22 +184,12 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                             mt="6"
                             mb="4"
                         >
-                            {!order.complete && (
-                                <Button
-                                    w="full"
-                                    onClick={cancelOrderHandler}
-                                    isLoading={cancelLoading}
-                                    mr="4"
-                                    variant="ghost"
-                                >
-                                    Cancel
-                                </Button>
-                            )}
                             <BlueButton
                                 w="full"
-                                text={`   Close   `}
+                                text={`   Cancel Order   `}
                                 mr={order.complete ? "0" : "4"}
-                                onClick={disclosure.onClose}
+                                onClick={cancelOrderHandler}
+                                isLoading={cancelLoading}
                             />
                         </Flex>
                     </Flex>
