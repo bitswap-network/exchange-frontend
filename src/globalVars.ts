@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react"
 
-export const api =
-    process.env.ENVIRONMENT === "production"
-        ? "https://bitwap-core-api.herokuapp.com/"
-        : "https://bitswap-core-api-staging.herokuapp.com/"
+export const isTest =
+    process.env.REACT_APP_ENVIRONMENT === "production" ? true : false
+
+export const api = isTest
+    ? "https://bitwap-core-api.herokuapp.com/"
+    : "https://bitswap-core-api-staging.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
-export const etherscanPrefix =
-    process.env.REACT_APP_ENVIRONMENT === "production" ? "" : "kovan."
+export const etherscanPrefix = isTest ? "" : "kovan."
 
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"
