@@ -260,7 +260,8 @@ export function OrderModal({
                                                 fontSize="sm"
                                             >
                                                 {" "}
-                                                Current ETH Balance{" "}
+                                                Current {globalVars.ETHER}{" "}
+                                                Balance{" "}
                                             </Text>
                                             <Spacer />
                                             <Text
@@ -412,7 +413,10 @@ export function OrderModal({
                                                 fontSize="sm"
                                             >
                                                 {" "}
-                                                Current BCLT Balance{" "}
+                                                Current {
+                                                    globalVars.BITCLOUT
+                                                }{" "}
+                                                Balance{" "}
                                             </Text>
                                             <Spacer />
                                             <Text

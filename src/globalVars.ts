@@ -13,7 +13,7 @@ export const etherscanPrefix = isTest ? "kovan." : ""
 export const BITCLOUT = "CLOUT"
 export const ETHER = "ETH"
 
-export const MAX_LIMIT = 300
+export const MAX_LIMIT = 1000
 export const MIN_LIMIT = 0.05
 
 const epochs: [string, number][] = [
