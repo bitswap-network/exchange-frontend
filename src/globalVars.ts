@@ -7,7 +7,7 @@ export const api =
 export const identityURL = "https://identity.bitclout.com"
 
 export const etherscanPrefix =
-    process.env.ENVIRONMENT === "production" ? "" : "kovan."
+    process.env.REACT_APP_ENVIRONMENT === "production" ? "" : "kovan."
 
 export const BITCLOUT = "BCLT"
 export const ETHER = "ETH"

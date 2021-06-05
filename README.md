@@ -1,5 +1,9 @@
 # Exchange Frontend
 
+### Staging Env:
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1814a2f9-9a84-4f3d-9725-7c8867813788/deploy-status)](https://app.netlify.com/sites/bitswap-exchange-staging/deploys)
+
 ## Available Scripts
 
 In the project directory, you can run:
