@@ -4,7 +4,7 @@ export const isTest =
     process.env.REACT_APP_ENVIRONMENT === "production" ? true : false
 
 export const api = isTest
-    ? "https://bitwap-core-api.herokuapp.com/"
+    ? "https://bitswap-core-api.herokuapp.com/"
     : "https://bitswap-core-api-staging.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
