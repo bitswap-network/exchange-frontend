@@ -18,4 +18,4 @@
 # All deploys that are not from a pull/merge request
 # or from the production branch will inherit these settings.
 [context.branch-deploy]
-  command = "branch-deploy"
+  ENVIRONMENT = "deploy-preview"
