@@ -169,7 +169,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                                     </Text>
                                     <Link
                                         isExternal
-                                        href={`https://etherscan.io/tx/${etherscanID}`}
+                                        href={`https://${globalVars.etherscanPrefix}etherscan.io/tx/${etherscanID}`}
                                         color="brand.100"
                                         fontWeight="600"
                                         textDecor="underline"
