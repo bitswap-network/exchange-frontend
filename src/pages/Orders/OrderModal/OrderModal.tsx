@@ -269,7 +269,9 @@ export function OrderModal({
                                                 fontSize="sm"
                                                 fontWeight="600"
                                             >
-                                                {user?.balance.ether.toFixed(6)}
+                                                {globalVars.formatBalanceLarge(
+                                                    user?.balance.ether
+                                                )}
                                             </Text>
                                         </HStack>
                                         <FormControl id="orderType">
@@ -310,7 +312,6 @@ export function OrderModal({
                                             </Text>
                                             <NumberInput
                                                 min={globalVars.MIN_LIMIT}
-                                                max={globalVars.MAX_LIMIT}
                                                 value={orderQuantity}
                                                 onChange={(valueString) =>
                                                     setOrderQuantity(
@@ -318,6 +319,7 @@ export function OrderModal({
                                                     )
                                                 }
                                                 step={0.1}
+                                                precision={globalVars.MIN_LIMIT}
                                             >
                                                 <NumberInputField />
                                                 <NumberInputStepper>
@@ -350,6 +352,9 @@ export function OrderModal({
                                                         )
                                                     }
                                                     step={0.1}
+                                                    precision={
+                                                        globalVars.MIN_LIMIT
+                                                    }
                                                 >
                                                     <NumberInputField />
                                                     <NumberInputStepper>
@@ -424,8 +429,8 @@ export function OrderModal({
                                                 fontSize="sm"
                                                 fontWeight="600"
                                             >
-                                                {user?.balance.bitclout.toFixed(
-                                                    6
+                                                {globalVars.formatBalanceLarge(
+                                                    user?.balance.bitclout
                                                 )}
                                             </Text>
                                         </HStack>
@@ -467,7 +472,11 @@ export function OrderModal({
                                             </Text>
                                             <NumberInput
                                                 min={globalVars.MIN_LIMIT}
-                                                max={globalVars.MAX_LIMIT}
+                                                max={
+                                                    user
+                                                        ? user.balance.bitclout
+                                                        : 0
+                                                }
                                                 value={orderQuantity}
                                                 onChange={(valueString) =>
                                                     setOrderQuantity(
@@ -475,6 +484,7 @@ export function OrderModal({
                                                     )
                                                 }
                                                 step={0.1}
+                                                precision={globalVars.MIN_LIMIT}
                                             >
                                                 <NumberInputField />
                                                 <NumberInputStepper>
@@ -506,6 +516,7 @@ export function OrderModal({
                                                         )
                                                     }
                                                     step={1}
+                                                    precision={1}
                                                 >
                                                     <NumberInputField />
                                                     <NumberInputStepper>
