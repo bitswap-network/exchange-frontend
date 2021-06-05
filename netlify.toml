@@ -1,0 +1,21 @@
+# Production context:
+# All deploys from the main repository branch
+# will inherit these settings.
+
+[context.production.environment]
+  ENVIRONMENT = "production"
+# Deploys from main branch run this plugin in the build.
+# Plugins context requires double brackets.
+
+
+# Deploy Preview context:
+# All deploys generated from a pull/merge request
+# will inherit these settings.
+[context.deploy-preview.environment]
+  ENVIRONMENT = "deploy-preview"
+
+# Branch deploy context:
+# All deploys that are not from a pull/merge request
+# or from the production branch will inherit these settings.
+[context.branch-deploy]
+  command = "branch-deploy"
