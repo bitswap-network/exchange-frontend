@@ -189,7 +189,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                             <BlueButton
                                 w="full"
                                 text={`   Close   `}
-                                mr={!order.complete ? "0" : "4"}
+                                mr={order.complete ? "0" : "4"}
                                 onClick={disclosure.onClose}
                                 isLoading={cancelLoading}
                                 ghost
@@ -199,7 +199,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                                     <BlueButton
                                         w="full"
                                         text={`   Cancel Order   `}
-                                        ml={!order.complete ? "0" : "4"}
+                                        ml={"4"}
                                         onClick={cancelOrderHandler}
                                         isLoading={cancelLoading}
                                     />
