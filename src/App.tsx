@@ -29,6 +29,8 @@ const tagManagerArgs = {
 
 window.addEventListener("message", identityHandler)
 
+console.log(process.env)
+
 export const App = (): ReactElement => {
     return (
         <>
