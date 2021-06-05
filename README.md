@@ -1,5 +1,9 @@
 # Exchange Frontend
 
+### Production Env:
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/55e68c7e-1ef4-479b-8429-3dee25a3bab2/deploy-status)](https://app.netlify.com/sites/bitswap-exchange/deploys)
+
 ### Staging Env:
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/1814a2f9-9a84-4f3d-9725-7c8867813788/deploy-status)](https://app.netlify.com/sites/bitswap-exchange-staging/deploys)
