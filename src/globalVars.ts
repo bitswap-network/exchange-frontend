@@ -4,13 +4,13 @@ export const isTest =
     process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
 
 export const api = isTest
-    ? "https://bitswap-core-api.herokuapp.com/"
-    : "https://bitswap-core-api-staging.herokuapp.com/"
+    ? "https://bitswap-core-api-staging.herokuapp.com/"
+    : "https://bitswap-core-api.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
-export const etherscanPrefix = isTest ? "" : "kovan."
+export const etherscanPrefix = isTest ? "kovan." : ""
 
-export const BITCLOUT = "BCLT"
+export const BITCLOUT = "CLOUT"
 export const ETHER = "ETH"
 
 export const MAX_LIMIT = 300
