@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 
 export const isTest =
-    process.env.REACT_APP_ENVIRONMENT === "production" ? true : false
+    process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
 
 export const api = isTest
     ? "https://bitswap-core-api.herokuapp.com/"
