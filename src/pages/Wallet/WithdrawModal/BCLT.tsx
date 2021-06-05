@@ -136,15 +136,15 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                         mt="6%"
                         mb="8%"
                     >
-                        <Button
+                        <BlueButton
+                            text={`   Modify   `}
                             w="47%"
-                            variant="ghost"
+                            ghost
                             onClick={() => {
                                 setPage(0)
                             }}
-                        >
-                            Modify
-                        </Button>
+                        />
+
                         <BlueButton
                             w="47%"
                             text={`   Confirm   `}
@@ -256,7 +256,6 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             w="47%"
                             text={`   Continue   `}
                             onClick={() => setPage(1)}
-                            icon
                         />
                     </Flex>
                 </Flex>

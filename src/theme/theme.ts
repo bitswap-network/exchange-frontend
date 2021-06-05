@@ -22,6 +22,11 @@ export const bitswapTheme = extendTheme({
             200: "#204cab",
             error: "#C70E0E",
         },
+        brandSubtle: {
+            100: "#fafcff",
+            150: "#F3F7FF",
+            200: "#edf3ff",
+        },
         background: {
             primary: "#faf9f8",
             secondary: "#262626",

@@ -77,7 +77,7 @@ export function OrderModal({
                 .catch((error) => {
                     console.error(error)
                     setPriceError(
-                        `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} BCLT.`
+                        `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
                     )
                 })
         } else if (isOpen) {
@@ -106,7 +106,7 @@ export function OrderModal({
                     console.error(error)
                     orderType === "market"
                         ? setPriceError(
-                              `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} BCLT.`
+                              `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
                           )
                         : setPriceError(null)
                 })
@@ -304,7 +304,8 @@ export function OrderModal({
                                                 mt="2"
                                                 mb="2"
                                             >
-                                                Quantity of BCLT
+                                                Quantity of{" "}
+                                                {globalVars.BITCLOUT}
                                             </Text>
                                             <NumberInput
                                                 min={globalVars.MIN_LIMIT}
@@ -457,7 +458,8 @@ export function OrderModal({
                                                 mt="2"
                                                 mb="2"
                                             >
-                                                Quantity of BCLT
+                                                Quantity of{" "}
+                                                {globalVars.BITCLOUT}
                                             </Text>
                                             <NumberInput
                                                 min={globalVars.MIN_LIMIT}
@@ -576,9 +578,12 @@ export function OrderModal({
                             mt="6"
                             mb="6"
                         >
-                            <Button w="47%" variant="solid" onClick={onClose}>
-                                Cancel
-                            </Button>
+                            <BlueButton
+                                w="47%"
+                                onClick={onClose}
+                                ghost
+                                text={`   Cancel   `}
+                            />
                             <BlueButton
                                 w="47%"
                                 text={`   Continue   `}
@@ -661,7 +666,7 @@ export function OrderModal({
                             </Text>
                             <Spacer />
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {orderQuantity} BCLT
+                                {orderQuantity} {globalVars.BITCLOUT}
                             </Text>
                         </HStack>
 

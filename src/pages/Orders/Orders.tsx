@@ -29,7 +29,7 @@ import {
 import { Chart } from "../../components/BitCloutChart/Chart"
 import { OrderTable } from "./OrderTable"
 import { OrderModal } from "./OrderModal"
-import { useOrderBook, orderBookInterface } from "../../hooks"
+import { useOrderBook } from "../../hooks"
 import { getOrders } from "../../services/user"
 import * as globalVars from "../../globalVars"
 import { useRecoilState } from "recoil"
@@ -55,16 +55,20 @@ export function Orders(): React.ReactElement {
                 ...order,
                 tldr: `${globalVars.capFirst(order.orderSide)} ${
                     order.orderQuantity
-                } BCLT (${globalVars.capFirst(order.orderType)})`,
+                } ${globalVars.BITCLOUT} (${globalVars.capFirst(
+                    order.orderType
+                )})`,
                 status: `${
-                    order.complete
+                    order.error !== ""
+                        ? "Error"
+                        : order.complete
                         ? "Closed"
                         : order.orderQuantityProcessed > 0
                         ? "Partial"
                         : "Active"
                 }`,
                 orderTypeCapped: globalVars.capFirst(order.orderType),
-                quantityString: `${order.orderQuantity} BCLT`,
+                quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
                 priceString: `${
                     order.orderPrice ? `$${order.orderPrice}` : "-"
                 }`,
@@ -189,7 +193,7 @@ export function Orders(): React.ReactElement {
                             <Heading as="h2" size="md" mb="2">
                                 BitClout Market Value
                             </Heading>
-                            <Box w="full" h="270px">
+                            <Box w="full" h="30vh">
                                 <Chart ticks={6} />
                             </Box>
                             <Table variant="simple">

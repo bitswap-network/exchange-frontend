@@ -1,6 +1,6 @@
 import axios from "axios"
 import useSWR from "swr"
-import { api } from "../globalVars"
+import { api, BITCLOUT } from "../globalVars"
 
 export function useOrderBook() {
     const { data, error } = useSWR(
@@ -16,7 +16,7 @@ export function useOrderBook() {
                         askArr.push({
                             totalString: `$${ask.price * ask.quantity} USD`,
                             priceString: `$${ask.price} USD`,
-                            quantityString: `${ask.quantity} BCLT`,
+                            quantityString: `${ask.quantity} ${BITCLOUT}`,
                         })
                     )
                 res.data.bids &&
@@ -25,7 +25,7 @@ export function useOrderBook() {
                             ...bid,
                             totalString: `$${bid.price * bid.quantity} USD`,
                             priceString: `$${bid.price} USD`,
-                            quantityString: `${bid.quantity} BCLT`,
+                            quantityString: `${bid.quantity} ${BITCLOUT}`,
                         })
                     )
                 return { asks: askArr, bids: bidArr }

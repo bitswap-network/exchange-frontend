@@ -34,7 +34,7 @@ export function Wallet(): React.ReactElement {
         type: string
         maxWithdraw: number
     }>({
-        type: "BCLT",
+        type: globalVars.BITCLOUT,
         maxWithdraw: 0,
     })
     const [transactions, setTransactions] = useState<TransactionSchema[]>([])
@@ -72,10 +72,10 @@ export function Wallet(): React.ReactElement {
         })
     }, [])
     useEffect(() => {
-        if (selectedCurrency.type === "BCLT") {
+        if (selectedCurrency.type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
                 setSelectedCurrency({
-                    type: "BCLT",
+                    type: globalVars.BITCLOUT,
                     maxWithdraw: max,
                 })
             })
@@ -92,7 +92,7 @@ export function Wallet(): React.ReactElement {
     const BCLT = {
         imageUri: "./bitcloutLogo.png",
         imageAlt: "BitClout Logo",
-        currency: "BCLT",
+        currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
         publicKey: user?.bitclout.publicKey,
     }
@@ -101,7 +101,7 @@ export function Wallet(): React.ReactElement {
         imageUri:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
         imageAlt: "Ether Logo",
-        currency: "ETH",
+        currency: globalVars.ETHER,
         amount: user?.balance.ether,
         usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
         publicKey: "",
@@ -138,17 +138,17 @@ export function Wallet(): React.ReactElement {
     }
 
     const handleCurrencyChange = (type: string) => {
-        if (type === "BCLT") {
+        if (type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
                 setSelectedCurrency({
-                    type: "BCLT",
+                    type: globalVars.BITCLOUT,
                     maxWithdraw: max,
                 })
             })
         } else {
             getMaxEth().then((max) => {
                 setSelectedCurrency({
-                    type: "ETH",
+                    type: globalVars.ETHER,
                     maxWithdraw: max,
                 })
             })
@@ -170,7 +170,7 @@ export function Wallet(): React.ReactElement {
                 }}
                 transaction={currentTransaction}
             />
-            {selectedCurrency.type == "BCLT" ? (
+            {selectedCurrency.type == globalVars.BITCLOUT ? (
                 <>
                     <BitcloutDepositModal
                         disclosure={{
@@ -228,12 +228,19 @@ export function Wallet(): React.ReactElement {
                             >
                                 <Box
                                     pb="4"
-                                    onClick={() => handleCurrencyChange("BCLT")}
+                                    onClick={() =>
+                                        handleCurrencyChange(
+                                            globalVars.BITCLOUT
+                                        )
+                                    }
                                     w="full"
                                     maxW="sm"
                                 >
                                     <CryptoCard
-                                        active={selectedCurrency.type == "BCLT"}
+                                        active={
+                                            selectedCurrency.type ==
+                                            globalVars.BITCLOUT
+                                        }
                                         imageUrl={BCLT.imageUri}
                                         imageAlt={BCLT.imageAlt}
                                         currency={BCLT.currency}
@@ -242,12 +249,17 @@ export function Wallet(): React.ReactElement {
                                     />
                                 </Box>
                                 <Box
-                                    onClick={() => handleCurrencyChange("ETH")}
+                                    onClick={() =>
+                                        handleCurrencyChange(globalVars.ETHER)
+                                    }
                                     w="full"
                                     maxW="sm"
                                 >
                                     <CryptoCard
-                                        active={selectedCurrency.type == "ETH"}
+                                        active={
+                                            selectedCurrency.type ==
+                                            globalVars.ETHER
+                                        }
                                         imageUrl={ETH.imageUri}
                                         imageAlt={ETH.imageAlt}
                                         currency={ETH.currency}
@@ -263,7 +275,8 @@ export function Wallet(): React.ReactElement {
                                 }}
                                 w="full"
                             >
-                                {selectedCurrency.type == "BCLT" ? (
+                                {selectedCurrency.type ==
+                                globalVars.BITCLOUT ? (
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}

@@ -13,6 +13,7 @@ interface BlueButtonProps extends ButtonProps {
     width?: any
     loading?: boolean
     disabled?: boolean
+    ghost?: boolean
 }
 
 export const BlueButton: React.FC<BlueButtonProps> = ({
@@ -21,22 +22,34 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
     width,
     loading,
     disabled,
+    ghost,
     ...rest
 }: BlueButtonProps) => {
-    return (
+    return !ghost ? (
         <Button
             isLoading={loading}
-            boxShadow="md"
-            bg="brand.100"
+            boxShadow={"md"}
+            bg={ghost ? "brandSubtle.100" : "brand.100"}
             opacity={disabled ? 0.6 : 1}
             _hover={{
-                bg: "brand.150",
+                bg: `${ghost ? "brandSubtle.150" : "brand.150"}`,
             }}
             _active={{
-                bg: "brand.200",
+                bg: `${ghost ? "brandSubtle.200" : "brand.200"}`,
             }}
             width={width ? width : ""}
-            color="white"
+            color={ghost ? "black" : "white"}
+            rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
+            {...rest}
+        >
+            <Text fontSize="15px">{text}</Text>
+        </Button>
+    ) : (
+        <Button
+            variant={"solid"}
+            isLoading={loading}
+            opacity={disabled ? 0.6 : 1}
+            width={width ? width : ""}
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
         >

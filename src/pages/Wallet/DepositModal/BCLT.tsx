@@ -40,6 +40,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
     const [preflight, setPreflight] =
         useState<TransactionAPIInterface | null>(null)
     const [page, setPage] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const getPreflight = () => {
         depositBitcloutPreflightTxn(parseFloat(depositValue))
@@ -52,6 +53,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
     }
 
     const submitDeposit = () => {
+        setLoading(true)
         if (preflight) {
             const depositObj = {
                 accessLevel:
@@ -66,9 +68,11 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
             }
             handleBitcloutDeposit(depositObj)
                 .then((response) => {
+                    setLoading(false)
                     setPage(page + 1)
                 })
                 .catch((error) => {
+                    setLoading(false)
                     console.error(error)
                 })
         }
@@ -173,6 +177,8 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
                             w="47%"
                             text={`   Confirm   `}
                             onClick={submitDeposit}
+                            loading={loading}
+                            icon
                         />
                     </Flex>
                 </Flex>

@@ -120,7 +120,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                                     fontWeight="600"
                                     mt="2"
                                 >
-                                    PRICE PER BCLT
+                                    PRICE PER {globalVars.BITCLOUT}
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     ${order.orderPrice} USD
@@ -148,7 +148,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                                     ORDER QUANTITY
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    {order.orderQuantity} BCLT
+                                    {order.orderQuantity} {globalVars.BITCLOUT}
                                 </Text>
                                 <Text
                                     color="gray.600"
@@ -159,7 +159,8 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                                     QUANTITY PROCESSED
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    {order.orderQuantityProcessed} BCLT
+                                    {order.orderQuantityProcessed}{" "}
+                                    {globalVars.BITCLOUT}
                                 </Text>
                             </Box>
                         </Flex>
@@ -177,6 +178,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                                 </Text>
                             </>
                         )}
+
                         <Flex
                             flexDir="row"
                             justifyContent="space-between"
@@ -186,11 +188,23 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                         >
                             <BlueButton
                                 w="full"
-                                text={`   Cancel Order   `}
-                                mr={order.complete ? "0" : "4"}
-                                onClick={cancelOrderHandler}
+                                text={`   Close   `}
+                                mr={!order.complete ? "0" : "4"}
+                                onClick={disclosure.onClose}
                                 isLoading={cancelLoading}
+                                ghost
                             />
+                            {!order.complete && (
+                                <>
+                                    <BlueButton
+                                        w="full"
+                                        text={`   Cancel Order   `}
+                                        ml={!order.complete ? "0" : "4"}
+                                        onClick={cancelOrderHandler}
+                                        isLoading={cancelLoading}
+                                    />
+                                </>
+                            )}
                         </Flex>
                     </Flex>
                     {cancelError && (
