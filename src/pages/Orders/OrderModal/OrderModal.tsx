@@ -24,6 +24,7 @@ import {
     Flex,
     Button,
     HStack,
+    Tooltip,
     Spacer,
 } from "@chakra-ui/react"
 import { BlueButton } from "../../../components/BlueButton"
@@ -34,6 +35,8 @@ import {
     createLimitOrder,
     getMarketPrice,
 } from "../../../services/order"
+import { AiFillInfoCircle } from "react-icons/ai"
+
 import { getEthUSD } from "../../../services/utility"
 import * as globalVars from "../../../globalVars"
 import { useUser } from "../../../hooks"
@@ -54,6 +57,13 @@ export function OrderModal({
     const [priceError, setPriceError] = useState<string | null>(null)
     const [totalUsd, setTotalUsd] = useState<number>(0)
     const [page, setPage] = useState<number>(0)
+
+    const marketBuyText = "Market Buy: enter explanation here"
+    const marketSellText = "Market Sell: enter explanation here"
+    const limitBuyText = "Limit Buy: enter explanation here"
+    const limitSellText = "Limit Sell: enter explanation here"
+    const [tooltipText, setTooltipText] = useState<string>(limitBuyText)
+
     const [orderQuantity, setOrderQuantity] = useControllableState({
         defaultValue: "1",
     })
@@ -69,6 +79,9 @@ export function OrderModal({
 
     useEffect(() => {
         if (orderType === "market" && isOpen) {
+            orderSide == "sell"
+                ? setTooltipText(marketSellText)
+                : setTooltipText(marketBuyText)
             getMarketPrice(parseFloat(orderQuantity), orderSide)
                 .then((response) => {
                     setPriceError(null)
@@ -81,6 +94,10 @@ export function OrderModal({
                     )
                 })
         } else if (isOpen) {
+            console.log(orderSide)
+            orderSide == "sell"
+                ? setTooltipText(limitSellText)
+                : setTooltipText(limitBuyText)
             setTotalUsd(parseFloat(orderQuantity) * parseFloat(limitPrice))
             setPriceError(null)
         }
@@ -274,16 +291,29 @@ export function OrderModal({
                                                 )}
                                             </Text>
                                         </HStack>
+
                                         <FormControl id="orderType">
-                                            <Text
-                                                color="gray.600"
-                                                fontSize="sm"
-                                                fontWeight="600"
-                                                mt="2"
-                                                mb="2"
+                                            <Tooltip
+                                                label={tooltipText}
+                                                aria-label=""
                                             >
-                                                Order Type
-                                            </Text>
+                                                <Text
+                                                    color="gray.600"
+                                                    fontSize="sm"
+                                                    fontWeight="600"
+                                                    mt="2"
+                                                    mb="2"
+                                                >
+                                                    Order Type&nbsp;
+                                                    <AiFillInfoCircle
+                                                        style={{
+                                                            display: "inline",
+                                                        }}
+                                                        color="#aaa"
+                                                    />
+                                                </Text>
+                                            </Tooltip>
+
                                             <Select
                                                 value={orderType}
                                                 textTransform="capitalize"
@@ -435,15 +465,26 @@ export function OrderModal({
                                             </Text>
                                         </HStack>
                                         <FormControl id="orderType">
-                                            <Text
-                                                color="gray.600"
-                                                fontSize="sm"
-                                                fontWeight="600"
-                                                mt="2"
-                                                mb="2"
+                                            <Tooltip
+                                                label={tooltipText}
+                                                aria-label=""
                                             >
-                                                Order Type
-                                            </Text>
+                                                <Text
+                                                    color="gray.600"
+                                                    fontSize="sm"
+                                                    fontWeight="600"
+                                                    mt="2"
+                                                    mb="2"
+                                                >
+                                                    Order Type&nbsp;
+                                                    <AiFillInfoCircle
+                                                        style={{
+                                                            display: "inline",
+                                                        }}
+                                                        color="#aaa"
+                                                    />
+                                                </Text>
+                                            </Tooltip>
                                             <Select
                                                 value={orderType}
                                                 textTransform="capitalize"
@@ -708,7 +749,7 @@ export function OrderModal({
                                 fontWeight="600"
                                 mt="2"
                             >
-                                Total USD
+                                Estimated Total USD
                             </Text>
                             <Spacer />
                             <Text color="gray.500" fontSize="sm" mt="1">
