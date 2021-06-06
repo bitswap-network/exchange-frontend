@@ -13,6 +13,10 @@ export function Chart(props: any) {
         borderWidth: number
         borderColor: string
     }
+    interface hotData {
+        timestamp: Date
+        price: number
+    }
     const CustomSymbol = ({
         size,
         color,
@@ -35,40 +39,44 @@ export function Chart(props: any) {
             />
         </g>
     )
-    const [depthHot, setDepth] = useState<ChartDataInterface>({
-        id: "BitClout Market Price",
-        data: [],
-    })
+    const [depthHot, setDepthHot] = useState<[]>([])
     const [loading, setLoading] = useState(true)
     const [minY, setMinY] = useState(0)
     const [maxY, setMaxY] = useState(0)
 
     useEffect(() => {
         getOrderHistory().then((response) => {
-            // console.log("orderhistoryrepsonse", response)
-            const parsedData: ChartDataInterface = {
-                id: "BitClout Market Price",
-                data: [],
-            }
-            let min = 1000000
-            let max = 0
-            response.data.forEach(
-                (item: { timestamp: Date; price: number }) => {
-                    const date = new Date(item.timestamp)
-                    parsedData.data.push({
-                        x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
-                        y: item.price,
-                    })
-                    min = Math.min(min, item.price - 30)
-                    max = Math.max(max, item.price + 30)
-                }
-            )
-            setDepth(parsedData)
-            setMinY(min)
-            setMaxY(max)
+            console.log("orderhistoryrepsonse", response)
+            setDepthHot(response.data)
             setLoading(false)
         })
     }, [])
+
+    const parseData = (dataList: []) => {
+        const parsedDataArr: ChartDataInterface = {
+            id: "BitClout Market Price",
+            data: [],
+        }
+        let min = 1000000
+        let max = 0
+        dataList.forEach((item: hotData) => {
+            const date = new Date(item.timestamp)
+            parsedDataArr.data.push({
+                x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+                y: item.price,
+            })
+            min = Math.min(min, item.price - 30)
+            max = Math.max(max, item.price + 30)
+        })
+        setMinY(min)
+        setMaxY(max)
+        return parsedDataArr
+    }
+
+    const depthMemo = useMemo(
+        () => parseData(depthHot),
+        [depthHot]
+    ) as ChartDataInterface
 
     return (
         <ParentSize>
@@ -88,7 +96,7 @@ export function Chart(props: any) {
                         height={parent.width * 0.7}
                     >
                         <ResponsiveLine
-                            data={[depthHot]}
+                            data={[depthMemo]}
                             colors="#4483ef"
                             tooltip={(point) => {
                                 const date = new Date(point.point.data.x)

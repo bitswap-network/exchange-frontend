@@ -41,14 +41,22 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
         useState<TransactionAPIInterface | null>(null)
     const [page, setPage] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(false)
+    const [preflightError, setPreflightError] = useState<string | null>(null)
 
     const getPreflight = () => {
+        setLoading(true)
+        setPreflightError(null)
         depositBitcloutPreflightTxn(parseFloat(depositValue))
             .then((response) => {
+                setLoading(false)
+                setPreflightError(null)
                 setPreflight(response.data.data)
+                setPage(page + 1)
             })
             .catch((error) => {
-                console.error(error)
+                setLoading(false)
+                error.response && setPreflightError(error.response.data.message)
+                console.error(error.response.data)
             })
     }
 
@@ -271,13 +279,27 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({
                         <BlueButton
                             w="47%"
                             text={`   Continue   `}
-                            isDisabled={parseFloat(depositValue) <= 0}
-                            onClick={() => {
-                                setPage(page + 1)
-                                getPreflight()
-                            }}
+                            isDisabled={
+                                parseFloat(depositValue) <= 0 ||
+                                preflightError !== null
+                            }
+                            onClick={getPreflight}
+                            loading={loading}
+                            icon
                         />
                     </Flex>
+                    {preflightError && (
+                        <Text
+                            color="red.400"
+                            fontSize="md"
+                            fontWeight="400"
+                            w="full"
+                            textAlign="center"
+                            mb="4"
+                        >
+                            {preflightError}
+                        </Text>
+                    )}
                 </Flex>
             </ModalBody>
         </ModalContent>

@@ -386,7 +386,7 @@ export function Profile(): React.ReactElement {
                     </Flex>
                 </Flex>
 
-                {user.verification.status === "verified" ? (
+                {/* {user.verification.status === "verified" ? (
                     <Flex
                         mt="50px"
                         w={{ sm: "80%", md: "650px" }}
@@ -470,7 +470,7 @@ export function Profile(): React.ReactElement {
                             />
                         </Flex>
                     </Flex>
-                )}
+                )} */}
 
                 <Flex
                     mt="50px"
