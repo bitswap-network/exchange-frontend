@@ -9,7 +9,6 @@ export const BalanceCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
     const balance = {
         imageUrl: props.imageUrl,
-        imageAlt: props.imageAlt,
         currency: props.currency,
         amount: props.amount,
         publicKey: props.publicKey,

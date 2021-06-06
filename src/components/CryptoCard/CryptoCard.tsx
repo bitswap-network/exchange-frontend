@@ -7,7 +7,6 @@ export const CryptoCard = (props: any) => {
     // 📌 TODO: This is just a placeholder
     const balance = {
         imageUrl: props.imageUrl,
-        imageAlt: props.imageAlt,
         currency: props.currency,
         amount: props.amount,
         publicKey: props.publicKey,
@@ -29,12 +28,7 @@ export const CryptoCard = (props: any) => {
             h="-moz-initial"
             opacity={props.active ? 1 : 0.6}
         >
-            <Image
-                alt="BitClout Logo"
-                htmlWidth="70px"
-                objectFit="cover"
-                src={balance.imageUrl}
-            />
+            <Image htmlWidth="70px" objectFit="cover" src={balance.imageUrl} />
 
             <Box ml="5">
                 <Box d="flex" alignItems="center">

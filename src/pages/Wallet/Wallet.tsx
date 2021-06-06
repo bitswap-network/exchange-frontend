@@ -91,7 +91,6 @@ export function Wallet(): React.ReactElement {
 
     const BCLT = {
         imageUri: "./bitcloutLogo.png",
-        imageAlt: "BitClout Logo",
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
         publicKey: user?.bitclout.publicKey,
@@ -100,7 +99,6 @@ export function Wallet(): React.ReactElement {
     const ETH = {
         imageUri:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
-        imageAlt: "Ether Logo",
         currency: globalVars.ETHER,
         amount: user?.balance.ether,
         usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
@@ -242,7 +240,6 @@ export function Wallet(): React.ReactElement {
                                             globalVars.BITCLOUT
                                         }
                                         imageUrl={BCLT.imageUri}
-                                        imageAlt={BCLT.imageAlt}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
                                         publicKey={BCLT.publicKey}
@@ -261,7 +258,6 @@ export function Wallet(): React.ReactElement {
                                             globalVars.ETHER
                                         }
                                         imageUrl={ETH.imageUri}
-                                        imageAlt={ETH.imageAlt}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
                                         publicKey={ETH.publicKey}
@@ -281,7 +277,6 @@ export function Wallet(): React.ReactElement {
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
                                         imageUrl={BCLT.imageUri}
-                                        imageAlt={BCLT.imageAlt}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
                                         usdValue={null}
@@ -291,7 +286,6 @@ export function Wallet(): React.ReactElement {
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
                                         imageUrl={ETH.imageUri}
-                                        imageAlt={ETH.imageAlt}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
                                         usdValue={
