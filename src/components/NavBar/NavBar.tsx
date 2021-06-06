@@ -11,11 +11,15 @@ import {
     Spacer,
     Text,
     Skeleton,
+    useColorModeValue,
+    useColorMode,
 } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { Logo } from "./components/Logo"
+import { ColorModeSwitcher } from "../ColorModeSwitcher"
+
 import { Link } from "react-router-dom"
 import { loggedInState, orderModalState } from "../../store"
 import { AiOutlineUser } from "react-icons/ai"
@@ -24,7 +28,10 @@ const LINKS = ["home", "orders", "wallet"]
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (loading: boolean) => (
-    <Box px={4}>
+    <Box
+        px={4}
+        bg={useColorModeValue("background.primary", "backgroud.secondary")}
+    >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
             <Skeleton isLoaded={!loading} m="4">
                 <HStack
@@ -63,6 +70,8 @@ function NavBarFunc() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
     const setOrderModalState = useSetRecoilState(orderModalState)
+    // const { toggleColorMode } = useColorMode()
+    // const bg = useColorModeValue("background.primary", "background.secondary")
 
     console.log("IS LOGGED IN: ", isLoggedIn)
     console.log(isOpen)
@@ -95,35 +104,47 @@ function NavBarFunc() {
                         </Text>
                     ))}
                 </HStack>
-                <Flex mr={{ sm: "5px", md: "40px" }}>
-                    <Button
-                        as={Link}
-                        to={{
-                            pathname: "/orders",
-                        }}
-                        onClick={() => setOrderModalState(() => true)}
-                        h="30px"
-                        bgColor="#DBE6FF"
-                        borderRadius="4"
-                        mr="8"
+                <Flex mr={{ sm: "5px", md: "20px" }}>
+                    <HStack
+                        as={"nav"}
+                        spacing={1}
+                        display={{ base: "none", md: "flex" }}
                     >
-                        <Text
-                            textTransform="capitalize"
-                            fontWeight="500"
-                            color="brand.100"
-                            fontSize="sm"
+                        <Button
+                            as={Link}
+                            to={{
+                                pathname: "/orders",
+                            }}
+                            onClick={() => setOrderModalState(() => true)}
+                            h="30px"
+                            bgColor="#DBE6FF"
+                            borderRadius="4"
+                            mr="4"
                         >
-                            New Order
-                        </Text>
-                    </Button>
-                    <Link to="/profile">
-                        <HStack spacing="5px" color="black" fontWeight="400">
-                            <AiOutlineUser size="20" />
-                            <Text textTransform="capitalize" pt="2px">
-                                Profile
+                            <Text
+                                textTransform="capitalize"
+                                fontWeight="500"
+                                color="brand.100"
+                                fontSize="sm"
+                            >
+                                New Order
                             </Text>
-                        </HStack>
-                    </Link>
+                        </Button>
+                        <Link to="/profile">
+                            <HStack
+                                spacing="5px"
+                                color="black"
+                                fontWeight="400"
+                                mr="4"
+                            >
+                                <AiOutlineUser size="20" />
+                                <Text textTransform="capitalize" pt="2px">
+                                    Profile
+                                </Text>
+                            </HStack>
+                        </Link>
+                        {/* <ColorModeSwitcher /> */}
+                    </HStack>
                 </Flex>
             </Flex>
             {isOpen && (
