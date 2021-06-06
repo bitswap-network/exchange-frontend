@@ -58,10 +58,18 @@ export function OrderModal({
     const [totalUsd, setTotalUsd] = useState<number>(0)
     const [page, setPage] = useState<number>(0)
 
-    const marketBuyText = "Market Buy: enter explanation here"
-    const marketSellText = "Market Sell: enter explanation here"
-    const limitBuyText = "Limit Buy: enter explanation here"
-    const limitSellText = "Limit Sell: enter explanation here"
+    const marketBuyText =
+        "Market Buy: immediately buys " +
+        globalVars.BITCLOUT +
+        " at market prices"
+    const marketSellText =
+        "Market Sell: immediately sells " +
+        globalVars.BITCLOUT +
+        " at market prices"
+    const limitBuyText =
+        "Limit Buy: your order will execute only when the specified price (or a better price) is met"
+    const limitSellText =
+        "Limit Sell: your order will execute only when the specified price (or a better price) is met"
     const [tooltipText, setTooltipText] = useState<string>(limitBuyText)
 
     const [orderQuantity, setOrderQuantity] = useControllableState({
