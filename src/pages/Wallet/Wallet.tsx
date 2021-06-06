@@ -314,7 +314,7 @@ export function Wallet(): React.ReactElement {
                             borderRadius="lg"
                             boxShadow="xs"
                         >
-                            <Table variant="simple">
+                            <Table variant="simple" w="100%">
                                 <Thead>
                                     <Tr>
                                         <Th color="gray.700" pt="5">
@@ -336,6 +336,22 @@ export function Wallet(): React.ReactElement {
                                 </Thead>
                                 <Tbody>
                                     {transactions
+                                        .filter((transaction) => {
+                                            if (
+                                                selectedCurrency.type ===
+                                                globalVars.BITCLOUT
+                                            ) {
+                                                return (
+                                                    transaction.assetType ===
+                                                    "BCLT"
+                                                )
+                                            } else {
+                                                return (
+                                                    transaction.assetType ===
+                                                    "ETH"
+                                                )
+                                            }
+                                        })
                                         .sort((a, b) => {
                                             return (
                                                 new Date(
@@ -390,7 +406,6 @@ export function Wallet(): React.ReactElement {
                                                 <Td
                                                     color="gray.500"
                                                     fontSize="14"
-                                                    textTransform="capitalize"
                                                 >
                                                     {transaction.value
                                                         ? `${globalVars.formatBalanceLarge(

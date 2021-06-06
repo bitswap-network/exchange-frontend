@@ -18,6 +18,7 @@ import {
     Tr,
     Th,
     Td,
+    Skeleton,
 } from "@chakra-ui/react"
 import React, { useEffect, useState, useMemo } from "react"
 import { Column } from "react-table"
@@ -50,34 +51,37 @@ export function Orders(): React.ReactElement {
 
     const parseOrderData = (orders: OrderTableDataInterface[]) => {
         const tempOrders: OrderTableDataInterface[] = []
-        orders.forEach((order: OrderTableDataInterface) => {
-            tempOrders.push({
-                ...order,
-                tldr: `${globalVars.capFirst(order.orderSide)} ${
-                    order.orderQuantity
-                } ${globalVars.BITCLOUT} (${globalVars.capFirst(
-                    order.orderType
-                )})`,
-                status: `${
-                    order.error !== ""
-                        ? "Error"
-                        : order.complete
-                        ? "Closed"
-                        : order.orderQuantityProcessed > 0
-                        ? "Partial"
-                        : "Active"
-                }`,
-                orderTypeCapped: globalVars.capFirst(order.orderType),
-                quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
-                priceString: `${
-                    order.orderPrice ? `$${order.orderPrice}` : "-"
-                }`,
-                createdAgo: globalVars.timeSince(new Date(order.created)),
-                completedAgo: order.completeTime
-                    ? globalVars.timeSince(new Date(order.completeTime))
-                    : "-",
+        if (orders.length > 0) {
+            orders.forEach((order: OrderTableDataInterface) => {
+                tempOrders.push({
+                    ...order,
+                    tldr: `${globalVars.capFirst(order.orderSide)} ${
+                        order.orderQuantity
+                    } ${globalVars.BITCLOUT} (${globalVars.capFirst(
+                        order.orderType
+                    )})`,
+                    status: `${
+                        order.error !== ""
+                            ? "Error"
+                            : order.complete
+                            ? "Closed"
+                            : order.orderQuantityProcessed > 0
+                            ? "Partial"
+                            : "Active"
+                    }`,
+                    orderTypeCapped: globalVars.capFirst(order.orderType),
+                    quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
+                    priceString: `${
+                        order.orderPrice ? `$${order.orderPrice}` : "-"
+                    }`,
+                    createdAgo: globalVars.timeSince(new Date(order.created)),
+                    completedAgo: order.completeTime
+                        ? globalVars.timeSince(new Date(order.completeTime))
+                        : "-",
+                })
             })
-        })
+        }
+
         return tempOrders
     }
 

@@ -1,15 +1,20 @@
-import { extendTheme } from "@chakra-ui/react"
+import { extendTheme, ThemeConfig } from "@chakra-ui/react"
 import Button from "./components/Button"
 import Link from "./components/Link"
 import Tabs from "./components/Tabs"
-
+const config: ThemeConfig = {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+}
 export const bitswapTheme = extendTheme({
+    config,
     styles: {
-        global: {
-            body: {
-                color: "black",
+        global: (props) => ({
+            "html, body": {
+                color: props.colorMode === "dark" ? "#F8F9FA" : "black",
+                lineHeight: "tall",
             },
-        },
+        }),
     },
     fonts: {
         body: "Inter, system-ui, sans-serif",
@@ -28,7 +33,7 @@ export const bitswapTheme = extendTheme({
             200: "#edf3ff",
         },
         background: {
-            primary: "#faf9f8",
+            primary: "#F8F9FA",
             secondary: "#262626",
             login: "#e5e5e5",
         },

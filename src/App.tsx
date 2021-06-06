@@ -1,5 +1,11 @@
 import React, { ReactElement, Suspense } from "react"
-import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react"
+import {
+    Box,
+    Container,
+    ChakraProvider,
+    Grid,
+    Skeleton,
+} from "@chakra-ui/react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { RecoilRoot } from "recoil"
 
@@ -45,16 +51,17 @@ export const App = (): ReactElement => {
                 }}
             />
             <RecoilRoot>
-                <Suspense fallback={<></>}>
-                    <ChakraProvider theme={bitswapTheme}>
-                        <BrowserRouter>
-                            <Grid h="100vh" templateRows={"64px 1fr"}>
-                                {/* TODO: implement auth to set loggedOut */}
-                                <Suspense fallback={DefaultNavBar(true)}>
-                                    <NavBar />
-                                </Suspense>
+                <ChakraProvider theme={bitswapTheme} resetCSS>
+                    {/* <CSSReset /> */}
+                    <BrowserRouter>
+                        <Grid h="100vh" templateRows={"64px 1fr"}>
+                            {/* TODO: implement auth to set loggedOut */}
+                            <Suspense fallback={DefaultNavBar(true)}>
+                                <NavBar />
+                            </Suspense>
 
-                                <Box bg="background.primary" p={8}>
+                            <Box p={8} bg={"background.primary"}>
+                                <Suspense fallback={<></>}>
                                     <Container maxW="container.xl">
                                         <Switch>
                                             <Route path="/login">
@@ -77,11 +84,11 @@ export const App = (): ReactElement => {
                                             </Route>
                                         </Switch>
                                     </Container>
-                                </Box>
-                            </Grid>
-                        </BrowserRouter>
-                    </ChakraProvider>
-                </Suspense>
+                                </Suspense>
+                            </Box>
+                        </Grid>
+                    </BrowserRouter>
+                </ChakraProvider>
             </RecoilRoot>
         </>
     )
