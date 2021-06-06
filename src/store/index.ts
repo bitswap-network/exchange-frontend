@@ -11,12 +11,12 @@ export const orderModalState = atom({
 
 export const userState = atom({
     key: "userState",
-    default: getData("user") as User,
+    default: getData("user") ? (getData("user") as User) : null,
 })
 
 export const tokenState = atom({
     key: "tokenState",
-    default: getData("token") as string,
+    default: getData("token") ? (getData("token") as string) : "",
 })
 
 export const loggedInState = selector({
@@ -35,9 +35,11 @@ export const loggedInState = selector({
 
 export const identityUsers = atom({
     key: "identityUsers",
-    default: getData("identityUsers") as IdentityUsers,
+    default: getData("identityUsers")
+        ? (getData("identityUsers") as IdentityUsers)
+        : null,
 })
 export const currentPublicKey = atom({
     key: "publicKey",
-    default: getData("publicKey") as string,
+    default: getData("publicKey") ? (getData("publicKey") as string) : "",
 })

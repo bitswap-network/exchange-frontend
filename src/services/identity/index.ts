@@ -106,16 +106,19 @@ const handleStorageGranted = () => {
     storageGranted.complete()
 }
 const handleLogin = (payload: any) => {
+    console.log("LOGIN: ", payload)
     if (identityWindow) {
         identityWindow.close()
+        // identityWindow = null
     }
-    identityWindow = null
+
     if (identityWindowSubject) {
         identityWindowSubject.next(payload)
         identityWindowSubject.complete()
+        // identityWindowSubject = null
     }
-    identityWindowSubject = null
 }
+
 const handleImport = (id: string) => {
     identityWindow &&
         respond(identityWindow, id, {

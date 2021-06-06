@@ -5,7 +5,17 @@ export const saveData = (key: string, data: any) => {
 
 export const getData = (key: string) => {
     const data: string | null = localStorage.getItem(key)
-    return data ? JSON.parse(data) : null
+    if (data) {
+        try {
+            const parsed = JSON.parse(data)
+            return parsed
+        } catch (e) {
+            console.error(e)
+            removeData(key)
+        }
+    } else {
+        return null
+    }
 }
 
 export const removeData = (key: string) => {

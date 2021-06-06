@@ -95,36 +95,42 @@ export function Login(): ReactElement {
                     res.users[res.publicKeyAdded].encryptedSeedHex,
             }
             jwt(payload).subscribe((token) => {
-                login(res.publicKeyAdded, token.jwt)
-                    .then(() => {
-                        window.location.assign("/")
-                    })
-                    .catch((error: any) => {
-                        //TODO: revise response status codes
-                        if (error.response) {
-                            if (error.response.status === 406) {
-                                fetchBitcloutProfile(res.publicKeyAdded, "")
-                                    .then((response) => {
-                                        console.log(response.data)
-                                        setBitcloutProfile(response.data)
-                                        setNewUser(true)
-                                        setCreateProfile({
-                                            ...createProfile,
-                                            publicKey: res.publicKeyAdded,
-                                        })
-                                    })
-                                    .catch((error) => {
-                                        console.log(error.response.data)
-                                        error.response.data.message &&
-                                            setErrText(
-                                                error.response.data.message
-                                            )
-                                    })
-                            }
-                        } else {
-                            console.log(error)
-                        }
-                    })
+                token.jwt
+                    ? login(res.publicKeyAdded, token.jwt)
+                          .then(() => {
+                              window.location.assign("/")
+                          })
+                          .catch((error: any) => {
+                              //TODO: revise response status codes
+                              if (error.response) {
+                                  if (error.response.status === 406) {
+                                      fetchBitcloutProfile(
+                                          res.publicKeyAdded,
+                                          ""
+                                      )
+                                          .then((response) => {
+                                              console.log(response.data)
+                                              setBitcloutProfile(response.data)
+                                              setNewUser(true)
+                                              setCreateProfile({
+                                                  ...createProfile,
+                                                  publicKey: res.publicKeyAdded,
+                                              })
+                                          })
+                                          .catch((error) => {
+                                              console.log(error.response.data)
+                                              error.response.data.message &&
+                                                  setErrText(
+                                                      error.response.data
+                                                          .message
+                                                  )
+                                          })
+                                  }
+                              } else {
+                                  console.log(error)
+                              }
+                          })
+                    : setErrText("Error logging in with identity.")
             })
         })
     }
