@@ -87,9 +87,9 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText)
             setTotalUsd(parseFloat(orderQuantity) * parseFloat(limitPrice))
             if (user && ethUsd) {
-                if (orderQuantity > user.balance.bitclout) {
+                if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
                     setPriceError("Insufficient CLOUT balance to place this order.")
-                } else if (totalUsd / ethUsd > user.balance.ether) {
+                } else if (orderSide === "buy" && totalUsd / ethUsd > user.balance.ether) {
                     setPriceError("Insufficient ETHER balance to place this order.")
                 } else {
                     setPriceError(null)
@@ -286,14 +286,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 text={`   Continue   `}
                                 loading={continueLoading}
                                 onClick={handleContinue}
-                                disabled={
-                                    !user ||
-                                    !ethUsd ||
-                                    priceError !== null ||
-                                    validateError !== null ||
-                                    totalUsd / ethUsd > user.balance.ether ||
-                                    orderQuantity > user.balance.bitclout
-                                }
+                                disabled={!user || !ethUsd || priceError !== null || validateError !== null}
                             />
                         </Flex>
                         {validateError && (

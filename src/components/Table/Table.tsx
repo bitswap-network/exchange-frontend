@@ -53,37 +53,53 @@ export function Table<T extends Record<string, unknown>>({
                     ))}
                 </Thead>
                 <Tbody {...getTableBodyProps()}>
-                    {rows.map((row) => {
-                        prepareRow(row)
-                        return (
-                            <Tr
-                                {...row.getRowProps()}
-                                key={Math.random().toString(4)}
-                                onClick={() => {
-                                    if (isOrderTable) {
-                                        setSelectOrder(row.original as OrderTableDataInterface)
-                                        modalDisclosure.onOpen()
-                                    }
-                                }}
-                                _hover={{
-                                    backgroundColor: "background.primary",
-                                    cursor: isOrderTable && "pointer",
-                                }}
-                            >
-                                {row.cells.map((cell) => (
-                                    <Td
-                                        pt="3"
-                                        pb="3"
-                                        color="gray.500"
-                                        {...cell.getCellProps()}
-                                        isNumeric={cell.column.isNumeric}
+                    {rows.length > 0 ? (
+                        <>
+                            {rows.map((row) => {
+                                prepareRow(row)
+                                return (
+                                    <Tr
+                                        {...row.getRowProps()}
+                                        key={Math.random().toString(4)}
+                                        onClick={() => {
+                                            if (isOrderTable) {
+                                                setSelectOrder(row.original as OrderTableDataInterface)
+                                                modalDisclosure.onOpen()
+                                            }
+                                        }}
+                                        _hover={{
+                                            backgroundColor: "background.primary",
+                                            cursor: isOrderTable && "pointer",
+                                        }}
                                     >
-                                        {cell.render("Cell")}
-                                    </Td>
-                                ))}
-                            </Tr>
-                        )
-                    })}
+                                        {row.cells.map((cell) => (
+                                            <Td
+                                                pt="3"
+                                                pb="3"
+                                                color="gray.500"
+                                                {...cell.getCellProps()}
+                                                isNumeric={cell.column.isNumeric}
+                                            >
+                                                {cell.render("Cell")}
+                                            </Td>
+                                        ))}
+                                    </Tr>
+                                )
+                            })}
+                        </>
+                    ) : (
+                        <Tr
+                            key={Math.random().toString(4)}
+                            _hover={{
+                                backgroundColor: "background.primary",
+                            }}
+                            alignContent="center"
+                        >
+                            <Td pt="3" pb="3" color="gray.500">
+                                No orders yet...
+                            </Td>
+                        </Tr>
+                    )}
                 </Tbody>
             </ChakraTable>
         </>

@@ -129,27 +129,25 @@ export function Orders(): React.ReactElement {
                     <BlueButton text="New Order" onClick={onOpen} />
                 </Flex>
                 <Flex w="full" dir="row">
-                    <Flex flex="0.7" maxW="70%">
+                    <Flex flex="0.75" maxW="75%">
                         <Tabs w="full" variant="order" h="70vh">
                             <Center>
                                 <TabList w="full" ml="4" mr="4" mb="4" justifyContent="space-evenly">
-                                    <Tab w="33%" pt="3" pb="3">
-                                        All Orders ({orders.length})
-                                    </Tab>
-                                    <Tab w="33%" pt="3" pb="3">
+                                    <Tab w="25%" pt="3" pb="3">
                                         Active Orders ({orders.filter((order) => order.complete === false).length})
                                     </Tab>
-                                    <Tab w="33%" pt="3" pb="3">
+                                    <Tab w="25%" pt="3" pb="3">
                                         Completed Orders ({orders.filter((order) => order.complete === true).length})
+                                    </Tab>
+                                    <Tab w="25%" pt="3" pb="3">
+                                        Cancelled Orders ({orders.filter((order) => order.error !== "").length})
+                                    </Tab>
+                                    <Tab w="25%" pt="3" pb="3">
+                                        All Orders ({orders.length})
                                     </Tab>
                                 </TabList>
                             </Center>
                             <TabPanels>
-                                <TabPanel>
-                                    <Stack spacing={4}>
-                                        <OrderTable data={orders} columns={columns} />
-                                    </Stack>
-                                </TabPanel>
                                 <TabPanel>
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
@@ -159,7 +157,6 @@ export function Orders(): React.ReactElement {
                                     </Stack>
                                 </TabPanel>
                                 <TabPanel>
-                                    {" "}
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
                                             data={orders.filter((order) => order.complete === true)}
@@ -167,10 +164,23 @@ export function Orders(): React.ReactElement {
                                         />
                                     </Stack>
                                 </TabPanel>
+                                <TabPanel>
+                                    <Stack spacing={4} w="100%">
+                                        <OrderTable
+                                            data={orders.filter((order) => order.error !== "")}
+                                            columns={columns}
+                                        />
+                                    </Stack>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Stack spacing={4} w="full">
+                                        <OrderTable data={orders} columns={columns} />
+                                    </Stack>
+                                </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </Flex>
-                    <Flex flex="0.3" flexDir="column">
+                    <Flex flex="0.25" flexDir="column">
                         <Box pb="4" w="full">
                             <CryptoCard
                                 size="sm"
@@ -193,7 +203,7 @@ export function Orders(): React.ReactElement {
                         </Box>
 
                         <Box bg="white" w="full" borderRadius="8" boxShadow="xs" p="6" alignSelf="flex-start">
-                            <HStack ml="4" mr="4">
+                            <HStack ml="3" mr="3">
                                 <Flex
                                     bgColor="#dbe6ff"
                                     p="4"

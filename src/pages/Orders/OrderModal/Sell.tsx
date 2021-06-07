@@ -16,6 +16,8 @@ import {
 import * as globalVars from "../../../globalVars"
 import { AiFillInfoCircle } from "react-icons/ai"
 
+const limitSellTooltipText = "This is the price you are willing to sell Bitclout at."
+
 interface SellTabProps {
     user?: any
     toolTipText: string
@@ -87,9 +89,17 @@ export const SellTab: React.FC<SellTabProps> = ({
         </FormControl>
         {orderType === "limit" ? (
             <FormControl id="limitPrice">
-                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
-                    Limit Price (USD)
-                </Text>
+                <Tooltip label={limitSellTooltipText} aria-label={limitSellTooltipText}>
+                    <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
+                        Limit Buy Price ($USD)&nbsp;
+                        <AiFillInfoCircle
+                            style={{
+                                display: "inline",
+                            }}
+                            color="#aaa"
+                        />
+                    </Text>
+                </Tooltip>
                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                 <NumberInput
                     min={0}
@@ -107,11 +117,14 @@ export const SellTab: React.FC<SellTabProps> = ({
             </FormControl>
         ) : null}
         <HStack pt="4">
-            <Tooltip label={"Fees are calculated as 2% of your transaction amount"} aria-label="fee label">
+            <Tooltip
+                label={"Fees are deducted from the amount of ETH you will recieve for this order."}
+                aria-label="fee label sell"
+            >
                 <Text color="gray.600" fontSize="sm">
                     {" "}
                     {orderType === "market" ? "Est. " : ""}
-                    Fees&nbsp;
+                    Fees (2%)&nbsp;
                     <AiFillInfoCircle
                         style={{
                             display: "inline",

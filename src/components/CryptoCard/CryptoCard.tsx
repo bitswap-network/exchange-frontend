@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
-import { Box, Text, Image, Button } from "@chakra-ui/react"
+import { Box, Text, Image, Button, Spinner } from "@chakra-ui/react"
 import * as globalVars from "../../globalVars"
 
 interface CryptoCardProps {
@@ -52,7 +52,7 @@ export const CryptoCard: React.FC<CryptoCardProps> = ({
                 </Box>
                 <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
                     <Text fontSize="3xl" color="gray.600">
-                        {globalVars.formatBalanceSmall(amount)} {currency}
+                        {amount ? globalVars.formatBalanceSmall(amount) : <Spinner />} {currency}
                     </Text>
                 </Box>
             </Box>
