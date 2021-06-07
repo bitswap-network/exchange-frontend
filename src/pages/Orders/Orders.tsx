@@ -187,7 +187,7 @@ export function Orders(): React.ReactElement {
                     <Flex flex="0.25" flexDir="column">
                         <Box pb="4" w="full">
                             <CryptoCard
-                                size="sm"
+                                size="xs"
                                 active={true}
                                 border={false}
                                 imageUrl={BCLT.imageUri}
@@ -197,7 +197,7 @@ export function Orders(): React.ReactElement {
                         </Box>
                         <Box w="full" mb="4">
                             <CryptoCard
-                                size="sm"
+                                size="xs"
                                 active={true}
                                 border={false}
                                 imageUrl={ETH.imageUri}
