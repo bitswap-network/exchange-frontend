@@ -7,7 +7,6 @@ import {
     ModalContent,
     ModalBody,
     ModalCloseButton,
-    Button,
     Divider,
     Box,
     Spacer,
@@ -25,19 +24,14 @@ interface OrderInfoModalProps {
     order: OrderTableDataInterface | undefined | null
 }
 
-export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
-    disclosure,
-    order,
-}: OrderInfoModalProps) => {
+export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, order }: OrderInfoModalProps) => {
     if (!order) {
         return null
     }
     const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [cancelError, setCancelError] = useState<string | null>(null)
     const created = new Date(order.created)
-    const completed: Date | null = order.completeTime
-        ? new Date(order.completeTime)
-        : null
+    const completed: Date | null = order.completeTime ? new Date(order.completeTime) : null
 
     const cancelOrderHandler = () => {
         setCancelError(null)
@@ -50,8 +44,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                     window.location.reload()
                 })
                 .catch((error: any) => {
-                    if (error.response)
-                        setCancelError(error.response.data.message)
+                    if (error.response) setCancelError(error.response.data.message)
                 })
         }
     }
@@ -69,12 +62,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                 <ModalCloseButton />
                 <ModalBody>
                     <Flex w="90%" ml="5%" flexDir="column">
-                        <Text
-                            fontSize="2xl"
-                            fontWeight="700"
-                            mt="6"
-                            color="gray.700"
-                        >
+                        <Text fontSize="2xl" fontWeight="700" mt="6" color="gray.700">
                             Order Details
                         </Text>
 
@@ -92,34 +80,19 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                         <Divider mb="2" />
                         <Flex>
                             <Box>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     STATUS
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     {order.status.toUpperCase()}
                                 </Text>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     ORDER TYPE
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     {order.orderType.toUpperCase()}
                                 </Text>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     PRICE PER {globalVars.BITCLOUT}
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
@@ -128,64 +101,35 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                             </Box>
                             <Spacer />
                             <Box align="right">
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     ORDER SIDE
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     {order.orderSide.toUpperCase()}
                                 </Text>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     ORDER QUANTITY
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     {order.orderQuantity} {globalVars.BITCLOUT}
                                 </Text>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     QUANTITY PROCESSED
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    {order.orderQuantityProcessed}{" "}
-                                    {globalVars.BITCLOUT}
+                                    {order.orderQuantityProcessed} {globalVars.BITCLOUT}
                                 </Text>
                             </Box>
                         </Flex>
                         {order.error && order.error !== "" && (
                             <>
-                                <Text
-                                    color="red.400"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="4"
-                                    w="full"
-                                    textAlign="center"
-                                >
+                                <Text color="red.400" fontSize="sm" fontWeight="600" mt="4" w="full" textAlign="center">
                                     {order.error}
                                 </Text>
                             </>
                         )}
 
-                        <Flex
-                            flexDir="row"
-                            justifyContent="space-between"
-                            w="full"
-                            mt="6"
-                            mb="4"
-                        >
+                        <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="4">
                             <BlueButton
                                 w="full"
                                 text={`   Close   `}
@@ -208,14 +152,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
                         </Flex>
                     </Flex>
                     {cancelError && (
-                        <Text
-                            color="red.400"
-                            fontSize="md"
-                            fontWeight="400"
-                            mb="1"
-                            w="full"
-                            textAlign="center"
-                        >
+                        <Text color="red.400" fontSize="md" fontWeight="400" mb="1" w="full" textAlign="center">
                             {cancelError}
                         </Text>
                     )}

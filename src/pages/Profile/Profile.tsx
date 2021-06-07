@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react"
-import {
-    HiExclamationCircle,
-    HiBadgeCheck,
-    HiChevronLeft,
-} from "react-icons/hi"
+import { HiExclamationCircle, HiBadgeCheck, HiChevronLeft } from "react-icons/hi"
 import {
     Flex,
     Button,
@@ -26,12 +22,7 @@ import {
 import { useRecoilValue } from "recoil"
 import { userState } from "../../store"
 import { BlueButton } from "../../components/BlueButton/BlueButton"
-import {
-    verifyBitclout,
-    updateEmail,
-    updateName,
-    resendVerificationEmail,
-} from "../../services/user"
+import { verifyBitclout, updateEmail, updateName, resendVerificationEmail } from "../../services/user"
 import { logout } from "../../helpers/persistence"
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
@@ -140,31 +131,17 @@ export function Profile(): React.ReactElement {
                     <ModalHeader>Verification Email Sent</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        An email was sent to {user.email} for verification.
-                        Check your spam folder if you cannot find the email.
+                        An email was sent to {user.email} for verification. Check your spam folder if you cannot find
+                        the email.
                     </ModalBody>
 
                     <ModalFooter>
-                        <BlueButton
-                            text={`   Close   `}
-                            onClick={onClose}
-                            mr="3"
-                        />
+                        <BlueButton text={`   Close   `} onClick={onClose} mr="3" />
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <Flex
-                minH="100%"
-                align="center"
-                justify="center"
-                flexDirection="column"
-            >
-                <Image
-                    src={user.bitclout.profilePicture}
-                    w="80px"
-                    h="80px"
-                    borderRadius="80px"
-                />
+            <Flex minH="100%" align="center" justify="center" flexDirection="column">
+                <Image src={user.bitclout.profilePicture} w="80px" h="80px" borderRadius="80px" />
                 <Link
                     isExternal
                     href={`https://bitclout.com/u/${user.bitclout.username}`}
@@ -186,26 +163,14 @@ export function Profile(): React.ReactElement {
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                 >
-                    <Flex
-                        flex="0.65"
-                        align="flex-start"
-                        justify="center"
-                        flexDir="column"
-                    >
+                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Name{" "}
                         </Text>
 
                         {!nameEdit ? (
-                            <Text
-                                color="#44423D"
-                                fontWeight="500"
-                                fontSize="md"
-                                mt="12px"
-                            >
-                                {user.name !== ""
-                                    ? user.name
-                                    : "Please add your name"}
+                            <Text color="#44423D" fontWeight="500" fontSize="md" mt="12px">
+                                {user.name !== "" ? user.name : "Please add your name"}
                             </Text>
                         ) : (
                             <Input
@@ -268,60 +233,31 @@ export function Profile(): React.ReactElement {
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                 >
-                    <Flex
-                        flex="0.65"
-                        align="flex-start"
-                        justify="center"
-                        flexDir="column"
-                    >
+                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Email{" "}
                             {user.verification.email ? (
-                                <HiBadgeCheck
-                                    style={{ display: "inline" }}
-                                    color="#5388fe"
-                                    size="20"
-                                />
+                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
                             ) : (
-                                <HiExclamationCircle
-                                    style={{ display: "inline" }}
-                                    color="#EE0004"
-                                    size="20"
-                                />
+                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
                             )}
                         </Text>
                         {user.verification.email ? (
-                            <Text
-                                color="#44423D"
-                                fontWeight="300"
-                                fontSize="15"
-                                mt="12px"
-                            >
+                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
                                 Your email is verified.
                                 <br />
                                 Important updates will be sent to this address.
                             </Text>
                         ) : (
-                            <Text
-                                color="#44423D"
-                                fontWeight="300"
-                                fontSize="15"
-                                mt="12px"
-                            >
-                                Check your inbox for verification, or resend
-                                verification.
+                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
+                                Check your inbox for verification, or resend verification.
                                 <br />
                                 Important updates will be sent to this address.
                             </Text>
                         )}
 
                         {!emailEdit ? (
-                            <Text
-                                color="#44423D"
-                                fontWeight="500"
-                                fontSize="md"
-                                mt="12px"
-                            >
+                            <Text color="#44423D" fontWeight="500" fontSize="md" mt="12px">
                                 {user.email}
                             </Text>
                         ) : (
@@ -472,12 +408,7 @@ export function Profile(): React.ReactElement {
                     </Flex>
                 )} */}
 
-                <Flex
-                    mt="50px"
-                    w={{ sm: "80%", md: "600px" }}
-                    flexDir="column"
-                    alignItems="center"
-                >
+                <Flex mt="50px" w={{ sm: "80%", md: "600px" }} flexDir="column" alignItems="center">
                     <Button
                         bg="red.500"
                         w="125px"
@@ -499,26 +430,14 @@ export function Profile(): React.ReactElement {
     const VerifyBitclout = (
         <Flex h="70vh" alignItems="center" justifyContent="center">
             <VStack spacing={8} align="flex-start" maxW="450px">
-                <Button
-                    color="gray.600"
-                    fontWeight="500"
-                    fontSize="16"
-                    p="0"
-                    onClick={() => setCurrentPage("profile")}
-                >
-                    <HiChevronLeft
-                        style={{ display: "inline" }}
-                        color="gray.600"
-                        size="24"
-                    />{" "}
-                    Back
+                <Button color="gray.600" fontWeight="500" fontSize="16" p="0" onClick={() => setCurrentPage("profile")}>
+                    <HiChevronLeft style={{ display: "inline" }} color="gray.600" size="24" /> Back
                 </Button>
                 <Text fontSize="xx-large" fontWeight="bold">
                     BitClout Verification
                 </Text>
                 <Text fontSize="md" color="gray.600">
-                    Please post the following on BitClout with your verification
-                    code (given below).
+                    Please post the following on BitClout with your verification code (given below).
                 </Text>
                 <InputGroup size="md">
                     <Input
@@ -559,21 +478,12 @@ export function Profile(): React.ReactElement {
                     Verification Complete
                 </Text>
                 <Text fontSize="md" color="gray.600">
-                    Welcome to BitSwap! Click the button below to return to your
-                    account.
+                    Welcome to BitSwap! Click the button below to return to your account.
                 </Text>
-                <BlueButton
-                    text={`   Return To Profile   `}
-                    width="350px"
-                    onClick={() => setCurrentPage("profile")}
-                />
+                <BlueButton text={`   Return To Profile   `} width="350px" onClick={() => setCurrentPage("profile")} />
             </VStack>
         </Flex>
     )
 
-    return currentPage == "profile"
-        ? profilePage
-        : currentPage == "verify"
-        ? VerifyBitclout
-        : VerificationComplete
+    return currentPage == "profile" ? profilePage : currentPage == "verify" ? VerifyBitclout : VerificationComplete
 }

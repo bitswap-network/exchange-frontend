@@ -13,7 +13,11 @@ const graphTheme = {
     background: "transparent",
 }
 
-export function Chart(props: any) {
+interface ChartProps {
+    ticks: number
+}
+
+export const Chart: React.FC<ChartProps> = ({ ticks }: ChartProps) => {
     interface CustomSymbolInterface {
         size: number
         color: string
@@ -24,26 +28,10 @@ export function Chart(props: any) {
         timestamp: Date
         price: number
     }
-    const CustomSymbol = ({
-        size,
-        color,
-        borderWidth,
-        borderColor,
-    }: CustomSymbolInterface) => (
+    const CustomSymbol = ({ size, color, borderWidth, borderColor }: CustomSymbolInterface) => (
         <g>
-            <circle
-                fill="#fff"
-                r={size / 2}
-                strokeWidth={borderWidth}
-                stroke={borderColor}
-            />
-            <circle
-                r={size / 5}
-                strokeWidth={borderWidth}
-                stroke={borderColor}
-                fill={color}
-                fillOpacity={0.35}
-            />
+            <circle fill="#fff" r={size / 2} strokeWidth={borderWidth} stroke={borderColor} />
+            <circle r={size / 5} strokeWidth={borderWidth} stroke={borderColor} fill={color} fillOpacity={0.35} />
         </g>
     )
     const [depthHot, setDepthHot] = useState<[]>([])
@@ -80,21 +68,12 @@ export function Chart(props: any) {
         return parsedDataArr
     }
 
-    const depthMemo = useMemo(
-        () => parseData(depthHot),
-        [depthHot]
-    ) as ChartDataInterface
+    const depthMemo = useMemo(() => parseData(depthHot), [depthHot]) as ChartDataInterface
 
     return (
         <ParentSize>
             {(parent) => (
-                <Box
-                    overflow="hidden"
-                    d="flex"
-                    w={parent.width}
-                    pos="relative"
-                    p="4"
-                >
+                <Box overflow="hidden" d="flex" w={parent.width} pos="relative" p="4">
                     <Skeleton
                         startColor="gray.100"
                         endColor="gray.300"
@@ -107,30 +86,16 @@ export function Chart(props: any) {
                             data={[depthMemo]}
                             colors="#4483ef"
                             tooltip={(point) => {
-                                const date = new Date(point.point.data.x)
-                                    .toString()
-                                    .split(" ")
+                                const date = new Date(point.point.data.x).toString().split(" ")
                                 return (
-                                    <Box
-                                        bgColor="white"
-                                        borderRadius="4"
-                                        padding="2"
-                                        boxShadow="md"
-                                        fontSize="x-small"
-                                    >
-                                        {date[1] +
-                                            " " +
-                                            date[2] +
-                                            " " +
-                                            date[3] +
-                                            ", $" +
-                                            point.point.data.y}
+                                    <Box bgColor="white" borderRadius="4" padding="2" boxShadow="md" fontSize="x-small">
+                                        {date[1] + " " + date[2] + " " + date[3] + ", $" + point.point.data.y}
                                     </Box>
                                 )
                             }}
                             margin={{
-                                left: parent.width * 0.08,
-                                bottom: parent.width * 0.08,
+                                left: 50,
+                                bottom: 55,
                                 right: parent.width * 0.05,
                                 top: parent.width * 0.03,
                             }}
@@ -146,7 +111,7 @@ export function Chart(props: any) {
                                 legend: "Market Price ($USD)",
                                 legendOffset: -40,
                                 legendPosition: "middle",
-                                tickValues: props.ticks,
+                                tickValues: ticks,
                                 tickSize: 0,
                                 tickPadding: 10,
                                 tickRotation: 0,

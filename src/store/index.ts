@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil"
 import { verifyToken } from "../services/auth"
-import { getData, removeData, saveData } from "../helpers/persistence"
+import { getData, removeData } from "../helpers/persistence"
 import { User } from "../interfaces/User"
 import { IdentityUsers } from "../interfaces/identity/User"
 
@@ -35,9 +35,7 @@ export const loggedInState = selector({
 
 export const identityUsers = atom({
     key: "identityUsers",
-    default: getData("identityUsers")
-        ? (getData("identityUsers") as IdentityUsers)
-        : null,
+    default: getData("identityUsers") ? (getData("identityUsers") as IdentityUsers) : null,
 })
 export const currentPublicKey = atom({
     key: "publicKey",

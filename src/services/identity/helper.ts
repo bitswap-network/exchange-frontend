@@ -27,11 +27,7 @@ export const handleBitcloutDeposit = async ({
                 transactionHex: transactionHex,
             })
             .subscribe((response) => {
-                depositBitclout(
-                    response.signedTransactionHex,
-                    transactionIDBase58Check,
-                    value
-                )
+                depositBitclout(response.signedTransactionHex, transactionIDBase58Check, value)
                     .then((response) => {
                         resolve(response)
                     })

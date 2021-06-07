@@ -72,13 +72,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mt="6"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
@@ -106,36 +100,17 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mt="6"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
                         Confirm Withdrawal
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        The following amount will be withdrawn from your BitSwap
-                        account
+                        The following amount will be withdrawn from your BitSwap account
                     </Text>
-                    <Text
-                        color="gray.700"
-                        fontSize="md"
-                        fontWeight="400"
-                        mt="4"
-                        mb="2"
-                    >
+                    <Text color="gray.700" fontSize="md" fontWeight="400" mt="4" mb="2">
                         <b>Total Amount: </b>
                         {withdrawValue} {globalVars.BITCLOUT}
                     </Text>
-                    <Flex
-                        flexDir="row"
-                        justifyContent="space-between"
-                        w="full"
-                        mt="6%"
-                        mb="8%"
-                    >
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                         <BlueButton
                             text={`   Modify   `}
                             w="47%"
@@ -162,43 +137,20 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
-                <Text
-                    textAlign="center"
-                    fontSize="xx-large"
-                    fontWeight="700"
-                    w="full"
-                    mt="6"
-                >
-                    {globalVars.formatBalanceSmall(user.balance.bitclout)}{" "}
-                    {globalVars.BITCLOUT}
+                <Text textAlign="center" fontSize="xx-large" fontWeight="700" w="full" mt="6">
+                    {globalVars.formatBalanceSmall(user.balance.bitclout)} {globalVars.BITCLOUT}
                 </Text>
-                <Text
-                    textAlign="center"
-                    color="gray.500"
-                    fontSize="sm"
-                    w="full"
-                    mb="6"
-                >
+                <Text textAlign="center" color="gray.500" fontSize="sm" w="full" mb="6">
                     Currently Available
                 </Text>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mb="2" color="gray.700">
                         Withdraw Funds
                     </Text>
                     <Text color="gray.500" fontSize="sm">
                         Withdraw funds from your BitSwap wallet!
                     </Text>
-                    <Text
-                        color="gray.600"
-                        fontSize="sm"
-                        fontWeight="600"
-                        mt="6"
-                    >
+                    <Text color="gray.600" fontSize="sm" fontWeight="600" mt="6">
                         Amount of {globalVars.BITCLOUT} to withdraw{" "}
                         <Button
                             variant="solid"
@@ -206,9 +158,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             p="3"
                             h="30px"
                             ml="2"
-                            onClick={() =>
-                                setWithdrawValue(maxWithdraw.toString())
-                            }
+                            onClick={() => setWithdrawValue(maxWithdraw.toString())}
                         >
                             Max
                         </Button>
@@ -231,28 +181,14 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                         </NumberInputStepper>
                     </NumberInput>
                     <Text color="gray.500" fontSize="sm" mt="6">
-                        You will be able to review this transaction before it’s
-                        complete.
+                        You will be able to review this transaction before it’s complete.
                     </Text>
-                    <Flex
-                        flexDir="row"
-                        justifyContent="space-between"
-                        w="full"
-                        mt="6%"
-                        mb="8%"
-                    >
-                        <Button
-                            w="47%"
-                            variant="ghost"
-                            onClick={disclosure.onClose}
-                        >
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
+                        <Button w="47%" variant="ghost" onClick={disclosure.onClose}>
                             Cancel
                         </Button>
                         <BlueButton
-                            isDisabled={
-                                parseFloat(withdrawValue) > maxWithdraw ||
-                                parseFloat(withdrawValue) <= 0
-                            }
+                            isDisabled={parseFloat(withdrawValue) > maxWithdraw || parseFloat(withdrawValue) <= 0}
                             w="47%"
                             text={`   Continue   `}
                             onClick={() => setPage(1)}

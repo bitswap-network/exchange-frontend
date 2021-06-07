@@ -1,17 +1,8 @@
 /* eslint-disable react/jsx-key */
 // jsx-key is disabled because it fails to apply to the spread operator with typed object [as of May 2021]
 
-import React, { PropsWithChildren, useState, useEffect } from "react"
-import {
-    Table as ChakraTable,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    chakra,
-    useDisclosure,
-} from "@chakra-ui/react"
+import React, { PropsWithChildren, useState } from "react"
+import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, chakra, useDisclosure } from "@chakra-ui/react"
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons"
 import { useTable, useSortBy, TableOptions } from "react-table"
 import { OrderInfoModal } from "../OrderInfoModal"
@@ -24,40 +15,21 @@ export function Table<T extends Record<string, unknown>>({
 }: PropsWithChildren<TableOptions<T>>): React.ReactElement {
     const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>()
     const isOrderTable = type === 0
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable<T>({ columns, data }, useSortBy)
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>(
+        { columns, data },
+        useSortBy
+    )
     const modalDisclosure = useDisclosure()
     return (
         <>
-            {isOrderTable && (
-                <OrderInfoModal
-                    disclosure={modalDisclosure}
-                    order={selectOrder}
-                />
-            )}
-            <ChakraTable
-                {...getTableProps()}
-                size="sm"
-                variant="simple"
-                borderRadius="md"
-            >
-                <Thead
-                    position="sticky"
-                    top="0"
-                    zIndex="100"
-                    bgColor="white"
-                    minH={isOrderTable && "100"}
-                >
+            {isOrderTable && <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />}
+            <ChakraTable {...getTableProps()} size="sm" variant="simple" borderRadius="md" bgColor="white">
+                <Thead position="sticky" top="0" zIndex="100" bgColor="white" minH={isOrderTable && "100"}>
                     {headerGroups.map((headerGroup) => (
-                        <Tr
-                            {...headerGroup.getHeaderGroupProps()}
-                            key={Math.random().toString(4)}
-                        >
+                        <Tr {...headerGroup.getHeaderGroupProps()} key={Math.random().toString(4)}>
                             {headerGroup.headers.map((column) => (
                                 <Th
-                                    {...column.getHeaderProps(
-                                        column.getSortByToggleProps()
-                                    )}
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
                                     isNumeric={column.isNumeric}
                                     pt="4"
                                     pb="4"
@@ -72,10 +44,7 @@ export function Table<T extends Record<string, unknown>>({
                                                 <TriangleUpIcon aria-label="sorted ascending" />
                                             )
                                         ) : (
-                                            <TriangleDownIcon
-                                                aria-label="not sorted"
-                                                fillOpacity="0"
-                                            />
+                                            <TriangleDownIcon aria-label="not sorted" fillOpacity="0" />
                                         )}
                                     </chakra.span>
                                 </Th>
@@ -92,9 +61,7 @@ export function Table<T extends Record<string, unknown>>({
                                 key={Math.random().toString(4)}
                                 onClick={() => {
                                     if (isOrderTable) {
-                                        setSelectOrder(
-                                            row.original as OrderTableDataInterface
-                                        )
+                                        setSelectOrder(row.original as OrderTableDataInterface)
                                         modalDisclosure.onOpen()
                                     }
                                 }}

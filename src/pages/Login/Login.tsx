@@ -1,13 +1,5 @@
 import React, { ReactElement, useState } from "react"
-import {
-    VStack,
-    Text,
-    Input,
-    Flex,
-    Checkbox,
-    Link,
-    HStack,
-} from "@chakra-ui/react"
+import { VStack, Text, Input, Flex, Checkbox, Link, HStack } from "@chakra-ui/react"
 import { HiExclamationCircle } from "react-icons/hi"
 
 import { BlueButton } from "../../components/BlueButton/BlueButton"
@@ -25,8 +17,7 @@ interface CreateUserObj {
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
 export function Login(): ReactElement {
-    const [bitcloutProfile, setBitcloutProfile] =
-        useState<BitcloutProfile | null>(null)
+    const [bitcloutProfile, setBitcloutProfile] = useState<BitcloutProfile | null>(null)
 
     const [createProfile, setCreateProfile] = useState<CreateUserObj>({
         publicKey: "",
@@ -45,11 +36,7 @@ export function Login(): ReactElement {
     const registerHandler = () => {
         setLoading(true)
         if (validate()) {
-            register(
-                createProfile.publicKey,
-                createProfile.email,
-                createProfile.name
-            )
+            register(createProfile.publicKey, createProfile.email, createProfile.name)
                 .then(() => {
                     setErrText("")
                     setLoading(false)
@@ -85,29 +72,28 @@ export function Login(): ReactElement {
     }
 
     const loginHandler = () => {
+        setLoading(true)
         launch("/log-in").subscribe((res) => {
             setErrText("")
             setIdentityUsers(res.users)
             const payload = {
                 accessLevel: res.users[res.publicKeyAdded].accessLevel,
                 accessLevelHmac: res.users[res.publicKeyAdded].accessLevelHmac,
-                encryptedSeedHex:
-                    res.users[res.publicKeyAdded].encryptedSeedHex,
+                encryptedSeedHex: res.users[res.publicKeyAdded].encryptedSeedHex,
             }
             jwt(payload).subscribe((token) => {
                 token.jwt
                     ? login(res.publicKeyAdded, token.jwt)
                           .then(() => {
+                              setLoading(false)
                               window.location.assign("/")
                           })
                           .catch((error: any) => {
+                              setLoading(false)
                               //TODO: revise response status codes
                               if (error.response) {
                                   if (error.response.status === 406) {
-                                      fetchBitcloutProfile(
-                                          res.publicKeyAdded,
-                                          ""
-                                      )
+                                      fetchBitcloutProfile(res.publicKeyAdded, "")
                                           .then((response) => {
                                               console.log(response.data)
                                               setBitcloutProfile(response.data)
@@ -119,11 +105,7 @@ export function Login(): ReactElement {
                                           })
                                           .catch((error) => {
                                               console.log(error.response.data)
-                                              error.response.data.message &&
-                                                  setErrText(
-                                                      error.response.data
-                                                          .message
-                                                  )
+                                              error.response.data.message && setErrText(error.response.data.message)
                                           })
                                   }
                               } else {
@@ -155,14 +137,9 @@ export function Login(): ReactElement {
                 Welcome to Bitswap 🚀
             </Text>
             <Text fontSize="md" color="gray.600" w="350px">
-                To continue to your account on the platform, login using your
-                BitClout account
+                To continue to your account on the platform, login using your BitClout account
             </Text>
-            <BlueButton
-                text={`   Login with Bitclout  `}
-                width="350px"
-                onClick={loginHandler}
-            />
+            <BlueButton text={`   Login with Bitclout  `} width="350px" onClick={loginHandler} loading={loading} />
             <Text fontSize="md" color="red.300">
                 {errText}
             </Text>
@@ -205,13 +182,7 @@ export function Login(): ReactElement {
                         value={createProfile.name}
                         onChange={nameInputHandler}
                     />
-                    {nameErr ? (
-                        <HiExclamationCircle
-                            style={{ display: "inline" }}
-                            color="#EE0004"
-                            size="24"
-                        />
-                    ) : null}
+                    {nameErr ? <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="24" /> : null}
                 </HStack>
                 {nameErr ? (
                     <Text fontSize="md" color="red.300">
@@ -234,13 +205,7 @@ export function Login(): ReactElement {
                         value={createProfile.email}
                         onChange={emailInputHandler}
                     />
-                    {emailErr ? (
-                        <HiExclamationCircle
-                            style={{ display: "inline" }}
-                            color="#EE0004"
-                            size="24"
-                        />
-                    ) : null}
+                    {emailErr ? <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="24" /> : null}
                 </HStack>
                 {emailErr ? (
                     <Text fontSize="md" color="red.300">
@@ -248,11 +213,7 @@ export function Login(): ReactElement {
                     </Text>
                 ) : null}
             </VStack>
-            <Checkbox
-                isChecked={checked}
-                onChange={(e) => setChecked(e.target.checked)}
-                isInvalid={termsErr}
-            >
+            <Checkbox isChecked={checked} onChange={(e) => setChecked(e.target.checked)} isInvalid={termsErr}>
                 <Text fontSize="sm" color="gray.600" maxW="400px">
                     I agree to BitSwap’s{" "}
                     <Link
@@ -269,12 +230,7 @@ export function Login(): ReactElement {
                 {errText}
             </Text>
             <Flex w="full" justify="center">
-                <BlueButton
-                    text={`   Create Account   `}
-                    width="350px"
-                    onClick={registerHandler}
-                    disabled={!checked}
-                />
+                <BlueButton text={`   Create Account   `} width="350px" onClick={registerHandler} disabled={!checked} />
             </Flex>
         </VStack>
     )
@@ -285,25 +241,16 @@ export function Login(): ReactElement {
                 Your account has been created 🚀
             </Text>
             <Text fontSize="md" color="gray.600">
-                Please check your inbox for intructions on how to verify your
-                account.
+                Please check your inbox for intructions on how to verify your account.
             </Text>
-            <BlueButton
-                text={`   Login   `}
-                width="350px"
-                onClick={loginHandler}
-            />
+            <BlueButton text={`   Login   `} width="350px" onClick={loginHandler} />
         </VStack>
     )
 
     return (
         <>
             <Flex minH="70vh" align="center" justify="center">
-                {newUser
-                    ? registrationSuccess
-                        ? accountCreated
-                        : newUserView
-                    : loginView}
+                {newUser ? (registrationSuccess ? accountCreated : newUserView) : loginView}
             </Flex>
         </>
     )

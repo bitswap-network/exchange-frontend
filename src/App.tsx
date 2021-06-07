@@ -1,11 +1,5 @@
 import React, { ReactElement, Suspense } from "react"
-import {
-    Box,
-    Container,
-    ChakraProvider,
-    Grid,
-    Skeleton,
-} from "@chakra-ui/react"
+import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import { RecoilRoot } from "recoil"
 
@@ -22,20 +16,8 @@ import { PrivateRoute } from "./components/PrivateRoute"
 
 import * as config from "./globalVars"
 import { identityHandler } from "./services/identity"
-import TagManager from "react-gtm-module"
-
-const tagManagerArgs = {
-    dataLayer: {
-        userId: "001",
-        userProject: "project",
-        page: "home",
-    },
-    dataLayerName: "PageDataLayer",
-}
 
 window.addEventListener("message", identityHandler)
-
-console.log(process.env)
 
 export const App = (): ReactElement => {
     return (

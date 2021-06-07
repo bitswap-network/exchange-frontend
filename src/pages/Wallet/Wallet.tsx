@@ -1,18 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useEffect, useState } from "react"
-import {
-    Box,
-    Flex,
-    Heading,
-    VStack,
-    SimpleGrid,
-    useDisclosure,
-} from "@chakra-ui/react"
+import { Box, Flex, Heading, VStack, SimpleGrid, useDisclosure, Text } from "@chakra-ui/react"
 import { BalanceCard } from "../../components/BalanceCard"
 import { CryptoCard } from "../../components/CryptoCard"
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
-import { tokenState, userState } from "../../store"
+import { tokenState } from "../../store"
 import { getEthUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
@@ -25,11 +18,9 @@ import { useUser } from "../../hooks"
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
-    // const user = useRecoilValue(userState)
     const token = useRecoilValue(tokenState)
     const { user, userIsLoading, userIsError } = useUser(token)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
-    // const [bitcloutUsd, setBitcloutUsd] = useState<number | null>(null)
     const [selectedCurrency, setSelectedCurrency] = useState<{
         type: string
         maxWithdraw: number
@@ -38,8 +29,7 @@ export function Wallet(): React.ReactElement {
         maxWithdraw: 0,
     })
     const [transactions, setTransactions] = useState<TransactionSchema[]>([])
-    const [currentTransaction, setCurrentTransaction] =
-        useState<TransactionSchema | null>(null)
+    const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null)
 
     const {
         isOpen: isOpenTransactionModal,
@@ -47,17 +37,9 @@ export function Wallet(): React.ReactElement {
         onClose: onCloseTransactionModal,
     } = useDisclosure()
 
-    const {
-        isOpen: isOpenDepositModal,
-        onOpen: onOpenDepositModal,
-        onClose: onCloseDepositModal,
-    } = useDisclosure()
+    const { isOpen: isOpenDepositModal, onOpen: onOpenDepositModal, onClose: onCloseDepositModal } = useDisclosure()
 
-    const {
-        isOpen: isOpenWithdrawModal,
-        onOpen: onOpenWithdrawModal,
-        onClose: onCloseWithdrawModal,
-    } = useDisclosure()
+    const { isOpen: isOpenWithdrawModal, onOpen: onOpenWithdrawModal, onClose: onCloseWithdrawModal } = useDisclosure()
 
     useEffect(() => {
         getEthUSD().then((response) => {
@@ -82,7 +64,7 @@ export function Wallet(): React.ReactElement {
         } else {
             getMaxEth().then((max) => {
                 setSelectedCurrency({
-                    type: "ETH",
+                    type: globalVars.ETHER,
                     maxWithdraw: max,
                 })
             })
@@ -110,10 +92,7 @@ export function Wallet(): React.ReactElement {
             if (user?.balance.bitclout > 0) {
                 withdrawBitcloutPreflightTxn(user.balance.bitclout)
                     .then((response) => {
-                        resolve(
-                            user.balance.bitclout -
-                                response.data.data.FeeNanos / 1e9
-                        )
+                        resolve(user.balance.bitclout - response.data.data.FeeNanos / 1e9)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -212,11 +191,7 @@ export function Wallet(): React.ReactElement {
                     </Box>
 
                     <Flex direction="column" bg="background.primary">
-                        <SimpleGrid
-                            columns={{ sm: 1, md: 2 }}
-                            rows={{ sm: 2, md: 1 }}
-                            spacing={10}
-                        >
+                        <SimpleGrid columns={{ sm: 1, md: 2 }} rows={{ sm: 2, md: 1 }} spacing={10}>
                             <VStack
                                 align={{ sm: "center", md: "flex-end" }}
                                 justifyContent={{
@@ -226,41 +201,25 @@ export function Wallet(): React.ReactElement {
                             >
                                 <Box
                                     pb="4"
-                                    onClick={() =>
-                                        handleCurrencyChange(
-                                            globalVars.BITCLOUT
-                                        )
-                                    }
+                                    onClick={() => handleCurrencyChange(globalVars.BITCLOUT)}
                                     w="full"
                                     maxW="sm"
                                 >
                                     <CryptoCard
-                                        active={
-                                            selectedCurrency.type ==
-                                            globalVars.BITCLOUT
-                                        }
+                                        active={selectedCurrency.type == globalVars.BITCLOUT}
                                         imageUrl={BCLT.imageUri}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
-                                        publicKey={BCLT.publicKey}
+                                        border={true}
                                     />
                                 </Box>
-                                <Box
-                                    onClick={() =>
-                                        handleCurrencyChange(globalVars.ETHER)
-                                    }
-                                    w="full"
-                                    maxW="sm"
-                                >
+                                <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="full" maxW="sm">
                                     <CryptoCard
-                                        active={
-                                            selectedCurrency.type ==
-                                            globalVars.ETHER
-                                        }
+                                        active={selectedCurrency.type == globalVars.ETHER}
                                         imageUrl={ETH.imageUri}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
-                                        publicKey={ETH.publicKey}
+                                        border={true}
                                     />
                                 </Box>
                             </VStack>
@@ -271,15 +230,13 @@ export function Wallet(): React.ReactElement {
                                 }}
                                 w="full"
                             >
-                                {selectedCurrency.type ==
-                                globalVars.BITCLOUT ? (
+                                {selectedCurrency.type == globalVars.BITCLOUT ? (
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
                                         imageUrl={BCLT.imageUri}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
-                                        usdValue={null}
                                     />
                                 ) : (
                                     <BalanceCard
@@ -288,11 +245,7 @@ export function Wallet(): React.ReactElement {
                                         imageUrl={ETH.imageUri}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
-                                        usdValue={
-                                            ethUsd
-                                                ? ethUsd * user?.balance.ether
-                                                : null
-                                        }
+                                        usdValue={ethUsd ? ethUsd * user?.balance.ether : 0}
                                     />
                                 )}
                             </Flex>
@@ -302,125 +255,95 @@ export function Wallet(): React.ReactElement {
                         <Heading as="h2" size="md" color="gray.700">
                             Transaction History
                         </Heading>
-                        <Box
-                            bg="white"
-                            w="100%"
-                            borderRadius="lg"
-                            boxShadow="xs"
-                        >
-                            <Table variant="simple" w="100%">
-                                <Thead>
-                                    <Tr>
-                                        <Th color="gray.700" pt="5">
-                                            Transaction Type
-                                        </Th>
-                                        <Th color="gray.700" pt="5">
-                                            Timestamp
-                                        </Th>
-                                        <Th color="gray.700" pt="5">
-                                            Asset
-                                        </Th>
-                                        <Th color="gray.700" pt="5">
-                                            Value
-                                        </Th>
-                                        <Th color="gray.700" pt="5">
-                                            Status
-                                        </Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {transactions
-                                        .filter((transaction) => {
-                                            if (
-                                                selectedCurrency.type ===
-                                                globalVars.BITCLOUT
-                                            ) {
-                                                return (
-                                                    transaction.assetType ===
-                                                    "BCLT"
-                                                )
-                                            } else {
-                                                return (
-                                                    transaction.assetType ===
-                                                    "ETH"
-                                                )
-                                            }
-                                        })
-                                        .sort((a, b) => {
-                                            return (
-                                                new Date(
-                                                    b.completionDate ??
-                                                        b.created
-                                                ).getTime() -
-                                                new Date(
-                                                    a.completionDate ??
-                                                        a.created
-                                                ).getTime()
-                                            )
-                                        })
-                                        .map((transaction) => (
-                                            <Tr
-                                                onClick={() =>
-                                                    openTransactionModal(
-                                                        transaction
-                                                    )
+                        {transactions.filter((transaction) => {
+                            if (selectedCurrency.type === globalVars.BITCLOUT) {
+                                return transaction.assetType === "BCLT"
+                            } else {
+                                return transaction.assetType === "ETH"
+                            }
+                        }).length > 0 ? (
+                            <Box bg="white" w="100%" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
+                                <Table variant="simple" w="100%" colorScheme="blackAlpha">
+                                    <Thead position="sticky" top="0" zIndex="100" bgColor="whiteAlpha.900" pb="4">
+                                        <Tr>
+                                            <Th color="gray.700" pt="5">
+                                                Transaction Type
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Timestamp
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Asset
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Value
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Status
+                                            </Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {transactions
+                                            .filter((transaction) => {
+                                                if (selectedCurrency.type === globalVars.BITCLOUT) {
+                                                    return transaction.assetType === "BCLT"
+                                                } else {
+                                                    return transaction.assetType === "ETH"
                                                 }
-                                                cursor="pointer"
-                                                key={transaction._id}
-                                            >
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="14"
-                                                    textTransform="capitalize"
+                                            })
+                                            .sort((a, b) => {
+                                                return (
+                                                    new Date(b.completionDate ?? b.created).getTime() -
+                                                    new Date(a.completionDate ?? a.created).getTime()
+                                                )
+                                            })
+                                            .map((transaction) => (
+                                                <Tr
+                                                    onClick={() => openTransactionModal(transaction)}
+                                                    cursor="pointer"
+                                                    key={transaction._id}
                                                 >
-                                                    {
-                                                        transaction.transactionType
-                                                    }
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="14"
-                                                    textTransform="capitalize"
-                                                >
-                                                    {globalVars.timeSince(
-                                                        new Date(
-                                                            transaction.completionDate
-                                                                ? transaction.completionDate
-                                                                : transaction.created
-                                                        )
-                                                    )}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="14"
-                                                    textTransform="capitalize"
-                                                >
-                                                    {transaction.assetType}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="14"
-                                                >
-                                                    {transaction.value
-                                                        ? `${globalVars.formatBalanceLarge(
-                                                              transaction.value
-                                                          )} ${
-                                                              transaction.assetType
-                                                          }`
-                                                        : "N/A"}
-                                                </Td>
-                                                <Td
-                                                    color="gray.500"
-                                                    fontSize="14"
-                                                    textTransform="capitalize"
-                                                >
-                                                    {transaction.state}
-                                                </Td>
-                                            </Tr>
-                                        ))}
-                                </Tbody>
-                            </Table>
-                        </Box>
+                                                    <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                        {transaction.transactionType}
+                                                    </Td>
+                                                    <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                        {globalVars.timeSince(
+                                                            new Date(
+                                                                transaction.completionDate
+                                                                    ? transaction.completionDate
+                                                                    : transaction.created
+                                                            )
+                                                        )}
+                                                    </Td>
+                                                    <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                        {transaction.assetType}
+                                                    </Td>
+                                                    <Td color="gray.500" fontSize="14">
+                                                        {transaction.value
+                                                            ? `${globalVars.formatBalanceSmall(transaction.value)} ${
+                                                                  transaction.assetType
+                                                              }`
+                                                            : "N/A"}
+                                                    </Td>
+                                                    <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                        {transaction.state}
+                                                    </Td>
+                                                </Tr>
+                                            ))}
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        ) : (
+                            <>
+                                <Text w="full" color="gray.500" fontSize="md" lineHeight="0" fontWeight="500" pt="4">
+                                    Looks like you haven&apos;t made a transaction yet!
+                                </Text>
+                                <Text w="full" color="gray.500" fontSize="sm" lineHeight="0" pt="2">
+                                    Any transactions you make will appear here.
+                                </Text>
+                            </>
+                        )}
                     </VStack>
                 </Box>
             </Flex>

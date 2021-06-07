@@ -18,10 +18,7 @@ import {
 import { AiFillInfoCircle } from "react-icons/ai"
 
 import { Column } from "react-table"
-import {
-    OrderBookTableColumns,
-    OrderTableDataInterface,
-} from "../../interfaces/Order"
+import { OrderBookTableColumns, OrderTableDataInterface } from "../../interfaces/Order"
 import { OrderBookTable } from "../Orders/OrderTable"
 import { useOrderBook } from "../../hooks"
 
@@ -34,10 +31,7 @@ export function Home(): React.ReactElement {
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
     const [marketBuy, setMarketBuy] = useState<number | null>(null)
     const [marketSell, setMarketSell] = useState<number | null>(null)
-    const columns = React.useMemo(
-        () => OrderBookTableColumns,
-        []
-    ) as Column<OrderTableDataInterface>[]
+    const columns = React.useMemo(() => OrderBookTableColumns, []) as Column<OrderTableDataInterface>[]
     useEffect(() => {
         getMarketPrice(1, "buy").then((response) => {
             setMarketBuy(response.data.price)
@@ -54,7 +48,7 @@ export function Home(): React.ReactElement {
                     <Heading>Home</Heading>
                     <HStack>
                         <Heading as="h2" size="md">
-                            BitClout Market Price
+                            BitClout Market Value
                         </Heading>
                         <Popover placement="top-start" trigger="hover">
                             <PopoverTrigger>
@@ -73,14 +67,9 @@ export function Home(): React.ReactElement {
                                 <PopoverHeader fontSize="sm" fontWeight="600">
                                     Price Derivation
                                 </PopoverHeader>
-                                <PopoverBody
-                                    fontSize="xs"
-                                    fontWeight="400"
-                                    color="gray.600"
-                                >
-                                    The Market Buy/Sell prices are the current
-                                    offers on the market if you were to buy or
-                                    sell 1 {globalVars.BITCLOUT}.
+                                <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
+                                    The Market Buy/Sell prices are the current offers on the market if you were to buy
+                                    or sell 1 {globalVars.BITCLOUT}.
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
@@ -94,9 +83,10 @@ export function Home(): React.ReactElement {
                             align="center"
                             justify="center"
                             borderRadius="4"
+                            boxShadow="md"
+                            m="4"
                         >
-                            Market Buy:{" "}
-                            {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
+                            Market Ask: {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
                         </Flex>
                         <Flex
                             bgColor="#dbe6ff"
@@ -108,44 +98,12 @@ export function Home(): React.ReactElement {
                             align="center"
                             justify="center"
                             borderRadius="4"
+                            boxShadow="md"
+                            m="4"
                         >
-                            Market Sell:{" "}
-                            {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
+                            Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                         </Flex>
                     </HStack>
-                    {/* <Flex w="100%" mt="4" mb="2" h="20px" flexDir="row">
-                        <Flex
-                            bgColor="#dbe6ff"
-                            boxShadow="sm"
-                            p="4"
-                            color="brand.100"
-                            fontWeight="500"
-                            fontSize="xs"
-                            h="20px"
-                            align="center"
-                            justify="center"
-                            borderRadius="4"
-                        >
-                            Market Buy:{" "}
-                            {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
-                        </Flex>
-                        <Flex
-                            bgColor="#dbe6ff"
-                            boxShadow="sm"
-                            p="4"
-                            color="brand.100"
-                            fontWeight="500"
-                            fontSize="xs"
-                            h="20px"
-                            align="center"
-                            justify="center"
-                            borderRadius="4"
-                            ml="4"
-                        >
-                            Market Sell:{" "}
-                            {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
-                        </Flex>
-                    </Flex> */}
                     <Box
                         boxShadow="lg"
                         borderRadius="lg"
@@ -154,8 +112,9 @@ export function Home(): React.ReactElement {
                         d="flex"
                         w="100%"
                         pos="relative"
-                        marginTop="4"
-                        paddingLeft="2"
+                        mt="4"
+                        pl="2"
+                        h="45vh"
                     >
                         <Chart ticks={10} />
                     </Box>
@@ -169,22 +128,14 @@ export function Home(): React.ReactElement {
                         Selling
                     </Heading>
                     <OrderBookTable
-                        data={
-                            !orderbookIsLoading && !orderbookIsError
-                                ? orderbook!.asks
-                                : []
-                        }
+                        data={!orderbookIsLoading && !orderbookIsError ? orderbook!.asks : []}
                         columns={columns}
                     />
                     <Heading as="h2" size="md" mt={4} mb={4}>
                         Buying
                     </Heading>
                     <OrderBookTable
-                        data={
-                            !orderbookIsLoading && !orderbookIsError
-                                ? orderbook!.bids
-                                : []
-                        }
+                        data={!orderbookIsLoading && !orderbookIsError ? orderbook!.bids : []}
                         columns={columns}
                     />
                 </Flex>

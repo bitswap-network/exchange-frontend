@@ -32,9 +32,7 @@ interface DepositModalProps {
     }
 }
 
-export const EthDepositModal: React.FC<DepositModalProps> = ({
-    disclosure,
-}: DepositModalProps) => {
+export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: DepositModalProps) => {
     let ETHTransferAddress: HTMLInputElement | null = null
     const user = useRecoilValue(userState)
     const [textCopied, setTextCopied] = useState("copy")
@@ -42,8 +40,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
     const [confirmButtonState, setConfirmButtonState] = useState(0)
     const [depositAddress, setDepositAddress] = useState<string | null>(null)
     const [depositSuccessful, setDepositSuccessful] = useState(false)
-    const [depositTransaction, setDepositTransaction] =
-        useState<TransactionSchema | null>(null)
+    const [depositTransaction, setDepositTransaction] = useState<TransactionSchema | null>(null)
     const [page, setPage] = useState<number>(0)
 
     const cancelDepositHandler = () => {
@@ -125,13 +122,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mt="6"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
@@ -158,37 +149,18 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
-                <Text
-                    textAlign="center"
-                    fontSize="xx-large"
-                    fontWeight="700"
-                    w="full"
-                    mt="6"
-                >
-                    {globalVars.formatBalanceSmall(user.balance.ether)}{" "}
-                    {globalVars.ETHER}
+                <Text textAlign="center" fontSize="xx-large" fontWeight="700" w="full" mt="6">
+                    {globalVars.formatBalanceSmall(user.balance.ether)} {globalVars.ETHER}
                 </Text>
-                <Text
-                    textAlign="center"
-                    color="gray.500"
-                    fontSize="sm"
-                    w="full"
-                    mb="6"
-                >
+                <Text textAlign="center" color="gray.500" fontSize="sm" w="full" mb="6">
                     Currently Available
                 </Text>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mb="2" color="gray.700">
                         Deposit Funds
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Add ETH to your BitSwap wallet! Click confirm below to
-                        generate a transfer address.
+                        Add ETH to your BitSwap wallet! Click confirm below to generate a transfer address.
                     </Text>
                     {depositAddress ? (
                         <>
@@ -203,11 +175,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
                                     value={depositAddress}
                                 />
                                 <InputRightElement width="4.5rem">
-                                    <Button
-                                        h="1.75rem"
-                                        size="sm"
-                                        onClick={copyToClipboard}
-                                    >
+                                    <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
                                         {textCopied}
                                     </Button>
                                 </InputRightElement>
@@ -228,10 +196,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
                                     </>
                                 ) : (
                                     <>
-                                        <HiCheckCircle
-                                            size="36"
-                                            color="#1dce9e"
-                                        />
+                                        <HiCheckCircle size="36" color="#1dce9e" />
                                         <Text color="gray.800" fontSize="md">
                                             Deposit successful
                                         </Text>
@@ -239,33 +204,19 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({
                                 )}
                             </VStack>
                             <Text color="gray.500" fontSize="xs" mt="6">
-                                Only transfer funds to this address{" "}
-                                <span style={{ fontWeight: 800 }}>ONCE</span>.
-                                Any further transfers will not go through and
-                                your funds may be lost.
+                                Only transfer funds to this address <span style={{ fontWeight: 800 }}>ONCE</span>. Any
+                                further transfers will not go through and your funds may be lost.
                             </Text>
                             <Text color="gray.500" fontSize="xs" mt="2">
-                                Do not copy the address by hand. Incorrect
-                                addresses may result in deposits in the wrong
+                                Do not copy the address by hand. Incorrect addresses may result in deposits in the wrong
                                 account and cannot be undone.
                             </Text>
                         </>
                     ) : null}
 
-                    <Flex
-                        flexDir="row"
-                        justifyContent="space-between"
-                        w="full"
-                        mt="6%"
-                        mb="8%"
-                    >
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                         {!depositSuccessful && depositAddress ? (
-                            <Button
-                                w="90%"
-                                ml="5%"
-                                variant="solid"
-                                onClick={cancelDepositHandler}
-                            >
+                            <Button w="90%" ml="5%" variant="solid" onClick={cancelDepositHandler}>
                                 Cancel
                             </Button>
                         ) : (

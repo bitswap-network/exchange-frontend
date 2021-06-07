@@ -16,10 +16,7 @@ let iframe: HTMLIFrameElement | null
 
 let importingIdentities: any[]
 
-const launch = (
-    path?: string,
-    params?: { publicKey?: string; tx?: string }
-): Observable<any> => {
+const launch = (path?: string, params?: { publicKey?: string; tx?: string }): Observable<any> => {
     let url = config.identityURL
     if (path) {
         url += path
@@ -28,9 +25,7 @@ const launch = (
     let httpParams = ""
 
     if (params?.publicKey) {
-        httpParams = httpParams.concat(
-            `${prepend ? "?" : "&"}publicKey=${params.publicKey}`
-        )
+        httpParams = httpParams.concat(`${prepend ? "?" : "&"}publicKey=${params.publicKey}`)
         prepend = false
     }
     if (params?.tx) {
@@ -38,9 +33,7 @@ const launch = (
         prepend = false
     }
     if (path === "/log-in") {
-        httpParams = httpParams.concat(
-            `${prepend ? "?" : "&"}accessLevelRequest=${accessLevel}`
-        )
+        httpParams = httpParams.concat(`${prepend ? "?" : "&"}accessLevelRequest=${accessLevel}`)
     }
     url += httpParams
     console.log(url)
@@ -50,11 +43,7 @@ const launch = (
     const y = window.outerHeight / 2 + window.screenY - h / 2
     const x = window.outerWidth / 2 + window.screenX - w / 2
     identityWindowSubject = new Subject()
-    identityWindow = window.open(
-        url,
-        undefined,
-        `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`
-    )
+    identityWindow = window.open(url, undefined, `toolbar=no, width=${w}, height=${h}, top=${y}, left=${x}`)
 
     return identityWindowSubject
 }
@@ -77,11 +66,7 @@ const decrypt = (payload: {
     return send("decrypt", payload)
 }
 
-const jwt = (payload: {
-    accessLevel: number
-    accessLevelHmac: string
-    encryptedSeedHex: string
-}): Observable<any> => {
+const jwt = (payload: { accessLevel: number; accessLevelHmac: string; encryptedSeedHex: string }): Observable<any> => {
     console.log(payload)
     return send("jwt", payload)
 }

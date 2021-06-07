@@ -10,49 +10,19 @@ interface OrderTableProps {
     columns: Column<OrderTableDataInterface>[]
 }
 
-function OrderTableFunc({
-    data,
-    columns,
-}: OrderTableProps): React.ReactElement {
+function OrderTableFunc({ data, columns }: OrderTableProps): React.ReactElement {
     return (
-        <Box
-            bg="white"
-            maxW="full"
-            w="full"
-            boxShadow="md"
-            borderRadius="6"
-            maxH="600px"
-            overflowY="auto"
-        >
-            <Table<OrderTableDataInterface>
-                data={data}
-                columns={columns}
-                type={0}
-            />
+        <Box bg="white" maxW="full" w="full" boxShadow="md" borderRadius="6" maxH="700px" overflowY="auto">
+            <Table<OrderTableDataInterface> data={data} columns={columns} type={0} />
         </Box>
     )
 }
 export const OrderTable = React.memo(OrderTableFunc)
 
-function OrderBookTableFunc({
-    data,
-    columns,
-}: OrderTableProps): React.ReactElement {
+function OrderBookTableFunc({ data, columns }: OrderTableProps): React.ReactElement {
     return (
-        <Box
-            bg="white"
-            maxW="full"
-            w="full"
-            boxShadow="md"
-            borderRadius="5"
-            maxH="250px"
-            overflowY="auto"
-        >
-            <Table<OrderTableDataInterface>
-                data={data}
-                columns={columns}
-                type={1}
-            />
+        <Box bg="white" maxW="full" w="full" boxShadow="md" borderRadius="5" maxH="250px" overflowY="auto">
+            <Table<OrderTableDataInterface> data={data} columns={columns} type={1} />
         </Box>
     )
 }

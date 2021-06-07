@@ -14,11 +14,7 @@ export const cancelDeposit = async (id: string) => {
     return await authClient.get(`/gateway/deposit/cancel/${id}`)
 }
 
-export const depositBitclout = async (
-    transactionHex: string,
-    transactionIDBase58Check: string,
-    value: number
-) => {
+export const depositBitclout = async (transactionHex: string, transactionIDBase58Check: string, value: number) => {
     return await authClient.post("/gateway/deposit/bitclout", {
         transactionHex: transactionHex,
         transactionIDBase58Check: transactionIDBase58Check,

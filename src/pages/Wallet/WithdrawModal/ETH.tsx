@@ -19,7 +19,6 @@ import {
     Link,
     VStack,
     Checkbox,
-    CheckboxGroup,
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { HiCheckCircle } from "react-icons/hi"
@@ -39,10 +38,7 @@ interface WithdrawModalProps {
     maxWithdraw: number
 }
 
-export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
-    disclosure,
-    maxWithdraw,
-}: WithdrawModalProps) => {
+export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw }: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
     const [checked, setChecked] = useState<boolean>(false)
     const [withdrawValue, setWithdrawValue] = useState<string>("0")
@@ -97,13 +93,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mt="6"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
@@ -131,20 +121,12 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mt="6"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
                         Transaction In Process
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        {withdrawValue} {globalVars.ETHER} will be withdrawn
-                        from your BitSwap account. Once the transaction has gone
-                        through, a link will be displayed below for you to
-                        review.
+                        {withdrawValue} {globalVars.ETHER} will be withdrawn from your BitSwap account. Once the
+                        transaction has gone through, a link will be displayed below for you to review.
                     </Text>
                     <HStack spacing={4} mt="4">
                         {!withdrawSuccessful ? (
@@ -181,13 +163,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             </>
                         )}
                     </HStack>
-                    <Flex
-                        flexDir="row"
-                        justifyContent="space-between"
-                        w="full"
-                        mt="6"
-                        mb="8"
-                    >
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="8">
                         <BlueButton
                             w="90%"
                             ml="5%"
@@ -206,43 +182,20 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
         <ModalContent>
             <ModalCloseButton />
             <ModalBody>
-                <Text
-                    textAlign="center"
-                    fontSize="xx-large"
-                    fontWeight="700"
-                    w="full"
-                    mt="6"
-                >
-                    {globalVars.formatBalanceSmall(user.balance.ether)}{" "}
-                    {globalVars.ETHER}
+                <Text textAlign="center" fontSize="xx-large" fontWeight="700" w="full" mt="6">
+                    {globalVars.formatBalanceSmall(user.balance.ether)} {globalVars.ETHER}
                 </Text>
-                <Text
-                    textAlign="center"
-                    color="gray.500"
-                    fontSize="sm"
-                    w="full"
-                    mb="6"
-                >
+                <Text textAlign="center" color="gray.500" fontSize="sm" w="full" mb="6">
                     Currently Available
                 </Text>
                 <Flex w="80%" ml="10%" flexDir="column">
-                    <Text
-                        fontSize="xl"
-                        fontWeight="700"
-                        mb="2"
-                        color="gray.700"
-                    >
+                    <Text fontSize="xl" fontWeight="700" mb="2" color="gray.700">
                         Withdraw Funds
                     </Text>
                     <Text color="gray.500" fontSize="sm">
                         Withdraw funds from your BitSwap wallet!
                     </Text>
-                    <Text
-                        color="gray.600"
-                        fontSize="sm"
-                        fontWeight="600"
-                        mt="6"
-                    >
+                    <Text color="gray.600" fontSize="sm" fontWeight="600" mt="6">
                         Amount of {globalVars.ETHER} to withdraw{" "}
                         <Button
                             variant="solid"
@@ -250,9 +203,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             p="3"
                             h="30px"
                             ml="2"
-                            onClick={() =>
-                                setWithdrawValue(maxWithdraw.toString())
-                            }
+                            onClick={() => setWithdrawValue(maxWithdraw.toString())}
                         >
                             Max
                         </Button>
@@ -274,14 +225,8 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                             <NumberDecrementStepper />
                         </NumberInputStepper>
                     </NumberInput>
-                    <Text
-                        color="gray.600"
-                        fontSize="sm"
-                        fontWeight="400"
-                        mt="6"
-                    >
-                        Enter the {globalVars.ETHER} address you would like to
-                        transfer the funds to
+                    <Text color="gray.600" fontSize="sm" fontWeight="400" mt="6">
+                        Enter the {globalVars.ETHER} address you would like to transfer the funds to
                     </Text>
                     <Input
                         mt="4"
@@ -296,9 +241,8 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                     </Text>
 
                     <Text color="gray.500" fontSize="xs" mt="2">
-                        Please verify carefully that your address has been
-                        entered correctly. Once the confirm button is clicked,
-                        the transaction can no longer be modified.
+                        Please verify carefully that your address has been entered correctly. Once the confirm button is
+                        clicked, the transaction can no longer be modified.
                     </Text>
                     <Checkbox
                         isChecked={checked}
@@ -307,22 +251,11 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({
                         mt="4"
                     >
                         <Text fontSize="xs" color="gray.600">
-                            I confirm that the entered information is correct
-                            and valid.
+                            I confirm that the entered information is correct and valid.
                         </Text>
                     </Checkbox>
-                    <Flex
-                        flexDir="row"
-                        justifyContent="space-between"
-                        w="full"
-                        mt="6%"
-                        mb="8%"
-                    >
-                        <Button
-                            w="47%"
-                            variant="ghost"
-                            onClick={disclosure.onClose}
-                        >
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
+                        <Button w="47%" variant="ghost" onClick={disclosure.onClose}>
                             Cancel
                         </Button>
                         <BlueButton

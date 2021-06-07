@@ -11,9 +11,7 @@ const onRequestError = (error: AxiosError): Promise<AxiosError> => {
     return Promise.reject(error)
 }
 
-const onAuthRequest = async (
-    config: AxiosRequestConfig
-): Promise<AxiosRequestConfig> => {
+const onAuthRequest = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
     const token = getData("token")
     if (token) {
         config.headers["x-access-token"] = token

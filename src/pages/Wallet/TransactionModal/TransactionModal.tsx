@@ -42,34 +42,16 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 <ModalCloseButton />
                 <ModalBody>
                     <Flex w="90%" ml="5%" flexDir="column">
-                        <Text
-                            fontSize="2xl"
-                            fontWeight="700"
-                            mt="6"
-                            mb="2"
-                            color="gray.700"
-                        >
-                            {transaction?.assetType}{" "}
-                            {transaction?.transactionType.toUpperCase()}{" "}
-                            TRANSFER
+                        <Text fontSize="2xl" fontWeight="700" mt="6" mb="2" color="gray.700">
+                            {transaction?.assetType} {transaction?.transactionType.toUpperCase()} TRANSFER
                         </Text>
-                        <Text
-                            color="gray.600"
-                            fontSize="sm"
-                            fontWeight="600"
-                            mt="2"
-                        >
+                        <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                             TRANSFER ID
                         </Text>
                         <Text color="gray.500" fontSize="sm" mt="1">
                             {transaction?._id}
                         </Text>
-                        <Text
-                            color="gray.600"
-                            fontSize="sm"
-                            fontWeight="600"
-                            mt="2"
-                        >
+                        <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                             STATUS
                         </Text>
                         <Text color="gray.500" fontSize="sm" mt="1">
@@ -77,12 +59,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         </Text>
                         {transaction?.txnHash ? (
                             <>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     TXN HASH{" "}
                                     {transaction?.assetType == "ETH" ? (
                                         <Link
@@ -113,12 +90,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                                 </Text>
                             </>
                         ) : null}
-                        <Text
-                            color="gray.600"
-                            fontSize="sm"
-                            fontWeight="600"
-                            mt="2"
-                        >
+                        <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                             FUNDS TRANSFERED
                         </Text>
                         <Text color="gray.500" fontSize="sm" mt="1">
@@ -126,12 +98,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         </Text>
                         {transaction?.gasDeducted ? (
                             <>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     GAS DEDUCTED
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
@@ -139,42 +106,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                                 </Text>
                             </>
                         ) : null}
-                        <Text
-                            color="gray.600"
-                            fontSize="sm"
-                            fontWeight="600"
-                            mt="2"
-                        >
+                        <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                             DATE CREATED
                         </Text>
                         <Text color="gray.500" fontSize="sm" mt="1">
-                            {created.toDateString()}{" "}
-                            {created.toLocaleTimeString()}
+                            {created.toDateString()} {created.toLocaleTimeString()}
                         </Text>
                         {completed ? (
                             <>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     DATE COMPLETED
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    {completed.toDateString()}{" "}
-                                    {completed.toLocaleTimeString()}
+                                    {completed.toDateString()} {completed.toLocaleTimeString()}
                                 </Text>
                             </>
                         ) : null}
                         {transaction?.error ? (
                             <>
-                                <Text
-                                    color="gray.600"
-                                    fontSize="sm"
-                                    fontWeight="600"
-                                    mt="2"
-                                >
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     ERROR
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
@@ -182,18 +132,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                                 </Text>
                             </>
                         ) : null}
-                        <Flex
-                            flexDir="row"
-                            justifyContent="space-between"
-                            w="full"
-                            mt="6%"
-                            mb="8%"
-                        >
-                            <BlueButton
-                                w="47%"
-                                text={`   Close   `}
-                                onClick={disclosure.onClose}
-                            />
+                        <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
+                            <BlueButton w="47%" text={`   Close   `} onClick={disclosure.onClose} />
                             <Button
                                 w="47%"
                                 variant="solid"

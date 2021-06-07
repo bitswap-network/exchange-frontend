@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react"
 
-export const isTest =
-    process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
+export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
 
 export const api = isTest
     ? "https://bitswap-core-api-staging.herokuapp.com/"
@@ -16,6 +15,8 @@ export const ETHER = "ETH"
 export const MAX_LIMIT = 1000
 export const MIN_LIMIT = 0.05
 
+export const parseNum = (val: string) => val.replace(/^\$/, "")
+
 const epochs: [string, number][] = [
     ["year", 31536000],
     ["month", 2592000],
@@ -29,9 +30,7 @@ export function timeSince(date: Date) {
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
     const interval = epochs.find((i) => i[1] < seconds)
     const count = interval ? Math.floor(seconds / interval[1]) : null
-    return interval && count
-        ? `${count} ${interval[0]}${count !== 1 ? "s" : ""} ago`
-        : "<1 second ago"
+    return interval && count ? `${count} ${interval[0]}${count !== 1 ? "s" : ""} ago` : "<1 second ago"
 }
 
 export const formatBalanceSmall = (balance: number) => {
@@ -48,8 +47,7 @@ export const formateDateTime = (date: Date) => {
 export const capFirst = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1)
 }
-export const zip = (a1: Array<any>, a2: Array<any>) =>
-    a1.map((x, i) => [x, a2[i]])
+export const zip = (a1: Array<any>, a2: Array<any>) => a1.map((x, i) => [x, a2[i]])
 
 export function useInterval(callback: () => void, delay: number | null) {
     const savedCallback = useRef(callback)

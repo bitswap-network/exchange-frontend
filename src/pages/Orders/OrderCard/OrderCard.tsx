@@ -10,13 +10,7 @@ interface OrderCardProps {
     icon?: React.ReactElement
 }
 
-export function OrderCard({
-    title,
-    linkText,
-    linkSrc,
-    status,
-    icon,
-}: OrderCardProps): React.ReactElement {
+export function OrderCard({ title, linkText, linkSrc, status, icon }: OrderCardProps): React.ReactElement {
     return (
         <Box bg="white" w="sm" borderRadius="lg" boxShadow="xs" p={6}>
             <Flex>

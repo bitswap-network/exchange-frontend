@@ -1,16 +1,12 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
-import { Button, ButtonProps, Text, Spinner } from "@chakra-ui/react"
+import { Button, ButtonProps, Text } from "@chakra-ui/react"
 
 import { HiArrowRight } from "react-icons/hi"
 
 interface BlueButtonProps extends ButtonProps {
-    /** Text for button */
     text: string
-    /** Determines if button should have icon */
     icon?: boolean
-    /** width */
-    width?: any
+    width?: string | number
     loading?: boolean
     disabled?: boolean
     ghost?: boolean
@@ -30,7 +26,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
             isLoading={loading}
             boxShadow={"md"}
             bg={ghost ? "brandSubtle.100" : "brand.100"}
-            opacity={disabled ? 0.6 : 1}
+            isDisabled={disabled}
             _hover={{
                 bg: `${ghost ? "brandSubtle.150" : "brand.150"}`,
             }}
@@ -48,7 +44,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
         <Button
             variant={"solid"}
             isLoading={loading}
-            opacity={disabled ? 0.6 : 1}
+            isDisabled={disabled}
             width={width ? width : ""}
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}

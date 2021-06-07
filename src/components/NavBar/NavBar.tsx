@@ -1,24 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
-import {
-    Box,
-    Flex,
-    HStack,
-    IconButton,
-    Button,
-    useDisclosure,
-    Stack,
-    Spacer,
-    Text,
-    Skeleton,
-    useColorModeValue,
-    useColorMode,
-} from "@chakra-ui/react"
+import { Box, Flex, HStack, IconButton, Button, useDisclosure, Stack, Spacer, Text, Skeleton } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { Logo } from "./components/Logo"
-import { ColorModeSwitcher } from "../ColorModeSwitcher"
 
 import { Link } from "react-router-dom"
 import { loggedInState, orderModalState } from "../../store"
@@ -28,17 +14,10 @@ const LINKS = ["home", "orders", "wallet"]
 
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (loading: boolean) => (
-    <Box
-        px={4}
-        bg={useColorModeValue("background.primary", "backgroud.secondary")}
-    >
+    <Box px={4} bg={"background.primary"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
             <Skeleton isLoaded={!loading} m="4">
-                <HStack
-                    as={"nav"}
-                    spacing={5}
-                    display={{ base: "none", md: "flex" }}
-                >
+                <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
                     <Link to="/">
                         <Logo />
                     </Link>
@@ -70,11 +49,7 @@ function NavBarFunc() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
     const setOrderModalState = useSetRecoilState(orderModalState)
-    // const { toggleColorMode } = useColorMode()
-    // const bg = useColorModeValue("background.primary", "background.secondary")
 
-    console.log("IS LOGGED IN: ", isLoggedIn)
-    console.log(isOpen)
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <Box px={4}>
@@ -86,30 +61,16 @@ function NavBarFunc() {
                     display={{ md: "none" }}
                     onClick={isOpen ? () => onClose() : () => onOpen()}
                 />
-                <HStack
-                    as={"nav"}
-                    spacing={5}
-                    display={{ base: "none", md: "flex" }}
-                >
+                <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
                     <Logo as={Link} to="/" />
                     {LINKS.map((link) => (
-                        <Text
-                            textTransform="capitalize"
-                            as={Link}
-                            to={`/${link}`}
-                            key={link}
-                            pt="3px"
-                        >
+                        <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} pt="3px">
                             {link}
                         </Text>
                     ))}
                 </HStack>
                 <Flex mr={{ sm: "5px", md: "20px" }}>
-                    <HStack
-                        as={"nav"}
-                        spacing={1}
-                        display={{ base: "none", md: "flex" }}
-                    >
+                    <HStack as={"nav"} spacing={1} display={{ base: "none", md: "flex" }}>
                         <Button
                             as={Link}
                             to={{
@@ -121,29 +82,18 @@ function NavBarFunc() {
                             borderRadius="4"
                             mr="4"
                         >
-                            <Text
-                                textTransform="capitalize"
-                                fontWeight="500"
-                                color="brand.100"
-                                fontSize="sm"
-                            >
+                            <Text textTransform="capitalize" fontWeight="500" color="brand.100" fontSize="sm">
                                 New Order
                             </Text>
                         </Button>
                         <Link to="/profile">
-                            <HStack
-                                spacing="5px"
-                                color="black"
-                                fontWeight="400"
-                                mr="4"
-                            >
+                            <HStack spacing="5px" color="black" fontWeight="400" mr="4">
                                 <AiOutlineUser size="20" />
                                 <Text textTransform="capitalize" pt="2px">
                                     Profile
                                 </Text>
                             </HStack>
                         </Link>
-                        {/* <ColorModeSwitcher /> */}
                     </HStack>
                 </Flex>
             </Flex>
@@ -151,12 +101,7 @@ function NavBarFunc() {
                 <Box pb={4} display={{ base: "flex", md: "none" }}>
                     <Stack as={"nav"} spacing={4}>
                         {LINKS.map((link) => (
-                            <Text
-                                textTransform="capitalize"
-                                as={Link}
-                                to={`/${link}`}
-                                key={link}
-                            >
+                            <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link}>
                                 {link}
                             </Text>
                         ))}
