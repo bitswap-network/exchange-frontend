@@ -114,7 +114,7 @@ export function Home(): React.ReactElement {
                         pos="relative"
                         mt="4"
                         pl="2"
-                        h="45vh"
+                        // h="45vh"
                     >
                         <Chart ticks={10} />
                     </Box>
