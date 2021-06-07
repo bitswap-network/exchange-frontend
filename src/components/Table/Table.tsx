@@ -41,7 +41,13 @@ export function Table<T extends Record<string, unknown>>({
                 variant="simple"
                 borderRadius="md"
             >
-                <Thead minH={isOrderTable && "100"}>
+                <Thead
+                    position="sticky"
+                    top="0"
+                    zIndex="100"
+                    bgColor="white"
+                    minH={isOrderTable && "100"}
+                >
                     {headerGroups.map((headerGroup) => (
                         <Tr
                             {...headerGroup.getHeaderGroupProps()}

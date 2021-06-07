@@ -15,7 +15,15 @@ function OrderTableFunc({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" boxShadow="md" borderRadius="5">
+        <Box
+            bg="white"
+            maxW="full"
+            w="full"
+            boxShadow="md"
+            borderRadius="6"
+            maxH="600px"
+            overflowY="auto"
+        >
             <Table<OrderTableDataInterface>
                 data={data}
                 columns={columns}
