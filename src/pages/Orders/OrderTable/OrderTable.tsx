@@ -3,6 +3,7 @@ import { Box } from "@chakra-ui/react"
 import { Table } from "../../../components/Table"
 import { OrderTableDataInterface } from "../../../interfaces/Order"
 import { Column } from "react-table"
+import "./scrollbar.css"
 
 interface OrderTableProps {
     data: OrderTableDataInterface[]
@@ -14,7 +15,7 @@ function OrderTableFunc({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" boxShadow="xs" borderRadius="5">
+        <Box bg="white" maxW="full" w="full" boxShadow="md" borderRadius="5">
             <Table<OrderTableDataInterface>
                 data={data}
                 columns={columns}
@@ -30,7 +31,15 @@ function OrderBookTableFunc({
     columns,
 }: OrderTableProps): React.ReactElement {
     return (
-        <Box bg="white" maxW="full" w="full" boxShadow="xs" borderRadius="5">
+        <Box
+            bg="white"
+            maxW="full"
+            w="full"
+            boxShadow="md"
+            borderRadius="5"
+            maxH="250px"
+            overflowY="auto"
+        >
             <Table<OrderTableDataInterface>
                 data={data}
                 columns={columns}

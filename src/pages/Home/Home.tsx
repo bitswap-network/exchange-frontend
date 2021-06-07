@@ -83,6 +83,7 @@ export function Home(): React.ReactElement {
                     <Flex w="100%" mt="4" mb="2" h="20px" flexDir="row">
                         <Flex
                             bgColor="#dbe6ff"
+                            boxShadow="sm"
                             p="4"
                             color="brand.100"
                             fontWeight="500"
@@ -96,6 +97,7 @@ export function Home(): React.ReactElement {
                         </Flex>
                         <Flex
                             bgColor="#dbe6ff"
+                            boxShadow="sm"
                             p="4"
                             color="brand.100"
                             fontWeight="500"
@@ -113,7 +115,6 @@ export function Home(): React.ReactElement {
                         boxShadow="lg"
                         borderRadius="lg"
                         overflow="hidden"
-                        // bg="white"
                         d="flex"
                         w="100%"
                         pos="relative"
