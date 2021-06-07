@@ -33,11 +33,11 @@ export function Home(): React.ReactElement {
     const [marketSell, setMarketSell] = useState<number | null>(null)
     const columns = React.useMemo(() => OrderBookTableColumns, []) as Column<OrderTableDataInterface>[]
     useEffect(() => {
-        getMarketPrice(1, "buy").then((response) => {
-            setMarketBuy(response.data.price)
+        getMarketPrice(0.1, "buy").then((response) => {
+            setMarketBuy(response.data.price * 10)
         })
-        getMarketPrice(1, "sell").then((response) => {
-            setMarketSell(response.data.price)
+        getMarketPrice(0.1, "sell").then((response) => {
+            setMarketSell(response.data.price * 10)
         })
     })
     return (
