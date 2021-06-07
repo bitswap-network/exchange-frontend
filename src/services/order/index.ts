@@ -1,4 +1,4 @@
-import { authClient } from "../index"
+import { authClient, client } from "../index"
 
 export const getOrder = async (id: string) => {
     return await authClient.get(`/order/${id}`)
@@ -21,7 +21,7 @@ export const createMarketOrder = async (orderQuantity: number, orderSide: string
 }
 
 export const getMarketPrice = async (orderQuantity: number, orderSide: string) => {
-    return await authClient.post(`/order/market-price`, {
+    return await client.post(`/order/market-price`, {
         orderQuantity: orderQuantity,
         orderSide: orderSide,
     })

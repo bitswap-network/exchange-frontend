@@ -135,7 +135,6 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                 text={`   Close   `}
                                 mr={order.complete ? "0" : "4"}
                                 onClick={disclosure.onClose}
-                                isLoading={cancelLoading}
                                 ghost
                             />
                             {!order.complete && (
