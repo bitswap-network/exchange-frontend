@@ -72,7 +72,9 @@ export function Orders(): React.ReactElement {
                     orderTypeCapped: globalVars.capFirst(order.orderType),
                     quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
                     priceString: `${
-                        order.orderPrice ? `$${order.orderPrice}` : "-"
+                        order.orderPrice
+                            ? `$${+order.orderPrice.toFixed(2)}`
+                            : "-"
                     }`,
                     createdAgo: globalVars.timeSince(new Date(order.created)),
                     completedAgo: order.completeTime

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 import {
     Flex,
@@ -28,15 +28,26 @@ import { OrderBookTable } from "../Orders/OrderTable"
 import { useOrderBook } from "../../hooks"
 
 import { Chart } from "../../components/BitCloutChart/Chart"
+import { getMarketPrice } from "../../services/order"
+
+import * as globalVars from "../../globalVars"
 
 export function Home(): React.ReactElement {
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
-
+    const [marketBuy, setMarketBuy] = useState<number | null>(null)
+    const [marketSell, setMarketSell] = useState<number | null>(null)
     const columns = React.useMemo(
         () => OrderBookTableColumns,
         []
     ) as Column<OrderTableDataInterface>[]
-
+    useEffect(() => {
+        getMarketPrice(1, "buy").then((response) => {
+            setMarketBuy(response.data.price)
+        })
+        getMarketPrice(1, "sell").then((response) => {
+            setMarketSell(response.data.price)
+        })
+    })
     return (
         // <>
         <VStack spacing={8} marginTop="40px">
@@ -47,19 +58,20 @@ export function Home(): React.ReactElement {
                         <Heading as="h2" size="md">
                             BitClout Market Price
                         </Heading>
-                        <Popover placement="right">
+                        <Popover placement="top-start" trigger="hover">
                             <PopoverTrigger>
-                                <AiFillInfoCircle
-                                    style={{
-                                        display: "inline",
-                                        marginTop: 2,
-                                    }}
-                                    color="#aaa"
-                                />
+                                <div>
+                                    <AiFillInfoCircle
+                                        style={{
+                                            display: "inline",
+                                            marginTop: 2,
+                                        }}
+                                        color="#aaa"
+                                    />
+                                </div>
                             </PopoverTrigger>
                             <PopoverContent>
                                 <PopoverArrow />
-                                <PopoverCloseButton />
                                 <PopoverHeader fontSize="sm" fontWeight="600">
                                     Price Derivation
                                 </PopoverHeader>
@@ -68,14 +80,9 @@ export function Home(): React.ReactElement {
                                     fontWeight="400"
                                     color="gray.600"
                                 >
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Nullam vel justo porttitor,
-                                    vestibulum nulla a, elementum nisi. Sed
-                                    pulvinar condimentum tincidunt. Nunc vitae
-                                    justo sit amet nisi vehicula hendrerit non
-                                    pharetra felis. Donec malesuada placerat
-                                    mattis. Curabitur tempus mi eget dapibus
-                                    rhoncus.
+                                    The Market Buy/Sell prices are the current
+                                    offers on the market if you were to buy or
+                                    sell 1 {globalVars.BITCLOUT}.
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
@@ -92,7 +99,8 @@ export function Home(): React.ReactElement {
                             justify="center"
                             borderRadius="4"
                         >
-                            Market Buy: $120.23
+                            Market Buy:{" "}
+                            {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
                         </Flex>
                         <Flex
                             bgColor="#dbe6ff"
@@ -106,7 +114,8 @@ export function Home(): React.ReactElement {
                             borderRadius="4"
                             ml="4"
                         >
-                            Market Sell: $60.24
+                            Market Sell:{" "}
+                            {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                         </Flex>
                     </Flex>
                     <Box
