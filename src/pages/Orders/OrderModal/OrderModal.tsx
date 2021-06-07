@@ -70,7 +70,7 @@ export function OrderModal({
         "Limit Buy: your order will execute only when the specified price (or a better price) is met"
     const limitSellText =
         "Limit Sell: your order will execute only when the specified price (or a better price) is met"
-    const [tooltipText, setTooltipText] = useState<string>(limitBuyText)
+    const [tooltipText, setTooltipText] = useState<string>(marketBuyText)
 
     const [orderQuantity, setOrderQuantity] = useControllableState({
         defaultValue: "1",
@@ -79,7 +79,7 @@ export function OrderModal({
         defaultValue: "0",
     })
     const [orderType, setOrderType] = useControllableState({
-        defaultValue: "limit",
+        defaultValue: "market",
     })
     const [orderSide, setOrderSide] = useControllableState({
         defaultValue: "buy",
@@ -446,6 +446,26 @@ export function OrderModal({
                                                 ${totalUsd}
                                             </Text>
                                         </HStack>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Estimated Fees{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                ~${totalUsd * 0.02}
+                                            </Text>
+                                        </HStack>
                                     </Stack>
                                 </TabPanel>
                                 <TabPanel>
@@ -617,6 +637,26 @@ export function OrderModal({
                                                 fontWeight="600"
                                             >
                                                 ${totalUsd}
+                                            </Text>
+                                        </HStack>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
+                                                    ? "Estimated "
+                                                    : ""}
+                                                Estimated Fees{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                ~${totalUsd * 0.02}
                                             </Text>
                                         </HStack>
                                     </Stack>

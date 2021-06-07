@@ -163,7 +163,7 @@ export function Chart(props: any) {
                             useMesh={true}
                             enableSlices={false}
                             animate={true}
-                            enableGridX={true}
+                            enableGridX={false}
                             enableGridY={true}
                             enableArea={true}
                         />

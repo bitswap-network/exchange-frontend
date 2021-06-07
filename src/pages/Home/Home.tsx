@@ -1,7 +1,23 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react"
 
-import { Flex, Heading, Spacer, VStack, Box } from "@chakra-ui/react"
+import {
+    Flex,
+    Heading,
+    Spacer,
+    VStack,
+    Box,
+    Tooltip,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
+    HStack,
+} from "@chakra-ui/react"
+import { AiFillInfoCircle } from "react-icons/ai"
 
 import { Column } from "react-table"
 import {
@@ -27,12 +43,74 @@ export function Home(): React.ReactElement {
             <Flex flexDirection="row" w="100%">
                 <Flex flexDirection="column" w="50%" padding={4}>
                     <Heading>Home</Heading>
-                    <Heading as="h2" size="md">
-                        BitClout Market Price
-                    </Heading>
-
+                    <HStack>
+                        <Heading as="h2" size="md">
+                            BitClout Market Price
+                        </Heading>
+                        <Popover placement="right">
+                            <PopoverTrigger>
+                                <AiFillInfoCircle
+                                    style={{
+                                        display: "inline",
+                                        marginTop: 2,
+                                    }}
+                                    color="#aaa"
+                                />
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverHeader fontSize="sm" fontWeight="600">
+                                    Price Derivation
+                                </PopoverHeader>
+                                <PopoverBody
+                                    fontSize="xs"
+                                    fontWeight="400"
+                                    color="gray.600"
+                                >
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipiscing elit. Nullam vel justo porttitor,
+                                    vestibulum nulla a, elementum nisi. Sed
+                                    pulvinar condimentum tincidunt. Nunc vitae
+                                    justo sit amet nisi vehicula hendrerit non
+                                    pharetra felis. Donec malesuada placerat
+                                    mattis. Curabitur tempus mi eget dapibus
+                                    rhoncus.
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
+                    </HStack>
+                    <Flex w="100%" mt="4" mb="2" h="20px" flexDir="row">
+                        <Flex
+                            bgColor="#dbe6ff"
+                            p="4"
+                            color="brand.100"
+                            fontWeight="500"
+                            fontSize="xs"
+                            h="20px"
+                            align="center"
+                            justify="center"
+                            borderRadius="4"
+                        >
+                            Market Buy: $120.23
+                        </Flex>
+                        <Flex
+                            bgColor="#dbe6ff"
+                            p="4"
+                            color="brand.100"
+                            fontWeight="500"
+                            fontSize="xs"
+                            h="20px"
+                            align="center"
+                            justify="center"
+                            borderRadius="4"
+                            ml="4"
+                        >
+                            Market Sell: $60.24
+                        </Flex>
+                    </Flex>
                     <Box
-                        boxShadow="xs"
+                        boxShadow="lg"
                         borderRadius="lg"
                         overflow="hidden"
                         // bg="white"
