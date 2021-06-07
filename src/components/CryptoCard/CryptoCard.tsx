@@ -52,7 +52,7 @@ export const CryptoCard: React.FC<CryptoCardProps> = ({
                 </Box>
                 <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
                     <Text fontSize="3xl" color="gray.600">
-                        {amount ? globalVars.formatBalanceSmall(amount) : <Spinner />} {currency}
+                        {amount !== null ? globalVars.formatBalanceSmall(amount) : <Spinner />} {currency}
                     </Text>
                 </Box>
             </Box>
