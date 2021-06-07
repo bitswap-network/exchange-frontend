@@ -7,14 +7,12 @@ import {
     Spacer,
     VStack,
     Box,
-    Tooltip,
     Popover,
     PopoverTrigger,
     PopoverContent,
     PopoverHeader,
     PopoverBody,
     PopoverArrow,
-    PopoverCloseButton,
     HStack,
 } from "@chakra-ui/react"
 import { AiFillInfoCircle } from "react-icons/ai"
@@ -64,7 +62,7 @@ export function Home(): React.ReactElement {
                                     <AiFillInfoCircle
                                         style={{
                                             display: "inline",
-                                            marginTop: 2,
+                                            marginBottom: "2",
                                         }}
                                         color="#aaa"
                                     />
@@ -86,8 +84,36 @@ export function Home(): React.ReactElement {
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
+                        <Flex
+                            bgColor="#dbe6ff"
+                            p="4"
+                            color="brand.100"
+                            fontWeight="500"
+                            fontSize="sm"
+                            h="20px"
+                            align="center"
+                            justify="center"
+                            borderRadius="4"
+                        >
+                            Market Buy:{" "}
+                            {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
+                        </Flex>
+                        <Flex
+                            bgColor="#dbe6ff"
+                            p="4"
+                            color="brand.100"
+                            fontWeight="500"
+                            fontSize="sm"
+                            h="20px"
+                            align="center"
+                            justify="center"
+                            borderRadius="4"
+                        >
+                            Market Sell:{" "}
+                            {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
+                        </Flex>
                     </HStack>
-                    <Flex w="100%" mt="4" mb="2" h="20px" flexDir="row">
+                    {/* <Flex w="100%" mt="4" mb="2" h="20px" flexDir="row">
                         <Flex
                             bgColor="#dbe6ff"
                             p="4"
@@ -117,12 +143,12 @@ export function Home(): React.ReactElement {
                             Market Sell:{" "}
                             {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                         </Flex>
-                    </Flex>
+                    </Flex> */}
                     <Box
                         boxShadow="lg"
                         borderRadius="lg"
                         overflow="hidden"
-                        // bg="white"
+                        bg="white"
                         d="flex"
                         w="100%"
                         pos="relative"

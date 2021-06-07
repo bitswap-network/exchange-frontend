@@ -409,6 +409,27 @@ export function OrderModal({
                                             >
                                                 {" "}
                                                 {orderType === "market"
+                                                    ? "Est. "
+                                                    : ""}
+                                                Fees{" "}
+                                            </Text>
+                                            <Spacer />
+                                            <Text
+                                                color="gray.900"
+                                                fontSize="sm"
+                                                fontWeight="600"
+                                            >
+                                                ~$
+                                                {+(totalUsd * 0.02).toFixed(2)}
+                                            </Text>
+                                        </HStack>
+                                        <HStack>
+                                            <Text
+                                                color="gray.600"
+                                                fontSize="sm"
+                                            >
+                                                {" "}
+                                                {orderType === "market"
                                                     ? "Estimated "
                                                     : ""}
                                                 Total ETH{" "}
@@ -444,26 +465,6 @@ export function OrderModal({
                                                 fontWeight="600"
                                             >
                                                 ${totalUsd}
-                                            </Text>
-                                        </HStack>
-                                        <HStack>
-                                            <Text
-                                                color="gray.600"
-                                                fontSize="sm"
-                                            >
-                                                {" "}
-                                                {orderType === "market"
-                                                    ? "Estimated "
-                                                    : ""}
-                                                Estimated Fees{" "}
-                                            </Text>
-                                            <Spacer />
-                                            <Text
-                                                color="gray.900"
-                                                fontSize="sm"
-                                                fontWeight="600"
-                                            >
-                                                ~${totalUsd * 0.02}
                                             </Text>
                                         </HStack>
                                     </Stack>

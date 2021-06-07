@@ -6,6 +6,13 @@ import { ChartData as ChartDataInterface } from "../../interfaces/Depth"
 import { getOrderHistory } from "../../services/utility"
 import { ParentSize } from "@visx/responsive"
 
+const graphTheme = {
+    fontSize: "12px",
+    textColor: "#5c5c5c",
+    fontFamily: "Inter, system-ui, sans-serif",
+    background: "transparent",
+}
+
 export function Chart(props: any) {
     interface CustomSymbolInterface {
         size: number
@@ -96,6 +103,7 @@ export function Chart(props: any) {
                         height={parent.width * 0.7}
                     >
                         <ResponsiveLine
+                            theme={graphTheme}
                             data={[depthMemo]}
                             colors="#4483ef"
                             tooltip={(point) => {
@@ -108,23 +116,23 @@ export function Chart(props: any) {
                                         borderRadius="4"
                                         padding="2"
                                         boxShadow="md"
-                                        fontSize="xx-small"
+                                        fontSize="x-small"
                                     >
                                         {date[1] +
                                             " " +
                                             date[2] +
                                             " " +
                                             date[3] +
-                                            ", " +
+                                            ", $" +
                                             point.point.data.y}
                                     </Box>
                                 )
                             }}
                             margin={{
-                                left: 50,
-                                bottom: 50,
-                                right: 20,
-                                top: 20,
+                                left: parent.width * 0.08,
+                                bottom: parent.width * 0.08,
+                                right: parent.width * 0.05,
+                                top: parent.width * 0.03,
                             }}
                             xScale={{
                                 type: "time",
@@ -135,8 +143,8 @@ export function Chart(props: any) {
                             yScale={{ type: "linear", min: minY, max: maxY }}
                             xFormat="time:%Y-%m-%d"
                             axisLeft={{
-                                legend: "BitClout Market Price ($USD)",
-                                legendOffset: -45,
+                                legend: "Market Price ($USD)",
+                                legendOffset: -40,
                                 legendPosition: "middle",
                                 tickValues: props.ticks,
                                 tickSize: 0,
@@ -144,10 +152,11 @@ export function Chart(props: any) {
                                 tickRotation: 0,
                             }}
                             axisBottom={{
-                                format: "%b %d",
-                                tickValues: 5,
+                                format: "%m/%d",
+                                tickValues: "every day",
                                 legend: "Date",
-                                legendOffset: 35,
+                                legendOffset: 40,
+                                tickPadding: 10,
                                 legendPosition: "middle",
                             }}
                             curve={"monotoneX"}
