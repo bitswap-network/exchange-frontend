@@ -137,7 +137,9 @@ export function Orders(): React.ReactElement {
                                         Active Orders ({orders.filter((order) => order.complete === false).length})
                                     </Tab>
                                     <Tab w="25%" pt="3" pb="3">
-                                        Completed Orders ({orders.filter((order) => order.complete === true).length})
+                                        Completed Orders (
+                                        {orders.filter((order) => order.complete === true && order.error === "").length}
+                                        )
                                     </Tab>
                                     <Tab w="25%" pt="3" pb="3">
                                         Cancelled Orders ({orders.filter((order) => order.error !== "").length})
@@ -159,7 +161,9 @@ export function Orders(): React.ReactElement {
                                 <TabPanel>
                                     <Stack spacing={4} w="100%">
                                         <OrderTable
-                                            data={orders.filter((order) => order.complete === true)}
+                                            data={orders.filter(
+                                                (order) => order.complete === true && order.error === ""
+                                            )}
                                             columns={columns}
                                         />
                                     </Stack>
