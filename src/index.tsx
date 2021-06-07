@@ -45,4 +45,4 @@ serviceWorker.unregister()
 //         non_interaction: true, // avoids affecting bounce rate
 //     })
 // }
-reportWebVitals(console.log)
+// reportWebVitals()
