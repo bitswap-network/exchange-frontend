@@ -62,9 +62,27 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                 <ModalCloseButton />
                 <ModalBody>
                     <Flex w="90%" ml="5%" flexDir="column">
-                        <Text fontSize="2xl" fontWeight="700" mt="6" color="gray.700">
-                            Order Details
-                        </Text>
+                        <Flex flexDir="row">
+                            <Text fontSize="2xl" fontWeight="700" mt="6" color="gray.700">
+                                Order Details
+                            </Text>
+                            <Spacer />
+                            <Text
+                                color={
+                                    order.status === "Active"
+                                        ? "green.700"
+                                        : order.status === "Partial"
+                                        ? "yellow.500"
+                                        : "red.500"
+                                }
+                                fontWeight="600"
+                                fontSize="xl"
+                                mt="7"
+                                mr="2"
+                            >
+                                {order.status.toUpperCase()}
+                            </Text>
+                        </Flex>
 
                         <Text color="gray.500" fontSize="sm" mb="2">
                             <b>Created: </b>
@@ -81,22 +99,22 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                         <Flex>
                             <Box>
                                 <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                    STATUS
-                                </Text>
-                                <Text color="gray.500" fontSize="sm" mt="1">
-                                    {order.status.toUpperCase()}
-                                </Text>
-                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                     ORDER TYPE
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
                                     {order.orderType.toUpperCase()}
                                 </Text>
                                 <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                    PRICE PER {globalVars.BITCLOUT}
+                                    LIMIT PRICE
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    ${order.orderPrice} USD
+                                    {order.orderPrice ? `${order.orderPrice} $USD` : " - "}
+                                </Text>
+                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
+                                    EXECUTION PRICE
+                                </Text>
+                                <Text color="gray.500" fontSize="sm" mt="1">
+                                    {order.execPrice ? `${order.execPrice} $USD` : " - "}
                                 </Text>
                             </Box>
                             <Spacer />

@@ -212,13 +212,16 @@ export function Orders(): React.ReactElement {
                                     bgColor="#dbe6ff"
                                     p="4"
                                     color="brand.100"
-                                    fontWeight="500"
+                                    fontWeight="600"
                                     fontSize="sm"
                                     h="20px"
                                     align="center"
                                     justify="center"
                                     borderRadius="4"
                                     boxShadow="md"
+                                    textOverflow="ellipsis"
+                                    overflow="hidden"
+                                    whiteSpace="nowrap"
                                 >
                                     Market Ask: {marketBuy ? `$${marketBuy.toFixed(2)}` : " - "}
                                 </Flex>
@@ -227,13 +230,16 @@ export function Orders(): React.ReactElement {
                                     bgColor="#dbe6ff"
                                     p="4"
                                     color="brand.100"
-                                    fontWeight="500"
+                                    fontWeight="600"
                                     fontSize="sm"
                                     h="20px"
                                     align="center"
                                     justify="center"
                                     borderRadius="4"
                                     boxShadow="md"
+                                    textOverflow="ellipsis"
+                                    overflow="hidden"
+                                    whiteSpace="nowrap"
                                 >
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
