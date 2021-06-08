@@ -114,7 +114,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                     EXECUTION PRICE
                                 </Text>
                                 <Text color="gray.500" fontSize="sm" mt="1">
-                                    {order.execPrice ? `${order.execPrice} $USD` : " - "}
+                                    {order.execPrice ? `${order.execPrice.toFixed(2)} $USD` : " - "}
                                 </Text>
                             </Box>
                             <Spacer />
