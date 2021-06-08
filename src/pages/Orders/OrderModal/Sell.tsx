@@ -91,7 +91,7 @@ export const SellTab: React.FC<SellTabProps> = ({
             <FormControl id="limitPrice">
                 <Tooltip label={limitSellTooltipText} aria-label={limitSellTooltipText}>
                     <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
-                        Limit Buy Price ($USD)&nbsp;
+                        Limit Sell Price ($USD)&nbsp;
                         <AiFillInfoCircle
                             style={{
                                 display: "inline",
