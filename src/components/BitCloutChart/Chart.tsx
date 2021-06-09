@@ -82,7 +82,6 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
             minDate.setDate(minDate.getDate() + dateInterval)
         }
         setDateTickValues(datesArray)
-        console.log(datesArray)
         setMinY(min)
         setMaxY(max)
 
