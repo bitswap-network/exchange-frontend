@@ -27,7 +27,7 @@ import { OrderTableDataInterface, OrderTableColumns } from "../../interfaces/Ord
 import { Chart } from "../../components/BitCloutChart/Chart"
 import { OrderTable } from "./OrderTable"
 import { OrderModal } from "./OrderModal"
-import { useOrderBook } from "../../hooks"
+import { useOrderBook, useOrders } from "../../hooks"
 import { getOrders } from "../../services/user"
 import * as globalVars from "../../globalVars"
 import { useRecoilState, useRecoilValue } from "recoil"
@@ -41,8 +41,11 @@ export function Orders(): React.ReactElement {
     const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState)
     const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[]
     const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
+
     const token = useRecoilValue(tokenState)
-    const { user } = useUser(token)
+
+    const { orders, ordersIsLoading, ordersIsError } = useOrders(token)
+    const { user, userIsLoading, userIsError } = useUser(token)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
 
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
@@ -75,6 +78,7 @@ export function Orders(): React.ReactElement {
         usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
         publicKey: "",
     }
+
     const parseOrderData = (orders: OrderTableDataInterface[]) => {
         const tempOrders: OrderTableDataInterface[] = []
         if (orders.length > 0) {
@@ -110,6 +114,7 @@ export function Orders(): React.ReactElement {
             setOrders(response.data.data)
         })
     }, [])
+
     useEffect(() => {
         if (orderModalOpenOnLoad) {
             onOpen()
@@ -117,7 +122,11 @@ export function Orders(): React.ReactElement {
         }
     }, [orderModalOpenOnLoad])
 
-    const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
+    // const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
+
+    if (ordersIsLoading || ordersIsError || userIsLoading || userIsError) {
+        return <></>
+    }
 
     return (
         <>
