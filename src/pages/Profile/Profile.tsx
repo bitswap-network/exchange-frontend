@@ -162,6 +162,7 @@ export function Profile(): React.ReactElement {
                     flexDir={{ sm: "column", md: "row" }}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
+                    background="whiteAlpha.700"
                 >
                     <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
                         <Text color="#44423D" fontWeight="700" fontSize="18">
@@ -232,6 +233,7 @@ export function Profile(): React.ReactElement {
                     flexDir={{ sm: "column", md: "row" }}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
+                    background="whiteAlpha.700"
                 >
                     <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
                         <Text color="#44423D" fontWeight="700" fontSize="18">
@@ -321,92 +323,6 @@ export function Profile(): React.ReactElement {
                         )}
                     </Flex>
                 </Flex>
-
-                {/* {user.verification.status === "verified" ? (
-                    <Flex
-                        mt="50px"
-                        w={{ sm: "80%", md: "650px" }}
-                        p="20px"
-                        flexDir="column"
-                        align="flex-start"
-                        justify="center"
-                        borderRadius="10"
-                        boxShadow="1px 4px 6px 0px #00000040"
-                        mb={{ sm: "50px", md: "0" }}
-                    >
-                        <Text color="#44423D" fontWeight="700" fontSize="18">
-                            BitClout Verification{" "}
-                            <HiBadgeCheck
-                                style={{ display: "inline" }}
-                                color="#5388fe"
-                                size="20"
-                            />
-                        </Text>
-                        <Text
-                            color="#44423D"
-                            fontWeight="300"
-                            fontSize="15"
-                            mt="12px"
-                        >
-                            You have already made your BitClout verification
-                            post.
-                            <br />
-                            Enjoy full access to the platform.
-                        </Text>
-                    </Flex>
-                ) : (
-                    <Flex
-                        mt="50px"
-                        w={{ sm: "80%", md: "650px" }}
-                        p="20px"
-                        flexDir={{ sm: "column", md: "row" }}
-                        borderRadius="10"
-                        boxShadow="1px 4px 6px 0px #00000040"
-                        mb={{ sm: "50px", md: "0" }}
-                    >
-                        <Flex
-                            flex="0.65"
-                            align="flex-start"
-                            justify="center"
-                            flexDir="column"
-                        >
-                            <Text
-                                color="#44423D"
-                                fontWeight="700"
-                                fontSize="18"
-                            >
-                                BitClout Verification{" "}
-                                <HiExclamationCircle
-                                    style={{ display: "inline" }}
-                                    color="#EE0004"
-                                    size="20"
-                                />
-                            </Text>
-                            <Text
-                                color="#44423D"
-                                fontWeight="300"
-                                fontSize="15"
-                                mt="12px"
-                            >
-                                You must make a BitClout post to verify your
-                                account before making any exchanges.
-                            </Text>
-                        </Flex>
-                        <Flex
-                            flex="0.35"
-                            align="flex-end"
-                            justify={{ sm: "center", md: "space-between" }}
-                            flexDir={{ sm: "row", md: "column" }}
-                            mt={{ sm: "15px", md: "0" }}
-                        >
-                            <BlueButton
-                                text={`   Verify   `}
-                                width="90%"
-                                onClick={() => setCurrentPage("verify")}
-                            />
-                        </Flex>
-                    </Flex>
-                )} */}
 
                 <Flex mt="50px" w={{ sm: "80%", md: "600px" }} flexDir="column" alignItems="center">
                     <Button
