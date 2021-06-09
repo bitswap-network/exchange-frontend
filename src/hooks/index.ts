@@ -87,9 +87,7 @@ const parseOrderData = (orders: OrderTableDataInterface[]) => {
         orders.forEach((order: OrderTableDataInterface) => {
             tempOrders.push({
                 ...order,
-                tldr: `${globalVars.capFirst(order.orderSide)} ${order.orderQuantity} ${
-                    globalVars.BITCLOUT
-                } (${globalVars.capFirst(order.orderType)})`,
+                tldr: `${order.orderType.toUpperCase()} ${order.orderSide.toUpperCase()}`,
                 status: `${
                     order.error !== ""
                         ? "Error"
@@ -100,10 +98,15 @@ const parseOrderData = (orders: OrderTableDataInterface[]) => {
                         : "Active"
                 }`,
                 orderTypeCapped: globalVars.capFirst(order.orderType),
-                quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
+                quantityString: `${+order.orderQuantity.toFixed(2)} ${globalVars.BITCLOUT}`,
+                quantityProcessedString: `${+order.orderQuantityProcessed.toFixed(2)} ${globalVars.BITCLOUT}`,
                 priceString: `${order.orderPrice ? `$${+order.orderPrice.toFixed(2)}` : "-"}`,
+                execPriceString: `${order.execPrice ? `$${+order.execPrice.toFixed(2)}` : "-"}`,
                 createdAgo: globalVars.timeSince(new Date(order.created)),
                 completedAgo: order.completeTime ? globalVars.timeSince(new Date(order.completeTime)) : "-",
+                timestamp: order.completeTime
+                    ? globalVars.timeSince(new Date(order.completeTime))
+                    : globalVars.timeSince(new Date(order.created)),
             })
         })
     }
@@ -129,6 +132,6 @@ export function useOrders(token: string) {
     return {
         orders: data,
         ordersIsLoading: !error && !data,
-        ordersIsERror: error,
+        ordersIsError: error,
     }
 }

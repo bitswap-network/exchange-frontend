@@ -17,6 +17,7 @@ import {
     Button,
     HStack,
     Spacer,
+    Divider,
 } from "@chakra-ui/react"
 import { BlueButton } from "../../../components/BlueButton"
 import { useRecoilValue } from "recoil"
@@ -39,18 +40,19 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     const [tabIndex, setTabIndex] = useState<number>(0)
     const [continueLoading, setContinueLoading] = useState<boolean>(false)
     const [validateError, setValidateError] = useState<string | null>(null)
-    const [priceError, setPriceError] = useState<string | null>(null)
+    const [marketError, setMarketError] = useState<string | null>(null)
+    const [balanceError, setBalanceError] = useState<string | null>(null)
     const [totalUsd, setTotalUsd] = useState<number>(0)
     const [page, setPage] = useState<number>(0)
 
-    const marketBuyText = "Market Buy: Instantly buy " + globalVars.BITCLOUT + " at the best market price."
-    const marketSellText = "Market Sell: Instantly sell " + globalVars.BITCLOUT + " at the best market price."
+    const marketBuyText = "Market Buy: Instantly buy $" + globalVars.BITCLOUT + " at the best market price."
+    const marketSellText = "Market Sell: Instantly sell $" + globalVars.BITCLOUT + " at the best market price."
     const limitBuyText =
-        "Limit Buy: Your order to buy " +
+        "Limit Buy: Your order to buy $" +
         globalVars.BITCLOUT +
         " will execute when a seller at your specified price (or a better price) is found."
     const limitSellText =
-        "Limit Sell: Your order to sell" +
+        "Limit Sell: Your order to sell $" +
         globalVars.BITCLOUT +
         " will execute when a buyer at your specified price (or a better price) is found."
     const [tooltipText, setTooltipText] = useState<string>(marketBuyText)
@@ -69,59 +71,47 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     })
 
     useEffect(() => {
-        if (orderType === "market" && isOpen) {
-            orderSide == "sell" ? setTooltipText(marketSellText) : setTooltipText(marketBuyText)
-            getMarketPrice(parseFloat(orderQuantity), orderSide)
-                .then((response) => {
-                    setPriceError(null)
-                    setTotalUsd(response.data.price)
-                })
-                .catch((error) => {
-                    console.error(error)
-                    setPriceError(
-                        `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
-                    )
-                })
-        } else if (isOpen) {
-            console.log(orderSide)
-            orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText)
-            setTotalUsd(parseFloat(orderQuantity) * parseFloat(limitPrice))
-            if (user && ethUsd) {
-                if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
-                    setPriceError("Insufficient CLOUT balance to place this order.")
-                } else if (orderSide === "buy" && totalUsd / ethUsd > user.balance.ether) {
-                    setPriceError("Insufficient ETHER balance to place this order.")
-                } else {
-                    setPriceError(null)
-                }
+        if (isOpen && user) {
+            if (orderType === "market") {
+                orderSide == "sell" ? setTooltipText(marketSellText) : setTooltipText(marketBuyText)
+                getMarketPrice(parseFloat(orderQuantity), orderSide)
+                    .then((response) => {
+                        setMarketError(null)
+                        setTotalUsd(+response.data.price.toFixed(2))
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                        setMarketError(
+                            `Insufficient order volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
+                        )
+                    })
+            } else {
+                setMarketError(null)
+                orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText)
+                setTotalUsd(+(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2))
+            }
+            if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
+                setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`)
+            } else if (ethUsd && orderSide === "buy" && totalUsd / ethUsd > user.balance.ether) {
+                setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`)
+            } else {
+                setBalanceError(null)
+                setValidateError(null)
             }
         }
-    }, [orderQuantity, orderSide, orderType, limitPrice, ethUsd, user])
+    }, [orderQuantity, orderSide, orderType, limitPrice, user])
 
     useEffect(() => {
         if (!isOpen) {
             setValidateError(null)
+            setBalanceError(null)
+            setMarketError(null)
             setTabIndex(0)
             setPage(0)
-            setOrderQuantity("1")
-            setLimitPrice("0")
         } else {
             getEthUSD().then((response) => {
                 setEthUsd(response.data.data)
             })
-            getMarketPrice(parseFloat(orderQuantity), orderSide)
-                .then((response) => {
-                    setPriceError(null)
-                    setTotalUsd(response.data.price)
-                })
-                .catch((error) => {
-                    console.error(error)
-                    orderType === "market"
-                        ? setPriceError(
-                              `Insufficient volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
-                          )
-                        : setPriceError(null)
-                })
         }
     }, [isOpen])
 
@@ -130,13 +120,12 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setOrderSide(index === 0 ? "buy" : "sell")
     }
     const orderBalanceValidate = async () => {
-        console.log(ethUsd, orderType, orderSide, orderQuantity, limitPrice, user.balance.bitclout)
         if (ethUsd) {
             if (orderType === "market" && orderSide === "buy") {
                 try {
                     const totalPriceResp = await getMarketPrice(parseFloat(orderQuantity), orderSide)
                     const totalEth = totalPriceResp.data.price / ethUsd
-                    return totalEth <= user.balance.ether && !priceError
+                    return totalEth <= user.balance.ether
                 } catch (e) {
                     console.error(e)
                     return false
@@ -156,8 +145,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     const handleContinue = async () => {
         setContinueLoading(true)
         setValidateError(null)
-        const validate = await orderBalanceValidate()
-        if (validate) {
+        if (await orderBalanceValidate()) {
             setContinueLoading(false)
             setPage(1)
         } else {
@@ -170,7 +158,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setContinueLoading(true)
         setValidateError(null)
         if (orderType === "market") {
-            createMarketOrder(parseFloat(orderQuantity), orderSide)
+            createMarketOrder(+parseFloat(orderQuantity).toFixed(2), orderSide)
                 .then(() => {
                     setContinueLoading(false)
                     setPage(2)
@@ -184,7 +172,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                     )
                 })
         } else {
-            createLimitOrder(parseFloat(orderQuantity), parseFloat(limitPrice), orderSide)
+            createLimitOrder(+parseFloat(orderQuantity).toFixed(2), +parseFloat(limitPrice).toFixed(2), orderSide)
                 .then(() => {
                     setContinueLoading(false)
                     setPage(2)
@@ -223,25 +211,32 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Flex w="80%" ml="10%" mt="8" flexDir="column">
+                    <Flex w="full" pl="4" pr="4" mt="8" flexDir="column">
                         <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
                             Create Order
                         </Text>
                         <Text color="gray.500" fontSize="sm" mb="4">
-                            Place a new buy or sell order for BitClout!
+                            Place a new order to buy or sell BitClout!
                         </Text>
                         <Tabs
-                            variant="soft-rounded"
+                            variant="enclosed-colored"
                             colorScheme="messenger"
                             mt="0.5em"
                             size="md"
                             onChange={handleTabsChange}
                             index={tabIndex}
                             isFitted
+                            isLazy
+                            lazyBehavior="keepMounted"
+                            boxShadow="md"
                         >
-                            <TabList>
-                                <Tab fontWeight="semibold">Buy</Tab>
-                                <Tab fontWeight="semibold">Sell</Tab>
+                            <TabList background="transparent">
+                                <Tab fontWeight="bold" fontSize="xl">
+                                    Buy
+                                </Tab>
+                                <Tab fontWeight="bold" fontSize="xl">
+                                    Sell
+                                </Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
@@ -274,9 +269,9 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
-                        {priceError && (
+                        {marketError && (
                             <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
-                                {priceError}
+                                {marketError}
                             </Text>
                         )}
                         <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="6">
@@ -286,9 +281,14 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 text={`   Continue   `}
                                 loading={continueLoading}
                                 onClick={handleContinue}
-                                disabled={!user || !ethUsd || priceError !== null || validateError !== null}
+                                disabled={!user || !ethUsd || marketError !== null || validateError !== null}
                             />
                         </Flex>
+                        {balanceError && (
+                            <Text color="red.400" fontSize="md" fontWeight="400" w="full" textAlign="center" mb="4">
+                                {balanceError}
+                            </Text>
+                        )}
                         {validateError && (
                             <Text color="red.400" fontSize="md" fontWeight="400" w="full" textAlign="center" mb="4">
                                 {validateError}
@@ -306,58 +306,68 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Flex w="80%" ml="10%" mt="8" flexDir="column">
+                    <Flex w="full" pl="4" pr="4" mt="8" flexDir="column">
                         <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
                             Confirm Order
                         </Text>
-                        <HStack>
-                            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                Order Type
-                            </Text>
-                            <Spacer />
-                            <Text color="gray.500" fontSize="sm" mt="1">
-                                {orderType.substr(0, 1).toUpperCase() + orderType.substr(1)}
-                            </Text>
-                        </HStack>
-                        <HStack>
-                            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                Order Side
-                            </Text>
-                            <Spacer />
-                            <Text color="gray.500" fontSize="sm" mt="1">
-                                {orderSide.substr(0, 1).toUpperCase() + orderSide.substr(1)}
-                            </Text>
-                        </HStack>
-                        <HStack>
-                            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                Order Quantity
-                            </Text>
-                            <Spacer />
-                            <Text color="gray.500" fontSize="sm" mt="1">
-                                {orderQuantity} {globalVars.BITCLOUT}
-                            </Text>
-                        </HStack>
-
-                        {orderType != "market" ? (
-                            <HStack>
-                                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                    Limit Price
+                        <Text color="gray.500" fontSize="sm" mb="2">
+                            {tooltipText}
+                        </Text>
+                        <Flex flexDir="column" p="4" boxShadow="md" borderRadius="md">
+                            <HStack mt="1" mb="2">
+                                <Text color="gray.600" fontSize="md">
+                                    Order Type
                                 </Text>
                                 <Spacer />
-                                <Text color="gray.500" fontSize="sm" mt="1">
-                                    ${limitPrice}
+                                <Text color="gray.900" fontWeight="600" fontSize="md">
+                                    {orderType.substr(0, 1).toUpperCase() + orderType.substr(1)}
                                 </Text>
                             </HStack>
-                        ) : null}
-                        <HStack>
-                            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
-                                Estimated Total USD
-                            </Text>
-                            <Spacer />
-                            <Text color="gray.500" fontSize="sm" mt="1">
-                                ${totalUsd}
-                            </Text>
-                        </HStack>
+                            <Divider />
+                            <HStack mt="2" mb="2">
+                                <Text color="gray.600" fontSize="md">
+                                    Order Side
+                                </Text>
+                                <Spacer />
+                                <Text color="gray.900" fontWeight="600" fontSize="md">
+                                    {orderSide.substr(0, 1).toUpperCase() + orderSide.substr(1)}
+                                </Text>
+                            </HStack>
+                            <Divider />
+                            <HStack mt="2" mb="2">
+                                <Text color="gray.600" fontSize="md">
+                                    Order Quantity
+                                </Text>
+                                <Spacer />
+                                <Text color="gray.900" fontWeight="600" fontSize="md">
+                                    {+parseFloat(orderQuantity).toFixed(4)} {globalVars.BITCLOUT}
+                                </Text>
+                            </HStack>
+                            <Divider />
+                            {orderType != "market" ? (
+                                <>
+                                    <HStack mt="2" mb="2">
+                                        <Text color="gray.600" fontSize="md">
+                                            Limit Price
+                                        </Text>
+                                        <Spacer />
+                                        <Text color="gray.900" fontWeight="600" fontSize="md">
+                                            ${+parseFloat(limitPrice).toFixed(2)}
+                                        </Text>
+                                    </HStack>
+                                    <Divider />
+                                </>
+                            ) : null}
+                            <HStack mt="2">
+                                <Text color="gray.600" fontSize="md">
+                                    Estimated Total USD
+                                </Text>
+                                <Spacer />
+                                <Text color="gray.900" fontWeight="600" fontSize="md">
+                                    ${+totalUsd.toFixed(2)}
+                                </Text>
+                            </HStack>
+                        </Flex>
 
                         <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="8">
                             <Button w="47%" variant="solid" onClick={() => setPage(0)}>
@@ -387,24 +397,15 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             <ModalContent>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Flex w="80%" ml="10%" flexDir="column">
-                        <Text fontSize="2xl" fontWeight="700" mt="6" mb="2" color="gray.700">
+                    <Flex w="full" pl="4" pr="4" mt="8" flexDir="column">
+                        <Text fontSize="2xl" fontWeight="700" mt="1" mb="2" color="gray.700">
                             Order Placed
                         </Text>
                         <Text color="gray.500" fontSize="sm">
                             Your order has been successfully placed. Market orders will reflect in your balance
                             immediately. Limit orders will be fulfilled as matching orders are found.
                         </Text>
-                        <BlueButton
-                            w="100%"
-                            mt="6"
-                            mb="8"
-                            text={`   Close   `}
-                            onClick={() => {
-                                onClose
-                                window.location.reload()
-                            }}
-                        />
+                        <BlueButton w="100%" mt="6" mb="8" text={`   Close   `} onClick={onClose} />
                     </Flex>
                 </ModalBody>
             </ModalContent>

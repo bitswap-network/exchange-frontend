@@ -19,6 +19,8 @@ import {
     Th,
     Td,
     HStack,
+    Skeleton,
+    SkeletonText,
 } from "@chakra-ui/react"
 import React, { useEffect, useState, useMemo } from "react"
 import { Column } from "react-table"
@@ -40,7 +42,7 @@ import { getMarketPrice } from "../../services/order"
 export function Orders(): React.ReactElement {
     const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState)
     const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[]
-    const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
+    // const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
 
     const token = useRecoilValue(tokenState)
 
@@ -79,42 +81,6 @@ export function Orders(): React.ReactElement {
         publicKey: "",
     }
 
-    const parseOrderData = (orders: OrderTableDataInterface[]) => {
-        const tempOrders: OrderTableDataInterface[] = []
-        if (orders.length > 0) {
-            orders.forEach((order: OrderTableDataInterface) => {
-                tempOrders.push({
-                    ...order,
-                    tldr: `${globalVars.capFirst(order.orderSide)} ${order.orderQuantity} ${
-                        globalVars.BITCLOUT
-                    } (${globalVars.capFirst(order.orderType)})`,
-                    status: `${
-                        order.error !== ""
-                            ? "Error"
-                            : order.complete
-                            ? "Closed"
-                            : order.orderQuantityProcessed > 0
-                            ? "Partial"
-                            : "Active"
-                    }`,
-                    orderTypeCapped: globalVars.capFirst(order.orderType),
-                    quantityString: `${order.orderQuantity} ${globalVars.BITCLOUT}`,
-                    priceString: `${order.orderPrice ? `$${+order.orderPrice.toFixed(2)}` : "-"}`,
-                    createdAgo: globalVars.timeSince(new Date(order.created)),
-                    completedAgo: order.completeTime ? globalVars.timeSince(new Date(order.completeTime)) : "-",
-                })
-            })
-        }
-
-        return tempOrders
-    }
-
-    useEffect(() => {
-        getOrders().then((response) => {
-            setOrders(response.data.data)
-        })
-    }, [])
-
     useEffect(() => {
         if (orderModalOpenOnLoad) {
             onOpen()
@@ -122,17 +88,15 @@ export function Orders(): React.ReactElement {
         }
     }, [orderModalOpenOnLoad])
 
-    // const orders = useMemo(() => parseOrderData(ordersHot), [ordersHot])
-
-    if (ordersIsLoading || ordersIsError || userIsLoading || userIsError) {
-        return <></>
-    }
+    // if (userIsLoading || userIsError) {
+    //     return <></>
+    // }
 
     return (
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
             <VStack spacing={6}>
-                <Flex w="full">
+                <Flex w="full" flexdir="row" pl="4">
                     <Heading> Your Orders </Heading>
                     <Spacer />
                     <BlueButton text="New Order" onClick={onOpen} />
@@ -141,56 +105,71 @@ export function Orders(): React.ReactElement {
                     <Flex flex="0.75" maxW="75%">
                         <Tabs w="full" variant="order" h="70vh">
                             <Center>
-                                <TabList w="full" ml="4" mr="4" mb="4" justifyContent="space-evenly">
-                                    <Tab w="25%" pt="3" pb="3">
-                                        Active Orders ({orders.filter((order) => order.complete === false).length})
+                                <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
+                                    <Tab w="25%">
+                                        Active Orders (
+                                        {orders ? orders.filter((order) => order.complete === false).length : 0})
                                     </Tab>
-                                    <Tab w="25%" pt="3" pb="3">
+                                    <Tab w="25%">
                                         Completed Orders (
-                                        {orders.filter((order) => order.complete === true && order.error === "").length}
+                                        {orders
+                                            ? orders.filter((order) => order.complete === true && order.error === "")
+                                                  .length
+                                            : 0}
                                         )
                                     </Tab>
-                                    <Tab w="25%" pt="3" pb="3">
-                                        Cancelled Orders ({orders.filter((order) => order.error !== "").length})
+                                    <Tab w="25%">
+                                        Cancelled Orders (
+                                        {orders ? orders.filter((order) => order.error !== "").length : 0})
                                     </Tab>
-                                    <Tab w="25%" pt="3" pb="3">
-                                        All Orders ({orders.length})
-                                    </Tab>
+                                    <Tab w="25%">All Orders ({orders ? orders.length : 0})</Tab>
                                 </TabList>
                             </Center>
-                            <TabPanels>
-                                <TabPanel>
-                                    <Stack spacing={4} w="100%">
-                                        <OrderTable
-                                            data={orders.filter((order) => order.complete === false)}
-                                            columns={columns}
-                                        />
-                                    </Stack>
-                                </TabPanel>
-                                <TabPanel>
-                                    <Stack spacing={4} w="100%">
-                                        <OrderTable
-                                            data={orders.filter(
-                                                (order) => order.complete === true && order.error === ""
-                                            )}
-                                            columns={columns}
-                                        />
-                                    </Stack>
-                                </TabPanel>
-                                <TabPanel>
-                                    <Stack spacing={4} w="100%">
-                                        <OrderTable
-                                            data={orders.filter((order) => order.error !== "")}
-                                            columns={columns}
-                                        />
-                                    </Stack>
-                                </TabPanel>
-                                <TabPanel>
-                                    <Stack spacing={4} w="full">
-                                        <OrderTable data={orders} columns={columns} />
-                                    </Stack>
-                                </TabPanel>
-                            </TabPanels>
+                            <Skeleton
+                                isLoaded={!ordersIsLoading && !ordersIsError}
+                                mt={!ordersIsLoading && !ordersIsError ? "0" : "4"}
+                                mr={!ordersIsLoading && !ordersIsError ? "0" : "4"}
+                                ml={!ordersIsLoading && !ordersIsError ? "0" : "4"}
+                                height="40px"
+                            >
+                                <TabPanels w="full">
+                                    <TabPanel>
+                                        <Stack w="100%">
+                                            <OrderTable
+                                                data={orders ? orders.filter((order) => order.complete === false) : []}
+                                                columns={columns}
+                                            />
+                                        </Stack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <Stack w="100%">
+                                            <OrderTable
+                                                data={
+                                                    orders
+                                                        ? orders.filter(
+                                                              (order) => order.complete === true && order.error === ""
+                                                          )
+                                                        : []
+                                                }
+                                                columns={columns}
+                                            />
+                                        </Stack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <Stack w="100%">
+                                            <OrderTable
+                                                data={orders ? orders.filter((order) => order.error !== "") : []}
+                                                columns={columns}
+                                            />
+                                        </Stack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <Stack w="full">
+                                            <OrderTable data={orders ? orders : []} columns={columns} />
+                                        </Stack>
+                                    </TabPanel>
+                                </TabPanels>
+                            </Skeleton>
                         </Tabs>
                     </Flex>
                     <Flex flex="0.25" flexDir="column">
@@ -254,7 +233,7 @@ export function Orders(): React.ReactElement {
                                 </Flex>
                             </HStack>
                             <Box w="full" h="30vh" mt="2">
-                                <Chart ticks={6} />
+                                <Chart ticks={6} dateTicks="every 2 days" />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
                                 <Table variant="simple">

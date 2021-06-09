@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react"
 import * as globalVars from "../../../globalVars"
 import { AiFillInfoCircle } from "react-icons/ai"
+const format = (val: string) => `$` + val
 
 interface BuyTabProps {
     user?: any
@@ -106,9 +107,10 @@ export const BuyTab: React.FC<BuyTabProps> = ({
 
                 <NumberInput
                     min={1}
-                    value={limitPrice}
+                    value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
                     step={1}
+                    precision={2}
                 >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -120,7 +122,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
         ) : null}
         <HStack pt="4">
             <Tooltip
-                label={"Fees are deducted from the amount of CLOUT you will recieve for this order."}
+                label={"Fees are deducted from the amount of CLOUT you will receive for this order."}
                 aria-label="fee label buy"
             >
                 <Text color="gray.600" fontSize="sm">
@@ -130,6 +132,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                     <AiFillInfoCircle
                         style={{
                             display: "inline",
+                            marginBottom: "4px",
                         }}
                         color="#aaa"
                     />
@@ -137,8 +140,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                ~$
-                {(totalUsd * 0.02).toFixed(2)}
+                {(parseFloat(orderQuantity) * 0.02).toFixed(2)} {globalVars.BITCLOUT}
             </Text>
         </HStack>
         <HStack>
@@ -150,9 +152,8 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 }
                 fontSize="sm"
             >
-                {" "}
                 {orderType === "market" ? "Estimated " : ""}
-                Total ETH{" "}
+                Total Cost
             </Text>
             <Spacer />
             <Text
@@ -164,7 +165,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 fontSize="sm"
                 fontWeight="600"
             >
-                {ethUsd ? globalVars.formatBalanceSmall(totalUsd / ethUsd) : "Loading..."}
+                {ethUsd ? `${globalVars.formatBalanceSmall(totalUsd / ethUsd)} ETH` : "Loading..."}
             </Text>
         </HStack>
         <HStack>

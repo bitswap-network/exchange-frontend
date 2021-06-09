@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react"
 import * as globalVars from "../../../globalVars"
 import { AiFillInfoCircle } from "react-icons/ai"
-
+const format = (val: string) => `$` + val
 const limitSellTooltipText = "This is the price you are willing to sell Bitclout at."
 
 interface SellTabProps {
@@ -79,6 +79,8 @@ export const SellTab: React.FC<SellTabProps> = ({
                 value={orderQuantity}
                 onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
                 step={0.1}
+                max={user.balance.bitclout}
+                clampValueOnBlur={false}
             >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -103,10 +105,10 @@ export const SellTab: React.FC<SellTabProps> = ({
                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                 <NumberInput
                     min={0}
-                    value={limitPrice}
+                    value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
                     step={1}
-                    precision={1}
+                    precision={2}
                 >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -118,7 +120,7 @@ export const SellTab: React.FC<SellTabProps> = ({
         ) : null}
         <HStack pt="4">
             <Tooltip
-                label={"Fees are deducted from the amount of ETH you will recieve for this order."}
+                label={"Fees are deducted from the amount of ETH you will receive for this order."}
                 aria-label="fee label sell"
             >
                 <Text color="gray.600" fontSize="sm">
@@ -128,6 +130,7 @@ export const SellTab: React.FC<SellTabProps> = ({
                     <AiFillInfoCircle
                         style={{
                             display: "inline",
+                            marginBottom: "4px",
                         }}
                         color="#aaa"
                     />
@@ -135,19 +138,17 @@ export const SellTab: React.FC<SellTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                ~$
-                {(totalUsd * 0.02).toFixed(2)}
+                {ethUsd && ((totalUsd / ethUsd) * 0.02).toFixed(2)} {globalVars.ETHER}
             </Text>
         </HStack>
         <HStack>
-            <Text color="gray.600" fontSize="sm">
-                {" "}
+            <Text color={"gray.600"} fontSize="sm">
                 {orderType === "market" ? "Estimated " : ""}
-                Total ETH{" "}
+                Total Cost
             </Text>
             <Spacer />
-            <Text color="gray.900" fontSize="sm" fontWeight="600">
-                {ethUsd ? globalVars.formatBalanceSmall(totalUsd / ethUsd) : "Loading..."}
+            <Text color={"gray.900"} fontSize="sm" fontWeight="600">
+                {ethUsd ? `${globalVars.formatBalanceSmall(totalUsd / ethUsd)} ETH` : "Loading..."}
             </Text>
         </HStack>
         <HStack>

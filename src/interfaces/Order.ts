@@ -18,8 +18,11 @@ export interface OrderTableDataInterface extends Order {
     tldr: string
     status: string
     quantityString: string
+    quantityProcessedString: string
     priceString: string
+    execPriceString: string
     orderTypeCapped: string
+    timestamp: string
     createdAgo: string
     completedAgo?: string
     totalString?: string
@@ -42,32 +45,27 @@ export const OrderBookTableColumns = [
 
 export const OrderTableColumns = [
     {
-        Header: "Order Details",
-        accessor: "tldr",
-    },
-    {
-        Header: "Status",
-        accessor: "status",
-    },
-    {
         Header: "Order Type",
-        accessor: "orderTypeCapped",
+        accessor: "tldr",
     },
     {
         Header: "Quantity",
         accessor: "quantityString",
     },
     {
+        Header: "Processed",
+        accessor: "quantityProcessedString",
+    },
+    {
         Header: "Price",
         accessor: "priceString",
-        isNumeric: true,
     },
     {
-        Header: "Created",
-        accessor: "createdAgo",
+        Header: "Exec Price",
+        accessor: "execPriceString",
     },
     {
-        Header: "Completed",
-        accessor: "completedAgo",
+        Header: "Timestamp",
+        accessor: "timestamp",
     },
 ]

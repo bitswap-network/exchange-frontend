@@ -15,9 +15,10 @@ const graphTheme = {
 
 interface ChartProps {
     ticks: number
+    dateTicks: string
 }
 
-export const Chart: React.FC<ChartProps> = ({ ticks }: ChartProps) => {
+export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) => {
     interface CustomSymbolInterface {
         size: number
         color: string
@@ -52,7 +53,7 @@ export const Chart: React.FC<ChartProps> = ({ ticks }: ChartProps) => {
             id: "BitClout Market Price",
             data: [],
         }
-        let min = 1000000
+        let min = 100
         let max = 0
         dataList.forEach((item: hotData) => {
             const date = new Date(item.timestamp)
@@ -118,10 +119,11 @@ export const Chart: React.FC<ChartProps> = ({ ticks }: ChartProps) => {
                             }}
                             axisBottom={{
                                 format: "%m/%d",
-                                tickValues: "every day",
+                                tickValues: dateTicks,
                                 legend: "Date",
                                 legendOffset: 40,
                                 tickPadding: 10,
+                                tickSize: 5,
                                 legendPosition: "middle",
                             }}
                             curve={"monotoneX"}

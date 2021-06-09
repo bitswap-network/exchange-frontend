@@ -24,13 +24,12 @@ export function Table<T extends Record<string, unknown>>({
         <>
             {isOrderTable && <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />}
             <ChakraTable {...getTableProps()} size="sm" variant="simple" borderRadius="md" bgColor="white">
-                <Thead position="sticky" top="0" zIndex="100" bgColor="white" minH={isOrderTable && "100"}>
+                <Thead position="sticky" top="0" zIndex="100" bgColor="white" minH={isOrderTable ? "100" : "inherit"}>
                     {headerGroups.map((headerGroup) => (
                         <Tr {...headerGroup.getHeaderGroupProps()} key={Math.random().toString(4)}>
                             {headerGroup.headers.map((column) => (
                                 <Th
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    isNumeric={column.isNumeric}
                                     pt="4"
                                     pb="4"
                                     verticalAlign="top"
@@ -59,6 +58,7 @@ export function Table<T extends Record<string, unknown>>({
                                 prepareRow(row)
                                 return (
                                     <Tr
+                                        w={100 / rows.length}
                                         {...row.getRowProps()}
                                         key={Math.random().toString(4)}
                                         onClick={() => {

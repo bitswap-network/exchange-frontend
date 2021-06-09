@@ -45,7 +45,7 @@ export function Home(): React.ReactElement {
         <VStack spacing={8} marginTop="40px">
             <Flex flexDirection="row" w="100%">
                 <Flex flexDirection="column" w="50%" padding={4}>
-                    <Heading>Home</Heading>
+                    <Heading>BitSwap</Heading>
                     <HStack>
                         <Heading as="h2" size="md">
                             BitClout Market Value
@@ -116,7 +116,7 @@ export function Home(): React.ReactElement {
                         pl="2"
                         // h="45vh"
                     >
-                        <Chart ticks={10} />
+                        <Chart ticks={10} dateTicks="every day" />
                     </Box>
                 </Flex>
                 <Spacer />
