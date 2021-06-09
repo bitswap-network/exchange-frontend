@@ -16,7 +16,7 @@ export function useOrderBook() {
                 res.data.asks &&
                     res.data.asks.forEach((ask: any) =>
                         askArr.push({
-                            totalString: `$${ask.price * ask.quantity} USD`,
+                            totalString: `$${(ask.price * ask.quantity).toFixed(2)} USD`,
                             priceString: `$${ask.price} USD`,
                             quantityString: `${ask.quantity} ${BITCLOUT}`,
                         })

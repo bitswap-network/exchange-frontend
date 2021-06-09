@@ -136,6 +136,7 @@ export function Orders(): React.ReactElement {
                                     <TabPanel>
                                         <Stack w="100%">
                                             <OrderTable
+                                                key="ActiveOrderTable"
                                                 data={orders ? orders.filter((order) => order.complete === false) : []}
                                                 columns={columns}
                                             />
@@ -144,6 +145,7 @@ export function Orders(): React.ReactElement {
                                     <TabPanel>
                                         <Stack w="100%">
                                             <OrderTable
+                                                key="CompletedOrderTable"
                                                 data={
                                                     orders
                                                         ? orders.filter(
@@ -158,6 +160,7 @@ export function Orders(): React.ReactElement {
                                     <TabPanel>
                                         <Stack w="100%">
                                             <OrderTable
+                                                key="CancelledOrderTable"
                                                 data={orders ? orders.filter((order) => order.error !== "") : []}
                                                 columns={columns}
                                             />
@@ -165,7 +168,11 @@ export function Orders(): React.ReactElement {
                                     </TabPanel>
                                     <TabPanel>
                                         <Stack w="full">
-                                            <OrderTable data={orders ? orders : []} columns={columns} />
+                                            <OrderTable
+                                                key="AllOrderTable"
+                                                data={orders ? orders : []}
+                                                columns={columns}
+                                            />
                                         </Stack>
                                     </TabPanel>
                                 </TabPanels>
@@ -232,11 +239,11 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box w="full" h="30vh" mt="2">
+                            <Box w="full" maxH="270px" mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
-                                <Table variant="simple">
+                                <Table key="orderBookTable" variant="simple">
                                     <Thead position="sticky" top="0" zIndex="100" bgColor="white">
                                         <Tr>
                                             <Th color="gray.700" pt="5">
@@ -253,7 +260,7 @@ export function Orders(): React.ReactElement {
                                             </Th>
                                         </Tr>
                                     </Thead>
-                                    <Tbody>
+                                    <Tbody key="orderBookTableBody" bgColor="white">
                                         {!orderbookIsLoading &&
                                             !orderbookIsError &&
                                             orderbook?.asks.map((order, i) => (

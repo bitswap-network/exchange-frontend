@@ -193,12 +193,12 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                         Are you sure you want to cancel this order?
                     </Text>
                 </Flex>
-                <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="4">
+                <Flex flexDir="row" justifyContent="space-between" w="90%" ml="5%" mt="6" mb="4">
                     <BlueButton
                         w="full"
-                        text={`   Close   `}
+                        text={`   Go Back   `}
                         mr={order.complete ? "0" : "4"}
-                        onClick={disclosure.onClose}
+                        onClick={() => setPage(0)}
                         ghost
                     />
                     {!order.complete && (
