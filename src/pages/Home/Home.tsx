@@ -116,7 +116,7 @@ export function Home(): React.ReactElement {
                         pl="2"
                         // h="45vh"
                     >
-                        <Chart ticks={10} dateTicks="every day" />
+                        <Chart ticks={10} dateTicks={9} />
                     </Box>
                 </Flex>
                 <Spacer />

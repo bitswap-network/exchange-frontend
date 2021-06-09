@@ -233,7 +233,7 @@ export function Orders(): React.ReactElement {
                                 </Flex>
                             </HStack>
                             <Box w="full" h="30vh" mt="2">
-                                <Chart ticks={6} dateTicks="every 2 days" />
+                                <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
                                 <Table variant="simple">

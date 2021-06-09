@@ -15,7 +15,7 @@ const graphTheme = {
 
 interface ChartProps {
     ticks: number
-    dateTicks: string
+    dateTicks: number
 }
 
 export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) => {
@@ -39,6 +39,7 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
     const [loading, setLoading] = useState(true)
     const [minY, setMinY] = useState(0)
     const [maxY, setMaxY] = useState(0)
+    const [dateTickValues, setDateTickValues] = useState<Date[]>([new Date()])
 
     useEffect(() => {
         getOrderHistory().then((response) => {
@@ -53,19 +54,38 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
             id: "BitClout Market Price",
             data: [],
         }
-        let min = 100
+        let min = 1000
         let max = 0
+        let minDate = new Date()
+        minDate.setDate(minDate.getDate() + 100)
+        let maxDate = new Date(0)
         dataList.forEach((item: hotData) => {
             const date = new Date(item.timestamp)
             parsedDataArr.data.push({
-                x: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+                x: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
                 y: item.price,
             })
+            if (date < minDate) {
+                minDate = date
+            }
+            if (date > maxDate) {
+                maxDate = date
+            }
             min = Math.min(min, item.price - 30)
             max = Math.max(max, item.price + 30)
         })
+        const dateRange = (maxDate - minDate) / (1000 * 60 * 60 * 24)
+        const dateInterval = Math.ceil(dateRange / dateTicks)
+        const datesArray = []
+        for (let i = 0; i < dateTicks; i++) {
+            datesArray.push(new Date(minDate.getMonth() + 1 + " " + minDate.getDate() + ", " + minDate.getFullYear()))
+            minDate.setDate(minDate.getDate() + dateInterval)
+        }
+        setDateTickValues(datesArray)
+        console.log(datesArray)
         setMinY(min)
         setMaxY(max)
+
         return parsedDataArr
     }
 
@@ -119,7 +139,7 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
                             }}
                             axisBottom={{
                                 format: "%m/%d",
-                                tickValues: dateTicks,
+                                tickValues: dateTickValues,
                                 legend: "Date",
                                 legendOffset: 40,
                                 tickPadding: 10,
