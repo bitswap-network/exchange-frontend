@@ -99,7 +99,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                 setValidateError(null)
             }
         }
-    }, [orderQuantity, orderSide, orderType, limitPrice, user])
+    }, [orderQuantity, orderSide, orderType, limitPrice, user, isOpen])
 
     useEffect(() => {
         if (!isOpen) {
@@ -113,7 +113,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                 setEthUsd(response.data.data)
             })
         }
-    }, [isOpen])
+    }, [])
 
     const handleTabsChange = (index: number) => {
         setTabIndex(index)
