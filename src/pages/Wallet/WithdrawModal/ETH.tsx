@@ -41,7 +41,7 @@ interface WithdrawModalProps {
 export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw }: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
     const [checked, setChecked] = useState<boolean>(false)
-    const [withdrawValue, setWithdrawValue] = useState<string>("0")
+    const [withdrawValue, setWithdrawValue] = useState<string>("0.004")
     const [page, setPage] = useState(0)
     const [ethAddressInput, setEthAddressInput] = useState<string>("")
     const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("")
@@ -216,7 +216,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                         onChange={valueHandler}
                         precision={4}
                         step={0.1}
-                        min={0}
+                        min={0.004}
                         max={maxWithdraw}
                     >
                         <NumberInputField />

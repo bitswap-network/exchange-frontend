@@ -213,6 +213,11 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                         </>
                     )}
                 </Flex>
+                {cancelError && (
+                    <Text color="red.400" fontSize="md" fontWeight="400" mb="1" w="full" textAlign="center">
+                        {cancelError}
+                    </Text>
+                )}
             </ModalBody>
         </ModalContent>
     )

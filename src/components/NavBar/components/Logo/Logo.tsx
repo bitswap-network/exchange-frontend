@@ -8,7 +8,7 @@ export function Logo(props: LogoProps): React.ReactElement {
     return (
         <Box {...props}>
             <HStack ml="10" mr="5">
-                <Image src="./bitswapLogo.png" alt="Bitswap Logo" htmlWidth="25px" objectFit="cover" />
+                <Image src="./bitswapLogo.png" htmlWidth="25px" objectFit="cover" />
                 <Text fontSize="lg" fontWeight="600">
                     BitSwap
                 </Text>

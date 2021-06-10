@@ -13,7 +13,7 @@ export const BITCLOUT = "CLOUT"
 export const ETHER = "ETH"
 
 export const MAX_LIMIT = 1000
-export const MIN_LIMIT = 0.05
+export const MIN_LIMIT = 0.01
 
 export const parseNum = (val: string) => val.replace(/^\$/, "")
 

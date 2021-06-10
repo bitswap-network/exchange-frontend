@@ -61,7 +61,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         defaultValue: "1",
     })
     const [limitPrice, setLimitPrice] = useControllableState({
-        defaultValue: "0",
+        defaultValue: "1.00",
     })
     const [orderType, setOrderType] = useControllableState({
         defaultValue: "market",
@@ -281,7 +281,13 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 text={`   Continue   `}
                                 loading={continueLoading}
                                 onClick={handleContinue}
-                                disabled={!user || !ethUsd || marketError !== null || validateError !== null}
+                                disabled={
+                                    !user ||
+                                    !ethUsd ||
+                                    marketError !== null ||
+                                    validateError !== null ||
+                                    balanceError !== null
+                                }
                             />
                         </Flex>
                         {balanceError && (

@@ -30,7 +30,20 @@ export function Wallet(): React.ReactElement {
     })
     const [transactions, setTransactions] = useState<TransactionSchema[]>([])
     const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null)
-
+    const [BCLT, setBCLT] = useState({
+        imageUri: "./bitcloutLogo.png",
+        currency: globalVars.BITCLOUT,
+        amount: user?.balance.bitclout,
+        publicKey: user?.bitclout.publicKey,
+    })
+    const [ETH, setETH] = useState({
+        imageUri:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
+        currency: globalVars.ETHER,
+        amount: user?.balance.ether,
+        usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
+        publicKey: "",
+    })
     const {
         isOpen: isOpenTransactionModal,
         onOpen: onOpenTransactionModal,
@@ -46,9 +59,6 @@ export function Wallet(): React.ReactElement {
             console.log(response.data.data)
             setEthUsd(response.data.data)
         })
-        // getBitcloutUSD().then((response) => {
-        //     setBitcloutUsd(response.data.data)
-        // })
         getTransactions().then((response) => {
             setTransactions(response.data.data)
         })
@@ -69,23 +79,21 @@ export function Wallet(): React.ReactElement {
                 })
             })
         }
+        setBCLT({
+            imageUri: "./bitcloutLogo.png",
+            currency: globalVars.BITCLOUT,
+            amount: user?.balance.bitclout,
+            publicKey: user?.bitclout.publicKey,
+        })
+        setETH({
+            imageUri:
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
+            currency: globalVars.ETHER,
+            amount: user?.balance.ether,
+            usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
+            publicKey: "",
+        })
     }, [user])
-
-    const BCLT = {
-        imageUri: "./bitcloutLogo.png",
-        currency: globalVars.BITCLOUT,
-        amount: user?.balance.bitclout,
-        publicKey: user?.bitclout.publicKey,
-    }
-
-    const ETH = {
-        imageUri:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
-        currency: globalVars.ETHER,
-        amount: user?.balance.ether,
-        usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
-        publicKey: "",
-    }
     //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {

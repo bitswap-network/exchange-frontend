@@ -22,11 +22,6 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
     openWithdrawModal,
     openDepositModal,
 }: BalanceCardProps) => {
-    // 📌 TODO: This is just a placeholder
-    console.log(usdValue)
-    console.log(usdValue)
-    console.log(usdValue)
-    console.log(usdValue)
     return (
         <Box boxShadow="xs" maxW="sm" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="full" pos="relative">
             <Flex flexDir="column" p="6" w="full">
@@ -52,7 +47,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
                         {usdValue != null ? (
                             <Tooltip label={usdValue.toString() + " $USD"} aria-label="USD Value">
                                 <Text fontSize="1xl" color="gray.500" h="30px">
-                                    ~{usdValue.toFixed(2)} $USD
+                                    ~${usdValue.toFixed(2)} USD
                                 </Text>
                             </Tooltip>
                         ) : null}

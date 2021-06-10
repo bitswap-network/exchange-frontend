@@ -144,7 +144,7 @@ export const SellTab: React.FC<SellTabProps> = ({
         <HStack>
             <Text color={"gray.600"} fontSize="sm">
                 {orderType === "market" ? "Estimated " : ""}
-                Total Profit
+                Total Received
             </Text>
             <Spacer />
             <Text color={"gray.900"} fontSize="sm" fontWeight="600">
