@@ -113,7 +113,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                 setEthUsd(response.data.data)
             })
         }
-    }, [])
+    }, [isOpen])
 
     const handleTabsChange = (index: number) => {
         setTabIndex(index)
