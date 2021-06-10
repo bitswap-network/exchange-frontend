@@ -270,7 +270,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                             </TabPanels>
                         </Tabs>
                         {marketError && (
-                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
+                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mt="6">
                                 {marketError}
                             </Text>
                         )}

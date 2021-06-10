@@ -1,3 +1,6 @@
+import React from "react"
+import * as globalVars from "../globalVars"
+
 export type Order = {
     _id: string
     username: string
@@ -22,7 +25,7 @@ export interface OrderTableDataInterface extends Order {
     priceString: string
     execPriceString: string
     orderTypeCapped: string
-    timestamp: string
+    timestamp: Date
     createdAgo: string
     completedAgo?: string
     totalString?: string
@@ -67,5 +70,9 @@ export const OrderTableColumns = [
     {
         Header: "Timestamp",
         accessor: "timestamp",
+        sortType: "datetime",
+        Cell: function create(props: any) {
+            return <span>{globalVars.timeSince(props.value)}</span>
+        },
     },
 ]

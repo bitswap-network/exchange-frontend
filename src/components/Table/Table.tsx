@@ -16,7 +16,7 @@ export function Table<T extends Record<string, unknown>>({
     const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>()
     const isOrderTable = type === 0
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>(
-        { columns, data },
+        { columns, data, autoResetPage: true },
         useSortBy
     )
     const modalDisclosure = useDisclosure()

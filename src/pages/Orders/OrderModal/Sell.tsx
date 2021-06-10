@@ -79,8 +79,8 @@ export const SellTab: React.FC<SellTabProps> = ({
                 value={orderQuantity}
                 onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
                 step={0.1}
+                precision={2}
                 max={user.balance.bitclout}
-                clampValueOnBlur={false}
             >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -144,7 +144,7 @@ export const SellTab: React.FC<SellTabProps> = ({
         <HStack>
             <Text color={"gray.600"} fontSize="sm">
                 {orderType === "market" ? "Estimated " : ""}
-                Total Cost
+                Total Profit
             </Text>
             <Spacer />
             <Text color={"gray.900"} fontSize="sm" fontWeight="600">

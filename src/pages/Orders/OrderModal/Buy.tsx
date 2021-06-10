@@ -83,6 +83,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 value={orderQuantity}
                 onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
                 step={0.1}
+                precision={2}
             >
                 <NumberInputField />
                 <NumberInputStepper>

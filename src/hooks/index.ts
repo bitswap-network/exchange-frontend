@@ -104,9 +104,7 @@ const parseOrderData = (orders: OrderTableDataInterface[]) => {
                 execPriceString: `${order.execPrice ? `$${+order.execPrice.toFixed(2)}` : "-"}`,
                 createdAgo: globalVars.timeSince(new Date(order.created)),
                 completedAgo: order.completeTime ? globalVars.timeSince(new Date(order.completeTime)) : "-",
-                timestamp: order.completeTime
-                    ? globalVars.timeSince(new Date(order.completeTime))
-                    : globalVars.timeSince(new Date(order.created)),
+                timestamp: order.completeTime ? new Date(order.completeTime) : new Date(order.created),
             })
         })
     }
