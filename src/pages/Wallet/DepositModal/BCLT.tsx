@@ -117,7 +117,6 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             disclosure.onClose()
                             setPage(0)
                             setDepositValue("0")
-                            window.location.reload()
                         }}
                     />
                 </Flex>

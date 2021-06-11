@@ -42,7 +42,6 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                 .then(() => {
                     setCancelLoading(false)
                     disclosure.onClose()
-                    window.location.reload()
                 })
                 .catch((error: any) => {
                     if (error.response) setCancelError(error.response.data.message)

@@ -91,7 +91,6 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             disclosure.onClose()
                             setPage(0)
                             setWithdrawValue("0")
-                            window.location.reload()
                         }}
                     />
                 </Flex>

@@ -108,7 +108,6 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             disclosure.onClose()
                             setPage(0)
                             setWithdrawValue("0")
-                            window.location.reload()
                         }}
                     />
                 </Flex>

@@ -49,11 +49,9 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                 .then(() => {
                     disclosure.onClose()
                     setPage(0)
-                    window.location.reload()
                 })
                 .catch((error) => {
                     console.error(error)
-                    window.location.reload()
                 })
         }
     }
@@ -137,7 +135,6 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                         onClick={() => {
                             disclosure.onClose()
                             setPage(0)
-                            window.location.reload()
                         }}
                     />
                 </Flex>
