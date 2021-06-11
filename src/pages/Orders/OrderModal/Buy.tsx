@@ -141,7 +141,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                {(parseFloat(orderQuantity) * 0.02).toFixed(2)} {globalVars.BITCLOUT}
+                {+(parseFloat(orderQuantity) * 0.02).toFixed(6)} {globalVars.BITCLOUT}
             </Text>
         </HStack>
         <HStack>

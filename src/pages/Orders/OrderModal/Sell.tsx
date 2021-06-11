@@ -138,7 +138,7 @@ export const SellTab: React.FC<SellTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                {ethUsd && ((totalUsd / ethUsd) * 0.02).toFixed(2)} {globalVars.ETHER}
+                {ethUsd && (+(totalUsd / ethUsd) * 0.02).toFixed(6)} {globalVars.ETHER}
             </Text>
         </HStack>
         <HStack>
