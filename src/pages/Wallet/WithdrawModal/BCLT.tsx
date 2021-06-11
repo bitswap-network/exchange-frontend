@@ -36,15 +36,19 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
 }: WithdrawModalProps) => {
     const user = useRecoilValue(userState)
     const [withdrawValue, setWithdrawValue] = useState<string>("0")
+    const [loading, setLoading] = useState<boolean>(false)
     const [page, setPage] = useState(0)
 
     const submitWithdrawBitclout = () => {
+        setLoading(true)
         if (withdrawValue) {
             withdrawBitclout(parseFloat(withdrawValue))
                 .then(() => {
+                    setLoading(false)
                     setPage(2)
                 })
                 .catch((error) => {
+                    setLoading(false)
                     console.error(error)
                 })
         }
@@ -138,7 +142,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
             <ModalCloseButton />
             <ModalBody>
                 <Text textAlign="center" fontSize="xx-large" fontWeight="700" w="full" mt="6">
-                    {globalVars.formatBalanceSmall(user.balance.bitclout)} {globalVars.BITCLOUT}
+                    {user ? globalVars.formatBalanceSmall(user.balance.bitclout) : 0} {globalVars.BITCLOUT}
                 </Text>
                 <Text textAlign="center" color="gray.500" fontSize="sm" w="full" mb="6">
                     Currently Available
@@ -192,6 +196,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             w="47%"
                             text={`   Continue   `}
                             onClick={() => setPage(1)}
+                            loading={loading}
                         />
                     </Flex>
                 </Flex>
