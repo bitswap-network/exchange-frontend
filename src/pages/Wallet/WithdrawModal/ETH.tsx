@@ -81,39 +81,10 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                 return withdrawStartView
             case 1:
                 return withdrawConfirmView
-            case 2:
-                return withdrawCompleteView
             default:
                 return withdrawStartView
         }
     }
-
-    const withdrawCompleteView = (
-        <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
-                <Flex w="80%" ml="10%" flexDir="column">
-                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
-                        Transaction Completed
-                    </Text>
-                    <Text color="gray.500" fontSize="sm">
-                        Your transaction has been completed successfully.
-                    </Text>
-                    <BlueButton
-                        w="100%"
-                        mt="6"
-                        mb="8"
-                        text={`   Close   `}
-                        onClick={() => {
-                            disclosure.onClose()
-                            setPage(0)
-                            setWithdrawValue("0")
-                        }}
-                    />
-                </Flex>
-            </ModalBody>
-        </ModalContent>
-    )
 
     const withdrawConfirmView = (
         <ModalContent>
@@ -168,7 +139,11 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             ml="5%"
                             text={`   Continue   `}
                             isDisabled={!withdrawSuccessful}
-                            onClick={() => setPage(2)}
+                            onClick={() => {
+                                disclosure.onClose()
+                                setPage(0)
+                                setWithdrawValue("0")
+                            }}
                             icon
                         />
                     </Flex>
