@@ -63,11 +63,11 @@ export function Orders(): React.ReactElement {
         getEthUSD().then((response) => {
             setEthUsd(response.data.data)
         })
-        getMarketPrice(0.1, "buy").then((response) => {
-            setMarketBuy(response.data.price * 10)
+        getMarketPrice(0.05, "buy").then((response) => {
+            setMarketBuy(response.data.price * 20)
         })
-        getMarketPrice(0.1, "sell").then((response) => {
-            setMarketSell(response.data.price * 10)
+        getMarketPrice(0.05, "sell").then((response) => {
+            setMarketSell(response.data.price * 20)
         })
     }, [])
 
