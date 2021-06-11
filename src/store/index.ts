@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil"
 import { verifyToken } from "../services/auth"
-import { getData, removeData } from "../helpers/persistence"
+import { getData, logout, removeData } from "../helpers/persistence"
 import { User } from "../interfaces/User"
 import { IdentityUsers } from "../interfaces/identity/User"
 
@@ -26,8 +26,7 @@ export const loggedInState = selector({
         if (user) {
             return await verifyToken()
         } else {
-            removeData("user")
-            removeData("token")
+            logout()
             return false
         }
     },

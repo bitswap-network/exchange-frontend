@@ -3,6 +3,7 @@ import { Redirect, Route, RouteProps } from "react-router"
 import { loggedInState, userState } from "../../store"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { getUserData } from "../../services/user"
+import { logout } from "../../helpers/persistence"
 
 type PrivateRouteProps = RouteProps
 
@@ -15,7 +16,7 @@ export function PrivateRoute({ ...routeProps }: PrivateRouteProps) {
                 setUser(response.data)
             })
             .catch((error) => {
-                console.log(error)
+                logout()
             })
     }, [])
 
