@@ -129,6 +129,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             text={`   Confirm   `}
                             isDisabled={parseFloat(withdrawValue) <= 0}
                             onClick={submitWithdrawBitclout}
+                            loading={loading}
                             icon
                         />
                     </Flex>
@@ -196,7 +197,6 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             w="47%"
                             text={`   Continue   `}
                             onClick={() => setPage(1)}
-                            loading={loading}
                         />
                     </Flex>
                 </Flex>
