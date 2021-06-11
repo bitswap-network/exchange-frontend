@@ -1,17 +1,29 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from "react"
-import { Box, Flex, HStack, IconButton, Button, useDisclosure, Stack, Spacer, Text, Skeleton } from "@chakra-ui/react"
+import React, { useEffect, useState } from "react"
+import {
+    Box,
+    Flex,
+    HStack,
+    useToast,
+    IconButton,
+    Button,
+    useDisclosure,
+    Stack,
+    Spacer,
+    Text,
+    Skeleton,
+    toast,
+} from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import { Logo } from "./components/Logo"
 
 import { Link } from "react-router-dom"
-import { loggedInState, orderModalState } from "../../store"
+import { loggedInState, orderModalState, userState } from "../../store"
 import { AiOutlineUser } from "react-icons/ai"
 
 const LINKS = ["home", "orders", "wallet"]
-
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (loading: boolean) => (
     <Box px={4} bg={"background.primary"}>
@@ -48,8 +60,38 @@ export const DefaultNavBar = (loading: boolean) => (
 function NavBarFunc() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const isLoggedIn = useRecoilValue(loggedInState)
+    const user = useRecoilValue(userState)
     const setOrderModalState = useSetRecoilState(orderModalState)
-
+    const emailToast = useToast()
+    const deviceToast = useToast()
+    const [emailToastOpened, setEmailToastOpened] = useState(false)
+    const [deviceToastOpened, setDeviceToastOpened] = useState(false)
+    useEffect(() => {
+        if (!user.verification.email && !emailToastOpened) {
+            setEmailToastOpened(true)
+            emailToast({
+                title: "Email not verified.",
+                description: "Verify your email to gain complete access to the platform.",
+                status: "error",
+                duration: 60000,
+                isClosable: true,
+                position: "bottom-right",
+            })
+        }
+    }, [user.verification])
+    useEffect(() => {
+        if (window.innerWidth < 768 && !deviceToastOpened) {
+            setDeviceToastOpened(true)
+            deviceToast({
+                title: "Mobile device detected.",
+                description: "Access the website on a dekstop or laptop for a better experience.",
+                status: "warning",
+                duration: 60000,
+                isClosable: true,
+                position: "top",
+            })
+        }
+    }, [])
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <Box px={4}>
