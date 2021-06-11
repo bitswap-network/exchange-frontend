@@ -41,6 +41,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
             cancelOrder(order.orderID)
                 .then(() => {
                     setCancelLoading(false)
+                    setPage(0)
                     disclosure.onClose()
                 })
                 .catch((error: any) => {

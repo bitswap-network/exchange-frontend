@@ -70,6 +70,22 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         defaultValue: "buy",
     })
 
+    const resetState = () => {
+        setTabIndex(0)
+        setEthUsd(null)
+        setContinueLoading(false)
+        setValidateError(null)
+        setMarketError(null)
+        setBalanceError(null)
+        setTotalUsd(0)
+        setPage(0)
+        setTooltipText(marketBuyText)
+        setOrderQuantity("1")
+        setLimitPrice("1.00")
+        setOrderQuantity("market")
+        setOrderSide("buy")
+    }
+
     useEffect(() => {
         if (isOpen && user) {
             if (orderType === "market") {
@@ -103,11 +119,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
 
     useEffect(() => {
         if (!isOpen) {
-            setValidateError(null)
-            setBalanceError(null)
-            setMarketError(null)
-            setTabIndex(0)
-            setPage(0)
+            resetState()
         } else {
             getEthUSD().then((response) => {
                 setEthUsd(response.data.data)
