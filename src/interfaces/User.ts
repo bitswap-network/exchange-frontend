@@ -6,6 +6,7 @@ export interface User {
     balance: {
         bitclout: number
         ether: number
+        in_transaction: boolean | undefined
     }
     transactions: string[]
     verification: {
