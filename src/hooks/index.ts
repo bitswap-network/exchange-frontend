@@ -14,7 +14,7 @@ export function useOrderBook() {
                 const bidArr: orderSideString[] = []
 
                 res.data.asks &&
-                    res.data.asks.forEach((ask: any) =>
+                    res.data.asks.reverse().forEach((ask: any) =>
                         askArr.push({
                             totalString: `$${(ask.price * ask.quantity).toFixed(2)} USD`,
                             priceString: `$${ask.price} USD`,
