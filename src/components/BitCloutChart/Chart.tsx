@@ -61,7 +61,7 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
         dataList.forEach((item: hotData) => {
             const date = new Date(item.timestamp)
             parsedDataArr.data.push({
-                x: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+                x: `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`,
                 y: item.price,
             })
             if (date < minDate) {
@@ -77,8 +77,10 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
         const dateInterval = Math.ceil(dateRange / dateTicks)
         const datesArray = []
         for (let i = 0; i < dateTicks; i++) {
-            datesArray.push(new Date(minDate.getMonth() + 1 + " " + minDate.getDate() + ", " + minDate.getFullYear()))
-            minDate.setDate(minDate.getDate() + dateInterval)
+            datesArray.push(
+                new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear())
+            )
+            minDate.setDate(minDate.getUTCDate() + dateInterval)
         }
         setDateTickValues(datesArray)
         setMinY(min)
