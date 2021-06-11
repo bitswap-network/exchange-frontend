@@ -67,7 +67,7 @@ function NavBarFunc() {
     const [emailToastOpened, setEmailToastOpened] = useState(false)
     const [deviceToastOpened, setDeviceToastOpened] = useState(false)
     useEffect(() => {
-        if (!user.verification.email && !emailToastOpened) {
+        if (user && !user.verification.email && !emailToastOpened) {
             setEmailToastOpened(true)
             emailToast({
                 title: "Email not verified.",
@@ -78,7 +78,7 @@ function NavBarFunc() {
                 position: "bottom-right",
             })
         }
-    }, [user.verification])
+    }, [user])
     useEffect(() => {
         if (window.innerWidth < 768 && !deviceToastOpened) {
             setDeviceToastOpened(true)
