@@ -68,8 +68,8 @@ export function Home(): React.ReactElement {
                                     Price Derivation
                                 </PopoverHeader>
                                 <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
-                                    The Market Buy/Sell prices are the current offers on the market if you were to buy
-                                    or sell 1 {globalVars.BITCLOUT}.
+                                    The market bid is the highest current offer to buy CLOUT. The market ask is the
+                                    lowest current offer to sell CLOUT.
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
