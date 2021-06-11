@@ -82,7 +82,6 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setTooltipText(marketBuyText)
         setOrderQuantity("1")
         setLimitPrice("1.00")
-        setOrderQuantity("market")
         setOrderSide("buy")
     }
 
