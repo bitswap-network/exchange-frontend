@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil"
 import { verifyToken } from "../services/auth"
-import { getData, logout, removeData } from "../helpers/persistence"
+import { getData, logout } from "../helpers/persistence"
 import { User } from "../interfaces/User"
 import { IdentityUsers } from "../interfaces/identity/User"
 

@@ -19,6 +19,12 @@ import { identityHandler } from "./services/identity"
 
 window.addEventListener("message", identityHandler)
 
+if (!localStorage.getItem("nulledState")) {
+    console.log("nulling")
+    localStorage.clear()
+    localStorage.setItem("nulledState", JSON.stringify(true))
+}
+
 export const App = (): ReactElement => {
     return (
         <>

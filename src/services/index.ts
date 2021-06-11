@@ -7,7 +7,7 @@ const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
 }
 
 const onRequestError = (error: AxiosError): Promise<AxiosError> => {
-    console.error(`[request error] [${JSON.stringify(error)}]`)
+    // console.error(`[request error] [${JSON.stringify(error)}]`)
     return Promise.reject(error)
 }
 
@@ -20,7 +20,7 @@ const onAuthRequest = async (config: AxiosRequestConfig): Promise<AxiosRequestCo
 }
 
 const onAuthRequestError = (error: AxiosError): Promise<AxiosError> => {
-    console.error(`[request error] [${JSON.stringify(error)}]`)
+    // console.error(`[request error] [${JSON.stringify(error)}]`)
     return Promise.reject(error)
 }
 
@@ -29,7 +29,7 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 }
 
 const onResponseError = (error: AxiosError): Promise<AxiosError> => {
-    console.error(`[response error] [${JSON.stringify(error)}]`)
+    // console.error(`[response error] [${JSON.stringify(error)}]`)
     return Promise.reject(error)
 }
 

@@ -56,7 +56,6 @@ export function Wallet(): React.ReactElement {
 
     useEffect(() => {
         getEthUSD().then((response) => {
-            console.log(response.data.data)
             setEthUsd(response.data.data)
         })
         getTransactions().then((response) => {
@@ -103,7 +102,6 @@ export function Wallet(): React.ReactElement {
                         resolve(user.balance.bitclout - response.data.data.FeeNanos / 1e9)
                     })
                     .catch((error) => {
-                        console.log(error)
                         reject(error)
                     })
             } else {

@@ -36,7 +36,6 @@ const launch = (path?: string, params?: { publicKey?: string; tx?: string }): Ob
         httpParams = httpParams.concat(`${prepend ? "?" : "&"}accessLevelRequest=${accessLevel}`)
     }
     url += httpParams
-    console.log(url)
     // center the window
     const h = 600
     const w = 600
@@ -67,14 +66,12 @@ const decrypt = (payload: {
 }
 
 const jwt = (payload: { accessLevel: number; accessLevelHmac: string; encryptedSeedHex: string }): Observable<any> => {
-    console.log(payload)
     return send("jwt", payload)
 }
 
 const handleInitialize = (event: MessageEvent) => {
     if (!initialized) {
         initialized = true
-        console.log("initializing identity...")
         iframe = document.getElementById("identity") as HTMLIFrameElement
         for (const request of pendingRequests) {
             postMessage(request)
@@ -91,7 +88,6 @@ const handleStorageGranted = () => {
     storageGranted.complete()
 }
 const handleLogin = (payload: any) => {
-    console.log("LOGIN: ", payload)
     if (identityWindow) {
         identityWindow.close()
         // identityWindow = null
@@ -142,7 +138,6 @@ const handleResponse = (event: MessageEvent) => {
     } = event
 
     const req = outboundRequests[id]
-    console.log(req)
     if (req) {
         req.next(payload)
         req.complete()
@@ -185,10 +180,8 @@ const identityHandler = (event: MessageEvent) => {
         return
     }
     if (method) {
-        console.log(event)
         handleRequest(event)
     } else {
-        console.log(event)
         handleResponse(event)
     }
 }

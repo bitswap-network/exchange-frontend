@@ -43,7 +43,6 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
 
     useEffect(() => {
         getOrderHistory().then((response) => {
-            console.log("orderhistoryrepsonse", response)
             setDepthHot(response.data)
             setLoading(false)
         })

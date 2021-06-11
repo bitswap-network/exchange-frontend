@@ -81,7 +81,6 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
         if (depositTransaction) {
             getTransactionById(depositTransaction._id)
                 .then((response) => {
-                    console.log(response.data.data)
                     if (response.data.data.state === "done") {
                         setDepositSuccessful(true)
                     }

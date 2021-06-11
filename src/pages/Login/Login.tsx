@@ -43,7 +43,6 @@ export function Login(): ReactElement {
                     setRegistrationSuccess(true)
                 })
                 .catch((error: any) => {
-                    console.log(error)
                     error.response.data
                         ? setErrText(error.response.data)
                         : setErrText("Something went wrong, try again later.")
@@ -95,7 +94,6 @@ export function Login(): ReactElement {
                                   if (error.response.status === 406) {
                                       fetchBitcloutProfile(res.publicKeyAdded, "")
                                           .then((response) => {
-                                              console.log(response.data)
                                               setBitcloutProfile(response.data)
                                               setNewUser(true)
                                               setCreateProfile({
@@ -104,7 +102,6 @@ export function Login(): ReactElement {
                                               })
                                           })
                                           .catch((error) => {
-                                              console.log(error.response.data)
                                               error.response.data.message && setErrText(error.response.data.message)
                                           })
                                   }
