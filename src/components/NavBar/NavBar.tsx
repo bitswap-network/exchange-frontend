@@ -12,7 +12,6 @@ import {
     Spacer,
     Text,
     Skeleton,
-    toast,
 } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
