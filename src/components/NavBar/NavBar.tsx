@@ -63,8 +63,10 @@ function NavBarFunc() {
     const setOrderModalState = useSetRecoilState(orderModalState)
     const emailToast = useToast()
     const deviceToast = useToast()
+    const chartWarningToast = useToast()
     const [emailToastOpened, setEmailToastOpened] = useState(false)
     const [deviceToastOpened, setDeviceToastOpened] = useState(false)
+    const [chartWarningToastOpened, setChartWarningToastOpened] = useState(false)
     useEffect(() => {
         if (user && !user.verification.email && !emailToastOpened) {
             setEmailToastOpened(true)
@@ -88,6 +90,19 @@ function NavBarFunc() {
                 duration: 60000,
                 isClosable: true,
                 position: "top",
+            })
+        }
+        if (!chartWarningToastOpened) {
+            setChartWarningToastOpened(true)
+            chartWarningToast({
+                id: "chartWarning",
+                title: "Warning",
+                description:
+                    "Chart prices may currently be inaccurate. Please refer to market bid and ask prices instead.",
+                status: "warning",
+                duration: 600000,
+                isClosable: true,
+                position: "bottom-left",
             })
         }
     }, [])

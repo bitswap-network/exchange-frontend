@@ -25,7 +25,7 @@ export function useOrderBook() {
                     res.data.bids.forEach((bid: any) =>
                         bidArr.push({
                             ...bid,
-                            totalString: `$${bid.price * bid.quantity} USD`,
+                            totalString: `$${(bid.price * bid.quantity).toFixed(2)} USD`,
                             priceString: `$${bid.price} USD`,
                             quantityString: `${bid.quantity} ${BITCLOUT}`,
                         })

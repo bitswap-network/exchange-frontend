@@ -49,6 +49,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                 .then(() => {
                     disclosure.onClose()
                     setPage(0)
+                    location.reload()
                 })
                 .catch((error) => {
                     console.error(error)
@@ -99,6 +100,8 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                 return depositStartView
             case 1:
                 return depositCompleteView
+            case 2:
+                return depositCancelView
             default:
                 return depositStartView
         }
@@ -113,6 +116,35 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
         }, 3000)
         e.target.focus()
     }
+
+    const depositCancelView = (
+        <ModalContent>
+            <ModalCloseButton />
+            <ModalBody>
+                <Flex w="80%" ml="10%" flexDir="column">
+                    <Text fontSize="xl" fontWeight="700" mt="6" mb="2" color="gray.700">
+                        Confirm cancellation
+                    </Text>
+                    <Text color="gray.500" fontSize="sm">
+                        Are you sure you want to cancel this deposit? If you have already transferred funds to this
+                        account, do not cancel this deposit as you may lose them.
+                    </Text>
+                    <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
+                        <Button
+                            w="47%"
+                            variant="ghost"
+                            onClick={() => {
+                                setPage(0)
+                            }}
+                        >
+                            Go back
+                        </Button>
+                        <BlueButton w="47%" text={`   Cancel Deposit   `} onClick={cancelDepositHandler} />
+                    </Flex>
+                </Flex>
+            </ModalBody>
+        </ModalContent>
+    )
 
     const depositCompleteView = (
         <ModalContent>
@@ -212,7 +244,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
 
                     <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                         {!depositSuccessful && depositAddress ? (
-                            <Button w="90%" ml="5%" variant="solid" onClick={cancelDepositHandler}>
+                            <Button w="90%" ml="5%" variant="solid" onClick={() => setPage(2)}>
                                 Cancel
                             </Button>
                         ) : (
