@@ -8,10 +8,16 @@ import {
     IconButton,
     Button,
     useDisclosure,
-    Stack,
     Spacer,
     Text,
     Skeleton,
+    Drawer,
+    DrawerBody,
+    VStack,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
 } from "@chakra-ui/react"
 import { RiCloseFill } from "react-icons/ri"
 import { HiMenu } from "react-icons/hi"
@@ -85,7 +91,7 @@ function NavBarFunc() {
             setDeviceToastOpened(true)
             deviceToast({
                 title: "Mobile device detected.",
-                description: "Access the website on a dekstop or laptop for a better experience.",
+                description: "Access the website on a desktop or laptop for a better experience.",
                 status: "warning",
                 duration: 60000,
                 isClosable: true,
@@ -108,63 +114,92 @@ function NavBarFunc() {
     }, [])
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
-        <Box px={4}>
-            <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-                <IconButton
-                    size={"lg"}
-                    icon={isOpen ? <RiCloseFill /> : <HiMenu />}
-                    aria-label={"Open Menu"}
-                    display={{ md: "none" }}
-                    onClick={isOpen ? () => onClose() : () => onOpen()}
-                />
-                <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
-                    <Logo as={Link} to="/" />
-                    {LINKS.map((link) => (
-                        <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} pt="3px">
-                            {link}
-                        </Text>
-                    ))}
-                </HStack>
-                <Flex mr={{ sm: "5px", md: "20px" }}>
-                    <HStack as={"nav"} spacing={1} display={{ base: "none", md: "flex" }}>
-                        <Button
-                            as={Link}
-                            to={{
-                                pathname: "/orders",
-                            }}
-                            onClick={() => setOrderModalState(() => true)}
-                            h="30px"
-                            bgColor="#DBE6FF"
-                            borderRadius="4"
-                            mr="4"
-                        >
-                            <Text textTransform="capitalize" fontWeight="500" color="brand.100" fontSize="sm">
-                                New Order
-                            </Text>
-                        </Button>
-                        <Link to="/profile">
-                            <HStack spacing="5px" color="black" fontWeight="400" mr="4">
-                                <AiOutlineUser size="20" />
-                                <Text textTransform="capitalize" pt="2px">
-                                    Profile
+        <>
+            <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>
+                        <Flex alignItems="flex-start" ml="-40px">
+                            <Logo as={Link} to="/" />
+                        </Flex>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <VStack spacing={4} alignItems="flex-start">
+                            {LINKS.map((link) => (
+                                <Text
+                                    textTransform="capitalize"
+                                    as={Link}
+                                    to={`/${link}`}
+                                    key={link}
+                                    onClick={() => onClose()}
+                                >
+                                    {link}
                                 </Text>
-                            </HStack>
-                        </Link>
-                    </HStack>
-                </Flex>
-            </Flex>
-            {isOpen && (
-                <Box pb={4} display={{ base: "flex", md: "none" }}>
-                    <Stack as={"nav"} spacing={4}>
+                            ))}
+                        </VStack>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+            <Box px={4}>
+                <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+                    <IconButton
+                        size={"lg"}
+                        icon={isOpen ? <RiCloseFill /> : <HiMenu />}
+                        aria-label={"Open Menu"}
+                        display={{ md: "none" }}
+                        onClick={isOpen ? () => onClose() : () => onOpen()}
+                    />
+                    <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
+                        <Logo as={Link} to="/" />
                         {LINKS.map((link) => (
-                            <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link}>
+                            <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} pt="3px">
                                 {link}
                             </Text>
                         ))}
-                    </Stack>
-                </Box>
-            )}
-        </Box>
+                    </HStack>
+                    <Flex mr={{ sm: "5px", md: "20px" }}>
+                        <HStack as={"nav"} spacing={1} display={{ base: "none", md: "flex" }}>
+                            <Button
+                                as={Link}
+                                to={{
+                                    pathname: "/orders",
+                                }}
+                                onClick={() => setOrderModalState(() => true)}
+                                h="30px"
+                                bgColor="#DBE6FF"
+                                borderRadius="4"
+                                mr="4"
+                            >
+                                <Text textTransform="capitalize" fontWeight="500" color="brand.100" fontSize="sm">
+                                    New Order
+                                </Text>
+                            </Button>
+                            <Link to="/profile">
+                                <HStack spacing="5px" color="black" fontWeight="400" mr="4">
+                                    <AiOutlineUser size="20" />
+                                    <Text textTransform="capitalize" pt="2px">
+                                        Profile
+                                    </Text>
+                                </HStack>
+                            </Link>
+                        </HStack>
+                    </Flex>
+                </Flex>
+
+                {/* {isOpen && (
+                    <Box pb={4} display={{ base: "flex", md: "none" }}>
+                        <Stack as={"nav"} spacing={4}>
+                            {LINKS.map((link) => (
+                                <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link}>
+                                    {link}
+                                </Text>
+                            ))}
+                        </Stack>
+                    </Box>
+                )} */}
+            </Box>
+        </>
     )
 
     return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar(false)}</>
