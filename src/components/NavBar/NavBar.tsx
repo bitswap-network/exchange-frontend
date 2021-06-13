@@ -98,19 +98,19 @@ function NavBarFunc() {
                 position: "top",
             })
         }
-        if (!chartWarningToastOpened) {
-            setChartWarningToastOpened(true)
-            chartWarningToast({
-                id: "chartWarning",
-                title: "Warning",
-                description:
-                    "Chart prices may currently be inaccurate. Please refer to market bid and ask prices instead.",
-                status: "warning",
-                duration: 600000,
-                isClosable: true,
-                position: "bottom-left",
-            })
-        }
+        // if (!chartWarningToastOpened) {
+        //     setChartWarningToastOpened(true)
+        //     chartWarningToast({
+        //         id: "chartWarning",
+        //         title: "Warning",
+        //         description:
+        //             "Chart prices may currently be inaccurate. Please refer to market bid and ask prices instead.",
+        //         status: "warning",
+        //         duration: 600000,
+        //         isClosable: true,
+        //         position: "bottom-left",
+        //     })
+        // }
     }, [])
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
