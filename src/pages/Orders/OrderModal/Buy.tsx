@@ -80,6 +80,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Text>
             <NumberInput
                 min={globalVars.MIN_LIMIT}
+                max={500}
                 value={orderQuantity}
                 onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
                 step={0.1}
@@ -107,7 +108,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 </Tooltip>
 
                 <NumberInput
-                    min={1}
+                    min={100}
                     value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
                     step={1}
