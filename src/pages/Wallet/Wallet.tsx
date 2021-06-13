@@ -102,7 +102,8 @@ export function Wallet(): React.ReactElement {
                         resolve(user.balance.bitclout - response.data.data.FeeNanos / 1e9)
                     })
                     .catch((error) => {
-                        reject(error)
+                        console.error(error)
+                        resolve(0)
                     })
             } else {
                 resolve(0)

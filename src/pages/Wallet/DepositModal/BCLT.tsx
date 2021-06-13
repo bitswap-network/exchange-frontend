@@ -13,6 +13,7 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
+    Tooltip,
 } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { userState, identityUsers } from "../../../store"
@@ -20,6 +21,7 @@ import { depositBitcloutPreflightTxn } from "../../../services/gateway"
 import { handleBitcloutDeposit } from "../../../services/identity/helper"
 import { BlueButton } from "../../../components/BlueButton"
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
+import { AiFillInfoCircle } from "react-icons/ai"
 
 import * as globalVars from "../../../globalVars"
 
@@ -172,10 +174,20 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                     </Text>
                     <Text color="gray.500" fontSize="sm">
                         Add funds to your BitSwap wallet!
-                    </Text>
-                    <Text color="gray.600" fontSize="sm" fontWeight="600" mt="6">
-                        Amount of {globalVars.BITCLOUT} to Deposit
-                    </Text>
+                    </Text>{" "}
+                    <Flex flexDir="row" mt="6">
+                        <Tooltip
+                            label={`You can deposit up to 500 ${globalVars.BITCLOUT} per transaction.`}
+                            aria-label=""
+                        >
+                            <Text color="gray.600" fontSize="sm" fontWeight="600">
+                                Amount of {globalVars.BITCLOUT} to Deposit
+                                <AiFillInfoCircle
+                                    style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
+                                />
+                            </Text>
+                        </Tooltip>
+                    </Flex>
                     <NumberInput
                         mt="4"
                         type="text"
@@ -185,6 +197,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         precision={6}
                         step={0.1}
                         min={0}
+                        max={500}
                     >
                         <NumberInputField />
                         <NumberInputStepper>

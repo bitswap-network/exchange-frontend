@@ -2,9 +2,7 @@ import { useEffect, useRef } from "react"
 
 export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
 
-export const api = isTest
-    ? "https://bitswap-core-api-staging.herokuapp.com/"
-    : "https://bitswap-core-api.herokuapp.com/"
+export const api = isTest ? "http://localhost:5000/" : "https://bitswap-core-api.herokuapp.com/"
 export const identityURL = "https://identity.bitclout.com"
 
 export const etherscanPrefix = isTest ? "kovan." : ""

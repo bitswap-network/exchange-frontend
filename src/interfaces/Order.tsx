@@ -11,6 +11,7 @@ export type Order = {
     orderQuantity: number
     orderPrice: number | undefined
     execPrice: number | undefined
+    fees: number | undefined
     orderQuantityProcessed: number
     complete: boolean
     error: string | undefined
