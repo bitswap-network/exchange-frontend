@@ -61,7 +61,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         defaultValue: "1",
     })
     const [limitPrice, setLimitPrice] = useControllableState({
-        defaultValue: "1.00",
+        defaultValue: "101",
     })
     const [orderType, setOrderType] = useControllableState({
         defaultValue: "market",
@@ -81,7 +81,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setPage(0)
         setTooltipText(marketBuyText)
         setOrderQuantity("1")
-        setLimitPrice("1.00")
+        setLimitPrice("101")
         setOrderSide("buy")
     }
 
