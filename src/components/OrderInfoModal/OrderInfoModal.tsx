@@ -15,6 +15,7 @@ import { BlueButton } from "../../components/BlueButton"
 import { OrderTableDataInterface } from "../../interfaces/Order"
 import { cancelOrder } from "../../services/order"
 import * as globalVars from "../../globalVars"
+import { useEffect } from "react"
 interface OrderInfoModalProps {
     disclosure: {
         isOpen: boolean
@@ -33,11 +34,17 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
     const [page, setPage] = useState<number>(0)
     const created = new Date(order.created)
     const completed: Date | null = order.completeTime ? new Date(order.completeTime) : null
-
+    useEffect(() => {
+        if (disclosure.isOpen) {
+            setCancelError(null)
+            setPage(0)
+        }
+    }, [disclosure.isOpen])
     const cancelOrderHandler = () => {
         setCancelError(null)
         if (!order.complete) {
             setCancelLoading(true)
+            setCancelError(null)
             cancelOrder(order.orderID)
                 .then(() => {
                     setCancelLoading(false)
@@ -45,6 +52,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                     disclosure.onClose()
                 })
                 .catch((error: any) => {
+                    setCancelLoading(false)
                     if (error.response) setCancelError(error.response.data.message)
                 })
         }
