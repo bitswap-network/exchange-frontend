@@ -231,7 +231,7 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box w="full" maxH="270px" mt="2">
+                            <Box w="full" maxH="325px" mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">

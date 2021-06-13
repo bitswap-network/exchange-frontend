@@ -30,7 +30,7 @@ interface BuyTabProps {
     ethUsd: number | null
 }
 
-const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at."
+const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at. Must be between $100 and $500."
 
 export const BuyTab: React.FC<BuyTabProps> = ({
     user,
@@ -75,9 +75,15 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Select>
         </FormControl>
         <FormControl id="bcltAmount">
-            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
-                Quantity of {globalVars.BITCLOUT}
-            </Text>
+            <Tooltip label={`You can buy up to 500 ${globalVars.BITCLOUT} per order.`} aria-label="">
+                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
+                    Quantity of {globalVars.BITCLOUT}
+                    <AiFillInfoCircle
+                        color="#aaa"
+                        style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
+                    />
+                </Text>
+            </Tooltip>
             <NumberInput
                 min={globalVars.MIN_LIMIT}
                 max={500}
@@ -109,6 +115,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
 
                 <NumberInput
                     min={100}
+                    max={500}
                     value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
                     step={1}

@@ -77,10 +77,15 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
         const dateInterval = Math.ceil(dateRange / dateTicks)
         const datesArray = []
         for (let i = 0; i < dateTicks; i++) {
-            datesArray.push(
-                new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear())
-            )
-            minDate.setDate(minDate.getUTCDate() + dateInterval)
+            if (
+                new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear()) <=
+                maxDate
+            ) {
+                datesArray.push(
+                    new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear())
+                )
+                minDate.setDate(minDate.getUTCDate() + dateInterval)
+            }
         }
         setDateTickValues(datesArray)
         setMinY(min)
