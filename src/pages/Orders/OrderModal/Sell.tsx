@@ -16,7 +16,7 @@ import {
 import * as globalVars from "../../../globalVars"
 import { AiFillInfoCircle } from "react-icons/ai"
 const format = (val: string) => `$` + val
-const limitSellTooltipText = "This is the price you are willing to sell Bitclout at."
+const limitSellTooltipText = "This is the price you are willing to sell Bitclout at. Must be between $100 and $500."
 
 interface SellTabProps {
     user?: any
@@ -71,9 +71,15 @@ export const SellTab: React.FC<SellTabProps> = ({
             </Select>
         </FormControl>
         <FormControl id="bcltAmount">
-            <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
-                Quantity of {globalVars.BITCLOUT}
-            </Text>
+            <Tooltip label={`You can sell up to 500 ${globalVars.BITCLOUT} per order.`} aria-label="">
+                <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
+                    Quantity of {globalVars.BITCLOUT}
+                    <AiFillInfoCircle
+                        color="#aaa"
+                        style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
+                    />
+                </Text>
+            </Tooltip>
             <NumberInput
                 min={globalVars.MIN_LIMIT}
                 value={orderQuantity}
@@ -105,6 +111,7 @@ export const SellTab: React.FC<SellTabProps> = ({
                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                 <NumberInput
                     min={100}
+                    max={500}
                     value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
                     step={1}
