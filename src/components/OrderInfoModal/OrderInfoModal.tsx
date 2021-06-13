@@ -120,7 +120,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                 LIMIT PRICE
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {order.orderPrice ? `${order.orderPrice} $USD` : " - "}
+                                {order.orderPrice ? `${order.orderPrice.toFixed(2)} $USD` : " - "}
                             </Text>
                             <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                 EXECUTION PRICE
@@ -141,13 +141,13 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                 ORDER QUANTITY
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {order.orderQuantity} {globalVars.BITCLOUT}
+                                {+order.orderQuantity.toFixed(2)} {globalVars.BITCLOUT}
                             </Text>
                             <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                 QUANTITY PROCESSED
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {order.orderQuantityProcessed} {globalVars.BITCLOUT}
+                                {+order.orderQuantityProcessed.toFixed(2)} {globalVars.BITCLOUT}
                             </Text>
                         </Box>
                     </Flex>
