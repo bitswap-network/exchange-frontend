@@ -103,7 +103,13 @@ export function Login(): ReactElement {
                                               })
                                           })
                                           .catch((error) => {
-                                              error.response.data.message && setErrText(error.response.data.message)
+                                              setNewUser(true)
+                                              setCreateProfile({
+                                                  ...createProfile,
+                                                  publicKey: res.publicKeyAdded,
+                                              })
+                                              error.response.data.message &&
+                                                  setErrText("Warning: Importing anonymous Bitclout account.")
                                           })
                                   }
                               } else {
@@ -154,12 +160,14 @@ export function Login(): ReactElement {
                 Account being imported:
                 <Link
                     isExternal
-                    href={`https://bitclout.com/u/${bitcloutProfile?.Username}`}
+                    href={`https://bitclout.com/u/${
+                        bitcloutProfile?.Username ? bitcloutProfile?.Username : "anonymous"
+                    }`}
                     fontWeight="bold"
                     color="brand.100"
                 >
                     {" "}
-                    {bitcloutProfile?.Username}
+                    {bitcloutProfile?.Username ? bitcloutProfile?.Username : createProfile.publicKey}
                 </Link>
             </Text>
             <Text fontSize="md" color="gray.600">
@@ -234,11 +242,11 @@ export function Login(): ReactElement {
     )
 
     const accountCreated = (
-        <VStack spacing={8} align="flex-start" maxW="450px">
-            <Text fontSize="xx-large" fontWeight="bold">
+        <VStack spacing={8} align="center" maxW="450px">
+            <Text fontSize="xx-large" fontWeight="bold" textAlign="center">
                 Your account has been created 🚀
             </Text>
-            <Text fontSize="md" color="gray.600">
+            <Text fontSize="md" color="gray.600" textAlign="center">
                 Please check your inbox for intructions on how to verify your account.
             </Text>
             <BlueButton text={`   Login   `} width="350px" onClick={loginHandler} />

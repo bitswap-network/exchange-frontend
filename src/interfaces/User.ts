@@ -18,10 +18,10 @@ export interface User {
     }
     bitclout: {
         publicKey: string
-        bio: string
+        bio: string | undefined
         verified: boolean
-        profilePicture: string
-        username: string
+        profilePicture: string | undefined
+        username: string | undefined
     }
     created: Date
     admin: boolean

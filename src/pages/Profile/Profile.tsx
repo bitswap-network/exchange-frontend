@@ -30,15 +30,12 @@ const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 export function Profile(): React.ReactElement {
     const user = useRecoilValue(userState)
 
-    let BitcloutCode: any = null
     const [emailEdit, setEmailEdit] = useState(false)
     const [nameEdit, setNameEdit] = useState(false)
     const [emailErr, setEmailErr] = useState(false)
     const [userName, setUserName] = useState("")
     const [userEmail, setUserEmail] = useState("")
     const [currentPage, setCurrentPage] = useState("profile")
-    const [textCopied, setTextCopied] = useState("copy")
-    const [verificationErrText, setVerificationErrText] = useState("")
     const [loading, setLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -59,8 +56,10 @@ export function Profile(): React.ReactElement {
     }, [userEmail])
 
     useEffect(() => {
-        setUserEmail(user.email)
-        setUserName(user.name)
+        if (user) {
+            setUserEmail(user.email)
+            setUserName(user.name)
+        }
     }, [user])
 
     const handleLogout = () => {
@@ -99,31 +98,7 @@ export function Profile(): React.ReactElement {
             })
     }
 
-    const checkBitcloutVerification = () => {
-        setLoading(true)
-        verifyBitclout()
-            .then(() => {
-                setLoading(false)
-                setVerificationErrText("")
-                setCurrentPage("complete")
-            })
-            .catch(() => {
-                setLoading(false)
-                setVerificationErrText("Unable to verify profile.")
-            })
-    }
-
-    const copyToClipboard = (e: any) => {
-        BitcloutCode.select()
-        document.execCommand("copy")
-        setTextCopied("copied")
-        setTimeout(function () {
-            setTextCopied("copy")
-        }, 3000)
-        e.target.focus()
-    }
-
-    const profilePage = (
+    const profilePage = user ? (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -141,16 +116,27 @@ export function Profile(): React.ReactElement {
                 </ModalContent>
             </Modal>
             <Flex minH="100%" align="center" justify="center" flexDirection="column">
-                <Image src={user.bitclout.profilePicture} w="80px" h="80px" borderRadius="80px" />
+                <Image
+                    src={
+                        user.bitclout.profilePicture
+                            ? user.bitclout.profilePicture
+                            : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                    }
+                    w="80px"
+                    h="80px"
+                    borderRadius="80px"
+                />
                 <Link
                     isExternal
-                    href={`https://bitclout.com/u/${user.bitclout.username}`}
+                    href={`https://bitclout.com/u/${
+                        user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey
+                    }`}
                     color="black"
                     fontWeight="700"
                     fontSize="20"
                     mt="3"
                 >
-                    @{user.bitclout.username}
+                    @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
                 </Link>
                 <Text color="gray.700" fontWeight="400" fontSize="16" mt="2">
                     {user.bitclout.bio}
@@ -341,65 +327,65 @@ export function Profile(): React.ReactElement {
                 </Flex>
             </Flex>
         </>
-    )
+    ) : null
 
-    const VerifyBitclout = (
-        <Flex h="70vh" alignItems="center" justifyContent="center">
-            <VStack spacing={8} align="flex-start" maxW="450px">
-                <Button color="gray.600" fontWeight="500" fontSize="16" p="0" onClick={() => setCurrentPage("profile")}>
-                    <HiChevronLeft style={{ display: "inline" }} color="gray.600" size="24" /> Back
-                </Button>
-                <Text fontSize="xx-large" fontWeight="bold">
-                    BitClout Verification
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                    Please post the following on BitClout with your verification code (given below).
-                </Text>
-                <InputGroup size="md">
-                    <Input
-                        pr="4.5rem"
-                        ref={(input) => {
-                            BitcloutCode = input
-                        }}
-                        type="text"
-                        isReadOnly={true}
-                        value={user.verification.bitcloutString}
-                    />
-                    <InputRightElement width="4.5rem">
-                        <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
-                            {textCopied}
-                        </Button>
-                    </InputRightElement>
-                </InputGroup>
-                <Image src="./bitclout_verification.png" />
-                <Flex w="full" align="center" flexDir="column">
-                    <Text fontSize="md" color="red.300" mb="4">
-                        {verificationErrText}
-                    </Text>
-                    <BlueButton
-                        text={`   Verify   `}
-                        width="350px"
-                        onClick={checkBitcloutVerification}
-                        loading={loading}
-                    />
-                </Flex>
-            </VStack>
-        </Flex>
-    )
+    // const VerifyBitclout = (
+    //     <Flex h="70vh" alignItems="center" justifyContent="center">
+    //         <VStack spacing={8} align="flex-start" maxW="450px">
+    //             <Button color="gray.600" fontWeight="500" fontSize="16" p="0" onClick={() => setCurrentPage("profile")}>
+    //                 <HiChevronLeft style={{ display: "inline" }} color="gray.600" size="24" /> Back
+    //             </Button>
+    //             <Text fontSize="xx-large" fontWeight="bold">
+    //                 BitClout Verification
+    //             </Text>
+    //             <Text fontSize="md" color="gray.600">
+    //                 Please post the following on BitClout with your verification code (given below).
+    //             </Text>
+    //             <InputGroup size="md">
+    //                 <Input
+    //                     pr="4.5rem"
+    //                     ref={(input) => {
+    //                         BitcloutCode = input
+    //                     }}
+    //                     type="text"
+    //                     isReadOnly={true}
+    //                     value={user.verification.bitcloutString}
+    //                 />
+    //                 <InputRightElement width="4.5rem">
+    //                     <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
+    //                         {textCopied}
+    //                     </Button>
+    //                 </InputRightElement>
+    //             </InputGroup>
+    //             <Image src="./bitclout_verification.png" />
+    //             <Flex w="full" align="center" flexDir="column">
+    //                 <Text fontSize="md" color="red.300" mb="4">
+    //                     {verificationErrText}
+    //                 </Text>
+    //                 <BlueButton
+    //                     text={`   Verify   `}
+    //                     width="350px"
+    //                     onClick={checkBitcloutVerification}
+    //                     loading={loading}
+    //                 />
+    //             </Flex>
+    //         </VStack>
+    //     </Flex>
+    // )
 
-    const VerificationComplete = (
-        <Flex h="70vh" alignItems="center" justifyContent="center">
-            <VStack spacing={8} align="flex-start" maxW="450px">
-                <Text fontSize="xx-large" fontWeight="bold">
-                    Verification Complete
-                </Text>
-                <Text fontSize="md" color="gray.600">
-                    Welcome to BitSwap! Click the button below to return to your account.
-                </Text>
-                <BlueButton text={`   Return To Profile   `} width="350px" onClick={() => setCurrentPage("profile")} />
-            </VStack>
-        </Flex>
-    )
+    // const VerificationComplete = (
+    //     <Flex h="70vh" alignItems="center" justifyContent="center">
+    //         <VStack spacing={8} align="flex-start" maxW="450px">
+    //             <Text fontSize="xx-large" fontWeight="bold">
+    //                 Verification Complete
+    //             </Text>
+    //             <Text fontSize="md" color="gray.600">
+    //                 Welcome to BitSwap! Click the button below to return to your account.
+    //             </Text>
+    //             <BlueButton text={`   Return To Profile   `} width="350px" onClick={() => setCurrentPage("profile")} />
+    //         </VStack>
+    //     </Flex>
+    // )
 
     return currentPage == "profile" ? profilePage : currentPage == "verify" ? VerifyBitclout : VerificationComplete
 }
