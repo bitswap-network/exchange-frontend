@@ -87,11 +87,6 @@ export function Orders(): React.ReactElement {
         }
     }, [orderModalOpenOnLoad])
 
-    // if (userIsLoading || userIsError) {
-    //     return <></>
-    // }
-    console.log(orderbookIsError, orderbookIsLoading)
-
     return (
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
