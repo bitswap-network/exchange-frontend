@@ -208,6 +208,9 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                     <Text color="gray.500" fontSize="sm" mt="6">
                         You will be able to review this transaction before it’s complete.
                     </Text>
+                    <Text color="red.400" fontSize="xs" mt="6">
+                        Warning: The BitClout identity approval window may show inaccurate transfer values.
+                    </Text>
                     <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                         <Button
                             w="47%"

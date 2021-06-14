@@ -20,13 +20,16 @@ export const handleBitcloutDeposit = async ({
 }: handleBitcloutDepositInterface): Promise<AxiosResponse> => {
     return new Promise<AxiosResponse>((resolve, reject) => {
         identity
-            .sign({
-                accessLevel: accessLevel,
-                accessLevelHmac: accessLevelHmac,
-                encryptedSeedHex: encryptedSeedHex,
-                transactionHex: transactionHex,
-            })
+            .launch(`/approve`, { tx: transactionHex })
+            // identity
+            //     .sign({
+            //         accessLevel: accessLevel,
+            //         accessLevelHmac: accessLevelHmac,
+            //         encryptedSeedHex: encryptedSeedHex,
+            //         transactionHex: transactionHex,
+            //     })
             .subscribe((response) => {
+                console.log(response)
                 depositBitclout(response.signedTransactionHex, transactionIDBase58Check, value)
                     .then((response) => {
                         resolve(response)
