@@ -90,6 +90,7 @@ export function Orders(): React.ReactElement {
     // if (userIsLoading || userIsError) {
     //     return <></>
     // }
+    console.log(orderbookIsError, orderbookIsLoading)
 
     return (
         <>
@@ -125,10 +126,10 @@ export function Orders(): React.ReactElement {
                                 </TabList>
                             </Center>
                             <Skeleton
-                                isLoaded={!ordersIsLoading && !ordersIsError}
-                                mt={!ordersIsLoading && !ordersIsError ? "0" : "4"}
-                                mr={!ordersIsLoading && !ordersIsError ? "0" : "4"}
-                                ml={!ordersIsLoading && !ordersIsError ? "0" : "4"}
+                                isLoaded={!ordersIsLoading}
+                                mt={!ordersIsLoading ? "0" : "4"}
+                                mr={!ordersIsLoading ? "0" : "4"}
+                                ml={!ordersIsLoading ? "0" : "4"}
                                 height="40px"
                             >
                                 <TabPanels w="full">
