@@ -93,24 +93,11 @@ function NavBarFunc() {
                 title: "Mobile device detected.",
                 description: "Access the website on a desktop or laptop for a better experience.",
                 status: "warning",
-                duration: 60000,
+                duration: 10000,
                 isClosable: true,
                 position: "top",
             })
         }
-        // if (!chartWarningToastOpened) {
-        //     setChartWarningToastOpened(true)
-        //     chartWarningToast({
-        //         id: "chartWarning",
-        //         title: "Warning",
-        //         description:
-        //             "Chart prices may currently be inaccurate. Please refer to market bid and ask prices instead.",
-        //         status: "warning",
-        //         duration: 600000,
-        //         isClosable: true,
-        //         position: "bottom-left",
-        //     })
-        // }
     }, [])
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
