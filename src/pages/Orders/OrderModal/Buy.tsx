@@ -30,7 +30,7 @@ interface BuyTabProps {
     ethUsd: number | null
 }
 
-const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at. Must be between $100 and $500."
+const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at."
 
 export const BuyTab: React.FC<BuyTabProps> = ({
     user,

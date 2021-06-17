@@ -16,7 +16,7 @@ import {
 import * as globalVars from "../../../globalVars"
 import { AiFillInfoCircle } from "react-icons/ai"
 const format = (val: string) => `$` + val
-const limitSellTooltipText = "This is the price you are willing to sell Bitclout at. Must be between $100 and $500."
+const limitSellTooltipText = "This is the price you are willing to sell Bitclout at."
 
 interface SellTabProps {
     user?: any
