@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react"
 
+export const fee = 0.01
+
 export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true
 
 export const api = isTest

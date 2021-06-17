@@ -133,7 +133,7 @@ export const SellTab: React.FC<SellTabProps> = ({
                 <Text color="gray.600" fontSize="sm">
                     {" "}
                     {orderType === "market" ? "Est. " : ""}
-                    Fees (2%)&nbsp;
+                    Fees (1%)&nbsp;
                     <AiFillInfoCircle
                         style={{
                             display: "inline",
@@ -145,7 +145,7 @@ export const SellTab: React.FC<SellTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                {ethUsd && (+(totalUsd / ethUsd) * 0.02).toFixed(6)} {globalVars.ETHER}
+                {ethUsd && (+(totalUsd / ethUsd) * 0.01).toFixed(6)} {globalVars.ETHER}
             </Text>
         </HStack>
         <HStack>

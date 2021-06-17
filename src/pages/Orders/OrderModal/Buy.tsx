@@ -137,7 +137,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 <Text color="gray.600" fontSize="sm">
                     {" "}
                     {orderType === "market" ? "Est. " : ""}
-                    Fees (2%)&nbsp;
+                    Fees (1%)&nbsp;
                     <AiFillInfoCircle
                         style={{
                             display: "inline",
@@ -149,7 +149,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Tooltip>
             <Spacer />
             <Text color="gray.900" fontSize="sm" fontWeight="600">
-                {+(parseFloat(orderQuantity) * 0.02).toFixed(6)} {globalVars.BITCLOUT}
+                {+(parseFloat(orderQuantity) * 0.01).toFixed(6)} {globalVars.BITCLOUT}
             </Text>
         </HStack>
         <HStack>
