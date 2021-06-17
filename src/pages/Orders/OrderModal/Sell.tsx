@@ -110,7 +110,7 @@ export const SellTab: React.FC<SellTabProps> = ({
                 </Tooltip>
                 {/* Add a tooltip here that says something like "this is the price that you will pay per bitclout if your order is executed" */}
                 <NumberInput
-                    min={100}
+                    min={1}
                     max={500}
                     value={format(limitPrice)}
                     onChange={(valueString) => setLimitPrice(globalVars.parseNum(valueString))}
