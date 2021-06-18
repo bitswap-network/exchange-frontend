@@ -107,7 +107,11 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             }
             if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
                 setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`)
-            } else if (ethUsd && orderSide === "buy" && totalUsd / ethUsd > user.balance.ether) {
+            } else if (
+                ethUsd &&
+                orderSide === "buy" &&
+                +(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2) / ethUsd > user.balance.ether
+            ) {
                 setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`)
             } else {
                 setBalanceError(null)

@@ -45,7 +45,9 @@ export function Login(): ReactElement {
                 })
                 .catch((error: any) => {
                     error.response.data
-                        ? setErrText(error.response.data)
+                        ? error.response.data.message
+                            ? setErrText(error.response.data.message)
+                            : setErrText(error.response.data)
                         : setErrText("Something went wrong, try again later.")
                 })
         } else {
@@ -247,7 +249,11 @@ export function Login(): ReactElement {
                 Your account has been created 🚀
             </Text>
             <Text fontSize="md" color="gray.600" textAlign="center">
-                Please check your inbox for intructions on how to verify your account.
+                We sent an email to {createProfile.email}. Please check your inbox for intructions on how to verify your
+                account. If you made a typo or would like to change your email{" "}
+                <Link href={"/profile"} color="brand.100">
+                    click here.
+                </Link>
             </Text>
             <BlueButton text={`   Login   `} width="350px" onClick={loginHandler} />
         </VStack>

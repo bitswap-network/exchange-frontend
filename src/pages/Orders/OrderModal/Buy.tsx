@@ -88,7 +88,9 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 min={globalVars.MIN_LIMIT}
                 max={500}
                 value={orderQuantity}
-                onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
+                onChange={(valueString) => {
+                    setOrderQuantity(globalVars.parseNum(valueString))
+                }}
                 step={0.1}
                 precision={2}
             >
