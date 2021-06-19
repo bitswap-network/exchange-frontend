@@ -82,10 +82,13 @@ function NavBarFunc() {
                 status: "error",
                 duration: 60000,
                 isClosable: true,
-                position: "bottom-right",
+                position: "bottom-left",
             })
         }
-    }, [user])
+        if (user && user.verification.email) {
+            emailToast.closeAll()
+        }
+    }, [user?.verification])
     useEffect(() => {
         if (window.innerWidth < 768 && !deviceToastOpened) {
             setDeviceToastOpened(true)

@@ -6,7 +6,7 @@ import { CryptoCard } from "../../components/CryptoCard"
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react"
 import { useRecoilValue } from "recoil"
 import { tokenState } from "../../store"
-import { getEthUSD } from "../../services/utility"
+import { getEthUSD, getBitcloutUSD } from "../../services/utility"
 import { TransactionSchema } from "../../interfaces/Transaction"
 import { getTransactions } from "../../services/user"
 import { withdrawBitcloutPreflightTxn } from "../../services/gateway"
@@ -21,6 +21,7 @@ export function Wallet(): React.ReactElement {
     const token = useRecoilValue(tokenState)
     const { user, userIsLoading, userIsError } = useUser(token)
     const [ethUsd, setEthUsd] = useState<number | null>(null)
+    const [cloutUsd, setCloutUsd] = useState<number | null>(null)
     const [selectedCurrency, setSelectedCurrency] = useState<{
         type: string
         maxWithdraw: number
@@ -34,6 +35,7 @@ export function Wallet(): React.ReactElement {
         imageUri: "./bitcloutLogo.png",
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
+        usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
         publicKey: user?.bitclout.publicKey,
     })
     const [ETH, setETH] = useState({
@@ -58,6 +60,7 @@ export function Wallet(): React.ReactElement {
         getEthUSD().then((response) => {
             setEthUsd(response.data.data)
         })
+        setCloutUsd(176.85)
         getTransactions().then((response) => {
             setTransactions(response.data.data)
         })
@@ -82,6 +85,7 @@ export function Wallet(): React.ReactElement {
             imageUri: "./bitcloutLogo.png",
             currency: globalVars.BITCLOUT,
             amount: user?.balance.bitclout,
+            usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
             publicKey: user?.bitclout.publicKey,
         })
         setETH({
@@ -244,6 +248,7 @@ export function Wallet(): React.ReactElement {
                                         imageUrl={BCLT.imageUri}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
+                                        usdValue={BCLT.usdValue ? BCLT.usdValue : 0}
                                     />
                                 ) : (
                                     <BalanceCard
@@ -252,7 +257,7 @@ export function Wallet(): React.ReactElement {
                                         imageUrl={ETH.imageUri}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
-                                        usdValue={ethUsd ? ethUsd * user?.balance.ether : 0}
+                                        usdValue={ETH.usdValue ? ETH.usdValue : 0}
                                     />
                                 )}
                             </Flex>
