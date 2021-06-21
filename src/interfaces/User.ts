@@ -12,15 +12,14 @@ export interface User {
     verification: {
         email: boolean
         emailString: string
-        passwordString: string
-        status: string
-        bitcloutString: string
+        personaAccountId: string | null
+        inquiryId: string | null
+        personaVerified: boolean
     }
     bitclout: {
         publicKey: string
         bio: string | undefined
         verified: boolean
-        profilePicture: string | undefined
         username: string | undefined
     }
     created: Date

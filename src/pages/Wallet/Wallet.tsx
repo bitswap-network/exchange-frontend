@@ -60,7 +60,9 @@ export function Wallet(): React.ReactElement {
         getEthUSD().then((response) => {
             setEthUsd(response.data.data)
         })
-        setCloutUsd(176.85)
+        getBitcloutUSD().then((response) => {
+            setCloutUsd(response.data.data)
+        })
         getTransactions().then((response) => {
             setTransactions(response.data.data)
         })
@@ -96,7 +98,7 @@ export function Wallet(): React.ReactElement {
             usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
             publicKey: "",
         })
-    }, [user])
+    }, [user, ethUsd, cloutUsd])
     //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {

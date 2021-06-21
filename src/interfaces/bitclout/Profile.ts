@@ -2,7 +2,6 @@ export interface BitcloutProfile {
     PublicKeyBase58Check: string
     Username: string
     Description: string
-    ProfilePic: string
     IsHidden: boolean
     IsReserved: boolean
     IsVerified: boolean

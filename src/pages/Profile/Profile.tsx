@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react"
-import { HiExclamationCircle, HiBadgeCheck, HiChevronLeft } from "react-icons/hi"
+import React, { useEffect, useState, useRef } from "react"
+import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi"
+import Persona, { Client } from "persona"
+
 import {
     Flex,
     Button,
     Input,
     Text,
     Link,
-    VStack,
     Image,
-    InputRightElement,
-    InputGroup,
     useDisclosure,
     Modal,
     ModalOverlay,
@@ -22,8 +21,9 @@ import {
 import { useRecoilValue } from "recoil"
 import { userState } from "../../store"
 import { BlueButton } from "../../components/BlueButton/BlueButton"
-import { verifyBitclout, updateEmail, updateName, resendVerificationEmail } from "../../services/user"
+import { updateEmail, updateName, resendVerificationEmail } from "../../services/user"
 import { logout } from "../../helpers/persistence"
+import { InlineInquiry } from "../../services/persona/inquiry"
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
 
@@ -35,9 +35,12 @@ export function Profile(): React.ReactElement {
     const [emailErr, setEmailErr] = useState(false)
     const [userName, setUserName] = useState("")
     const [userEmail, setUserEmail] = useState("")
+    const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png")
     const [currentPage, setCurrentPage] = useState("profile")
     const [loading, setLoading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const embeddedClientRef = useRef<Client | null>(null)
+    const [startedVerification, setStartedVerification] = useState(false)
 
     const emailInputHandler = (e: any) => {
         setUserEmail(e.target.value)
@@ -59,6 +62,9 @@ export function Profile(): React.ReactElement {
         if (user) {
             setUserEmail(user.email)
             setUserName(user.name)
+            setUserPfp(
+                `https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}?fallback=https://bitclout.com/assets/img/default_profile_pic.png`
+            )
         }
     }, [user])
 
@@ -98,6 +104,40 @@ export function Profile(): React.ReactElement {
             })
     }
 
+    const createClient = () => {
+        const client = new Client({
+            templateId: "tmpl_pSp6SHUWLXufK4PRnvDW9ov1",
+            accountId: user?.verification.personaAccountId ? user.verification.personaAccountId : "",
+            environment: "sandbox",
+            onLoad: (error) => {
+                if (error) {
+                    console.error(`Failed with code: ${error.code} and message ${error.message}`)
+                }
+
+                client.open()
+            },
+            onStart: (inquiryId) => {
+                console.log(`Started inquiry ${inquiryId}`)
+            },
+            onComplete: (inquiryId) => {
+                console.log(`Sending finished inquiry ${inquiryId} to backend`)
+                fetch(`/server-handler?inquiry-id=${inquiryId}`)
+            },
+            onEvent: (name, meta) => {
+                switch (name) {
+                    case "start":
+                        console.log(`Received event: start`)
+                        break
+                    default:
+                        console.log(`Received event: ${name} with meta: ${JSON.stringify(meta)}`)
+                }
+            },
+        })
+        embeddedClientRef.current = client
+        setStartedVerification(true)
+
+        window.exit = (force) => (client ? client.exit(force) : alert("Initialize client first"))
+    }
     const profilePage = user ? (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -116,16 +156,7 @@ export function Profile(): React.ReactElement {
                 </ModalContent>
             </Modal>
             <Flex minH="100%" align="center" justify="center" flexDirection="column">
-                <Image
-                    src={
-                        user.bitclout.profilePicture
-                            ? user.bitclout.profilePicture
-                            : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
-                    }
-                    w="80px"
-                    h="80px"
-                    borderRadius="80px"
-                />
+                <Image src={userPfp} w="80px" h="80px" borderRadius="80px" />
                 <Link
                     isExternal
                     href={`https://bitclout.com/u/${
@@ -306,6 +337,53 @@ export function Profile(): React.ReactElement {
                                     loading={loading}
                                 />
                             </>
+                        )}
+                    </Flex>
+                </Flex>
+                <Flex
+                    mt="20px"
+                    w={{ sm: "80%", md: "650px" }}
+                    p="20px"
+                    flexDir={{ sm: "column", md: "row" }}
+                    borderRadius="10"
+                    boxShadow="1px 4px 6px 0px #00000040"
+                    background="whiteAlpha.700"
+                >
+                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
+                        <Text color="#44423D" fontWeight="700" fontSize="18">
+                            Identity Verification{" "}
+                            {user.verification.personaVerified ? (
+                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                            ) : (
+                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                            )}
+                        </Text>
+                        {user.verification.personaVerified ? (
+                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
+                                Your identity is verified - enjoy full access to the platform.
+                            </Text>
+                        ) : (
+                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
+                                Complete your identity verification to unlock full access.
+                            </Text>
+                        )}
+                    </Flex>
+                    <Flex
+                        flex="0.35"
+                        align="flex-end"
+                        justify="space-between"
+                        flexDir={{ sm: "row", md: "column" }}
+                        mt={{ sm: "15px", md: "0" }}
+                    >
+                        {startedVerification ? (
+                            <BlueButton
+                                onClick={() =>
+                                    embeddedClientRef.current ? embeddedClientRef.current.open() : createClient()
+                                }
+                                text={`  Resume Verification   `}
+                            />
+                        ) : (
+                            <BlueButton onClick={createClient} text={`  Start Verification   `} />
                         )}
                     </Flex>
                 </Flex>
