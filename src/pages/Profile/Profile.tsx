@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi";
-import { Client } from "persona";
+import React, {useEffect, useState, useRef} from "react";
+import {HiExclamationCircle, HiBadgeCheck} from "react-icons/hi";
+import {Client} from "persona";
 
 import {
     Flex,
@@ -18,11 +18,11 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react";
-import { useRecoilValue } from "recoil";
-import { userState } from "../../store";
-import { BlueButton } from "../../components/BlueButton/BlueButton";
-import { updateEmail, updateName, resendVerificationEmail } from "../../services/user";
-import { logout } from "../../helpers/persistence";
+import {useRecoilValue} from "recoil";
+import {userState} from "../../store";
+import {BlueButton} from "../../components/BlueButton/BlueButton";
+import {updateEmail, updateName, resendVerificationEmail} from "../../services/user";
+import {logout} from "../../helpers/persistence";
 import * as globalVars from "../../globalVars";
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
@@ -38,7 +38,7 @@ export function Profile(): React.ReactElement {
     const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png");
     const [currentPage, setCurrentPage] = useState("profile");
     const [loading, setLoading] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const embeddedClientRef = useRef<Client | null>(null);
     const [startedVerification, setStartedVerification] = useState(false);
 
@@ -122,6 +122,7 @@ export function Profile(): React.ReactElement {
             },
             onComplete: (inquiryId) => {
                 console.log(`Sending finished inquiry ${inquiryId} to backend`);
+                window.location.reload()
             },
             onEvent: (name, meta) => {
                 switch (name) {
@@ -169,9 +170,9 @@ export function Profile(): React.ReactElement {
                 </Text>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
@@ -198,14 +199,14 @@ export function Profile(): React.ReactElement {
                             />
                         )}
                     </Flex>
-                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
                         {!nameEdit ? (
-                            <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} onClick={() => setNameEdit(true)} />
+                            <BlueButton text={`   Edit   `} width={{sm: "45%", md: "90%"}} onClick={() => setNameEdit(true)} />
                         ) : (
                             <>
                                 <Button
                                     bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
+                                    w={{sm: "45%", md: "90%"}}
                                     p="10px 0"
                                     color="white"
                                     fontWeight="600"
@@ -220,7 +221,7 @@ export function Profile(): React.ReactElement {
                                     mt="4"
                                     isDisabled={userName.length <= 1}
                                     text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
+                                    width={{sm: "45%", md: "90%"}}
                                     onClick={updateNameFunc}
                                     loading={loading}
                                 />
@@ -230,9 +231,9 @@ export function Profile(): React.ReactElement {
                 </Flex>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
@@ -241,9 +242,9 @@ export function Profile(): React.ReactElement {
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Email{" "}
                             {user.verification.email ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                <HiBadgeCheck style={{display: "inline"}} color="#5388fe" size="20" />
                             ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                <HiExclamationCircle style={{display: "inline"}} color="#EE0004" size="20" />
                             )}
                         </Text>
                         {user.verification.email ? (
@@ -277,19 +278,19 @@ export function Profile(): React.ReactElement {
                             />
                         )}
                     </Flex>
-                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
                         {!emailEdit ? (
                             <>
-                                <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} onClick={() => setEmailEdit(true)} />
+                                <BlueButton text={`   Edit   `} width={{sm: "45%", md: "90%"}} onClick={() => setEmailEdit(true)} />
                                 {user.verification.email ? null : (
-                                    <BlueButton text={`   Resend Verification   `} width={{ sm: "45%", md: "90%" }} onClick={resendEmailVerification} />
+                                    <BlueButton text={`   Resend Verification   `} width={{sm: "45%", md: "90%"}} onClick={resendEmailVerification} />
                                 )}
                             </>
                         ) : (
                             <>
                                 <Button
                                     bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
+                                    w={{sm: "45%", md: "90%"}}
                                     p="10px 0"
                                     color="white"
                                     fontWeight="600"
@@ -303,7 +304,7 @@ export function Profile(): React.ReactElement {
                                 <BlueButton
                                     isDisabled={emailErr}
                                     text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
+                                    width={{sm: "45%", md: "90%"}}
                                     onClick={updateEmailFunc}
                                     loading={loading}
                                 />
@@ -313,9 +314,9 @@ export function Profile(): React.ReactElement {
                 </Flex>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
@@ -324,9 +325,9 @@ export function Profile(): React.ReactElement {
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Identity Verification{" "}
                             {user.verification.personaVerified ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                <HiBadgeCheck style={{display: "inline"}} color="#5388fe" size="20" />
                             ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                <HiExclamationCircle style={{display: "inline"}} color="#EE0004" size="20" />
                             )}
                         </Text>
                         {user.verification.personaVerified ? (
@@ -340,7 +341,7 @@ export function Profile(): React.ReactElement {
                         )}
                     </Flex>
                     {!user.verification.personaVerified && (
-                        <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                        <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
                             {startedVerification ? (
                                 <BlueButton
                                     onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
@@ -353,7 +354,7 @@ export function Profile(): React.ReactElement {
                     )}
                 </Flex>
 
-                <Flex mt="50px" w={{ sm: "80%", md: "600px" }} flexDir="column" alignItems="center">
+                <Flex mt="50px" w={{sm: "80%", md: "600px"}} flexDir="column" alignItems="center">
                     <Button
                         bg="red.500"
                         w="125px"
