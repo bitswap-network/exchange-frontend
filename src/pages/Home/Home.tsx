@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 
 import {
     Flex,
@@ -14,32 +14,30 @@ import {
     PopoverBody,
     PopoverArrow,
     HStack,
-} from "@chakra-ui/react"
-import { AiFillInfoCircle } from "react-icons/ai"
+} from "@chakra-ui/react";
+import { AiFillInfoCircle } from "react-icons/ai";
 
-import { Column } from "react-table"
-import { OrderBookTableColumns, OrderTableDataInterface } from "../../interfaces/Order"
-import { OrderBookTable } from "../Orders/OrderTable"
-import { useOrderBook } from "../../hooks"
+import { Column } from "react-table";
+import { OrderBookTableColumns, OrderTableDataInterface } from "../../interfaces/Order";
+import { OrderBookTable } from "../Orders/OrderTable";
+import { useOrderBook } from "../../hooks";
 
-import { Chart } from "../../components/BitCloutChart/Chart"
-import { getMarketPrice } from "../../services/order"
-
-import * as globalVars from "../../globalVars"
+import { Chart } from "../../components/BitCloutChart/Chart";
+import { getMarketPrice } from "../../services/order";
 
 export function Home(): React.ReactElement {
-    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
-    const [marketBuy, setMarketBuy] = useState<number | null>(null)
-    const [marketSell, setMarketSell] = useState<number | null>(null)
-    const columns = React.useMemo(() => OrderBookTableColumns, []) as Column<OrderTableDataInterface>[]
+    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook();
+    const [marketBuy, setMarketBuy] = useState<number | null>(null);
+    const [marketSell, setMarketSell] = useState<number | null>(null);
+    const columns = React.useMemo(() => OrderBookTableColumns, []) as Column<OrderTableDataInterface>[];
     useEffect(() => {
         getMarketPrice(0.05, "buy").then((response) => {
-            setMarketBuy(response.data.price * 20)
-        })
+            setMarketBuy(response.data.price * 20);
+        });
         getMarketPrice(0.05, "sell").then((response) => {
-            setMarketSell(response.data.price * 20)
-        })
-    })
+            setMarketSell(response.data.price * 20);
+        });
+    });
     return (
         // <>
         <VStack spacing={8} marginTop="40px">
@@ -68,8 +66,7 @@ export function Home(): React.ReactElement {
                                     Price Derivation
                                 </PopoverHeader>
                                 <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
-                                    The market bid is the highest current offer to buy CLOUT. The market ask is the
-                                    lowest current offer to sell CLOUT.
+                                    The market bid is the highest current offer to buy CLOUT. The market ask is the lowest current offer to sell CLOUT.
                                 </PopoverBody>
                             </PopoverContent>
                         </Popover>
@@ -104,18 +101,7 @@ export function Home(): React.ReactElement {
                             Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                         </Flex>
                     </HStack>
-                    <Box
-                        boxShadow="lg"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg="white"
-                        d="flex"
-                        w="100%"
-                        pos="relative"
-                        mt="4"
-                        pl="2"
-                        // h="45vh"
-                    >
+                    <Box boxShadow="lg" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="100%" pos="relative" mt="4" pl="2">
                         <Chart ticks={10} dateTicks={9} />
                     </Box>
                 </Flex>
@@ -127,20 +113,14 @@ export function Home(): React.ReactElement {
                     <Heading as="h2" size="md" mt={4} mb={4}>
                         Selling
                     </Heading>
-                    <OrderBookTable
-                        data={!orderbookIsLoading && !orderbookIsError ? orderbook!.asks : []}
-                        columns={columns}
-                    />
+                    <OrderBookTable data={!orderbookIsLoading && !orderbookIsError ? orderbook!.asks : []} columns={columns} />
                     <Heading as="h2" size="md" mt={4} mb={4}>
                         Buying
                     </Heading>
-                    <OrderBookTable
-                        data={!orderbookIsLoading && !orderbookIsError ? orderbook!.bids : []}
-                        columns={columns}
-                    />
+                    <OrderBookTable data={!orderbookIsLoading && !orderbookIsError ? orderbook!.bids : []} columns={columns} />
                 </Flex>
             </Flex>
         </VStack>
         // </>
-    )
+    );
 }

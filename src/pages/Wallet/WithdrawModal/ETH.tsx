@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
     Modal,
     Text,
@@ -19,72 +19,72 @@ import {
     Link,
     VStack,
     Checkbox,
-} from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import { HiCheckCircle } from "react-icons/hi"
-import { userState } from "../../../store"
-import { withdrawEth } from "../../../services/gateway"
-import { BlueButton } from "../../../components/BlueButton"
-import { isAddress } from "ethereum-address"
+} from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { HiCheckCircle } from "react-icons/hi";
+import { userState } from "../../../store";
+import { withdrawEth } from "../../../services/gateway";
+import { BlueButton } from "../../../components/BlueButton";
+import { isAddress } from "ethereum-address";
 // const ethereum_address = require("ethereum-address")
-import * as globalVars from "../../../globalVars"
+import * as globalVars from "../../../globalVars";
 
 interface WithdrawModalProps {
     disclosure: {
-        isOpen: boolean
-        onOpen: () => void
-        onClose: () => void
-    }
-    maxWithdraw: number
+        isOpen: boolean;
+        onOpen: () => void;
+        onClose: () => void;
+    };
+    maxWithdraw: number;
 }
 
 export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw }: WithdrawModalProps) => {
-    const user = useRecoilValue(userState)
-    const [checked, setChecked] = useState<boolean>(false)
-    const [withdrawValue, setWithdrawValue] = useState<string>("0.004")
-    const [page, setPage] = useState(0)
-    const [ethAddressInput, setEthAddressInput] = useState<string>("")
-    const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("")
-    const [withdrawSuccessful, setWithdrawSuccessful] = useState<boolean>(false)
-    const [etherscanID, setEtherscanID] = useState<string>("")
+    const user = useRecoilValue(userState);
+    const [checked, setChecked] = useState<boolean>(false);
+    const [withdrawValue, setWithdrawValue] = useState<string>("0.004");
+    const [page, setPage] = useState(0);
+    const [ethAddressInput, setEthAddressInput] = useState<string>("");
+    const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("");
+    const [withdrawSuccessful, setWithdrawSuccessful] = useState<boolean>(false);
+    const [etherscanID, setEtherscanID] = useState<string>("");
 
     const submitWithdrawETH = () => {
         // submit eth withdraw stuff here
         withdrawEth(parseFloat(withdrawValue), ethAddressInput)
             .then((response) => {
-                setWithdrawSuccessful(true)
-                setEtherscanID(response.data.data.txnHash)
+                setWithdrawSuccessful(true);
+                setEtherscanID(response.data.data.txnHash);
             })
             .catch((error) => {
-                console.error(error)
-            })
+                console.error(error);
+            });
 
-        setPage(1)
-    }
+        setPage(1);
+    };
 
     const valueHandler = async (valueString: string) => {
-        setWithdrawValue(valueString.replace(/^\$/, ""))
-    }
+        setWithdrawValue(valueString.replace(/^\$/, ""));
+    };
 
     const ethAddressValueHandler = (e: any) => {
         if (!isAddress(e.target.value)) {
-            setEthAddressInputErr("Invalid ETH address")
+            setEthAddressInputErr("Invalid ETH address");
         } else {
-            setEthAddressInputErr("")
+            setEthAddressInputErr("");
         }
-        setEthAddressInput(e.target.value)
-    }
+        setEthAddressInput(e.target.value);
+    };
 
     const renderHandler = () => {
         switch (page) {
             case 0:
-                return withdrawStartView
+                return withdrawStartView;
             case 1:
-                return withdrawConfirmView
+                return withdrawConfirmView;
             default:
-                return withdrawStartView
+                return withdrawStartView;
         }
-    }
+    };
 
     const withdrawConfirmView = (
         <ModalContent>
@@ -95,19 +95,13 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                         Transaction In Process
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        {withdrawValue} {globalVars.ETHER} will be withdrawn from your BitSwap account. Once the
-                        transaction has gone through, a link will be displayed below for you to review.
+                        {withdrawValue} {globalVars.ETHER} will be withdrawn from your BitSwap account. Once the transaction has gone through, a link will be
+                        displayed below for you to review.
                     </Text>
                     <HStack spacing={4} mt="4">
                         {!withdrawSuccessful ? (
                             <>
-                                <Spinner
-                                    thickness="3px"
-                                    speed="0.65s"
-                                    emptyColor="gray.200"
-                                    color="gray.600"
-                                    size="lg"
-                                />
+                                <Spinner thickness="3px" speed="0.65s" emptyColor="gray.200" color="gray.600" size="lg" />
                                 <Text color="gray.700" fontSize="md">
                                     Awaiting transfer
                                 </Text>
@@ -140,9 +134,9 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             text={`   Continue   `}
                             isDisabled={!withdrawSuccessful}
                             onClick={() => {
-                                disclosure.onClose()
-                                setPage(0)
-                                setWithdrawValue("0")
+                                disclosure.onClose();
+                                setPage(0);
+                                setWithdrawValue("0");
                             }}
                             icon
                         />
@@ -150,7 +144,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const withdrawStartView = (
         <ModalContent>
@@ -171,14 +165,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                     </Text>
                     <Text color="gray.600" fontSize="sm" fontWeight="600" mt="6">
                         Amount of {globalVars.ETHER} to withdraw{" "}
-                        <Button
-                            variant="solid"
-                            fontSize="sm"
-                            p="3"
-                            h="30px"
-                            ml="2"
-                            onClick={() => setWithdrawValue(maxWithdraw.toString())}
-                        >
+                        <Button variant="solid" fontSize="sm" p="3" h="30px" ml="2" onClick={() => setWithdrawValue(maxWithdraw.toString())}>
                             Max
                         </Button>
                     </Text>
@@ -215,15 +202,10 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                     </Text>
 
                     <Text color="gray.500" fontSize="xs" mt="2">
-                        Please verify carefully that your address has been entered correctly. Once the confirm button is
-                        clicked, the transaction can no longer be modified.
+                        Please verify carefully that your address has been entered correctly. Once the confirm button is clicked, the transaction can no longer
+                        be modified.
                     </Text>
-                    <Checkbox
-                        isChecked={checked}
-                        onChange={(e) => setChecked(e.target.checked)}
-                        isInvalid={!checked}
-                        mt="4"
-                    >
+                    <Checkbox isChecked={checked} onChange={(e) => setChecked(e.target.checked)} isInvalid={!checked} mt="4">
                         <Text fontSize="xs" color="gray.600">
                             I confirm that the entered information is correct and valid.
                         </Text>
@@ -233,12 +215,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             Cancel
                         </Button>
                         <BlueButton
-                            isDisabled={
-                                parseFloat(withdrawValue) > maxWithdraw ||
-                                parseFloat(withdrawValue) <= 0 ||
-                                !checked ||
-                                !isAddress(ethAddressInput)
-                            }
+                            isDisabled={parseFloat(withdrawValue) > maxWithdraw || parseFloat(withdrawValue) <= 0 || !checked || !isAddress(ethAddressInput)}
                             w="47%"
                             text={`   Confirm   `}
                             onClick={submitWithdrawETH}
@@ -248,12 +225,12 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
             {renderHandler()}
         </Modal>
-    )
-}
+    );
+};

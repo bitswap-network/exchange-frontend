@@ -1,25 +1,18 @@
 /* eslint-disable react/jsx-key */
 // jsx-key is disabled because it fails to apply to the spread operator with typed object [as of May 2021]
 
-import React, { PropsWithChildren, useState } from "react"
-import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, chakra, useDisclosure } from "@chakra-ui/react"
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons"
-import { useTable, useSortBy, TableOptions } from "react-table"
-import { OrderInfoModal } from "../OrderInfoModal"
-import { OrderTableDataInterface } from "../../interfaces/Order"
+import React, { PropsWithChildren, useState } from "react";
+import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, chakra, useDisclosure } from "@chakra-ui/react";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { useTable, useSortBy, TableOptions } from "react-table";
+import { OrderInfoModal } from "../OrderInfoModal";
+import { OrderTableDataInterface } from "../../interfaces/Order";
 
-export function Table<T extends Record<string, unknown>>({
-    data,
-    columns,
-    type,
-}: PropsWithChildren<TableOptions<T>>): React.ReactElement {
-    const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>()
-    const isOrderTable = type === 0
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>(
-        { columns, data, autoResetPage: true },
-        useSortBy
-    )
-    const modalDisclosure = useDisclosure()
+export function Table<T extends Record<string, unknown>>({ data, columns, type }: PropsWithChildren<TableOptions<T>>): React.ReactElement {
+    const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>();
+    const isOrderTable = type === 0;
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>({ columns, data, autoResetPage: true }, useSortBy);
+    const modalDisclosure = useDisclosure();
     return (
         <>
             {isOrderTable && <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />}
@@ -28,12 +21,7 @@ export function Table<T extends Record<string, unknown>>({
                     {headerGroups.map((headerGroup) => (
                         <Tr {...headerGroup.getHeaderGroupProps()} key={Math.random().toString(4)}>
                             {headerGroup.headers.map((column) => (
-                                <Th
-                                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    pt="4"
-                                    pb="4"
-                                    verticalAlign="top"
-                                >
+                                <Th {...column.getHeaderProps(column.getSortByToggleProps())} pt="4" pb="4" verticalAlign="top">
                                     {column.render("Header")}
                                     <chakra.span>
                                         {column.isSorted ? (
@@ -55,7 +43,7 @@ export function Table<T extends Record<string, unknown>>({
                     {rows.length > 0 ? (
                         <>
                             {rows.map((row) => {
-                                prepareRow(row)
+                                prepareRow(row);
                                 return (
                                     <Tr
                                         w={100 / rows.length}
@@ -63,8 +51,8 @@ export function Table<T extends Record<string, unknown>>({
                                         key={Math.random().toString(4)}
                                         onClick={() => {
                                             if (isOrderTable) {
-                                                setSelectOrder(row.original as OrderTableDataInterface)
-                                                modalDisclosure.onOpen()
+                                                setSelectOrder(row.original as OrderTableDataInterface);
+                                                modalDisclosure.onOpen();
                                             }
                                         }}
                                         _hover={{
@@ -73,18 +61,12 @@ export function Table<T extends Record<string, unknown>>({
                                         }}
                                     >
                                         {row.cells.map((cell) => (
-                                            <Td
-                                                pt="3"
-                                                pb="3"
-                                                color="gray.500"
-                                                {...cell.getCellProps()}
-                                                isNumeric={cell.column.isNumeric}
-                                            >
+                                            <Td pt="3" pb="3" color="gray.500" {...cell.getCellProps()} isNumeric={cell.column.isNumeric}>
                                                 {cell.render("Cell")}
                                             </Td>
                                         ))}
                                     </Tr>
-                                )
+                                );
                             })}
                         </>
                     ) : (
@@ -103,5 +85,5 @@ export function Table<T extends Record<string, unknown>>({
                 </Tbody>
             </ChakraTable>
         </>
-    )
+    );
 }

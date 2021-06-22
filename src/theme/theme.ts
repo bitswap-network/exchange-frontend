@@ -1,11 +1,11 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react"
-import Button from "./components/Button"
-import Link from "./components/Link"
-import Tabs from "./components/Tabs"
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import Button from "./components/Button";
+import Link from "./components/Link";
+import Tabs from "./components/Tabs";
 const config: ThemeConfig = {
     initialColorMode: "light",
     useSystemColorMode: false,
-}
+};
 export const bitswapTheme = extendTheme({
     config,
     styles: {
@@ -44,4 +44,4 @@ export const bitswapTheme = extendTheme({
         Link,
         Tabs,
     },
-})
+});

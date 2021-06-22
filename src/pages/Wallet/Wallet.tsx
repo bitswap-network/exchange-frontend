@@ -1,125 +1,125 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react"
-import { Box, Flex, Heading, VStack, SimpleGrid, useDisclosure, Text } from "@chakra-ui/react"
-import { BalanceCard } from "../../components/BalanceCard"
-import { CryptoCard } from "../../components/CryptoCard"
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import { tokenState } from "../../store"
-import { getEthUSD } from "../../services/utility"
-import { TransactionSchema } from "../../interfaces/Transaction"
-import { getTransactions } from "../../services/user"
-import { withdrawBitcloutPreflightTxn } from "../../services/gateway"
-import { TransactionModal } from "./TransactionModal"
-import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal"
-import { BitcloutDepositModal, EthDepositModal } from "./DepositModal"
-import * as globalVars from "../../globalVars"
-import { useUser } from "../../hooks"
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Heading, VStack, SimpleGrid, useDisclosure, Text } from "@chakra-ui/react";
+import { BalanceCard } from "../../components/BalanceCard";
+import { CryptoCard } from "../../components/CryptoCard";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { tokenState } from "../../store";
+import { getEthUSD, getBitcloutUSD } from "../../services/utility";
+import { TransactionSchema } from "../../interfaces/Transaction";
+import { getTransactions } from "../../services/user";
+import { withdrawBitcloutPreflightTxn } from "../../services/gateway";
+import { TransactionModal } from "./TransactionModal";
+import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal";
+import { BitcloutDepositModal, EthDepositModal } from "./DepositModal";
+import * as globalVars from "../../globalVars";
+import { useUser } from "../../hooks";
 
 // TODO: UNFINISHED
 export function Wallet(): React.ReactElement {
-    const token = useRecoilValue(tokenState)
-    const { user, userIsLoading, userIsError } = useUser(token)
-    const [ethUsd, setEthUsd] = useState<number | null>(null)
+    const token = useRecoilValue(tokenState);
+    const { user, userIsLoading, userIsError } = useUser(token);
+    const [ethUsd, setEthUsd] = useState<number | null>(null);
+    const [cloutUsd, setCloutUsd] = useState<number | null>(null);
     const [selectedCurrency, setSelectedCurrency] = useState<{
-        type: string
-        maxWithdraw: number
+        type: string;
+        maxWithdraw: number;
     }>({
         type: globalVars.BITCLOUT,
         maxWithdraw: 0,
-    })
-    const [transactions, setTransactions] = useState<TransactionSchema[]>([])
-    const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null)
+    });
+    const [transactions, setTransactions] = useState<TransactionSchema[]>([]);
+    const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null);
     const [BCLT, setBCLT] = useState({
         imageUri: "./bitcloutLogo.png",
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
+        usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
         publicKey: user?.bitclout.publicKey,
-    })
+    });
     const [ETH, setETH] = useState({
-        imageUri:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
+        imageUri: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
         currency: globalVars.ETHER,
         amount: user?.balance.ether,
         usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
         publicKey: "",
-    })
-    const {
-        isOpen: isOpenTransactionModal,
-        onOpen: onOpenTransactionModal,
-        onClose: onCloseTransactionModal,
-    } = useDisclosure()
+    });
+    const { isOpen: isOpenTransactionModal, onOpen: onOpenTransactionModal, onClose: onCloseTransactionModal } = useDisclosure();
 
-    const { isOpen: isOpenDepositModal, onOpen: onOpenDepositModal, onClose: onCloseDepositModal } = useDisclosure()
+    const { isOpen: isOpenDepositModal, onOpen: onOpenDepositModal, onClose: onCloseDepositModal } = useDisclosure();
 
-    const { isOpen: isOpenWithdrawModal, onOpen: onOpenWithdrawModal, onClose: onCloseWithdrawModal } = useDisclosure()
+    const { isOpen: isOpenWithdrawModal, onOpen: onOpenWithdrawModal, onClose: onCloseWithdrawModal } = useDisclosure();
 
     useEffect(() => {
         getEthUSD().then((response) => {
-            setEthUsd(response.data.data)
-        })
+            setEthUsd(response.data.data);
+        });
+        getBitcloutUSD().then((response) => {
+            setCloutUsd(response.data.data);
+        });
         getTransactions().then((response) => {
-            setTransactions(response.data.data)
-        })
-    }, [])
+            setTransactions(response.data.data);
+        });
+    }, []);
     useEffect(() => {
         if (selectedCurrency.type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
                 setSelectedCurrency({
                     type: globalVars.BITCLOUT,
                     maxWithdraw: max,
-                })
-            })
+                });
+            });
         } else {
             getMaxEth().then((max) => {
                 setSelectedCurrency({
                     type: globalVars.ETHER,
                     maxWithdraw: max,
-                })
-            })
+                });
+            });
         }
         setBCLT({
             imageUri: "./bitcloutLogo.png",
             currency: globalVars.BITCLOUT,
             amount: user?.balance.bitclout,
+            usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
             publicKey: user?.bitclout.publicKey,
-        })
+        });
         setETH({
-            imageUri:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
+            imageUri: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
             currency: globalVars.ETHER,
             amount: user?.balance.ether,
             usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
             publicKey: "",
-        })
-    }, [user])
+        });
+    }, [user, ethUsd, cloutUsd]);
     //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
             if (user?.balance.bitclout > 0) {
                 withdrawBitcloutPreflightTxn(user.balance.bitclout)
                     .then((response) => {
-                        resolve(user.balance.bitclout - response.data.data.FeeNanos / 1e9)
+                        resolve(user.balance.bitclout - response.data.data.FeeNanos / 1e9);
                     })
                     .catch((error) => {
-                        console.error(error)
-                        resolve(0)
-                    })
+                        console.error(error);
+                        resolve(0);
+                    });
             } else {
-                resolve(0)
+                resolve(0);
             }
-        })
-    }
+        });
+    };
 
     const getMaxEth = (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
             if (user?.balance.ether > 0) {
-                resolve(user.balance.ether)
+                resolve(user.balance.ether);
             } else {
-                resolve(0)
+                resolve(0);
             }
-        })
-    }
+        });
+    };
 
     const handleCurrencyChange = (type: string) => {
         if (type === globalVars.BITCLOUT) {
@@ -127,22 +127,22 @@ export function Wallet(): React.ReactElement {
                 setSelectedCurrency({
                     type: globalVars.BITCLOUT,
                     maxWithdraw: max,
-                })
-            })
+                });
+            });
         } else {
             getMaxEth().then((max) => {
                 setSelectedCurrency({
                     type: globalVars.ETHER,
                     maxWithdraw: max,
-                })
-            })
+                });
+            });
         }
-    }
+    };
 
     const openTransactionModal = (transaction: TransactionSchema) => {
-        setCurrentTransaction(transaction)
-        onOpenTransactionModal()
-    }
+        setCurrentTransaction(transaction);
+        onOpenTransactionModal();
+    };
 
     return (
         <>
@@ -206,12 +206,7 @@ export function Wallet(): React.ReactElement {
                                     md: "center",
                                 }}
                             >
-                                <Box
-                                    pb="4"
-                                    onClick={() => handleCurrencyChange(globalVars.BITCLOUT)}
-                                    w="full"
-                                    maxW="sm"
-                                >
+                                <Box pb="4" onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
                                     <CryptoCard
                                         active={selectedCurrency.type == globalVars.BITCLOUT}
                                         imageUrl={BCLT.imageUri}
@@ -244,6 +239,7 @@ export function Wallet(): React.ReactElement {
                                         imageUrl={BCLT.imageUri}
                                         currency={BCLT.currency}
                                         amount={BCLT.amount}
+                                        usdValue={BCLT.usdValue ? BCLT.usdValue : 0}
                                     />
                                 ) : (
                                     <BalanceCard
@@ -252,7 +248,7 @@ export function Wallet(): React.ReactElement {
                                         imageUrl={ETH.imageUri}
                                         currency={ETH.currency}
                                         amount={ETH.amount}
-                                        usdValue={ethUsd ? ethUsd * user?.balance.ether : 0}
+                                        usdValue={ETH.usdValue ? ETH.usdValue : 0}
                                     />
                                 )}
                             </Flex>
@@ -264,9 +260,9 @@ export function Wallet(): React.ReactElement {
                         </Heading>
                         {transactions.filter((transaction) => {
                             if (selectedCurrency.type === globalVars.BITCLOUT) {
-                                return transaction.assetType === "BCLT"
+                                return transaction.assetType === "BCLT";
                             } else {
-                                return transaction.assetType === "ETH"
+                                return transaction.assetType === "ETH";
                             }
                         }).length > 0 ? (
                             <Box bg="white" w="100%" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
@@ -294,33 +290,22 @@ export function Wallet(): React.ReactElement {
                                         {transactions
                                             .filter((transaction) => {
                                                 if (selectedCurrency.type === globalVars.BITCLOUT) {
-                                                    return transaction.assetType === "BCLT"
+                                                    return transaction.assetType === "BCLT";
                                                 } else {
-                                                    return transaction.assetType === "ETH"
+                                                    return transaction.assetType === "ETH";
                                                 }
                                             })
                                             .sort((a, b) => {
-                                                return (
-                                                    new Date(b.completionDate ?? b.created).getTime() -
-                                                    new Date(a.completionDate ?? a.created).getTime()
-                                                )
+                                                return new Date(b.completionDate ?? b.created).getTime() - new Date(a.completionDate ?? a.created).getTime();
                                             })
                                             .map((transaction) => (
-                                                <Tr
-                                                    onClick={() => openTransactionModal(transaction)}
-                                                    cursor="pointer"
-                                                    key={transaction._id}
-                                                >
+                                                <Tr onClick={() => openTransactionModal(transaction)} cursor="pointer" key={transaction._id}>
                                                     <Td color="gray.500" fontSize="14" textTransform="capitalize">
                                                         {transaction.transactionType}
                                                     </Td>
                                                     <Td color="gray.500" fontSize="14" textTransform="capitalize">
                                                         {globalVars.timeSince(
-                                                            new Date(
-                                                                transaction.completionDate
-                                                                    ? transaction.completionDate
-                                                                    : transaction.created
-                                                            )
+                                                            new Date(transaction.completionDate ? transaction.completionDate : transaction.created)
                                                         )}
                                                     </Td>
                                                     <Td color="gray.500" fontSize="14" textTransform="capitalize">
@@ -328,9 +313,7 @@ export function Wallet(): React.ReactElement {
                                                     </Td>
                                                     <Td color="gray.500" fontSize="14">
                                                         {transaction.value
-                                                            ? `${globalVars.formatBalanceSmall(transaction.value)} ${
-                                                                  transaction.assetType
-                                                              }`
+                                                            ? `${globalVars.formatBalanceSmall(transaction.value)} ${transaction.assetType}`
                                                             : "N/A"}
                                                     </Td>
                                                     <Td color="gray.500" fontSize="14" textTransform="capitalize">
@@ -355,5 +338,5 @@ export function Wallet(): React.ReactElement {
                 </Box>
             </Flex>
         </>
-    )
+    );
 }

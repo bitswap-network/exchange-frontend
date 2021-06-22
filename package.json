@@ -34,6 +34,7 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "ethereum-address": "^0.0.4",
         "framer-motion": "^4.1.17",
+        "persona": "^3.10.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-gtm-module": "^2.0.11",
@@ -44,6 +45,7 @@
         "react-table": "^7.7.0",
         "recoil": "^0.3.0",
         "rxjs": "^7.0.1",
+        "styled-components": "^5.3.0",
         "swr": "^0.5.6",
         "typescript": "^3.9.5",
         "uuid": "^8.3.2",
@@ -76,6 +78,7 @@
         "@typescript-eslint/parser": "^4.23.0",
         "eslint": "^7.26.0",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-flowtype": "^5.7.2",
         "eslint-plugin-prettier": "^3.4.0",
         "eslint-plugin-react": "^7.23.2",
         "prettier": "2.3.0"

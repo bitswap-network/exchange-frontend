@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
     Modal,
     Text,
@@ -14,53 +14,53 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Tooltip,
-} from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import { userState, identityUsers } from "../../../store"
-import { depositBitcloutPreflightTxn } from "../../../services/gateway"
-import { handleBitcloutDeposit } from "../../../services/identity/helper"
-import { BlueButton } from "../../../components/BlueButton"
-import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction"
-import { AiFillInfoCircle } from "react-icons/ai"
+} from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { userState, identityUsers } from "../../../store";
+import { depositBitcloutPreflightTxn } from "../../../services/gateway";
+import { handleBitcloutDeposit } from "../../../services/identity/helper";
+import { BlueButton } from "../../../components/BlueButton";
+import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction";
+import { AiFillInfoCircle } from "react-icons/ai";
 
-import * as globalVars from "../../../globalVars"
+import * as globalVars from "../../../globalVars";
 
 interface DepositModalProps {
     disclosure: {
-        isOpen: boolean
-        onOpen: () => void
-        onClose: () => void
-    }
+        isOpen: boolean;
+        onOpen: () => void;
+        onClose: () => void;
+    };
 }
 
 export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }: DepositModalProps) => {
-    const user = useRecoilValue(userState)
-    const identityUserData = useRecoilValue(identityUsers)
-    const [depositValue, setDepositValue] = useState<string>("0.000000")
-    const [preflight, setPreflight] = useState<TransactionAPIInterface | null>(null)
-    const [page, setPage] = useState<number>(0)
-    const [loading, setLoading] = useState<boolean>(false)
-    const [preflightError, setPreflightError] = useState<string | null>(null)
+    const user = useRecoilValue(userState);
+    const identityUserData = useRecoilValue(identityUsers);
+    const [depositValue, setDepositValue] = useState<string>("0.000000");
+    const [preflight, setPreflight] = useState<TransactionAPIInterface | null>(null);
+    const [page, setPage] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [preflightError, setPreflightError] = useState<string | null>(null);
 
     const getPreflight = () => {
-        setLoading(true)
-        setPreflightError(null)
+        setLoading(true);
+        setPreflightError(null);
         depositBitcloutPreflightTxn(parseFloat(depositValue))
             .then((response) => {
-                setLoading(false)
-                setPreflightError(null)
-                setPreflight(response.data.data)
-                setPage(page + 1)
+                setLoading(false);
+                setPreflightError(null);
+                setPreflight(response.data.data);
+                setPage(page + 1);
             })
             .catch((error) => {
-                setLoading(false)
-                error.response && setPreflightError(error.response.data.message)
-                console.error(error.response.data)
-            })
-    }
+                setLoading(false);
+                error.response && setPreflightError(error.response.data.message);
+                console.error(error.response.data);
+            });
+    };
 
     const submitDeposit = () => {
-        setLoading(true)
+        setLoading(true);
         if (preflight) {
             const depositObj = {
                 accessLevel: identityUserData[user.bitclout.publicKey].accessLevel,
@@ -69,35 +69,35 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                 transactionHex: preflight.TransactionHex,
                 transactionIDBase58Check: preflight.TransactionIDBase58Check,
                 value: parseFloat(depositValue),
-            }
+            };
             handleBitcloutDeposit(depositObj)
                 .then((response) => {
-                    setLoading(false)
-                    setPage(page + 1)
+                    setLoading(false);
+                    setPage(page + 1);
                 })
                 .catch((error) => {
-                    setLoading(false)
-                    console.error(error)
-                })
+                    setLoading(false);
+                    console.error(error);
+                });
         }
-    }
+    };
 
     const valueHandler = (valueString: string) => {
-        setDepositValue(valueString.replace(/^\$/, ""))
-    }
+        setDepositValue(valueString.replace(/^\$/, ""));
+    };
 
     const renderHandler = () => {
         switch (page) {
             case 0:
-                return depositStartView
+                return depositStartView;
             case 1:
-                return depositConfirmView
+                return depositConfirmView;
             case 2:
-                return depositCompleteView
+                return depositCompleteView;
             default:
-                return depositStartView
+                return depositStartView;
         }
-    }
+    };
 
     const depositCompleteView = (
         <ModalContent>
@@ -116,15 +116,15 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         mb="8"
                         text={`   Close   `}
                         onClick={() => {
-                            disclosure.onClose()
-                            setPage(0)
-                            setDepositValue("0")
+                            disclosure.onClose();
+                            setPage(0);
+                            setDepositValue("0");
                         }}
                     />
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const depositConfirmView = (
         <ModalContent>
@@ -146,7 +146,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             w="47%"
                             variant="solid"
                             onClick={() => {
-                                setPage(page - 1)
+                                setPage(page - 1);
                             }}
                         >
                             Modify
@@ -156,7 +156,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const depositStartView = (
         <ModalContent>
@@ -176,29 +176,14 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Add funds to your BitSwap wallet!
                     </Text>{" "}
                     <Flex flexDir="row" mt="6">
-                        <Tooltip
-                            label={`You can deposit up to 500 ${globalVars.BITCLOUT} per transaction.`}
-                            aria-label=""
-                        >
+                        <Tooltip label={`You can deposit up to 500 ${globalVars.BITCLOUT} per transaction.`} aria-label="">
                             <Text color="gray.600" fontSize="sm" fontWeight="600">
                                 Amount of {globalVars.BITCLOUT} to Deposit
-                                <AiFillInfoCircle
-                                    style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
-                                />
+                                <AiFillInfoCircle style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
                             </Text>
                         </Tooltip>
                     </Flex>
-                    <NumberInput
-                        mt="4"
-                        type="text"
-                        placeholder="0.0"
-                        value={depositValue}
-                        onChange={valueHandler}
-                        precision={4}
-                        step={0.1}
-                        min={0}
-                        max={500}
-                    >
+                    <NumberInput mt="4" type="text" placeholder="0.0" value={depositValue} onChange={valueHandler} precision={4} step={0.1} min={0} max={500}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -216,10 +201,10 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             w="47%"
                             variant="ghost"
                             onClick={() => {
-                                disclosure.onClose()
-                                setDepositValue("0")
-                                setPreflight(null)
-                                setPage(0)
+                                disclosure.onClose();
+                                setDepositValue("0");
+                                setPreflight(null);
+                                setPage(0);
                             }}
                         >
                             Cancel
@@ -241,12 +226,12 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
             {renderHandler()}
         </Modal>
-    )
-}
+    );
+};

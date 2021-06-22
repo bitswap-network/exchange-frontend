@@ -1,41 +1,28 @@
-import { ColorModeScript } from "@chakra-ui/react"
-import * as React from "react"
-import ReactDOM from "react-dom"
-import TagManager from "react-gtm-module"
-import { App } from "./App"
-import * as serviceWorker from "./serviceWorker"
-import { bitswapTheme } from "./theme"
-import * as config from "./globalVars"
-// import Veriff from "@veriff/js-sdk"
+import {ColorModeScript} from "@chakra-ui/react";
+import * as React from "react";
+import ReactDOM from "react-dom";
+import TagManager from "react-gtm-module";
+import {App} from "./App";
+import * as serviceWorker from "./serviceWorker";
+import {bitswapTheme} from "./theme";
+import * as config from "./globalVars";
 
 const tagManagerArgs = {
     gtmId: "GTM-WQ8F6D8",
-}
-!config.isTest && TagManager.initialize(tagManagerArgs)
-
-// const veriff = Veriff({
-//     apiKey: "bd97f969-bda7-4e73-bf09-e6263e635942",
-//     parentId: "veriff-root",
-//     onSession: function (err, response) {
-//         // received the response, verification can be started now
-//         console.log(err, response)
-//     },
-// })
-
-// veriff.mount()
-
+};
+!config.isTest && TagManager.initialize(tagManagerArgs);
 ReactDOM.render(
     <React.StrictMode>
         <ColorModeScript initialColorMode={bitswapTheme.config.initialColorMode} />
         <App />
     </React.StrictMode>,
     document.getElementById("root")
-)
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
-serviceWorker.unregister()
+serviceWorker.unregister();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

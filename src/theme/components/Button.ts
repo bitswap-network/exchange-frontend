@@ -7,6 +7,6 @@ const Button = {
     defaultProps: {
         variant: "default",
     },
-}
+};
 
-export default Button
+export default Button;

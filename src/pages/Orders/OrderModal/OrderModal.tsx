@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
     Modal,
     ModalOverlay,
@@ -18,203 +18,189 @@ import {
     HStack,
     Spacer,
     Divider,
-} from "@chakra-ui/react"
-import { BlueButton } from "../../../components/BlueButton"
-import { useRecoilValue } from "recoil"
-import { tokenState } from "../../../store"
-import { createMarketOrder, createLimitOrder, getMarketPrice } from "../../../services/order"
+} from "@chakra-ui/react";
+import { BlueButton } from "../../../components/BlueButton";
+import { useRecoilValue } from "recoil";
+import { tokenState } from "../../../store";
+import { createMarketOrder, createLimitOrder, getMarketPrice } from "../../../services/order";
 
-import { getEthUSD } from "../../../services/utility"
-import * as globalVars from "../../../globalVars"
-import { useUser } from "../../../hooks"
-import { BuyTab } from "./Buy"
-import { SellTab } from "./Sell"
+import { getEthUSD } from "../../../services/utility";
+import * as globalVars from "../../../globalVars";
+import { useUser } from "../../../hooks";
+import { BuyTab } from "./Buy";
+import { SellTab } from "./Sell";
 
-type OrderModalProps = Omit<ModalProps, "children">
+type OrderModalProps = Omit<ModalProps, "children">;
 
 export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactElement {
-    const token = useRecoilValue(tokenState)
-    const { user, userIsLoading, userIsError } = useUser(token)
-    const [ethUsd, setEthUsd] = useState<number | null>(null)
+    const token = useRecoilValue(tokenState);
+    const { user, userIsLoading, userIsError } = useUser(token);
+    const [ethUsd, setEthUsd] = useState<number | null>(null);
 
-    const [tabIndex, setTabIndex] = useState<number>(0)
-    const [continueLoading, setContinueLoading] = useState<boolean>(false)
-    const [validateError, setValidateError] = useState<string | null>(null)
-    const [marketError, setMarketError] = useState<string | null>(null)
-    const [balanceError, setBalanceError] = useState<string | null>(null)
-    const [totalUsd, setTotalUsd] = useState<number>(0)
-    const [page, setPage] = useState<number>(0)
+    const [tabIndex, setTabIndex] = useState<number>(0);
+    const [continueLoading, setContinueLoading] = useState<boolean>(false);
+    const [validateError, setValidateError] = useState<string | null>(null);
+    const [marketError, setMarketError] = useState<string | null>(null);
+    const [balanceError, setBalanceError] = useState<string | null>(null);
+    const [totalUsd, setTotalUsd] = useState<number>(0);
+    const [page, setPage] = useState<number>(0);
 
-    const marketBuyText = "Market Buy: Instantly buy $" + globalVars.BITCLOUT + " at the best market price."
-    const marketSellText = "Market Sell: Instantly sell $" + globalVars.BITCLOUT + " at the best market price."
+    const marketBuyText = "Market Buy: Instantly buy $" + globalVars.BITCLOUT + " at the best market price.";
+    const marketSellText = "Market Sell: Instantly sell $" + globalVars.BITCLOUT + " at the best market price.";
     const limitBuyText =
-        "Limit Buy: Your order to buy $" +
-        globalVars.BITCLOUT +
-        " will execute when a seller at your specified price (or a better price) is found."
+        "Limit Buy: Your order to buy $" + globalVars.BITCLOUT + " will execute when a seller at your specified price (or a better price) is found.";
     const limitSellText =
-        "Limit Sell: Your order to sell $" +
-        globalVars.BITCLOUT +
-        " will execute when a buyer at your specified price (or a better price) is found."
-    const [tooltipText, setTooltipText] = useState<string>(marketBuyText)
+        "Limit Sell: Your order to sell $" + globalVars.BITCLOUT + " will execute when a buyer at your specified price (or a better price) is found.";
+    const [tooltipText, setTooltipText] = useState<string>(marketBuyText);
 
     const [orderQuantity, setOrderQuantity] = useControllableState({
         defaultValue: "1",
-    })
+    });
     const [limitPrice, setLimitPrice] = useControllableState({
         defaultValue: "101",
-    })
+    });
     const [orderType, setOrderType] = useControllableState({
         defaultValue: "market",
-    })
+    });
     const [orderSide, setOrderSide] = useControllableState({
         defaultValue: "buy",
-    })
+    });
 
     const resetState = () => {
-        setTabIndex(0)
-        setEthUsd(null)
-        setContinueLoading(false)
-        setValidateError(null)
-        setMarketError(null)
-        setBalanceError(null)
-        setTotalUsd(0)
-        setPage(0)
-        setTooltipText(marketBuyText)
-        setOrderQuantity("1")
-        setLimitPrice("101")
-        setOrderSide("buy")
-    }
+        setTabIndex(0);
+        setEthUsd(null);
+        setContinueLoading(false);
+        setValidateError(null);
+        setMarketError(null);
+        setBalanceError(null);
+        setTotalUsd(0);
+        setPage(0);
+        setTooltipText(marketBuyText);
+        setOrderQuantity("1");
+        setLimitPrice("101");
+        setOrderSide("buy");
+    };
 
     useEffect(() => {
         if (isOpen && user) {
             if (orderType === "market") {
-                orderSide == "sell" ? setTooltipText(marketSellText) : setTooltipText(marketBuyText)
+                orderSide == "sell" ? setTooltipText(marketSellText) : setTooltipText(marketBuyText);
                 getMarketPrice(parseFloat(orderQuantity), orderSide)
                     .then((response) => {
-                        setMarketError(null)
-                        setTotalUsd(+response.data.price.toFixed(2))
+                        setMarketError(null);
+                        setTotalUsd(+response.data.price.toFixed(2));
                     })
                     .catch((error) => {
-                        console.error(error)
-                        setMarketError(
-                            `Insufficient order volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`
-                        )
-                    })
+                        console.error(error);
+                        setMarketError(`Insufficient order volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`);
+                    });
             } else {
-                setMarketError(null)
-                orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText)
-                setTotalUsd(+(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2))
+                setMarketError(null);
+                orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText);
+                setTotalUsd(+(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2));
             }
             if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
-                setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`)
-            } else if (ethUsd && orderSide === "buy" && totalUsd / ethUsd > user.balance.ether) {
-                setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`)
+                setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`);
+            } else if (ethUsd && orderSide === "buy" && +(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2) / ethUsd > user.balance.ether) {
+                setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`);
             } else {
-                setBalanceError(null)
-                setValidateError(null)
+                setBalanceError(null);
+                setValidateError(null);
             }
         }
-    }, [orderQuantity, orderSide, orderType, limitPrice, user, isOpen])
+    }, [orderQuantity, orderSide, orderType, limitPrice, user, isOpen]);
 
     useEffect(() => {
         if (!isOpen) {
-            resetState()
+            resetState();
         } else {
             getEthUSD().then((response) => {
-                setEthUsd(response.data.data)
-            })
+                setEthUsd(response.data.data);
+            });
         }
-    }, [isOpen])
+    }, [isOpen]);
 
     const handleTabsChange = (index: number) => {
-        setTabIndex(index)
-        setOrderSide(index === 0 ? "buy" : "sell")
-    }
+        setTabIndex(index);
+        setOrderSide(index === 0 ? "buy" : "sell");
+    };
     const orderBalanceValidate = async () => {
         if (ethUsd) {
             if (orderType === "market" && orderSide === "buy") {
                 try {
-                    const totalPriceResp = await getMarketPrice(parseFloat(orderQuantity), orderSide)
-                    const totalEth = totalPriceResp.data.price / ethUsd
-                    return totalEth <= user.balance.ether
+                    const totalPriceResp = await getMarketPrice(parseFloat(orderQuantity), orderSide);
+                    const totalEth = totalPriceResp.data.price / ethUsd;
+                    return totalEth <= user.balance.ether;
                 } catch (e) {
-                    console.error(e)
-                    return false
+                    console.error(e);
+                    return false;
                 }
             } else if (orderType === "limit" && orderSide === "buy") {
-                const totalPrice = parseFloat(orderQuantity) * parseFloat(limitPrice)
-                const totalEth = totalPrice / ethUsd
-                return totalEth <= user.balance.ether
+                const totalPrice = parseFloat(orderQuantity) * parseFloat(limitPrice);
+                const totalEth = totalPrice / ethUsd;
+                return totalEth <= user.balance.ether;
             } else {
-                return parseFloat(orderQuantity) <= user.balance.bitclout
+                return parseFloat(orderQuantity) <= user.balance.bitclout;
             }
         } else {
-            return false
+            return false;
         }
-    }
+    };
 
     const handleContinue = async () => {
-        setContinueLoading(true)
-        setValidateError(null)
+        setContinueLoading(true);
+        setValidateError(null);
         if (await orderBalanceValidate()) {
-            setContinueLoading(false)
-            setPage(1)
+            setContinueLoading(false);
+            setPage(1);
         } else {
-            setContinueLoading(false)
-            setValidateError("Unable to place order.")
+            setContinueLoading(false);
+            setValidateError("Unable to place order.");
         }
-    }
+    };
 
     const handlePlaceOrder = () => {
-        setContinueLoading(true)
-        setValidateError(null)
+        setContinueLoading(true);
+        setValidateError(null);
         if (orderType === "market") {
             createMarketOrder(+parseFloat(orderQuantity).toFixed(2), orderSide)
                 .then(() => {
-                    setContinueLoading(false)
-                    setPage(2)
+                    setContinueLoading(false);
+                    setPage(2);
                 })
                 .catch((error) => {
-                    setContinueLoading(false)
-                    setValidateError(
-                        error.response.data.message
-                            ? `${error.response.status}: ${error.response.data.message}`
-                            : "Error Placing Order"
-                    )
-                })
+                    setContinueLoading(false);
+                    setValidateError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
+                });
         } else {
             createLimitOrder(+parseFloat(orderQuantity).toFixed(2), +parseFloat(limitPrice).toFixed(2), orderSide)
                 .then(() => {
-                    setContinueLoading(false)
-                    setPage(2)
+                    setContinueLoading(false);
+                    setPage(2);
                 })
                 .catch((error) => {
-                    setContinueLoading(false)
+                    setContinueLoading(false);
                     if (error.response) {
-                        setValidateError(
-                            error.response.data.message
-                                ? `${error.response.status}: ${error.response.data.message}`
-                                : "Error Placing Order"
-                        )
+                        setValidateError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
                     } else {
-                        setValidateError("Unknown Error")
+                        setValidateError("Unknown Error");
                     }
-                })
+                });
         }
-    }
+    };
 
     const renderHandler = () => {
         switch (page) {
             case 0:
-                return createOrder
+                return createOrder;
             case 1:
-                return confirmOrder
+                return confirmOrder;
             case 2:
-                return orderSuccess
+                return orderSuccess;
             default:
-                return createOrder
+                return createOrder;
         }
-    }
+    };
 
     const createOrder = (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -292,13 +278,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 text={`   Continue   `}
                                 loading={continueLoading}
                                 onClick={handleContinue}
-                                disabled={
-                                    !user ||
-                                    !ethUsd ||
-                                    marketError !== null ||
-                                    validateError !== null ||
-                                    balanceError !== null
-                                }
+                                disabled={!user || !ethUsd || marketError !== null || validateError !== null || balanceError !== null}
                             />
                         </Flex>
                         {balanceError && (
@@ -315,7 +295,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                 </ModalBody>
             </ModalContent>
         </Modal>
-    )
+    );
 
     const confirmOrder = (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -390,12 +370,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                             <Button w="47%" variant="solid" onClick={() => setPage(0)}>
                                 Modify
                             </Button>
-                            <BlueButton
-                                w="47%"
-                                text={`   Confirm   `}
-                                onClick={handlePlaceOrder}
-                                loading={continueLoading}
-                            />
+                            <BlueButton w="47%" text={`   Confirm   `} onClick={handlePlaceOrder} loading={continueLoading} />
                         </Flex>
                         {validateError && (
                             <Text color="red.400" fontSize="md" fontWeight="400" w="full" textAlign="center" mb="4">
@@ -406,7 +381,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                 </ModalBody>
             </ModalContent>
         </Modal>
-    )
+    );
 
     const orderSuccess = (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -419,15 +394,15 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                             Order Placed
                         </Text>
                         <Text color="gray.500" fontSize="sm">
-                            Your order has been successfully placed. Market orders will reflect in your balance
-                            immediately. Limit orders will be fulfilled as matching orders are found.
+                            Your order has been successfully placed. Market orders will reflect in your balance immediately. Limit orders will be fulfilled as
+                            matching orders are found.
                         </Text>
                         <BlueButton w="100%" mt="6" mb="8" text={`   Close   `} onClick={onClose} />
                     </Flex>
                 </ModalBody>
             </ModalContent>
         </Modal>
-    )
+    );
 
-    return renderHandler()
+    return renderHandler();
 }

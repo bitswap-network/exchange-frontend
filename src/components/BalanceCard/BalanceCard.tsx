@@ -1,40 +1,27 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from "react"
-import { Box, Text, Image, Tooltip, Flex, Spacer } from "@chakra-ui/react"
-import { BlueButton } from "../BlueButton"
+import React from "react";
+import { Box, Text, Image, Tooltip, Flex, Spacer } from "@chakra-ui/react";
+import { BlueButton } from "../BlueButton";
 
-import * as globalVars from "../../globalVars"
+import * as globalVars from "../../globalVars";
 
 interface BalanceCardProps {
-    imageUrl: string
-    currency: string
-    amount?: number
-    usdValue?: number
-    openWithdrawModal: () => void
-    openDepositModal: () => void
+    imageUrl: string;
+    currency: string;
+    amount?: number;
+    usdValue?: number;
+    openWithdrawModal: () => void;
+    openDepositModal: () => void;
 }
 
-export const BalanceCard: React.FC<BalanceCardProps> = ({
-    imageUrl,
-    currency,
-    amount,
-    usdValue,
-    openWithdrawModal,
-    openDepositModal,
-}: BalanceCardProps) => {
+export const BalanceCard: React.FC<BalanceCardProps> = ({ imageUrl, currency, amount, usdValue, openWithdrawModal, openDepositModal }: BalanceCardProps) => {
     return (
         <Box boxShadow="xs" maxW="sm" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="full" pos="relative">
             <Flex flexDir="column" p="6" w="full">
                 <Image htmlWidth="70px" objectFit="cover" pos="absolute" top="4" right="4" src={imageUrl} />
                 <Box>
                     <Box w="100%">
-                        <Box
-                            color="gray.600"
-                            fontWeight="semibold"
-                            letterSpacing="wide"
-                            fontSize="xs"
-                            textTransform="uppercase"
-                        >
+                        <Box color="gray.600" fontWeight="semibold" letterSpacing="wide" fontSize="xs" textTransform="uppercase">
                             Your Balance
                         </Box>
                     </Box>
@@ -60,5 +47,5 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
                 </Flex>
             </Flex>
         </Box>
-    )
-}
+    );
+};

@@ -1,2 +1,2 @@
-export { BitcloutWithdrawModal } from "./BCLT"
-export { EthWithdrawModal } from "./ETH"
+export { BitcloutWithdrawModal } from "./BCLT";
+export { EthWithdrawModal } from "./ETH";

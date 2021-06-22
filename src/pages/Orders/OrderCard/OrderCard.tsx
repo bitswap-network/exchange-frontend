@@ -1,13 +1,13 @@
-import React from "react"
-import { Box, Flex, Spacer, Text, Link, HStack } from "@chakra-ui/react"
-import { Link as RouterLink } from "react-router-dom"
+import React from "react";
+import { Box, Flex, Spacer, Text, Link, HStack } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 interface OrderCardProps {
-    title: string
-    linkText: string
-    linkSrc: string
-    status: string
-    icon?: React.ReactElement
+    title: string;
+    linkText: string;
+    linkSrc: string;
+    status: string;
+    icon?: React.ReactElement;
 }
 
 export function OrderCard({ title, linkText, linkSrc, status, icon }: OrderCardProps): React.ReactElement {
@@ -25,5 +25,5 @@ export function OrderCard({ title, linkText, linkSrc, status, icon }: OrderCardP
                 <Text>{status}</Text>
             </HStack>
         </Box>
-    )
+    );
 }

@@ -1,28 +1,28 @@
-import React, { ReactElement, Suspense } from "react"
-import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react"
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
-import { RecoilRoot } from "recoil"
+import React, { ReactElement, Suspense } from "react";
+import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import { bitswapTheme } from "./theme"
+import { bitswapTheme } from "./theme";
 
-import { Home } from "./pages/Home"
-import { Login } from "./pages/Login"
-import { Wallet } from "./pages/Wallet"
-import { Orders } from "./pages/Orders"
-import { Profile } from "./pages/Profile"
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Wallet } from "./pages/Wallet";
+import { Orders } from "./pages/Orders";
+import { Profile } from "./pages/Profile";
 
-import { DefaultNavBar, NavBar } from "./components/NavBar"
-import { PrivateRoute } from "./components/PrivateRoute"
+import { DefaultNavBar, NavBar } from "./components/NavBar";
+import { PrivateRoute } from "./components/PrivateRoute";
 
-import * as config from "./globalVars"
-import { identityHandler } from "./services/identity"
+import * as config from "./globalVars";
+import { identityHandler } from "./services/identity";
 
-window.addEventListener("message", identityHandler)
+window.addEventListener("message", identityHandler);
 
 if (!localStorage.getItem("nulledState")) {
-    console.log("nulling")
-    localStorage.clear()
-    localStorage.setItem("nulledState", JSON.stringify(true))
+    console.log("nulling");
+    localStorage.clear();
+    localStorage.setItem("nulledState", JSON.stringify(true));
 }
 
 export const App = (): ReactElement => {
@@ -79,5 +79,5 @@ export const App = (): ReactElement => {
                 </ChakraProvider>
             </RecoilRoot>
         </>
-    )
-}
+    );
+};

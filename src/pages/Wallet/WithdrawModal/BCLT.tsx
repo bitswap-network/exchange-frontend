@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
     Modal,
     Text,
@@ -13,63 +13,60 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-} from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import { userState } from "../../../store"
-import { withdrawBitclout } from "../../../services/gateway"
-import { BlueButton } from "../../../components/BlueButton"
+} from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../../store";
+import { withdrawBitclout } from "../../../services/gateway";
+import { BlueButton } from "../../../components/BlueButton";
 
-import * as globalVars from "../../../globalVars"
+import * as globalVars from "../../../globalVars";
 
 interface WithdrawModalProps {
     disclosure: {
-        isOpen: boolean
-        onOpen: () => void
-        onClose: () => void
-    }
-    maxWithdraw: number
+        isOpen: boolean;
+        onOpen: () => void;
+        onClose: () => void;
+    };
+    maxWithdraw: number;
 }
 
-export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
-    disclosure,
-    maxWithdraw,
-}: WithdrawModalProps) => {
-    const user = useRecoilValue(userState)
-    const [withdrawValue, setWithdrawValue] = useState<string>("0")
-    const [loading, setLoading] = useState<boolean>(false)
-    const [page, setPage] = useState(0)
+export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw }: WithdrawModalProps) => {
+    const user = useRecoilValue(userState);
+    const [withdrawValue, setWithdrawValue] = useState<string>("0");
+    const [loading, setLoading] = useState<boolean>(false);
+    const [page, setPage] = useState(0);
 
     const submitWithdrawBitclout = () => {
-        setLoading(true)
+        setLoading(true);
         if (withdrawValue) {
             withdrawBitclout(parseFloat(withdrawValue))
                 .then(() => {
-                    setLoading(false)
-                    setPage(2)
+                    setLoading(false);
+                    setPage(2);
                 })
                 .catch((error) => {
-                    setLoading(false)
-                    console.error(error)
-                })
+                    setLoading(false);
+                    console.error(error);
+                });
         }
-    }
+    };
 
     const valueHandler = async (valueString: string) => {
-        setWithdrawValue(valueString.replace(/^\$/, ""))
-    }
+        setWithdrawValue(valueString.replace(/^\$/, ""));
+    };
 
     const renderHandler = () => {
         switch (page) {
             case 0:
-                return withdrawStartView
+                return withdrawStartView;
             case 1:
-                return withdrawConfirmView
+                return withdrawConfirmView;
             case 2:
-                return withdrawCompleteView
+                return withdrawCompleteView;
             default:
-                return withdrawStartView
+                return withdrawStartView;
         }
-    }
+    };
 
     const withdrawCompleteView = (
         <ModalContent>
@@ -88,15 +85,15 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                         mb="8"
                         text={`   Close   `}
                         onClick={() => {
-                            disclosure.onClose()
-                            setPage(0)
-                            setWithdrawValue("0")
+                            disclosure.onClose();
+                            setPage(0);
+                            setWithdrawValue("0");
                         }}
                     />
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const withdrawConfirmView = (
         <ModalContent>
@@ -119,7 +116,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                             w="47%"
                             ghost
                             onClick={() => {
-                                setPage(0)
+                                setPage(0);
                             }}
                         />
 
@@ -135,7 +132,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const withdrawStartView = (
         <ModalContent>
@@ -156,14 +153,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                     </Text>
                     <Text color="gray.600" fontSize="sm" fontWeight="600" mt="6">
                         Amount of {globalVars.BITCLOUT} to withdraw{" "}
-                        <Button
-                            variant="solid"
-                            fontSize="sm"
-                            p="3"
-                            h="30px"
-                            ml="2"
-                            onClick={() => setWithdrawValue(maxWithdraw.toString())}
-                        >
+                        <Button variant="solid" fontSize="sm" p="3" h="30px" ml="2" onClick={() => setWithdrawValue(maxWithdraw.toString())}>
                             Max
                         </Button>
                     </Text>
@@ -201,12 +191,12 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({
                 </Flex>
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
             <ModalOverlay />
             {renderHandler()}
         </Modal>
-    )
-}
+    );
+};

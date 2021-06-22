@@ -1,26 +1,18 @@
-import React from "react"
-import { Button, ButtonProps, Text } from "@chakra-ui/react"
+import React from "react";
+import { Button, ButtonProps, Text } from "@chakra-ui/react";
 
-import { HiArrowRight } from "react-icons/hi"
+import { HiArrowRight } from "react-icons/hi";
 
 interface BlueButtonProps extends ButtonProps {
-    text: string
-    icon?: boolean
-    width?: string | number
-    loading?: boolean
-    disabled?: boolean
-    ghost?: boolean
+    text: string;
+    icon?: boolean;
+    width?: string | number;
+    loading?: boolean;
+    disabled?: boolean;
+    ghost?: boolean;
 }
 
-export const BlueButton: React.FC<BlueButtonProps> = ({
-    text,
-    icon,
-    width,
-    loading,
-    disabled,
-    ghost,
-    ...rest
-}: BlueButtonProps) => {
+export const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, width, loading, disabled, ghost, ...rest }: BlueButtonProps) => {
     return !ghost ? (
         <Button
             isLoading={loading}
@@ -51,5 +43,5 @@ export const BlueButton: React.FC<BlueButtonProps> = ({
         >
             <Text fontSize="15px">{text}</Text>
         </Button>
-    )
-}
+    );
+};

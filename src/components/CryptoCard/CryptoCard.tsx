@@ -1,25 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React from "react"
-import { Box, Text, Image, Button, Spinner } from "@chakra-ui/react"
-import * as globalVars from "../../globalVars"
+import React from "react";
+import { Box, Text, Image, Button, Spinner } from "@chakra-ui/react";
+import * as globalVars from "../../globalVars";
 
 interface CryptoCardProps {
-    active: boolean
-    imageUrl: string
-    currency: string
-    amount: number
-    border: boolean
-    size?: string
+    active: boolean;
+    imageUrl: string;
+    currency: string;
+    amount: number;
+    border: boolean;
+    size?: string;
 }
 
-export const CryptoCard: React.FC<CryptoCardProps> = ({
-    imageUrl,
-    currency,
-    amount,
-    active,
-    border,
-    size,
-}: CryptoCardProps) => {
+export const CryptoCard: React.FC<CryptoCardProps> = ({ imageUrl, currency, amount, active, border, size }: CryptoCardProps) => {
     return (
         <Button
             border={border && active ? "3px solid #94b5ff" : "0px solid #94b5ff"}
@@ -40,13 +33,7 @@ export const CryptoCard: React.FC<CryptoCardProps> = ({
 
             <Box ml="5">
                 <Box d="flex" alignItems="center">
-                    <Box
-                        color="gray.600"
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                    >
+                    <Box color="gray.600" fontWeight="semibold" letterSpacing="wide" fontSize="xs" textTransform="uppercase">
                         {currency} Balance
                     </Box>
                 </Box>
@@ -57,5 +44,5 @@ export const CryptoCard: React.FC<CryptoCardProps> = ({
                 </Box>
             </Box>
         </Button>
-    )
-}
+    );
+};

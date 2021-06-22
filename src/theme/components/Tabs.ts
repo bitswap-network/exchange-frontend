@@ -29,6 +29,6 @@ const Tabs = {
     },
     // The default `size` or `variant` values
     defaultProps: {},
-}
+};
 
-export default Tabs
+export default Tabs;

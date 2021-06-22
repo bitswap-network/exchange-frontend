@@ -1,14 +1,14 @@
-import * as identity from "./index"
-import { depositBitclout } from "../gateway"
-import { AxiosResponse } from "axios"
+import * as identity from "./index";
+import { depositBitclout } from "../gateway";
+import { AxiosResponse } from "axios";
 
 interface handleBitcloutDepositInterface {
-    accessLevel: number
-    accessLevelHmac: string
-    encryptedSeedHex: string
-    transactionHex: string
-    transactionIDBase58Check: string
-    value: number
+    accessLevel: number;
+    accessLevelHmac: string;
+    encryptedSeedHex: string;
+    transactionHex: string;
+    transactionIDBase58Check: string;
+    value: number;
 }
 export const handleBitcloutDeposit = async ({
     accessLevel,
@@ -29,14 +29,14 @@ export const handleBitcloutDeposit = async ({
             //         transactionHex: transactionHex,
             //     })
             .subscribe((response) => {
-                console.log(response)
+                console.log(response);
                 depositBitclout(response.signedTransactionHex, transactionIDBase58Check, value)
                     .then((response) => {
-                        resolve(response)
+                        resolve(response);
                     })
                     .catch((error) => {
-                        reject(error)
-                    })
-            })
-    })
-}
+                        reject(error);
+                    });
+            });
+    });
+};

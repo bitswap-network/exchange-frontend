@@ -1,2 +1,2 @@
-import { BitCloutChart } from "./BitCloutChart"
-export default BitCloutChart
+import { BitCloutChart } from "./BitCloutChart";
+export default BitCloutChart;
