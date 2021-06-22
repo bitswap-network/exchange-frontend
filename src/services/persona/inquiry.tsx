@@ -1,9 +1,9 @@
-import React from "react"
-import Persona from "persona"
-import { User } from "../../interfaces/User"
+import React from "react";
+import Persona from "persona";
+import { User } from "../../interfaces/User";
 
 interface UserProp {
-    user: User
+    user: User;
 }
 
 export const InlineInquiry: React.FC<UserProp> = ({ user }: UserProp) => {
@@ -15,19 +15,19 @@ export const InlineInquiry: React.FC<UserProp> = ({ user }: UserProp) => {
                     environment="sandbox"
                     language="english"
                     onLoad={(error) => {
-                        console.log("Loaded inline")
+                        console.log("Loaded inline");
                     }}
                     onStart={(inquiryId) => {
-                        console.log(`Started inquiry ${inquiryId}`)
+                        console.log(`Started inquiry ${inquiryId}`);
                     }}
                     onComplete={(inquiryId) => {
-                        console.log(`Sending finished inquiry ${inquiryId} to backend`)
-                        fetch(`/server-handler?inquiry-id=${inquiryId}`)
+                        console.log(`Sending finished inquiry ${inquiryId} to backend`);
+                        fetch(`/server-handler?inquiry-id=${inquiryId}`);
                     }}
                     accountId={user.bitclout.publicKey}
                     prefill={{}}
                 />
             </div>
         </>
-    )
-}
+    );
+};

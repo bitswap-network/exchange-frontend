@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react"
-import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi"
-import Persona, { Client } from "persona"
+import React, {useEffect, useState, useRef} from "react";
+import {HiExclamationCircle, HiBadgeCheck} from "react-icons/hi";
+import {Client} from "persona";
 
 import {
     Flex,
@@ -17,127 +17,127 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-} from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import { userState } from "../../store"
-import { BlueButton } from "../../components/BlueButton/BlueButton"
-import { updateEmail, updateName, resendVerificationEmail } from "../../services/user"
-import { logout } from "../../helpers/persistence"
-import { InlineInquiry } from "../../services/persona/inquiry"
+} from "@chakra-ui/react";
+import {useRecoilValue} from "recoil";
+import {userState} from "../../store";
+import {BlueButton} from "../../components/BlueButton/BlueButton";
+import {updateEmail, updateName, resendVerificationEmail} from "../../services/user";
+import {logout} from "../../helpers/persistence";
+import * as globalVars from "../../globalVars"
 
-const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/
+const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
 
 export function Profile(): React.ReactElement {
-    const user = useRecoilValue(userState)
+    const user = useRecoilValue(userState);
 
-    const [emailEdit, setEmailEdit] = useState(false)
-    const [nameEdit, setNameEdit] = useState(false)
-    const [emailErr, setEmailErr] = useState(false)
-    const [userName, setUserName] = useState("")
-    const [userEmail, setUserEmail] = useState("")
-    const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png")
-    const [currentPage, setCurrentPage] = useState("profile")
-    const [loading, setLoading] = useState(false)
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const embeddedClientRef = useRef<Client | null>(null)
-    const [startedVerification, setStartedVerification] = useState(false)
+    const [emailEdit, setEmailEdit] = useState(false);
+    const [nameEdit, setNameEdit] = useState(false);
+    const [emailErr, setEmailErr] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [userEmail, setUserEmail] = useState("");
+    const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png");
+    const [currentPage, setCurrentPage] = useState("profile");
+    const [loading, setLoading] = useState(false);
+    const {isOpen, onOpen, onClose} = useDisclosure();
+    const embeddedClientRef = useRef<Client | null>(null);
+    const [startedVerification, setStartedVerification] = useState(false);
 
     const emailInputHandler = (e: any) => {
-        setUserEmail(e.target.value)
-    }
+        setUserEmail(e.target.value);
+    };
 
     const nameInputHandler = (e: any) => {
-        setUserName(e.target.value)
-    }
+        setUserName(e.target.value);
+    };
 
     useEffect(() => {
         if (!regEmail.test(userEmail)) {
-            setEmailErr(true)
+            setEmailErr(true);
         } else {
-            setEmailErr(false)
+            setEmailErr(false);
         }
-    }, [userEmail])
+    }, [userEmail]);
 
     useEffect(() => {
         if (user) {
-            setUserEmail(user.email)
-            setUserName(user.name)
+            setUserEmail(user.email);
+            setUserName(user.name);
             setUserPfp(
                 `https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}?fallback=https://bitclout.com/assets/img/default_profile_pic.png`
-            )
+            );
         }
-    }, [user])
+    }, [user]);
 
     const handleLogout = () => {
-        logout()
-        window.location.assign("/")
-    }
+        logout();
+        window.location.assign("/");
+    };
 
     const resendEmailVerification = () => {
-        onOpen()
-        resendVerificationEmail()
-    }
+        onOpen();
+        resendVerificationEmail();
+    };
 
     const updateEmailFunc = () => {
-        setLoading(true)
+        setLoading(true);
         updateEmail(userEmail)
             .then(() => {
-                setLoading(false)
-                window.location.reload()
+                setLoading(false);
+                window.location.reload();
             })
             .catch((error) => {
-                setLoading(false)
-                console.error(error)
-            })
-    }
+                setLoading(false);
+                console.error(error);
+            });
+    };
 
     const updateNameFunc = () => {
-        setLoading(true)
+        setLoading(true);
         updateName(userName)
             .then(() => {
-                setLoading(false)
-                window.location.reload()
+                setLoading(false);
+                window.location.reload();
             })
             .catch((error) => {
-                setLoading(false)
-                console.error(error)
-            })
-    }
+                setLoading(false);
+                console.error(error);
+            });
+    };
 
     const createClient = () => {
         const client = new Client({
+            language: "en",
             templateId: "tmpl_pSp6SHUWLXufK4PRnvDW9ov1",
             accountId: user?.verification.personaAccountId ? user.verification.personaAccountId : "",
-            environment: "sandbox",
+            environment: globalVars.isTest ? "sandbox" : "production",
             onLoad: (error) => {
                 if (error) {
-                    console.error(`Failed with code: ${error.code} and message ${error.message}`)
+                    console.error(`Failed with code: ${error.code} and message ${error.message}`);
                 }
 
-                client.open()
+                client.open();
             },
             onStart: (inquiryId) => {
-                console.log(`Started inquiry ${inquiryId}`)
+                console.log(`Started inquiry ${inquiryId}`);
             },
             onComplete: (inquiryId) => {
-                console.log(`Sending finished inquiry ${inquiryId} to backend`)
-                fetch(`/server-handler?inquiry-id=${inquiryId}`)
+                console.log(`Sending finished inquiry ${inquiryId} to backend`);
             },
             onEvent: (name, meta) => {
                 switch (name) {
                     case "start":
-                        console.log(`Received event: start`)
-                        break
+                        console.log(`Received event: start`);
+                        break;
                     default:
-                        console.log(`Received event: ${name} with meta: ${JSON.stringify(meta)}`)
+                        console.log(`Received event: ${name} with meta: ${JSON.stringify(meta)}`);
                 }
             },
-        })
-        embeddedClientRef.current = client
-        setStartedVerification(true)
+        });
+        embeddedClientRef.current = client;
+        setStartedVerification(true);
 
-        window.exit = (force) => (client ? client.exit(force) : alert("Initialize client first"))
-    }
+        window.exit = (force) => (client ? client.exit(force) : alert("Initialize client first"));
+    };
     const profilePage = user ? (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -145,10 +145,7 @@ export function Profile(): React.ReactElement {
                 <ModalContent>
                     <ModalHeader>Verification Email Sent</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                        An email was sent to {user.email} for verification. Check your spam folder if you cannot find
-                        the email.
-                    </ModalBody>
+                    <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
 
                     <ModalFooter>
                         <BlueButton text={`   Close   `} onClick={onClose} mr="3" />
@@ -159,9 +156,7 @@ export function Profile(): React.ReactElement {
                 <Image src={userPfp} w="80px" h="80px" borderRadius="80px" />
                 <Link
                     isExternal
-                    href={`https://bitclout.com/u/${
-                        user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey
-                    }`}
+                    href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
                     color="black"
                     fontWeight="700"
                     fontSize="20"
@@ -174,9 +169,9 @@ export function Profile(): React.ReactElement {
                 </Text>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
@@ -203,24 +198,14 @@ export function Profile(): React.ReactElement {
                             />
                         )}
                     </Flex>
-                    <Flex
-                        flex="0.35"
-                        align="flex-end"
-                        justify="space-between"
-                        flexDir={{ sm: "row", md: "column" }}
-                        mt={{ sm: "15px", md: "0" }}
-                    >
+                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
                         {!nameEdit ? (
-                            <BlueButton
-                                text={`   Edit   `}
-                                width={{ sm: "45%", md: "90%" }}
-                                onClick={() => setNameEdit(true)}
-                            />
+                            <BlueButton text={`   Edit   `} width={{sm: "45%", md: "90%"}} onClick={() => setNameEdit(true)} />
                         ) : (
                             <>
                                 <Button
                                     bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
+                                    w={{sm: "45%", md: "90%"}}
                                     p="10px 0"
                                     color="white"
                                     fontWeight="600"
@@ -235,7 +220,7 @@ export function Profile(): React.ReactElement {
                                     mt="4"
                                     isDisabled={userName.length <= 1}
                                     text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
+                                    width={{sm: "45%", md: "90%"}}
                                     onClick={updateNameFunc}
                                     loading={loading}
                                 />
@@ -245,9 +230,9 @@ export function Profile(): React.ReactElement {
                 </Flex>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
@@ -256,9 +241,9 @@ export function Profile(): React.ReactElement {
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Email{" "}
                             {user.verification.email ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                <HiBadgeCheck style={{display: "inline"}} color="#5388fe" size="20" />
                             ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                <HiExclamationCircle style={{display: "inline"}} color="#EE0004" size="20" />
                             )}
                         </Text>
                         {user.verification.email ? (
@@ -292,33 +277,19 @@ export function Profile(): React.ReactElement {
                             />
                         )}
                     </Flex>
-                    <Flex
-                        flex="0.35"
-                        align="flex-end"
-                        justify="space-between"
-                        flexDir={{ sm: "row", md: "column" }}
-                        mt={{ sm: "15px", md: "0" }}
-                    >
+                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
                         {!emailEdit ? (
                             <>
-                                <BlueButton
-                                    text={`   Edit   `}
-                                    width={{ sm: "45%", md: "90%" }}
-                                    onClick={() => setEmailEdit(true)}
-                                />
+                                <BlueButton text={`   Edit   `} width={{sm: "45%", md: "90%"}} onClick={() => setEmailEdit(true)} />
                                 {user.verification.email ? null : (
-                                    <BlueButton
-                                        text={`   Resend Verification   `}
-                                        width={{ sm: "45%", md: "90%" }}
-                                        onClick={resendEmailVerification}
-                                    />
+                                    <BlueButton text={`   Resend Verification   `} width={{sm: "45%", md: "90%"}} onClick={resendEmailVerification} />
                                 )}
                             </>
                         ) : (
                             <>
                                 <Button
                                     bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
+                                    w={{sm: "45%", md: "90%"}}
                                     p="10px 0"
                                     color="white"
                                     fontWeight="600"
@@ -332,7 +303,7 @@ export function Profile(): React.ReactElement {
                                 <BlueButton
                                     isDisabled={emailErr}
                                     text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
+                                    width={{sm: "45%", md: "90%"}}
                                     onClick={updateEmailFunc}
                                     loading={loading}
                                 />
@@ -342,20 +313,20 @@ export function Profile(): React.ReactElement {
                 </Flex>
                 <Flex
                     mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
+                    w={{sm: "80%", md: "650px"}}
                     p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
+                    flexDir={{sm: "column", md: "row"}}
                     borderRadius="10"
                     boxShadow="1px 4px 6px 0px #00000040"
                     background="whiteAlpha.700"
                 >
-                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
+                    <Flex flex={user.verification.personaVerified ? "1" : "0.65"} align="flex-start" justify="center" flexDir="column">
                         <Text color="#44423D" fontWeight="700" fontSize="18">
                             Identity Verification{" "}
                             {user.verification.personaVerified ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                <HiBadgeCheck style={{display: "inline"}} color="#5388fe" size="20" />
                             ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                <HiExclamationCircle style={{display: "inline"}} color="#EE0004" size="20" />
                             )}
                         </Text>
                         {user.verification.personaVerified ? (
@@ -368,27 +339,21 @@ export function Profile(): React.ReactElement {
                             </Text>
                         )}
                     </Flex>
-                    <Flex
-                        flex="0.35"
-                        align="flex-end"
-                        justify="space-between"
-                        flexDir={{ sm: "row", md: "column" }}
-                        mt={{ sm: "15px", md: "0" }}
-                    >
-                        {startedVerification ? (
-                            <BlueButton
-                                onClick={() =>
-                                    embeddedClientRef.current ? embeddedClientRef.current.open() : createClient()
-                                }
-                                text={`  Resume Verification   `}
-                            />
-                        ) : (
-                            <BlueButton onClick={createClient} text={`  Start Verification   `} />
-                        )}
-                    </Flex>
+                    {!user.verification.personaVerified && (
+                        <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{sm: "row", md: "column"}} mt={{sm: "15px", md: "0"}}>
+                            {startedVerification ? (
+                                <BlueButton
+                                    onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
+                                    text={`  Resume Verification   `}
+                                />
+                            ) : (
+                                <BlueButton onClick={createClient} text={`  Start Verification   `} />
+                            )}
+                        </Flex>
+                    )}
                 </Flex>
 
-                <Flex mt="50px" w={{ sm: "80%", md: "600px" }} flexDir="column" alignItems="center">
+                <Flex mt="50px" w={{sm: "80%", md: "600px"}} flexDir="column" alignItems="center">
                     <Button
                         bg="red.500"
                         w="125px"
@@ -405,7 +370,7 @@ export function Profile(): React.ReactElement {
                 </Flex>
             </Flex>
         </>
-    ) : null
+    ) : null;
 
     // const VerifyBitclout = (
     //     <Flex h="70vh" alignItems="center" justifyContent="center">
@@ -465,5 +430,5 @@ export function Profile(): React.ReactElement {
     //     </Flex>
     // )
 
-    return currentPage == "profile" ? profilePage : currentPage == "verify" ? VerifyBitclout : VerificationComplete
+    return currentPage == "profile" ? profilePage : currentPage == "verify" ? VerifyBitclout : VerificationComplete;
 }

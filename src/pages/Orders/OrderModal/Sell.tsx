@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction } from "react";
 import {
     FormControl,
     Select,
@@ -12,23 +12,23 @@ import {
     HStack,
     Tooltip,
     Spacer,
-} from "@chakra-ui/react"
-import * as globalVars from "../../../globalVars"
-import { AiFillInfoCircle } from "react-icons/ai"
-const format = (val: string) => `$` + val
-const limitSellTooltipText = "This is the price you are willing to sell Bitclout at. Must be between $100 and $500."
+} from "@chakra-ui/react";
+import * as globalVars from "../../../globalVars";
+import { AiFillInfoCircle } from "react-icons/ai";
+const format = (val: string) => `$` + val;
+const limitSellTooltipText = "This is the price you are willing to sell Bitclout at. Must be between $100 and $500.";
 
 interface SellTabProps {
-    user?: any
-    toolTipText: string
-    orderType: string
-    setOrderType: Dispatch<SetStateAction<string>>
-    orderQuantity: string
-    setOrderQuantity: Dispatch<SetStateAction<string>>
-    limitPrice: string
-    setLimitPrice: Dispatch<SetStateAction<string>>
-    totalUsd: number
-    ethUsd: number
+    user?: any;
+    toolTipText: string;
+    orderType: string;
+    setOrderType: Dispatch<SetStateAction<string>>;
+    orderQuantity: string;
+    setOrderQuantity: Dispatch<SetStateAction<string>>;
+    limitPrice: string;
+    setLimitPrice: Dispatch<SetStateAction<string>>;
+    totalUsd: number;
+    ethUsd: number;
 }
 export const SellTab: React.FC<SellTabProps> = ({
     user,
@@ -74,10 +74,7 @@ export const SellTab: React.FC<SellTabProps> = ({
             <Tooltip label={`You can sell up to 500 ${globalVars.BITCLOUT} per order.`} aria-label="">
                 <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
                     Quantity of {globalVars.BITCLOUT}
-                    <AiFillInfoCircle
-                        color="#aaa"
-                        style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
-                    />
+                    <AiFillInfoCircle color="#aaa" style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
                 </Text>
             </Tooltip>
             <NumberInput
@@ -126,10 +123,7 @@ export const SellTab: React.FC<SellTabProps> = ({
             </FormControl>
         ) : null}
         <HStack pt="4">
-            <Tooltip
-                label={"Fees are deducted from the amount of ETH you will receive for this order."}
-                aria-label="fee label sell"
-            >
+            <Tooltip label={"Fees are deducted from the amount of ETH you will receive for this order."} aria-label="fee label sell">
                 <Text color="gray.600" fontSize="sm">
                     {" "}
                     {orderType === "market" ? "Est. " : ""}
@@ -170,4 +164,4 @@ export const SellTab: React.FC<SellTabProps> = ({
             </Text>
         </HStack>
     </Stack>
-)
+);

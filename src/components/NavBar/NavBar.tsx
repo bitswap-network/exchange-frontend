@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Flex,
@@ -18,17 +18,17 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
-} from "@chakra-ui/react"
-import { RiCloseFill } from "react-icons/ri"
-import { HiMenu } from "react-icons/hi"
-import { useRecoilValue, useSetRecoilState } from "recoil"
-import { Logo } from "./components/Logo"
+} from "@chakra-ui/react";
+import { RiCloseFill } from "react-icons/ri";
+import { HiMenu } from "react-icons/hi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Logo } from "./components/Logo";
 
-import { Link } from "react-router-dom"
-import { loggedInState, orderModalState, userState } from "../../store"
-import { AiOutlineUser } from "react-icons/ai"
+import { Link } from "react-router-dom";
+import { loggedInState, orderModalState, userState } from "../../store";
+import { AiOutlineUser } from "react-icons/ai";
 
-const LINKS = ["home", "orders", "wallet"]
+const LINKS = ["home", "orders", "wallet"];
 // 📌 TO DO: This is just the skeleton (no links or connections)
 export const DefaultNavBar = (loading: boolean) => (
     <Box px={4} bg={"background.primary"}>
@@ -60,22 +60,22 @@ export const DefaultNavBar = (loading: boolean) => (
             </Flex>
         </Flex>
     </Box>
-)
+);
 
 function NavBarFunc() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const isLoggedIn = useRecoilValue(loggedInState)
-    const user = useRecoilValue(userState)
-    const setOrderModalState = useSetRecoilState(orderModalState)
-    const emailToast = useToast()
-    const deviceToast = useToast()
-    const chartWarningToast = useToast()
-    const [emailToastOpened, setEmailToastOpened] = useState(false)
-    const [deviceToastOpened, setDeviceToastOpened] = useState(false)
-    const [chartWarningToastOpened, setChartWarningToastOpened] = useState(false)
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const isLoggedIn = useRecoilValue(loggedInState);
+    const user = useRecoilValue(userState);
+    const setOrderModalState = useSetRecoilState(orderModalState);
+    const emailToast = useToast();
+    const deviceToast = useToast();
+    const chartWarningToast = useToast();
+    const [emailToastOpened, setEmailToastOpened] = useState(false);
+    const [deviceToastOpened, setDeviceToastOpened] = useState(false);
+    const [chartWarningToastOpened, setChartWarningToastOpened] = useState(false);
     useEffect(() => {
         if (user && !user.verification.email && !emailToastOpened) {
-            setEmailToastOpened(true)
+            setEmailToastOpened(true);
             emailToast({
                 title: "Email not verified.",
                 description: "Verify your email to gain complete access to the platform.",
@@ -83,15 +83,15 @@ function NavBarFunc() {
                 duration: 60000,
                 isClosable: true,
                 position: "bottom-left",
-            })
+            });
         }
         if (user && user.verification.email) {
-            emailToast.closeAll()
+            emailToast.closeAll();
         }
-    }, [user?.verification])
+    }, [user?.verification]);
     useEffect(() => {
         if (window.innerWidth < 768 && !deviceToastOpened) {
-            setDeviceToastOpened(true)
+            setDeviceToastOpened(true);
             deviceToast({
                 title: "Mobile device detected.",
                 description: "Access the website on a desktop or laptop for a better experience.",
@@ -99,7 +99,7 @@ function NavBarFunc() {
                 duration: 60000,
                 isClosable: true,
                 position: "top",
-            })
+            });
         }
         // if (!chartWarningToastOpened) {
         //     setChartWarningToastOpened(true)
@@ -114,7 +114,7 @@ function NavBarFunc() {
         //         position: "bottom-left",
         //     })
         // }
-    }, [])
+    }, []);
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <>
@@ -130,13 +130,7 @@ function NavBarFunc() {
                     <DrawerBody>
                         <VStack spacing={4} alignItems="flex-start">
                             {LINKS.map((link) => (
-                                <Text
-                                    textTransform="capitalize"
-                                    as={Link}
-                                    to={`/${link}`}
-                                    key={link}
-                                    onClick={() => onClose()}
-                                >
+                                <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} onClick={() => onClose()}>
                                     {link}
                                 </Text>
                             ))}
@@ -203,8 +197,8 @@ function NavBarFunc() {
                 )} */}
             </Box>
         </>
-    )
+    );
 
-    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar(false)}</>
+    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar(false)}</>;
 }
-export const NavBar = React.memo(NavBarFunc)
+export const NavBar = React.memo(NavBarFunc);

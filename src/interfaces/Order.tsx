@@ -1,35 +1,35 @@
-import React from "react"
-import * as globalVars from "../globalVars"
+import React from "react";
+import * as globalVars from "../globalVars";
 
 export type Order = {
-    _id: string
-    username: string
-    created: Date
-    orderID: string
-    orderSide: string
-    orderType: string
-    orderQuantity: number
-    orderPrice: number | undefined
-    execPrice: number | undefined
-    fees: number | undefined
-    orderQuantityProcessed: number
-    complete: boolean
-    error: string | undefined
-    completeTime: Date | undefined
-}
+    _id: string;
+    username: string;
+    created: Date;
+    orderID: string;
+    orderSide: string;
+    orderType: string;
+    orderQuantity: number;
+    orderPrice: number | undefined;
+    execPrice: number | undefined;
+    fees: number | undefined;
+    orderQuantityProcessed: number;
+    complete: boolean;
+    error: string | undefined;
+    completeTime: Date | undefined;
+};
 export interface OrderTableDataInterface extends Order {
-    [index: string]: any
-    tldr: string
-    status: string
-    quantityString: string
-    quantityProcessedString: string
-    priceString: string
-    execPriceString: string
-    orderTypeCapped: string
-    timestamp: Date
-    createdAgo: string
-    completedAgo?: string
-    totalString?: string
+    [index: string]: any;
+    tldr: string;
+    status: string;
+    quantityString: string;
+    quantityProcessedString: string;
+    priceString: string;
+    execPriceString: string;
+    orderTypeCapped: string;
+    timestamp: Date;
+    createdAgo: string;
+    completedAgo?: string;
+    totalString?: string;
 }
 
 export const OrderBookTableColumns = [
@@ -45,7 +45,7 @@ export const OrderBookTableColumns = [
         Header: "Total",
         accessor: "totalString",
     },
-]
+];
 
 export const OrderTableColumns = [
     {
@@ -73,7 +73,7 @@ export const OrderTableColumns = [
         accessor: "timestamp",
         sortType: "datetime",
         Cell: function create(props: any) {
-            return <span>{globalVars.timeSince(props.value)}</span>
+            return <span>{globalVars.timeSince(props.value)}</span>;
         },
     },
-]
+];

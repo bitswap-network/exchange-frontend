@@ -1,123 +1,112 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState, useMemo } from "react"
-import { Box, Skeleton } from "@chakra-ui/react"
-import { ResponsiveLine } from "@nivo/line"
-import { ChartData as ChartDataInterface } from "../../interfaces/Depth"
-import { getOrderHistory } from "../../services/utility"
-import { ParentSize } from "@visx/responsive"
+import React, { useEffect, useState, useMemo } from "react";
+import { Box, Skeleton } from "@chakra-ui/react";
+import { ResponsiveLine } from "@nivo/line";
+import { ChartData as ChartDataInterface } from "../../interfaces/Depth";
+import { getOrderHistory } from "../../services/utility";
+import { ParentSize } from "@visx/responsive";
 
 const graphTheme = {
     fontSize: "12px",
     textColor: "#5c5c5c",
     fontFamily: "Inter, system-ui, sans-serif",
     background: "transparent",
-}
+};
 
 interface ChartProps {
-    ticks: number
-    dateTicks: number
+    ticks: number;
+    dateTicks: number;
 }
 
 export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) => {
     interface CustomSymbolInterface {
-        size: number
-        color: string
-        borderWidth: number
-        borderColor: string
+        size: number;
+        color: string;
+        borderWidth: number;
+        borderColor: string;
     }
     interface hotData {
-        timestamp: Date
-        price: number
+        timestamp: Date;
+        price: number;
     }
     const CustomSymbol = ({ size, color, borderWidth, borderColor }: CustomSymbolInterface) => (
         <g>
             <circle fill="#fff" r={size / 2} strokeWidth={borderWidth} stroke={borderColor} />
             <circle r={size / 5} strokeWidth={borderWidth} stroke={borderColor} fill={color} fillOpacity={0.35} />
         </g>
-    )
-    const [depthHot, setDepthHot] = useState<[]>([])
-    const [loading, setLoading] = useState(true)
-    const [minY, setMinY] = useState(0)
-    const [maxY, setMaxY] = useState(0)
-    const [dateTickValues, setDateTickValues] = useState<Date[]>([new Date()])
+    );
+    const [depthHot, setDepthHot] = useState<[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [minY, setMinY] = useState(0);
+    const [maxY, setMaxY] = useState(0);
+    const [dateTickValues, setDateTickValues] = useState<Date[]>([new Date()]);
 
     useEffect(() => {
         getOrderHistory().then((response) => {
-            setDepthHot(response.data)
-            setLoading(false)
-        })
-    }, [])
+            setDepthHot(response.data);
+            setLoading(false);
+        });
+    }, []);
 
     const parseData = (dataList: []) => {
         const parsedDataArr: ChartDataInterface = {
             id: "BitClout Market Price",
             data: [],
-        }
-        let min = 1000
-        let max = 0
-        let minDate = new Date()
-        minDate.setDate(minDate.getDate() + 100)
-        let maxDate = new Date(0)
+        };
+        let min = 1000;
+        let max = 0;
+        let minDate = new Date();
+        minDate.setDate(minDate.getDate() + 100);
+        let maxDate = new Date(0);
         dataList.forEach((item: hotData) => {
-            const date = new Date(item.timestamp)
+            const date = new Date(item.timestamp);
             parsedDataArr.data.push({
                 x: `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`,
                 y: item.price,
-            })
+            });
             if (date < minDate) {
-                minDate = date
+                minDate = date;
             }
             if (date > maxDate) {
-                maxDate = date
+                maxDate = date;
             }
-            min = Math.min(min, item.price - 30)
-            max = Math.max(max, item.price + 30)
-        })
-        const dateRange = (maxDate - minDate) / (1000 * 60 * 60 * 24)
-        const dateInterval = Math.ceil(dateRange / dateTicks)
-        const datesArray = []
+            min = Math.min(min, item.price - 30);
+            max = Math.max(max, item.price + 30);
+        });
+        const dateRange = (maxDate - minDate) / (1000 * 60 * 60 * 24);
+        const dateInterval = Math.ceil(dateRange / dateTicks);
+        const datesArray = [];
         for (let i = 0; i < dateTicks; i++) {
-            if (
-                new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear()) <=
-                maxDate
-            ) {
-                datesArray.push(
-                    new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear())
-                )
-                minDate.setDate(minDate.getUTCDate() + dateInterval)
+            if (new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear()) <= maxDate) {
+                datesArray.push(new Date(minDate.getUTCMonth() + 1 + " " + minDate.getUTCDate() + ", " + minDate.getUTCFullYear()));
+                minDate.setDate(minDate.getUTCDate() + dateInterval);
             }
         }
-        setDateTickValues(datesArray)
-        setMinY(min)
-        setMaxY(max)
+        setDateTickValues(datesArray);
+        setMinY(min);
+        setMaxY(max);
 
-        return parsedDataArr
-    }
+        return parsedDataArr;
+    };
 
-    const depthMemo = useMemo(() => parseData(depthHot), [depthHot]) as ChartDataInterface
+    const depthMemo = useMemo(() => parseData(depthHot), [depthHot]) as ChartDataInterface;
 
     return (
         <ParentSize>
             {(parent) => (
                 <Box overflow="hidden" d="flex" w={parent.width} pos="relative" p="4">
-                    <Skeleton
-                        startColor="gray.100"
-                        endColor="gray.300"
-                        isLoaded={!loading}
-                        w="full"
-                        height={parent.width * 0.7}
-                    >
+                    <Skeleton startColor="gray.100" endColor="gray.300" isLoaded={!loading} w="full" height={parent.width * 0.7}>
                         <ResponsiveLine
                             theme={graphTheme}
                             data={[depthMemo]}
                             colors="#4483ef"
                             tooltip={(point) => {
-                                const date = new Date(point.point.data.x).toString().split(" ")
+                                const date = new Date(point.point.data.x).toString().split(" ");
                                 return (
                                     <Box bgColor="white" borderRadius="4" padding="2" boxShadow="md" fontSize="x-small">
                                         {date[1] + " " + date[2] + " " + date[3] + ", $" + point.point.data.y}
                                     </Box>
-                                )
+                                );
                             }}
                             margin={{
                                 left: 50,
@@ -230,5 +219,5 @@ export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) =>
                 </Box>
             )}
         </ParentSize>
-    )
-}
+    );
+};

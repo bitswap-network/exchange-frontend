@@ -12,6 +12,6 @@ const Link = {
     defaultProps: {
         variant: "default",
     },
-}
+};
 
-export default Link
+export default Link;

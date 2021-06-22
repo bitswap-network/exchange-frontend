@@ -1,73 +1,62 @@
-import React, { useState } from "react"
-import {
-    Flex,
-    Modal,
-    Text,
-    ModalOverlay,
-    ModalContent,
-    ModalBody,
-    ModalCloseButton,
-    Divider,
-    Box,
-    Spacer,
-} from "@chakra-ui/react"
-import { BlueButton } from "../../components/BlueButton"
-import { OrderTableDataInterface } from "../../interfaces/Order"
-import { cancelOrder } from "../../services/order"
-import * as globalVars from "../../globalVars"
-import { useEffect } from "react"
+import React, { useState } from "react";
+import { Flex, Modal, Text, ModalOverlay, ModalContent, ModalBody, ModalCloseButton, Divider, Box, Spacer } from "@chakra-ui/react";
+import { BlueButton } from "../../components/BlueButton";
+import { OrderTableDataInterface } from "../../interfaces/Order";
+import { cancelOrder } from "../../services/order";
+import * as globalVars from "../../globalVars";
+import { useEffect } from "react";
 interface OrderInfoModalProps {
     disclosure: {
-        isOpen: boolean
-        onOpen: () => void
-        onClose: () => void
-    }
-    order: OrderTableDataInterface | undefined | null
+        isOpen: boolean;
+        onOpen: () => void;
+        onClose: () => void;
+    };
+    order: OrderTableDataInterface | undefined | null;
 }
 
 export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, order }: OrderInfoModalProps) => {
     if (!order) {
-        return null
+        return null;
     }
-    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
-    const [cancelError, setCancelError] = useState<string | null>(null)
-    const [page, setPage] = useState<number>(0)
-    const created = new Date(order.created)
-    const completed: Date | null = order.completeTime ? new Date(order.completeTime) : null
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false);
+    const [cancelError, setCancelError] = useState<string | null>(null);
+    const [page, setPage] = useState<number>(0);
+    const created = new Date(order.created);
+    const completed: Date | null = order.completeTime ? new Date(order.completeTime) : null;
     useEffect(() => {
         if (disclosure.isOpen) {
-            setCancelError(null)
-            setPage(0)
+            setCancelError(null);
+            setPage(0);
         }
-    }, [disclosure.isOpen])
+    }, [disclosure.isOpen]);
     const cancelOrderHandler = () => {
-        setCancelError(null)
+        setCancelError(null);
         if (!order.complete) {
-            setCancelLoading(true)
-            setCancelError(null)
+            setCancelLoading(true);
+            setCancelError(null);
             cancelOrder(order.orderID)
                 .then(() => {
-                    setCancelLoading(false)
-                    setPage(0)
-                    disclosure.onClose()
+                    setCancelLoading(false);
+                    setPage(0);
+                    disclosure.onClose();
                 })
                 .catch((error: any) => {
-                    setCancelLoading(false)
-                    if (error.response) setCancelError(error.response.data.message)
-                })
+                    setCancelLoading(false);
+                    if (error.response) setCancelError(error.response.data.message);
+                });
         }
-    }
+    };
 
     const renderHandler = () => {
         switch (page) {
             case 0:
-                return infoModal
+                return infoModal;
             case 1:
-                return confirmCancelModal
+                return confirmCancelModal;
             default:
-                return infoModal
+                return infoModal;
         }
-    }
+    };
 
     const infoModal = (
         <ModalContent>
@@ -80,13 +69,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                         </Text>
                         <Spacer />
                         <Text
-                            color={
-                                order.status === "Active"
-                                    ? "green.700"
-                                    : order.status === "Partial"
-                                    ? "yellow.500"
-                                    : "red.500"
-                            }
+                            color={order.status === "Active" ? "green.700" : order.status === "Partial" ? "yellow.500" : "red.500"}
                             fontWeight="600"
                             fontSize="xl"
                             mt="7"
@@ -160,22 +143,10 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                     )}
 
                     <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="4">
-                        <BlueButton
-                            w="full"
-                            text={`   Close   `}
-                            mr={order.complete ? "0" : "4"}
-                            onClick={disclosure.onClose}
-                            ghost
-                        />
+                        <BlueButton w="full" text={`   Close   `} mr={order.complete ? "0" : "4"} onClick={disclosure.onClose} ghost />
                         {!order.complete && (
                             <>
-                                <BlueButton
-                                    w="full"
-                                    text={`   Cancel Order   `}
-                                    ml={"4"}
-                                    onClick={() => setPage(1)}
-                                    isLoading={cancelLoading}
-                                />
+                                <BlueButton w="full" text={`   Cancel Order   `} ml={"4"} onClick={() => setPage(1)} isLoading={cancelLoading} />
                             </>
                         )}
                     </Flex>
@@ -187,7 +158,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                 )}
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     const confirmCancelModal = (
         <ModalContent>
@@ -202,22 +173,10 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                     </Text>
                 </Flex>
                 <Flex flexDir="row" justifyContent="space-between" w="90%" ml="5%" mt="6" mb="4">
-                    <BlueButton
-                        w="full"
-                        text={`   Go Back   `}
-                        mr={order.complete ? "0" : "4"}
-                        onClick={() => setPage(0)}
-                        ghost
-                    />
+                    <BlueButton w="full" text={`   Go Back   `} mr={order.complete ? "0" : "4"} onClick={() => setPage(0)} ghost />
                     {!order.complete && (
                         <>
-                            <BlueButton
-                                w="full"
-                                text={`   Cancel Order   `}
-                                ml={"4"}
-                                onClick={cancelOrderHandler}
-                                isLoading={cancelLoading}
-                            />
+                            <BlueButton w="full" text={`   Cancel Order   `} ml={"4"} onClick={cancelOrderHandler} isLoading={cancelLoading} />
                         </>
                     )}
                 </Flex>
@@ -228,19 +187,19 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                 )}
             </ModalBody>
         </ModalContent>
-    )
+    );
 
     return (
         <Modal
             isOpen={disclosure.isOpen}
             onClose={() => {
-                disclosure.onClose()
-                setCancelError(null)
-                setCancelLoading(false)
+                disclosure.onClose();
+                setCancelError(null);
+                setCancelLoading(false);
             }}
         >
             <ModalOverlay />
             {renderHandler()}
         </Modal>
-    )
-}
+    );
+};

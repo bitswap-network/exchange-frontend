@@ -1,3 +1,3 @@
 export interface ModWindow extends Window {
-    gtag: any
+    gtag: any;
 }

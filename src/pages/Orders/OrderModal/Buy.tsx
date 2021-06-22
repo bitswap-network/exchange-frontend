@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction } from "react";
 import {
     FormControl,
     Select,
@@ -12,25 +12,25 @@ import {
     HStack,
     Tooltip,
     Spacer,
-} from "@chakra-ui/react"
-import * as globalVars from "../../../globalVars"
-import { AiFillInfoCircle } from "react-icons/ai"
-const format = (val: string) => `$` + val
+} from "@chakra-ui/react";
+import * as globalVars from "../../../globalVars";
+import { AiFillInfoCircle } from "react-icons/ai";
+const format = (val: string) => `$` + val;
 
 interface BuyTabProps {
-    user?: any
-    toolTipText: string
-    orderType: string
-    setOrderType: Dispatch<SetStateAction<string>>
-    orderQuantity: string
-    setOrderQuantity: Dispatch<SetStateAction<string>>
-    limitPrice: string
-    setLimitPrice: Dispatch<SetStateAction<string>>
-    totalUsd: number
-    ethUsd: number | null
+    user?: any;
+    toolTipText: string;
+    orderType: string;
+    setOrderType: Dispatch<SetStateAction<string>>;
+    orderQuantity: string;
+    setOrderQuantity: Dispatch<SetStateAction<string>>;
+    limitPrice: string;
+    setLimitPrice: Dispatch<SetStateAction<string>>;
+    totalUsd: number;
+    ethUsd: number | null;
 }
 
-const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at. Must be between $100 and $500."
+const limitBuyTooltipText = "This is the price you are willing to buy Bitclout at. Must be between $100 and $500.";
 
 export const BuyTab: React.FC<BuyTabProps> = ({
     user,
@@ -78,10 +78,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             <Tooltip label={`You can buy up to 500 ${globalVars.BITCLOUT} per order.`} aria-label="">
                 <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
                     Quantity of {globalVars.BITCLOUT}
-                    <AiFillInfoCircle
-                        color="#aaa"
-                        style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }}
-                    />
+                    <AiFillInfoCircle color="#aaa" style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
                 </Text>
             </Tooltip>
             <NumberInput
@@ -89,7 +86,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
                 max={500}
                 value={orderQuantity}
                 onChange={(valueString) => {
-                    setOrderQuantity(globalVars.parseNum(valueString))
+                    setOrderQuantity(globalVars.parseNum(valueString));
                 }}
                 step={0.1}
                 precision={2}
@@ -132,10 +129,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </FormControl>
         ) : null}
         <HStack pt="4">
-            <Tooltip
-                label={"Fees are deducted from the amount of CLOUT you will receive for this order."}
-                aria-label="fee label buy"
-            >
+            <Tooltip label={"Fees are deducted from the amount of CLOUT you will receive for this order."} aria-label="fee label buy">
                 <Text color="gray.600" fontSize="sm">
                     {" "}
                     {orderType === "market" ? "Est. " : ""}
@@ -155,24 +149,13 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Text>
         </HStack>
         <HStack>
-            <Text
-                color={
-                    user && ethUsd && globalVars.formatBalanceSmall(totalUsd / ethUsd) <= user.balance.ether
-                        ? "gray.600"
-                        : "red.600"
-                }
-                fontSize="sm"
-            >
+            <Text color={user && ethUsd && globalVars.formatBalanceSmall(totalUsd / ethUsd) <= user.balance.ether ? "gray.600" : "red.600"} fontSize="sm">
                 {orderType === "market" ? "Estimated " : ""}
                 Total Cost
             </Text>
             <Spacer />
             <Text
-                color={
-                    user && ethUsd && globalVars.formatBalanceSmall(totalUsd / ethUsd) <= user.balance.ether
-                        ? "gray.900"
-                        : "red.600"
-                }
+                color={user && ethUsd && globalVars.formatBalanceSmall(totalUsd / ethUsd) <= user.balance.ether ? "gray.900" : "red.600"}
                 fontSize="sm"
                 fontWeight="600"
             >
@@ -191,4 +174,4 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             </Text>
         </HStack>
     </Stack>
-)
+);
