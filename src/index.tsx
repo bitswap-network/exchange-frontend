@@ -1,10 +1,10 @@
-import {ColorModeScript} from "@chakra-ui/react";
+import { ColorModeScript } from "@chakra-ui/react";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import TagManager from "react-gtm-module";
-import {App} from "./App";
+import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
-import {bitswapTheme} from "./theme";
+import { bitswapTheme } from "./theme";
 import * as config from "./globalVars";
 
 const tagManagerArgs = {

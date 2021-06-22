@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction} from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
     FormControl,
     Select,
@@ -14,7 +14,7 @@ import {
     Spacer,
 } from "@chakra-ui/react";
 import * as globalVars from "../../../globalVars";
-import {AiFillInfoCircle} from "react-icons/ai";
+import { AiFillInfoCircle } from "react-icons/ai";
 const format = (val: string) => `$` + val;
 
 interface BuyTabProps {
@@ -78,7 +78,7 @@ export const BuyTab: React.FC<BuyTabProps> = ({
             <Tooltip label={`You can buy up to 500 ${globalVars.BITCLOUT} per order.`} aria-label="">
                 <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2" mb="2">
                     Quantity of {globalVars.BITCLOUT}
-                    <AiFillInfoCircle color="#aaa" style={{marginLeft: "4px", marginBottom: "2px", display: "inline"}} />
+                    <AiFillInfoCircle color="#aaa" style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
                 </Text>
             </Tooltip>
             <NumberInput

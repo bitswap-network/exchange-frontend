@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Flex,
@@ -19,14 +19,14 @@ import {
     DrawerContent,
     DrawerCloseButton,
 } from "@chakra-ui/react";
-import {RiCloseFill} from "react-icons/ri";
-import {HiMenu} from "react-icons/hi";
-import {useRecoilValue, useSetRecoilState} from "recoil";
-import {Logo} from "./components/Logo";
+import { RiCloseFill } from "react-icons/ri";
+import { HiMenu } from "react-icons/hi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Logo } from "./components/Logo";
 
-import {Link} from "react-router-dom";
-import {loggedInState, orderModalState, userState} from "../../store";
-import {AiOutlineUser} from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { loggedInState, orderModalState, userState } from "../../store";
+import { AiOutlineUser } from "react-icons/ai";
 
 const LINKS = ["home", "orders", "wallet"];
 // 📌 TO DO: This is just the skeleton (no links or connections)
@@ -34,7 +34,7 @@ export const DefaultNavBar = (loading: boolean) => (
     <Box px={4} bg={"background.primary"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
             <Skeleton isLoaded={!loading} m="4">
-                <HStack as={"nav"} spacing={5} display={{base: "none", md: "flex"}}>
+                <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
                     <Link to="/">
                         <Logo />
                     </Link>
@@ -63,7 +63,7 @@ export const DefaultNavBar = (loading: boolean) => (
 );
 
 function NavBarFunc() {
-    const {isOpen, onOpen, onClose} = useDisclosure();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const isLoggedIn = useRecoilValue(loggedInState);
     const user = useRecoilValue(userState);
     const setOrderModalState = useSetRecoilState(orderModalState);
@@ -101,7 +101,7 @@ function NavBarFunc() {
                 position: "top",
             });
         }
-    }, [])
+    }, []);
     // 📌 TODO: Connect all functionality
     const loggedInMarkup = (
         <>
@@ -131,10 +131,10 @@ function NavBarFunc() {
                         size={"lg"}
                         icon={isOpen ? <RiCloseFill /> : <HiMenu />}
                         aria-label={"Open Menu"}
-                        display={{md: "none"}}
+                        display={{ md: "none" }}
                         onClick={isOpen ? () => onClose() : () => onOpen()}
                     />
-                    <HStack as={"nav"} spacing={5} display={{base: "none", md: "flex"}}>
+                    <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
                         <Logo as={Link} to="/" />
                         {LINKS.map((link) => (
                             <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} pt="3px">
@@ -142,8 +142,8 @@ function NavBarFunc() {
                             </Text>
                         ))}
                     </HStack>
-                    <Flex mr={{sm: "5px", md: "20px"}}>
-                        <HStack as={"nav"} spacing={1} display={{base: "none", md: "flex"}}>
+                    <Flex mr={{ sm: "5px", md: "20px" }}>
+                        <HStack as={"nav"} spacing={1} display={{ base: "none", md: "flex" }}>
                             <Button
                                 as={Link}
                                 to={{
