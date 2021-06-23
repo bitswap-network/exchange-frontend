@@ -30,6 +30,7 @@ interface SellTabProps {
     setLimitPrice: Dispatch<SetStateAction<string>>;
     totalUsd: number;
     ethUsd: number;
+    cloutUsd: number;
     setAdvanced: Dispatch<SetStateAction<boolean>>;
     advanced: boolean;
 }
@@ -44,6 +45,7 @@ export function SellTab({
     setLimitPrice,
     totalUsd,
     ethUsd,
+    cloutUsd,
     setAdvanced,
     advanced,
 }: SellTabProps): React.ReactElement {
@@ -79,7 +81,15 @@ export function SellTab({
                     onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
                     step={0.1}
                     precision={2}
-                    max={user.balance.bitclout < 500 ? user.balance.bitclout : 500}
+                    max={
+                        user.verification.personaVerified
+                            ? user.balance.bitclout < 500
+                                ? user.balance.bitclout
+                                : 500
+                            : user.balance.bitclout < globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd
+                            ? user.balance.bitclout
+                            : globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd
+                    }
                 >
                     <NumberInputField />
                     <NumberInputStepper>

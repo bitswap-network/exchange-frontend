@@ -24,7 +24,7 @@ import { useRecoilValue } from "recoil";
 import { tokenState } from "../../../store";
 import { createMarketOrder, createLimitOrder, getMarketPrice } from "../../../services/order";
 
-import { getEthUSD } from "../../../services/utility";
+import { getEthUSD, getBitcloutUSD } from "../../../services/utility";
 import * as globalVars from "../../../globalVars";
 import { useUser } from "../../../hooks";
 import { BuyTab } from "./Buy";
@@ -36,6 +36,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     const token = useRecoilValue(tokenState);
     const { user, userIsLoading, userIsError } = useUser(token);
     const [ethUsd, setEthUsd] = useState<number | null>(null);
+    const [cloutUsd, setCloutUsd] = useState<number | null>(null);
 
     const [tabIndex, setTabIndex] = useState<number>(0);
     const [continueLoading, setContinueLoading] = useState<boolean>(false);
@@ -118,6 +119,10 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         } else {
             getEthUSD().then((response) => {
                 setEthUsd(response.data.data);
+            });
+            getBitcloutUSD().then((response) => {
+                setCloutUsd(response.data.data);
+                console.log(response.data.data);
             });
         }
     }, [isOpen]);
@@ -249,6 +254,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                         setLimitPrice={setLimitPrice}
                                         totalUsd={totalUsd ? totalUsd : 0}
                                         ethUsd={ethUsd ? ethUsd : 0}
+                                        cloutUsd={cloutUsd ? cloutUsd : 0}
                                         advanced={advanced}
                                         setAdvanced={setAdvanced}
                                     />
@@ -265,6 +271,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                         setLimitPrice={setLimitPrice}
                                         totalUsd={totalUsd ? totalUsd : 0}
                                         ethUsd={ethUsd ? ethUsd : 0}
+                                        cloutUsd={cloutUsd ? cloutUsd : 0}
                                         advanced={advanced}
                                         setAdvanced={setAdvanced}
                                     />

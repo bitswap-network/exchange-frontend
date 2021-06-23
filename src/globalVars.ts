@@ -10,6 +10,7 @@ export const etherscanPrefix = isTest ? "kovan." : "";
 export const BITCLOUT = "CLOUT";
 export const ETHER = "ETH";
 
+export const UNVERIFIED_MAX_USD_LIMIT = 2000;
 export const MAX_LIMIT = 1000;
 export const MIN_LIMIT = 0.01;
 
