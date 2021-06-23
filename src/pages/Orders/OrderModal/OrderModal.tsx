@@ -44,6 +44,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     const [balanceError, setBalanceError] = useState<string | null>(null);
     const [totalUsd, setTotalUsd] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
+    const [advanced, setAdvanced] = useState<boolean>(false);
 
     const marketBuyText = "Market Buy: Instantly buy $" + globalVars.BITCLOUT + " at the best market price.";
     const marketSellText = "Market Sell: Instantly sell $" + globalVars.BITCLOUT + " at the best market price.";
@@ -79,6 +80,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setOrderQuantity("1");
         setLimitPrice("101");
         setOrderSide("buy");
+        setAdvanced(false);
     };
 
     useEffect(() => {
@@ -212,11 +214,11 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                         <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
                             Create Order
                         </Text>
-                        <Text color="gray.500" fontSize="sm" mb="4">
+                        {/* <Text color="gray.500" fontSize="sm" mb="4">
                             Place a new order to buy or sell BitClout!
-                        </Text>
+                        </Text> */}
                         <Tabs
-                            variant="enclosed-colored"
+                            variant="enclosed"
                             colorScheme="messenger"
                             mt="0.5em"
                             size="md"
@@ -225,7 +227,6 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                             isFitted
                             isLazy
                             lazyBehavior="keepMounted"
-                            boxShadow="md"
                         >
                             <TabList background="transparent">
                                 <Tab fontWeight="bold" fontSize="xl">
@@ -248,6 +249,8 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                         setLimitPrice={setLimitPrice}
                                         totalUsd={totalUsd ? totalUsd : 0}
                                         ethUsd={ethUsd ? ethUsd : 0}
+                                        advanced={advanced}
+                                        setAdvanced={setAdvanced}
                                     />
                                 </TabPanel>
                                 <TabPanel>
@@ -262,6 +265,8 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                         setLimitPrice={setLimitPrice}
                                         totalUsd={totalUsd ? totalUsd : 0}
                                         ethUsd={ethUsd ? ethUsd : 0}
+                                        advanced={advanced}
+                                        setAdvanced={setAdvanced}
                                     />
                                 </TabPanel>
                             </TabPanels>
@@ -282,12 +287,12 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                             />
                         </Flex>
                         {balanceError && (
-                            <Text color="red.400" fontSize="md" fontWeight="400" w="full" textAlign="center" mb="4">
+                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
                                 {balanceError}
                             </Text>
                         )}
                         {validateError && (
-                            <Text color="red.400" fontSize="md" fontWeight="400" w="full" textAlign="center" mb="4">
+                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
                                 {validateError}
                             </Text>
                         )}
