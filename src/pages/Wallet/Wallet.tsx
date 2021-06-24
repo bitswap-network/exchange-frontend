@@ -32,18 +32,12 @@ export function Wallet(): React.ReactElement {
     const [transactions, setTransactions] = useState<TransactionSchema[]>([]);
     const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null);
     const [BCLT, setBCLT] = useState({
-        imageUri: "./bitcloutLogo.png",
-        currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
         usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
-        publicKey: user?.bitclout.publicKey,
     });
     const [ETH, setETH] = useState({
-        imageUri: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
-        currency: globalVars.ETHER,
         amount: user?.balance.ether,
         usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
-        publicKey: "",
     });
     const { isOpen: isOpenTransactionModal, onOpen: onOpenTransactionModal, onClose: onCloseTransactionModal } = useDisclosure();
 
@@ -79,18 +73,12 @@ export function Wallet(): React.ReactElement {
             });
         }
         setBCLT({
-            imageUri: "./bitcloutLogo.png",
-            currency: globalVars.BITCLOUT,
             amount: user?.balance.bitclout,
             usdValue: cloutUsd ? cloutUsd * user?.balance.bitclout : null,
-            publicKey: user?.bitclout.publicKey,
         });
         setETH({
-            imageUri: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
-            currency: globalVars.ETHER,
             amount: user?.balance.ether,
             usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
-            publicKey: "",
         });
     }, [user, ethUsd, cloutUsd]);
     //make it into an est. gas fees field
@@ -209,8 +197,8 @@ export function Wallet(): React.ReactElement {
                                 <Box pb="4" onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
                                     <CryptoCard
                                         active={selectedCurrency.type == globalVars.BITCLOUT}
-                                        imageUrl={BCLT.imageUri}
-                                        currency={BCLT.currency}
+                                        imageUrl={globalVars.BITCLOUT_LOGO}
+                                        currency={globalVars.BITCLOUT}
                                         amount={BCLT.amount}
                                         border={true}
                                     />
@@ -218,8 +206,8 @@ export function Wallet(): React.ReactElement {
                                 <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="full" maxW="sm">
                                     <CryptoCard
                                         active={selectedCurrency.type == globalVars.ETHER}
-                                        imageUrl={ETH.imageUri}
-                                        currency={ETH.currency}
+                                        imageUrl={globalVars.ETHER_LOGO}
+                                        currency={globalVars.ETHER}
                                         amount={ETH.amount}
                                         border={true}
                                     />
@@ -236,8 +224,8 @@ export function Wallet(): React.ReactElement {
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
-                                        imageUrl={BCLT.imageUri}
-                                        currency={BCLT.currency}
+                                        imageUrl={globalVars.BITCLOUT_LOGO}
+                                        currency={globalVars.BITCLOUT}
                                         amount={BCLT.amount}
                                         usdValue={BCLT.usdValue ? BCLT.usdValue : 0}
                                     />
@@ -245,8 +233,8 @@ export function Wallet(): React.ReactElement {
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
                                         openDepositModal={onOpenDepositModal}
-                                        imageUrl={ETH.imageUri}
-                                        currency={ETH.currency}
+                                        imageUrl={globalVars.ETHER_LOGO}
+                                        currency={globalVars.ETHER}
                                         amount={ETH.amount}
                                         usdValue={ETH.usdValue ? ETH.usdValue : 0}
                                     />

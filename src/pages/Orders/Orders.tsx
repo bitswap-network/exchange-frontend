@@ -47,22 +47,20 @@ export function Orders(): React.ReactElement {
 
     const { orders, ordersIsLoading, ordersIsError } = useOrders(token);
     const { user, userIsLoading, userIsError } = useUser(token);
-    const [ethUsd, setEthUsd] = useState<number | null>(null);
 
     const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook();
     const [marketBuy, setMarketBuy] = useState<number | null>(null);
     const [marketSell, setMarketSell] = useState<number | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const BCLT = {
-        imageUri: "./bitcloutLogo.png",
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
-        publicKey: user?.bitclout.publicKey,
+    };
+    const ETH = {
+        currency: globalVars.ETHER,
+        amount: user?.balance.ether,
     };
     useEffect(() => {
-        getEthUSD().then((response) => {
-            setEthUsd(response.data.data);
-        });
         getMarketPrice(0.05, "buy").then((response) => {
             setMarketBuy(response.data.price * 20);
         });
@@ -70,14 +68,6 @@ export function Orders(): React.ReactElement {
             setMarketSell(response.data.price * 20);
         });
     }, []);
-
-    const ETH = {
-        imageUri: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
-        currency: globalVars.ETHER,
-        amount: user?.balance.ether,
-        usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
-        publicKey: "",
-    };
 
     useEffect(() => {
         if (orderModalOpenOnLoad) {
@@ -145,10 +135,17 @@ export function Orders(): React.ReactElement {
                     </Flex>
                     <Flex flex="0.25" flexDir="column">
                         <Box pb="4" w="full">
-                            <CryptoCard size="xs" active={true} border={false} imageUrl={BCLT.imageUri} currency={BCLT.currency} amount={BCLT.amount} />
+                            <CryptoCard
+                                size="xs"
+                                active={true}
+                                border={false}
+                                imageUrl={globalVars.BITCLOUT_LOGO}
+                                currency={BCLT.currency}
+                                amount={BCLT.amount}
+                            />
                         </Box>
                         <Box w="full" mb="4">
-                            <CryptoCard size="xs" active={true} border={false} imageUrl={ETH.imageUri} currency={ETH.currency} amount={ETH.amount} />
+                            <CryptoCard size="xs" active={true} border={false} imageUrl={globalVars.ETHER_LOGO} currency={ETH.currency} amount={ETH.amount} />
                         </Box>
 
                         <Box bg="white" w="full" borderRadius="8" boxShadow="xs" p="6" alignSelf="flex-start">

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {useEffect, useRef} from "react";
 
 export const isTest = process.env.REACT_APP_ENVIRONMENT === "production" ? false : true;
 
@@ -11,6 +11,9 @@ export const BITCLOUT = "CLOUT";
 export const ETHER = "ETH";
 
 export const UNVERIFIED_MAX_USD_LIMIT = 2000;
+export const BITCLOUT_LOGO = "./bitcloutLogo.png";
+export const ETHER_LOGO = "./etherLogo.png";
+
 export const MAX_LIMIT = 1000;
 export const MIN_LIMIT = 0.01;
 
