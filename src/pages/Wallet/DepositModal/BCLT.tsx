@@ -136,7 +136,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Confirm Deposit
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        The following amount will be transfered to your Bitclout account
+                        You must approve transaction in the bitclout deposit window for the following funds to be transferred to your account.
                     </Text>
                     <Text color="gray.700" fontSize="md" fontWeight="400" mt="4" mb="2">
                         <b>Total Amount: </b>

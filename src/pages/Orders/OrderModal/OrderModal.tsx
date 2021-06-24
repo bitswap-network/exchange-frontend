@@ -96,7 +96,6 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     };
 
     const insufficientVolumeHandler = () => {
-        console.log(orderQuantity)
         if (isNaN(parseFloat(orderQuantity))) {
             setMarketError("");
         } else {
