@@ -78,7 +78,9 @@ export function SellTab({
                 <NumberInput
                     min={globalVars.MIN_LIMIT}
                     value={orderQuantity}
-                    onChange={(valueString) => setOrderQuantity(globalVars.parseNum(valueString))}
+                    onChange={(valueString) => {
+                        setOrderQuantity(globalVars.parseNum(valueString));
+                    }}
                     step={0.1}
                     precision={2}
                     max={

@@ -36,7 +36,7 @@ interface DepositModalProps {
 export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }: DepositModalProps) => {
     const user = useRecoilValue(userState);
     const identityUserData = useRecoilValue(identityUsers);
-    const [depositValue, setDepositValue] = useState<string>("0.000000");
+    const [depositValue, setDepositValue] = useState<string>("0");
     const [preflight, setPreflight] = useState<TransactionAPIInterface | null>(null);
     const [page, setPage] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
@@ -84,6 +84,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
 
     const valueHandler = (valueString: string) => {
         setDepositValue(valueString.replace(/^\$/, ""));
+        setPreflightError(null);
     };
 
     const renderHandler = () => {
@@ -183,7 +184,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             </Text>
                         </Tooltip>
                     </Flex>
-                    <NumberInput mt="4" type="text" placeholder="0.0" value={depositValue} onChange={valueHandler} precision={4} step={0.1} min={0} max={500}>
+                    <NumberInput mt="4" type="text" placeholder="0.0" value={depositValue} onChange={valueHandler} step={0.1} min={0} max={500}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />

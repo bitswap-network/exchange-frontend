@@ -84,32 +84,45 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setAdvanced(false);
     };
 
+    const insufficientBalanceHandler = () => {
+        if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
+            setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`);
+        } else if (ethUsd && orderSide === "buy" && +(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2) / ethUsd > user.balance.ether) {
+            setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`);
+        } else {
+            setBalanceError(null);
+            setValidateError(null);
+        }
+    };
+
+    const insufficientVolumeHandler = () => {
+        console.log(orderQuantity)
+        if (isNaN(parseFloat(orderQuantity))) {
+            setMarketError("");
+        } else {
+            getMarketPrice(parseFloat(orderQuantity), orderSide)
+                .then((response) => {
+                    setMarketError(null);
+                    setTotalUsd(+response.data.price.toFixed(2));
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setMarketError(`Insufficient order volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`);
+                });
+        }
+    };
+
     useEffect(() => {
         if (isOpen && user) {
             if (orderType === "market") {
                 orderSide == "sell" ? setTooltipText(marketSellText) : setTooltipText(marketBuyText);
-                getMarketPrice(parseFloat(orderQuantity), orderSide)
-                    .then((response) => {
-                        setMarketError(null);
-                        setTotalUsd(+response.data.price.toFixed(2));
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        setMarketError(`Insufficient order volume to process a market ${orderSide} order for ${orderQuantity} ${globalVars.BITCLOUT}.`);
-                    });
+                insufficientVolumeHandler();
             } else {
                 setMarketError(null);
                 orderSide == "sell" ? setTooltipText(limitSellText) : setTooltipText(limitBuyText);
                 setTotalUsd(+(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2));
             }
-            if (orderSide === "sell" && orderQuantity > user.balance.bitclout) {
-                setBalanceError(`Insufficient ${globalVars.BITCLOUT} balance to place this order.`);
-            } else if (ethUsd && orderSide === "buy" && +(parseFloat(orderQuantity) * parseFloat(limitPrice)).toFixed(2) / ethUsd > user.balance.ether) {
-                setBalanceError(`Insufficient ${globalVars.ETHER} balance to place this order.`);
-            } else {
-                setBalanceError(null);
-                setValidateError(null);
-            }
+            insufficientBalanceHandler();
         }
     }, [orderQuantity, orderSide, orderType, limitPrice, user, isOpen]);
 

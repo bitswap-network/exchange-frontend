@@ -157,17 +157,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure
                             Max
                         </Button>
                     </Text>
-                    <NumberInput
-                        mt="4"
-                        type="text"
-                        placeholder="0.0"
-                        value={withdrawValue}
-                        onChange={valueHandler}
-                        precision={4}
-                        step={0.1}
-                        min={0}
-                        max={maxWithdraw}
-                    >
+                    <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0} max={maxWithdraw}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
