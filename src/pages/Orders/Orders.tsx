@@ -79,7 +79,7 @@ export function Orders(): React.ReactElement {
     return (
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
-            <VStack spacing={6}>
+            <VStack spacing={8}>
                 <Flex w="full" flexdir="row" pl="4">
                     <Heading> Your Orders </Heading>
                     <Spacer />

@@ -5,7 +5,7 @@ const Button = {
         default: {},
     },
     defaultProps: {
-        variant: "default",
+        variant: "ghost",
     },
 };
 

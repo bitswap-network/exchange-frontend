@@ -1,7 +1,6 @@
 import React, { ReactElement, useState } from "react";
 import { VStack, Text, Input, Flex, Checkbox, Link, HStack } from "@chakra-ui/react";
 import { HiExclamationCircle } from "react-icons/hi";
-
 import { BlueButton } from "../../components/BlueButton/BlueButton";
 import { launch, jwt } from "../../services/identity";
 import { login, fetchBitcloutProfile, register } from "../../services/auth";

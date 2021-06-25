@@ -39,8 +39,7 @@ export function Home(): React.ReactElement {
         });
     });
     return (
-        // <>
-        <VStack spacing={8} marginTop="40px">
+        <VStack spacing={8}>
             <Flex flexDirection="row" w="100%">
                 <Flex flexDirection="column" w="50%" padding={4}>
                     <Heading>BitSwap</Heading>
@@ -121,6 +120,5 @@ export function Home(): React.ReactElement {
                 </Flex>
             </Flex>
         </VStack>
-        // </>
     );
 }

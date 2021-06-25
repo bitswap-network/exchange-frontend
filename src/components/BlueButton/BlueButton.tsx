@@ -30,7 +30,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, width, loadi
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
         >
-            <Text fontSize="15px">{text}</Text>
+            <Text>{text}</Text>
         </Button>
     ) : (
         <Button
@@ -41,7 +41,7 @@ export const BlueButton: React.FC<BlueButtonProps> = ({ text, icon, width, loadi
             rightIcon={icon && !loading ? <HiArrowRight /> : undefined}
             {...rest}
         >
-            <Text fontSize="15px">{text}</Text>
+            <Text>{text}</Text>
         </Button>
     );
 };
