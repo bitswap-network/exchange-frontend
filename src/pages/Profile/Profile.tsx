@@ -17,6 +17,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    VStack,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../store";
@@ -153,21 +154,23 @@ export function Profile(): React.ReactElement {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <Flex minH="100%" align="center" justify="center" flexDirection="column">
-                <Image src={userPfp} w="80px" h="80px" borderRadius="80px" />
-                <Link
-                    isExternal
-                    href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
-                    color="black"
-                    fontWeight="700"
-                    fontSize="20"
-                    mt="3"
-                >
-                    @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
-                </Link>
-                <Text color="gray.700" fontWeight="400" fontSize="16" mt="2">
-                    {user.bitclout.bio}
-                </Text>
+            <VStack align="center" spacing={8}>
+                <VStack>
+                    <Image src={userPfp} w="80px" fit="cover" borderRadius="80px" />
+                    <Link
+                        isExternal
+                        href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
+                        color="black"
+                        fontWeight="700"
+                        fontSize="20"
+                        mt="3"
+                    >
+                        @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
+                    </Link>
+                    <Text color="gray.700" fontWeight="400" fontSize="16" mt="2">
+                        {user.bitclout.bio}
+                    </Text>
+                </VStack>
                 <Flex
                     mt="20px"
                     w={{ sm: "80%", md: "650px" }}
@@ -353,23 +356,7 @@ export function Profile(): React.ReactElement {
                         </Flex>
                     )}
                 </Flex>
-
-                <Flex mt="50px" w={{ sm: "80%", md: "600px" }} flexDir="column" alignItems="center">
-                    <Button
-                        bg="red.500"
-                        w="125px"
-                        p="10px 0"
-                        color="white"
-                        fontWeight="600"
-                        fontSize="16"
-                        borderRadius="6"
-                        boxShadow="0px 2px 6px 0px #00000030"
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </Button>
-                </Flex>
-            </Flex>
+            </VStack>
         </>
     ) : null;
 

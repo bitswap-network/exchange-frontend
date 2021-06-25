@@ -42,13 +42,13 @@ export const App = (): ReactElement => {
                 <ChakraProvider theme={bitswapTheme} resetCSS>
                     {/* <CSSReset /> */}
                     <BrowserRouter>
-                        <Grid h="100vh" templateRows={"64px 1fr"}>
+                        <Grid templateRows={"64px 2fr"}>
                             {/* TODO: implement auth to set loggedOut */}
-                            <Suspense fallback={DefaultNavBar(true)}>
+                            <Suspense fallback={DefaultNavBar()}>
                                 <NavBar />
                             </Suspense>
 
-                            <Box p={8} bg={"background.primary"}>
+                            <Box p={8}>
                                 <Suspense fallback={<></>}>
                                     <Container maxW="container.xl">
                                         <Switch>

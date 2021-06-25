@@ -17,7 +17,7 @@ export function Table<T extends Record<string, unknown>>({ data, columns, type }
         <>
             {isOrderTable && <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />}
             <ChakraTable {...getTableProps()} size="sm" variant="simple" borderRadius="md" bgColor="white">
-                <Thead position="sticky" top="0" zIndex="100" bgColor="white" minH={isOrderTable ? "100" : "inherit"}>
+                <Thead position="sticky" top="0" bgColor="white" minH={isOrderTable ? "100" : "inherit"}>
                     {headerGroups.map((headerGroup) => (
                         <Tr {...headerGroup.getHeaderGroupProps()} key={Math.random().toString(4)}>
                             {headerGroup.headers.map((column) => (

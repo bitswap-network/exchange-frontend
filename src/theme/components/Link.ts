@@ -3,10 +3,7 @@ const Link = {
         default: {
             _hover: {
                 textDecoration: "none",
-                bg: "background.100",
             },
-            color: "black",
-            rounded: "md",
         },
     },
     defaultProps: {
