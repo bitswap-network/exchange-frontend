@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi";
+import { MdModeEdit } from "react-icons/md";
+
 import { Client } from "persona";
 
 import {
@@ -18,6 +20,8 @@ import {
     ModalBody,
     ModalCloseButton,
     VStack,
+    HStack,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../store";
@@ -142,281 +146,233 @@ export function Profile(): React.ReactElement {
     };
     const profilePage = user ? (
         <>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Verification Email Sent</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
+            <SimpleGrid columns={2} bgColor="white" spacing={10} mt="6">
+                <Flex height="full" bgColor="white">
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                            <ModalHeader>Verification Email Sent</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
 
-                    <ModalFooter>
-                        <BlueButton text={`   Close   `} onClick={onClose} mr="3" />
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-            <VStack align="center" spacing={8}>
-                <VStack>
-                    <Image src={userPfp} w="80px" fit="cover" borderRadius="80px" />
-                    <Link
-                        isExternal
-                        href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
-                        color="black"
-                        fontWeight="700"
-                        fontSize="20"
-                        mt="3"
-                    >
-                        @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
-                    </Link>
-                    <Text color="gray.700" fontWeight="400" fontSize="16" mt="2">
-                        {user.bitclout.bio}
-                    </Text>
-                </VStack>
-                <Flex
-                    mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
-                    p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
-                    borderRadius="10"
-                    boxShadow="1px 4px 6px 0px #00000040"
-                    background="whiteAlpha.700"
-                >
-                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
-                        <Text color="#44423D" fontWeight="700" fontSize="18">
-                            Name{" "}
-                        </Text>
-
-                        {!nameEdit ? (
-                            <Text color="#44423D" fontWeight="500" fontSize="md" mt="12px">
-                                {user.name !== "" ? user.name : "Please add your name"}
-                            </Text>
-                        ) : (
-                            <Input
-                                isInvalid={userName.length <= 1}
-                                errorBorderColor="red.300"
-                                variant="outline"
-                                size="md"
-                                p="5"
-                                mt="3"
-                                value={userName}
-                                onChange={nameInputHandler}
-                            />
-                        )}
-                    </Flex>
-                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
-                        {!nameEdit ? (
-                            <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} onClick={() => setNameEdit(true)} />
-                        ) : (
-                            <>
-                                <Button
-                                    bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
-                                    p="10px 0"
-                                    color="white"
-                                    fontWeight="600"
-                                    fontSize="16"
-                                    borderRadius="6"
-                                    boxShadow="0px 2px 6px 0px #00000030"
-                                    onClick={() => setNameEdit(false)}
+                            <ModalFooter>
+                                <BlueButton text={`   Close   `} onClick={onClose} mr="3" />
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                    <VStack align="self-start" spacing={8}>
+                        <HStack align="start">
+                            <Image src={userPfp} w="80px" fit="cover" alignSelf="center" borderRadius="80px" mr="4" />
+                            <VStack align="start" spacing="0" alignSelf="center">
+                                <Link
+                                    isExternal
+                                    href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
+                                    color="black"
+                                    fontWeight="700"
+                                    fontSize="20"
                                 >
-                                    Cancel
-                                </Button>
-                                <BlueButton
-                                    mt="4"
-                                    isDisabled={userName.length <= 1}
-                                    text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
-                                    onClick={updateNameFunc}
-                                    loading={loading}
-                                />
-                            </>
-                        )}
-                    </Flex>
-                </Flex>
-                <Flex
-                    mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
-                    p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
-                    borderRadius="10"
-                    boxShadow="1px 4px 6px 0px #00000040"
-                    background="whiteAlpha.700"
-                >
-                    <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
-                        <Text color="#44423D" fontWeight="700" fontSize="18">
-                            Email{" "}
-                            {user.verification.email ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
-                            ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
-                            )}
-                        </Text>
-                        {user.verification.email ? (
-                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
-                                Your email is verified.
-                                <br />
-                                Important updates will be sent to this address.
-                            </Text>
-                        ) : (
-                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
-                                Check your inbox for verification, or resend verification.
-                                <br />
-                                Important updates will be sent to this address.
-                            </Text>
-                        )}
-
-                        {!emailEdit ? (
-                            <Text color="#44423D" fontWeight="500" fontSize="md" mt="12px">
-                                {user.email}
-                            </Text>
-                        ) : (
-                            <Input
-                                isInvalid={emailErr}
-                                errorBorderColor="red.300"
-                                variant="outline"
-                                size="md"
-                                p="5"
-                                mt="3"
-                                value={userEmail}
-                                onChange={emailInputHandler}
-                            />
-                        )}
-                    </Flex>
-                    <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
-                        {!emailEdit ? (
-                            <>
-                                <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} onClick={() => setEmailEdit(true)} />
-                                {user.verification.email ? null : (
-                                    <BlueButton text={`   Resend Verification   `} width={{ sm: "45%", md: "90%" }} onClick={resendEmailVerification} />
+                                    @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
+                                </Link>
+                                {!nameEdit ? (
+                                    <Text color="gray.700" fontWeight="600" fontSize="16" mt="1" display="inline">
+                                        {user.name !== "" ? user.name : "Please add your name"}{" "}
+                                        <MdModeEdit style={{ display: "inline", marginTop: -4 }} onClick={() => setNameEdit(true)} />
+                                    </Text>
+                                ) : (
+                                    <HStack spacing="1">
+                                        <Input
+                                            isInvalid={userName.length <= 1}
+                                            errorBorderColor="red.300"
+                                            variant="outline"
+                                            size="sm"
+                                            p="2"
+                                            value={userName}
+                                            onChange={nameInputHandler}
+                                        />
+                                        <Button
+                                            bg="gray.400"
+                                            w={250}
+                                            p="10px 0"
+                                            color="white"
+                                            fontWeight="600"
+                                            fontSize="sm"
+                                            borderRadius="6"
+                                            boxShadow="0px 2px 6px 0px #00000030"
+                                            h="35px"
+                                            onClick={() => setNameEdit(false)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <BlueButton
+                                            isDisabled={userName.length <= 1}
+                                            text={`Update`}
+                                            w={250}
+                                            fontSize="sm"
+                                            h="35px"
+                                            onClick={updateNameFunc}
+                                            loading={loading}
+                                        />
+                                    </HStack>
                                 )}
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    bg="gray.400"
-                                    w={{ sm: "45%", md: "90%" }}
-                                    p="10px 0"
-                                    color="white"
-                                    fontWeight="600"
-                                    fontSize="16"
-                                    borderRadius="6"
-                                    boxShadow="0px 2px 6px 0px #00000030"
-                                    onClick={() => setEmailEdit(false)}
-                                >
-                                    Cancel
-                                </Button>
-                                <BlueButton
-                                    isDisabled={emailErr}
-                                    text={`   Update   `}
-                                    width={{ sm: "45%", md: "90%" }}
-                                    onClick={updateEmailFunc}
-                                    loading={loading}
-                                />
-                            </>
-                        )}
-                    </Flex>
-                </Flex>
-                <Flex
-                    mt="20px"
-                    w={{ sm: "80%", md: "650px" }}
-                    p="20px"
-                    flexDir={{ sm: "column", md: "row" }}
-                    borderRadius="10"
-                    boxShadow="1px 4px 6px 0px #00000040"
-                    background="whiteAlpha.700"
-                >
-                    <Flex flex={user.verification.personaVerified ? "1" : "0.65"} align="flex-start" justify="center" flexDir="column">
-                        <Text color="#44423D" fontWeight="700" fontSize="18">
-                            Identity Verification{" "}
-                            {user.verification.personaVerified ? (
-                                <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
-                            ) : (
-                                <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
-                            )}
-                        </Text>
-                        {user.verification.personaVerified ? (
-                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
-                                Your identity is verified - enjoy full access to the platform.
-                            </Text>
-                        ) : (
-                            <Text color="#44423D" fontWeight="300" fontSize="15" mt="12px">
-                                Complete your identity verification to unlock full access.
-                            </Text>
-                        )}
-                    </Flex>
-                    {!user.verification.personaVerified && (
-                        <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
-                            {startedVerification ? (
-                                <BlueButton
-                                    onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
-                                    text={`  Resume Verification   `}
-                                />
-                            ) : (
-                                <BlueButton onClick={createClient} text={`  Start Verification   `} />
+                                <Text color="gray.700" fontWeight="400" fontSize="16" mt="1">
+                                    {user.bitclout.bio}
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <Flex
+                            mt="20px"
+                            w={{ sm: "80%", md: "550px" }}
+                            p="20px"
+                            flexDir={{ sm: "column", md: "row" }}
+                            borderRadius="10"
+                            boxShadow="1px 4px 6px 0px #00000040"
+                            background="whiteAlpha.700"
+                        >
+                            <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
+                                <Text color="#44423D" fontWeight="700" fontSize="18">
+                                    Tier <HiBadgeCheck style={{ display: "inline" }} color="#FFC634" size="20" />
+                                </Text>
+                                <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
+                                    You are a <span style={{ fontWeight: 600 }}>Gold Tier</span> BitSwap user.
+                                    <br />
+                                    Enjoy unlimited trading on BitSwap!
+                                </Text>
+                            </Flex>
+                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                                <BlueButton text={`   View   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setNameEdit(true)} />
+                            </Flex>
+                        </Flex>
+                        <Flex
+                            mt="20px"
+                            w={{ sm: "80%", md: "550px" }}
+                            p="20px"
+                            flexDir={{ sm: "column", md: "row" }}
+                            borderRadius="10"
+                            boxShadow="1px 4px 6px 0px #00000040"
+                            background="whiteAlpha.700"
+                        >
+                            <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
+                                <Text color="#44423D" fontWeight="700" fontSize="18">
+                                    Email{" "}
+                                    {user.verification.email ? (
+                                        <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                    ) : (
+                                        <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                    )}
+                                </Text>
+                                {user.verification.email ? (
+                                    <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
+                                        Your email is verified.
+                                        <br />
+                                        Important updates will be sent to this address.
+                                    </Text>
+                                ) : (
+                                    <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
+                                        Check your inbox for verification.
+                                        <br />
+                                        Important updates will be sent to this address.
+                                    </Text>
+                                )}
+
+                                {!emailEdit ? (
+                                    <Text color="#44423D" fontWeight="500" fontSize="sm" mt="12px">
+                                        {user.email}
+                                    </Text>
+                                ) : (
+                                    <Input
+                                        isInvalid={emailErr}
+                                        errorBorderColor="red.300"
+                                        variant="outline"
+                                        size="md"
+                                        p="5"
+                                        mt="3"
+                                        value={userEmail}
+                                        onChange={emailInputHandler}
+                                    />
+                                )}
+                            </Flex>
+                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                                {!emailEdit ? (
+                                    <>
+                                        <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
+                                        {user.verification.email ? null : (
+                                            <BlueButton text={`   Resend Verification   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={resendEmailVerification} />
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button
+                                            bg="gray.400"
+                                            w={{ sm: "45%", md: "90%" }}
+                                            p="10px 0"
+                                            color="white"
+                                            fontWeight="600"
+                                            fontSize="sm"
+                                            borderRadius="6"
+                                            boxShadow="0px 2px 6px 0px #00000030"
+                                            onClick={() => setEmailEdit(false)}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <BlueButton
+                                            isDisabled={emailErr}
+                                            text={`   Update   `}
+                                            width={{ sm: "45%", md: "90%" }}
+                                            fontSize="sm"
+                                            onClick={updateEmailFunc}
+                                            loading={loading}
+                                        />
+                                    </>
+                                )}
+                            </Flex>
+                        </Flex>
+                        <Flex
+                            mt="20px"
+                            w={{ sm: "80%", md: "550px" }}
+                            p="20px"
+                            flexDir={{ sm: "column", md: "row" }}
+                            borderRadius="10"
+                            boxShadow="1px 4px 6px 0px #00000040"
+                            background="whiteAlpha.700"
+                        >
+                            <Flex flex={user.verification.personaVerified ? "1" : "0.65"} align="flex-start" justify="center" flexDir="column">
+                                <Text color="#44423D" fontWeight="700" fontSize="18">
+                                    Identity Verification{" "}
+                                    {user.verification.personaVerified ? (
+                                        <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
+                                    ) : (
+                                        <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
+                                    )}
+                                </Text>
+                                {user.verification.personaVerified ? (
+                                    <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
+                                        Your identity is verified.<br/>enjoy full access to the platform.
+                                    </Text>
+                                ) : (
+                                    <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
+                                        Complete your identity verification to unlock full access.
+                                    </Text>
+                                )}
+                            </Flex>
+                            {!user.verification.personaVerified && (
+                                <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                                    {startedVerification ? (
+                                        <BlueButton
+                                            onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
+                                            fontSize="sm"
+                                            text={`  Resume Verification   `}
+                                        />
+                                    ) : (
+                                        <BlueButton fontSize="sm" onClick={createClient} text={`  Start Verification   `} />
+                                    )}
+                                </Flex>
                             )}
                         </Flex>
-                    )}
+                    </VStack>
                 </Flex>
-            </VStack>
+            </SimpleGrid>
         </>
     ) : null;
 
-    // const VerifyBitclout = (
-    //     <Flex h="70vh" alignItems="center" justifyContent="center">
-    //         <VStack spacing={8} align="flex-start" maxW="450px">
-    //             <Button color="gray.600" fontWeight="500" fontSize="16" p="0" onClick={() => setCurrentPage("profile")}>
-    //                 <HiChevronLeft style={{ display: "inline" }} color="gray.600" size="24" /> Back
-    //             </Button>
-    //             <Text fontSize="xx-large" fontWeight="bold">
-    //                 BitClout Verification
-    //             </Text>
-    //             <Text fontSize="md" color="gray.600">
-    //                 Please post the following on BitClout with your verification code (given below).
-    //             </Text>
-    //             <InputGroup size="md">
-    //                 <Input
-    //                     pr="4.5rem"
-    //                     ref={(input) => {
-    //                         BitcloutCode = input
-    //                     }}
-    //                     type="text"
-    //                     isReadOnly={true}
-    //                     value={user.verification.bitcloutString}
-    //                 />
-    //                 <InputRightElement width="4.5rem">
-    //                     <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
-    //                         {textCopied}
-    //                     </Button>
-    //                 </InputRightElement>
-    //             </InputGroup>
-    //             <Image src="./bitclout_verification.png" />
-    //             <Flex w="full" align="center" flexDir="column">
-    //                 <Text fontSize="md" color="red.300" mb="4">
-    //                     {verificationErrText}
-    //                 </Text>
-    //                 <BlueButton
-    //                     text={`   Verify   `}
-    //                     width="350px"
-    //                     onClick={checkBitcloutVerification}
-    //                     loading={loading}
-    //                 />
-    //             </Flex>
-    //         </VStack>
-    //     </Flex>
-    // )
-
-    // const VerificationComplete = (
-    //     <Flex h="70vh" alignItems="center" justifyContent="center">
-    //         <VStack spacing={8} align="flex-start" maxW="450px">
-    //             <Text fontSize="xx-large" fontWeight="bold">
-    //                 Verification Complete
-    //             </Text>
-    //             <Text fontSize="md" color="gray.600">
-    //                 Welcome to BitSwap! Click the button below to return to your account.
-    //             </Text>
-    //             <BlueButton text={`   Return To Profile   `} width="350px" onClick={() => setCurrentPage("profile")} />
-    //         </VStack>
-    //     </Flex>
-    // )
-
-    return currentPage == "profile" ? profilePage : currentPage == "verify" ? VerifyBitclout : VerificationComplete;
+    return profilePage;
 }
