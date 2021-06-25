@@ -80,13 +80,13 @@ export function Orders(): React.ReactElement {
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
             <VStack spacing={8}>
-                <Flex w="full" flexdir="row" pl="4">
-                    <Heading> Your Orders </Heading>
-                    <Spacer />
-                    <BlueButton text="New Order" onClick={onOpen} />
+                <Flex w="full" flexDirection={{ base: "column", md: "row" }} pl="4">
+                    <Heading mb="2"> Your Orders </Heading>
+                    <Spacer display={{ base: "none", md: "block" }} />
+                    <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} />
                 </Flex>
-                <Flex w="full" dir="row">
-                    <Flex flex="0.75" maxW="75%">
+                <Flex w="full" flexDirection={{ base: "column", md: "row" }}>
+                    <Flex flex={{ base: "1", md: "0.75" }}>
                         <Tabs w="full" variant="order" h="70vh">
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
@@ -133,7 +133,7 @@ export function Orders(): React.ReactElement {
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex="0.25" flexDir="column">
+                    <Flex flex={{ base: "1", md: "0.25" }} flexDir="column">
                         <Box pb="4" w="full">
                             <CryptoCard
                                 size="xs"

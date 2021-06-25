@@ -1,21 +1,21 @@
-import React, {ReactElement, Suspense} from "react";
-import {Box, Container, ChakraProvider, Grid} from "@chakra-ui/react";
-import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
-import {RecoilRoot} from "recoil";
+import React, { ReactElement, Suspense } from "react";
+import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import {bitswapTheme} from "./theme";
+import { bitswapTheme } from "./theme";
 
-import {Home} from "./pages/Home";
-import {Login} from "./pages/Login";
-import {Wallet} from "./pages/Wallet";
-import {Orders} from "./pages/Orders";
-import {Profile} from "./pages/Profile";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Wallet } from "./pages/Wallet";
+import { Orders } from "./pages/Orders";
+import { Profile } from "./pages/Profile";
 
-import {DefaultNavBar, NavBar} from "./components/NavBar";
-import {PrivateRoute} from "./components/PrivateRoute";
+import { DefaultNavBar, NavBar } from "./components/NavBar";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 import * as config from "./globalVars";
-import {identityHandler} from "./services/identity";
+import { identityHandler } from "./services/identity";
 
 window.addEventListener("message", identityHandler);
 
@@ -42,13 +42,13 @@ export const App = (): ReactElement => {
                 <ChakraProvider theme={bitswapTheme} resetCSS>
                     {/* <CSSReset /> */}
                     <BrowserRouter>
-                        <Grid templateRows={"72px 2fr"}>
+                        <Grid templateRows={"74px 1fr"}>
                             {/* TODO: implement auth to set loggedOut */}
                             <Suspense fallback={DefaultNavBar()}>
                                 <NavBar />
                             </Suspense>
 
-                            <Box p={8}>
+                            <Box p={{ base: 0, md: 8, lg: 12 }}>
                                 <Suspense fallback={<></>}>
                                     <Container maxW="container.xl">
                                         <Switch>

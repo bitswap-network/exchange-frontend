@@ -26,8 +26,6 @@ import { NotifPopover } from "./components/NotifPopover";
 import { Link } from "react-router-dom";
 import { loggedInState, orderModalState, userState } from "../../store";
 import { logout } from "../../helpers/persistence";
-const LINKS = ["home", "orders", "profile"];
-// 📌 TO DO: This is just the skeleton (no links or connections)
 
 export function DefaultNavBar() {
     return (
@@ -102,6 +100,7 @@ function NavBarFunc() {
                         <VStack spacing={6} alignItems="center" mt="2">
                             <NavLink as={Link} to="/" label={"Home"} onClick={onClose} />
                             <NavLink as={Link} to="/orders" label={"Orders"} onClick={onClose} />
+                            <NavLink as={Link} to="/wallet" label={"Wallet"} />
                             <NavLink as={Link} to="/profile" label={"Account"} onClick={onClose} />
 
                             <Box
@@ -135,6 +134,7 @@ function NavBarFunc() {
                     <Logo as={Link} to="/" ml={4} mr={4} />
                     <NavLink as={Link} to="/" label={"Home"} />
                     <NavLink as={Link} to="/orders" label={"Orders"} />
+                    <NavLink as={Link} to="/wallet" label={"Wallet"} />
                     <NavLink as={Link} to="/profile" label={"Account"} />
                     <NotifPopover />
                 </HStack>
@@ -169,15 +169,6 @@ function NavBarFunc() {
                         </HStack>
                     </Box>
                 </HStack>
-                {/* {true && (
-                    // <Box pb={4} >
-                    <HStack spacing={4} display={{base: "flex", md: "none"}}>
-                        <NavLink as={Link} to="/" label={"Home"} />
-                        <NavLink as={Link} to="/orders" label={"Orders"} />
-                        <NavLink as={Link} to="/profile" label={"Account"} />
-                    </HStack>
-                    // </Box>
-                )} */}
             </Flex>
         </>
     );

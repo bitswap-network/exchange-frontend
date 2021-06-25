@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, {useEffect, useState, useMemo} from "react";
-import {Box, Skeleton, Text} from "@chakra-ui/react";
-import {ResponsiveLine} from "@nivo/line";
-import {ChartData as ChartDataInterface} from "../../interfaces/Depth";
-import {getOrderHistory} from "../../services/utility";
-import {ParentSize} from "@visx/responsive";
+import React, { useEffect, useState, useMemo } from "react";
+import { Box, Skeleton, Text } from "@chakra-ui/react";
+import { ResponsiveLine } from "@nivo/line";
+import { ChartData as ChartDataInterface } from "../../interfaces/Depth";
+import { getOrderHistory } from "../../services/utility";
+import { ParentSize } from "@visx/responsive";
 
 const graphTheme = {
     fontSize: "12px",
@@ -14,21 +14,18 @@ const graphTheme = {
         legend: {
             text: {
                 fontWeight: "bold",
-                fontSize: "13px"
-            }
-        }
-    }
+                fontSize: "13px",
+            },
+        },
+    },
 };
-
-
 
 interface ChartProps {
     ticks: number;
     dateTicks: number;
 }
 
-export const Chart: React.FC<ChartProps> = ({ticks, dateTicks}: ChartProps) => {
-
+export const Chart: React.FC<ChartProps> = ({ ticks, dateTicks }: ChartProps) => {
     interface hotData {
         timestamp: Date;
         price: number;
@@ -103,7 +100,9 @@ export const Chart: React.FC<ChartProps> = ({ticks, dateTicks}: ChartProps) => {
                                 const date = new Date(point.point.data.x).toString().split(" ");
                                 return (
                                     <Box bgColor="white" borderRadius="lg" p="2" boxShadow="lg" fontSize="x-small" textAlign="center" borderStyle="groove">
-                                        <Text fontSize="sm" color="brand.100" fontWeight="bold">{"$" + point.point.data.y}</Text>
+                                        <Text fontSize="sm" color="brand.100" fontWeight="bold">
+                                            {"$" + point.point.data.y}
+                                        </Text>
                                         <Text>{date[1] + " " + date[2] + " " + date[3]}</Text>
                                     </Box>
                                 );
@@ -120,7 +119,7 @@ export const Chart: React.FC<ChartProps> = ({ticks, dateTicks}: ChartProps) => {
                                 useUTC: false,
                                 precision: "day",
                             }}
-                            yScale={{type: "linear", min: minY, max: maxY}}
+                            yScale={{ type: "linear", min: minY, max: maxY }}
                             xFormat="time:%Y-%m-%d"
                             axisLeft={{
                                 legend: "Market Price ($USD)",
@@ -152,18 +151,18 @@ export const Chart: React.FC<ChartProps> = ({ticks, dateTicks}: ChartProps) => {
                             gridYValues={5}
                             enableArea={true}
                             areaOpacity={0.9}
-                            defs={[{
-                                id: 'themeGradient',
-                                type: 'linearGradient',
-                                colors: [
-                                    {offset: 25, color: '#407BFF', opacity: 1},
-                                    {offset: 100, color: '#FFFFFF', opacity: 0},
-                                ],
-                            }]}
-                            fill={[
-                                {match: '*', id: 'themeGradient'},
+                            defs={[
+                                {
+                                    id: "themeGradient",
+                                    type: "linearGradient",
+                                    colors: [
+                                        { offset: 25, color: "#407BFF", opacity: 1 },
+                                        { offset: 100, color: "#FFFFFF", opacity: 0 },
+                                    ],
+                                },
                             ]}
-                            colorBy={'id'}
+                            fill={[{ match: "*", id: "themeGradient" }]}
+                            colorBy={"id"}
                             lineWidth={1.5}
                         />
                     </Skeleton>
