@@ -271,8 +271,8 @@ export function Profile(): React.ReactElement {
     };
     const profilePage = user ? (
         <>
-            <SimpleGrid columns={2} bgColor="white" spacing={10} mt="6">
-                <Flex bgColor="white">
+            <SimpleGrid columns={{base:1, xl:2}} bgColor="white" spacing={10} mt="6">
+                <Flex bgColor="white" justify={{base:'center', xl:'start'}}>
                     <Modal isOpen={isEmailVerificationOpen} onClose={onEmailVerificationClose}>
                         <ModalOverlay />
                         <ModalContent>
@@ -296,7 +296,7 @@ export function Profile(): React.ReactElement {
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
-                    <VStack align="self-start" spacing={8}>
+                    <VStack spacing={8} align={{base:'center', xl:'self-start'}}>
                         <HStack align="start">
                             <Image src={userPfp} w="80px" fit="cover" alignSelf="center" borderRadius="80px" mr="4" />
                             <VStack align="start" spacing="0" alignSelf="center">
@@ -357,9 +357,9 @@ export function Profile(): React.ReactElement {
                         </HStack>
                         <Flex
                             mt="20px"
-                            w={{ sm: "80%", md: "550px" }}
+                            w={{ base: "80%", md: "550px" }}
                             p="20px"
-                            flexDir={{ sm: "column", md: "row" }}
+                            flexDir={{ base: "column", md: "row" }}
                             borderRadius="10"
                             boxShadow="1px 4px 6px 0px #00000040"
                             background="whiteAlpha.700"
@@ -374,15 +374,15 @@ export function Profile(): React.ReactElement {
                                     Enjoy unlimited trading on BitSwap!
                                 </Text>
                             </Flex>
-                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
-                                <BlueButton text={`   View   `} w={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={onTierOpen} />
+                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
+                                <BlueButton text={`   View   `} w={{ base: "45%", md: "90%" }} fontSize="sm" onClick={onTierOpen} />
                             </Flex>
                         </Flex>
                         <Flex
                             mt="20px"
-                            w={{ sm: "80%", md: "550px" }}
+                            w={{ base: "80%", md: "550px" }}
                             p="20px"
-                            flexDir={{ sm: "column", md: "row" }}
+                            flexDir={{ base: "column", md: "row" }}
                             borderRadius="10"
                             boxShadow="1px 4px 6px 0px #00000040"
                             background="whiteAlpha.700"
@@ -427,14 +427,14 @@ export function Profile(): React.ReactElement {
                                     />
                                 )}
                             </Flex>
-                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
                                 {!emailEdit ? (
                                     <>
-                                        <BlueButton text={`   Edit   `} w={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
+                                        <BlueButton text={`   Edit   `} w={{ base: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
                                         {user.verification.email ? null : (
                                             <BlueButton
                                                 text={`   Resend Verification   `}
-                                                w={{ sm: "45%", md: "90%" }}
+                                                w={{ base: "45%", md: "90%" }}
                                                 fontSize="sm"
                                                 onClick={resendEmailVerification}
                                             />
@@ -444,7 +444,7 @@ export function Profile(): React.ReactElement {
                                     <>
                                         <Button
                                             bg="gray.400"
-                                            w={{ sm: "45%", md: "90%" }}
+                                            w={{ base: "45%", md: "90%" }}
                                             p="10px 0"
                                             color="white"
                                             fontWeight="600"
@@ -458,7 +458,7 @@ export function Profile(): React.ReactElement {
                                         <BlueButton
                                             isDisabled={emailErr}
                                             text={`   Update   `}
-                                            w={{ sm: "45%", md: "90%" }}
+                                            w={{ base: "45%", md: "90%" }}
                                             fontSize="sm"
                                             onClick={updateEmailFunc}
                                             loading={loading}
@@ -469,9 +469,9 @@ export function Profile(): React.ReactElement {
                         </Flex>
                         <Flex
                             mt="20px"
-                            w={{ sm: "80%", md: "550px" }}
+                            w={{ base: "80%", md: "550px" }}
                             p="20px"
-                            flexDir={{ sm: "column", md: "row" }}
+                            flexDir={{ base: "column", md: "row" }}
                             borderRadius="10"
                             boxShadow="1px 4px 6px 0px #00000040"
                             background="whiteAlpha.700"
@@ -498,7 +498,7 @@ export function Profile(): React.ReactElement {
                                 )}
                             </Flex>
                             {!user.verification.personaVerified && (
-                                <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
+                                <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
                                     {startedVerification ? (
                                         <BlueButton
                                             onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
@@ -515,7 +515,7 @@ export function Profile(): React.ReactElement {
                 </Flex>
 
                 {/* WALLET SECTION */}
-                <Flex bgColor="white">
+                <Flex bgColor="white" justify={{base:'center', xl:'start'}}>
                     <TransactionModal
                         disclosure={{
                             isOpen: isOpenTransactionModal,
@@ -561,10 +561,10 @@ export function Profile(): React.ReactElement {
                             />
                         </>
                     )}
-                    <Flex flexDir="column" alignItems="center" w="">
+                    <Flex flexDir="column" alignItems="center" w="full">
                         <Flex direction="column" bg="background.primary" w="full">
                             <VStack>
-                                <HStack spacing={2} w="full">
+                                <SimpleGrid columns={{base:1, lg:2}} spacing={2} w="full">
                                     <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.BITCLOUT}
@@ -583,7 +583,7 @@ export function Profile(): React.ReactElement {
                                             border={true}
                                         />
                                     </Box>
-                                </HStack>
+                                </SimpleGrid>
                                 {selectedCurrency.type == globalVars.BITCLOUT ? (
                                     <BalanceCard
                                         openWithdrawModal={onOpenWithdrawModal}
@@ -605,12 +605,12 @@ export function Profile(): React.ReactElement {
                                 )}
                             </VStack>
                         </Flex>
-                        <VStack alignItems="flex-start" mt="8" spacing={5}>
+                        <VStack alignItems="flex-start" mt="8" spacing={5} w="full" mb="10">
                             <Heading as="h2" size="md" color="gray.700">
                                 Transaction History
                             </Heading>
-                            <Box bg="white" w="100%" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
-                                <Table variant="simple" w="100%" colorScheme="blackAlpha">
+                            <Box bg="white" w="full" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
+                                <Table variant="simple" colorScheme="blackAlpha" w="full">
                                     <Thead position="sticky" top="0" zIndex="100" bgColor="whiteAlpha.900" pb="4">
                                         <Tr>
                                             <Th color="gray.700" pt="5">
@@ -677,7 +677,7 @@ export function Profile(): React.ReactElement {
                                         ) : (
                                             <Tr>
                                                 <Td pt="3" pb="3" color="gray.500">
-                                                    Any transactions you make will appear here.
+                                                    No transactions yet...
                                                 </Td>
                                             </Tr>
                                         )}
