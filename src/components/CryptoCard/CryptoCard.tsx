@@ -31,14 +31,14 @@ export const CryptoCard: React.FC<CryptoCardProps> = ({ imageUrl, currency, amou
         >
             <Image htmlWidth="70px" objectFit="cover" src={imageUrl} />
 
-            <Box ml="5">
+            <Box ml="1">
                 <Box d="flex" alignItems="center">
                     <Box color="gray.600" fontWeight="semibold" letterSpacing="wide" fontSize="xs" textTransform="uppercase">
                         {currency} Balance
                     </Box>
                 </Box>
                 <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
-                    <Text fontSize="3xl" color="gray.600">
+                    <Text fontSize="2xl" color="gray.600" textAlign="left">
                         {!isNaN(amount) ? globalVars.formatBalanceSmall(amount) : <Spinner />} {currency}
                     </Text>
                 </Box>

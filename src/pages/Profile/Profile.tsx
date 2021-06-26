@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi";
 import { MdModeEdit } from "react-icons/md";
-
 import { Client } from "persona";
-
 import {
     Flex,
     Button,
@@ -22,7 +20,21 @@ import {
     VStack,
     HStack,
     SimpleGrid,
+    Box,
+    Heading,
 } from "@chakra-ui/react";
+import { BalanceCard } from "../../components/BalanceCard";
+import { CryptoCard } from "../../components/CryptoCard";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { tokenState } from "../../store";
+import { getEthUSD, getBitcloutUSD } from "../../services/utility";
+import { TransactionSchema } from "../../interfaces/Transaction";
+import { getTransactions } from "../../services/user";
+import { withdrawBitcloutPreflightTxn } from "../../services/gateway";
+import { TransactionModal } from "./TransactionModal";
+import { BitcloutWithdrawModal, EthWithdrawModal } from "./WithdrawModal";
+import { BitcloutDepositModal, EthDepositModal } from "./DepositModal";
+import { useUser } from "../../hooks";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../store";
 import { BlueButton } from "../../components/BlueButton/BlueButton";
@@ -43,10 +55,123 @@ export function Profile(): React.ReactElement {
     const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png");
     const [currentPage, setCurrentPage] = useState("profile");
     const [loading, setLoading] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isEmailVerificationOpen, onOpen: onEmailVerificationOpen, onClose: onEmailVerificationClose } = useDisclosure();
+    const { isOpen: isTierOpen, onOpen: onTierOpen, onClose: onTierClose } = useDisclosure();
     const embeddedClientRef = useRef<Client | null>(null);
     const [startedVerification, setStartedVerification] = useState(false);
+    const token = useRecoilValue(tokenState);
+    const { user: user2, userIsLoading, userIsError } = useUser(token);
+    const [ethUsd, setEthUsd] = useState<number | null>(null);
+    const [cloutUsd, setCloutUsd] = useState<number | null>(null);
+    const [selectedCurrency, setSelectedCurrency] = useState<{
+        type: string;
+        maxWithdraw: number;
+    }>({
+        type: globalVars.BITCLOUT,
+        maxWithdraw: 0,
+    });
+    const [transactions, setTransactions] = useState<TransactionSchema[]>([]);
+    const [currentTransaction, setCurrentTransaction] = useState<TransactionSchema | null>(null);
+    const [BCLT, setBCLT] = useState({
+        amount: user?.balance.bitclout,
+        usdValue: cloutUsd ? cloutUsd * user2?.balance.bitclout : null,
+    });
+    const [ETH, setETH] = useState({
+        amount: user?.balance.ether,
+        usdValue: ethUsd ? ethUsd * user2?.balance.ether : null,
+    });
+    const { isOpen: isOpenTransactionModal, onOpen: onOpenTransactionModal, onClose: onCloseTransactionModal } = useDisclosure();
 
+    const { isOpen: isOpenDepositModal, onOpen: onOpenDepositModal, onClose: onCloseDepositModal } = useDisclosure();
+
+    const { isOpen: isOpenWithdrawModal, onOpen: onOpenWithdrawModal, onClose: onCloseWithdrawModal } = useDisclosure();
+
+    useEffect(() => {
+        getEthUSD().then((response) => {
+            setEthUsd(response.data.data);
+        });
+        getBitcloutUSD().then((response) => {
+            setCloutUsd(response.data.data);
+        });
+        getTransactions().then((response) => {
+            setTransactions(response.data.data);
+        });
+    }, []);
+    useEffect(() => {
+        if (selectedCurrency.type === globalVars.BITCLOUT) {
+            getMaxBitclout().then((max) => {
+                setSelectedCurrency({
+                    type: globalVars.BITCLOUT,
+                    maxWithdraw: max,
+                });
+            });
+        } else {
+            getMaxEth().then((max) => {
+                setSelectedCurrency({
+                    type: globalVars.ETHER,
+                    maxWithdraw: max,
+                });
+            });
+        }
+        setBCLT({
+            amount: user2?.balance.bitclout,
+            usdValue: cloutUsd ? cloutUsd * user2?.balance.bitclout : null,
+        });
+        setETH({
+            amount: user2?.balance.ether,
+            usdValue: ethUsd ? ethUsd * user2?.balance.ether : null,
+        });
+    }, [user, ethUsd, cloutUsd]);
+    //make it into an est. gas fees field
+    const getMaxBitclout = async (): Promise<number> => {
+        return new Promise<number>((resolve, reject) => {
+            if (user2?.balance.bitclout > 0) {
+                withdrawBitcloutPreflightTxn(user2.balance.bitclout)
+                    .then((response) => {
+                        resolve(user2.balance.bitclout - response.data.data.FeeNanos / 1e9);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        resolve(0);
+                    });
+            } else {
+                resolve(0);
+            }
+        });
+    };
+
+    const getMaxEth = (): Promise<number> => {
+        return new Promise<number>((resolve, reject) => {
+            if (user2?.balance.ether > 0) {
+                resolve(user2.balance.ether);
+            } else {
+                resolve(0);
+            }
+        });
+    };
+
+    const handleCurrencyChange = (type: string) => {
+        if (type === globalVars.BITCLOUT) {
+            getMaxBitclout().then((max) => {
+                setSelectedCurrency({
+                    type: globalVars.BITCLOUT,
+                    maxWithdraw: max,
+                });
+            });
+        } else {
+            getMaxEth().then((max) => {
+                setSelectedCurrency({
+                    type: globalVars.ETHER,
+                    maxWithdraw: max,
+                });
+            });
+        }
+    };
+
+    const openTransactionModal = (transaction: TransactionSchema) => {
+        setCurrentTransaction(transaction);
+        onOpenTransactionModal();
+    };
     const emailInputHandler = (e: any) => {
         setUserEmail(e.target.value);
     };
@@ -79,7 +204,7 @@ export function Profile(): React.ReactElement {
     };
 
     const resendEmailVerification = () => {
-        onOpen();
+        onEmailVerificationOpen();
         resendVerificationEmail();
     };
 
@@ -147,8 +272,8 @@ export function Profile(): React.ReactElement {
     const profilePage = user ? (
         <>
             <SimpleGrid columns={2} bgColor="white" spacing={10} mt="6">
-                <Flex height="full" bgColor="white">
-                    <Modal isOpen={isOpen} onClose={onClose}>
+                <Flex bgColor="white">
+                    <Modal isOpen={isEmailVerificationOpen} onClose={onEmailVerificationClose}>
                         <ModalOverlay />
                         <ModalContent>
                             <ModalHeader>Verification Email Sent</ModalHeader>
@@ -156,7 +281,18 @@ export function Profile(): React.ReactElement {
                             <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
 
                             <ModalFooter>
-                                <BlueButton text={`   Close   `} onClick={onClose} mr="3" />
+                                <BlueButton text={`   Close   `} onClick={onEmailVerificationClose} mr="3" />
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                    <Modal isOpen={isTierOpen} onClose={onTierClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                            <ModalHeader>BitSwap Tiers</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>Insert content here</ModalBody>
+                            <ModalFooter>
+                                <BlueButton text={`   Close   `} onClick={onTierClose} mr="3" />
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
@@ -239,7 +375,7 @@ export function Profile(): React.ReactElement {
                                 </Text>
                             </Flex>
                             <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
-                                <BlueButton text={`   View   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setNameEdit(true)} />
+                                <BlueButton text={`   View   `} w={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={onTierOpen} />
                             </Flex>
                         </Flex>
                         <Flex
@@ -294,9 +430,14 @@ export function Profile(): React.ReactElement {
                             <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ sm: "row", md: "column" }} mt={{ sm: "15px", md: "0" }}>
                                 {!emailEdit ? (
                                     <>
-                                        <BlueButton text={`   Edit   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
+                                        <BlueButton text={`   Edit   `} w={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
                                         {user.verification.email ? null : (
-                                            <BlueButton text={`   Resend Verification   `} width={{ sm: "45%", md: "90%" }} fontSize="sm" onClick={resendEmailVerification} />
+                                            <BlueButton
+                                                text={`   Resend Verification   `}
+                                                w={{ sm: "45%", md: "90%" }}
+                                                fontSize="sm"
+                                                onClick={resendEmailVerification}
+                                            />
                                         )}
                                     </>
                                 ) : (
@@ -317,7 +458,7 @@ export function Profile(): React.ReactElement {
                                         <BlueButton
                                             isDisabled={emailErr}
                                             text={`   Update   `}
-                                            width={{ sm: "45%", md: "90%" }}
+                                            w={{ sm: "45%", md: "90%" }}
                                             fontSize="sm"
                                             onClick={updateEmailFunc}
                                             loading={loading}
@@ -346,7 +487,9 @@ export function Profile(): React.ReactElement {
                                 </Text>
                                 {user.verification.personaVerified ? (
                                     <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
-                                        Your identity is verified.<br/>enjoy full access to the platform.
+                                        Your identity is verified.
+                                        <br />
+                                        enjoy full access to the platform.
                                     </Text>
                                 ) : (
                                     <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
@@ -369,6 +512,180 @@ export function Profile(): React.ReactElement {
                             )}
                         </Flex>
                     </VStack>
+                </Flex>
+
+                {/* WALLET SECTION */}
+                <Flex bgColor="white">
+                    <TransactionModal
+                        disclosure={{
+                            isOpen: isOpenTransactionModal,
+                            onOpen: onOpenTransactionModal,
+                            onClose: onCloseTransactionModal,
+                        }}
+                        transaction={currentTransaction}
+                    />
+                    {selectedCurrency.type == globalVars.BITCLOUT ? (
+                        <>
+                            <BitcloutDepositModal
+                                disclosure={{
+                                    isOpen: isOpenDepositModal,
+                                    onOpen: onOpenDepositModal,
+                                    onClose: onCloseDepositModal,
+                                }}
+                            />
+                            <BitcloutWithdrawModal
+                                maxWithdraw={selectedCurrency.maxWithdraw}
+                                disclosure={{
+                                    isOpen: isOpenWithdrawModal,
+                                    onOpen: onOpenWithdrawModal,
+                                    onClose: onCloseWithdrawModal,
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <EthDepositModal
+                                disclosure={{
+                                    isOpen: isOpenDepositModal,
+                                    onOpen: onOpenDepositModal,
+                                    onClose: onCloseDepositModal,
+                                }}
+                            />
+                            <EthWithdrawModal
+                                maxWithdraw={selectedCurrency.maxWithdraw}
+                                disclosure={{
+                                    isOpen: isOpenWithdrawModal,
+                                    onOpen: onOpenWithdrawModal,
+                                    onClose: onCloseWithdrawModal,
+                                }}
+                            />
+                        </>
+                    )}
+                    <Flex flexDir="column" alignItems="center" w="">
+                        <Flex direction="column" bg="background.primary" w="full">
+                            <VStack>
+                                <HStack spacing={2} w="full">
+                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
+                                        <CryptoCard
+                                            active={selectedCurrency.type == globalVars.BITCLOUT}
+                                            imageUrl={globalVars.BITCLOUT_LOGO}
+                                            currency={globalVars.BITCLOUT}
+                                            amount={BCLT.amount}
+                                            border={true}
+                                        />
+                                    </Box>
+                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="full" maxW="sm">
+                                        <CryptoCard
+                                            active={selectedCurrency.type == globalVars.ETHER}
+                                            imageUrl={globalVars.ETHER_LOGO}
+                                            currency={globalVars.ETHER}
+                                            amount={ETH.amount}
+                                            border={true}
+                                        />
+                                    </Box>
+                                </HStack>
+                                {selectedCurrency.type == globalVars.BITCLOUT ? (
+                                    <BalanceCard
+                                        openWithdrawModal={onOpenWithdrawModal}
+                                        openDepositModal={onOpenDepositModal}
+                                        imageUrl={globalVars.BITCLOUT_LOGO}
+                                        currency={globalVars.BITCLOUT}
+                                        amount={BCLT.amount}
+                                        usdValue={BCLT.usdValue ? BCLT.usdValue : 0}
+                                    />
+                                ) : (
+                                    <BalanceCard
+                                        openWithdrawModal={onOpenWithdrawModal}
+                                        openDepositModal={onOpenDepositModal}
+                                        imageUrl={globalVars.ETHER_LOGO}
+                                        currency={globalVars.ETHER}
+                                        amount={ETH.amount}
+                                        usdValue={ETH.usdValue ? ETH.usdValue : 0}
+                                    />
+                                )}
+                            </VStack>
+                        </Flex>
+                        <VStack alignItems="flex-start" mt="8" spacing={5}>
+                            <Heading as="h2" size="md" color="gray.700">
+                                Transaction History
+                            </Heading>
+                            <Box bg="white" w="100%" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
+                                <Table variant="simple" w="100%" colorScheme="blackAlpha">
+                                    <Thead position="sticky" top="0" zIndex="100" bgColor="whiteAlpha.900" pb="4">
+                                        <Tr>
+                                            <Th color="gray.700" pt="5">
+                                                Transaction Type
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Timestamp
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Asset
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Value
+                                            </Th>
+                                            <Th color="gray.700" pt="5">
+                                                Status
+                                            </Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {transactions.filter((transaction) => {
+                                            if (selectedCurrency.type === globalVars.BITCLOUT) {
+                                                return transaction.assetType === "BCLT";
+                                            } else {
+                                                return transaction.assetType === "ETH";
+                                            }
+                                        }).length > 0 ? (
+                                            transactions
+                                                .filter((transaction) => {
+                                                    if (selectedCurrency.type === globalVars.BITCLOUT) {
+                                                        return transaction.assetType === "BCLT";
+                                                    } else {
+                                                        return transaction.assetType === "ETH";
+                                                    }
+                                                })
+                                                .sort((a, b) => {
+                                                    return (
+                                                        new Date(b.completionDate ?? b.created).getTime() - new Date(a.completionDate ?? a.created).getTime()
+                                                    );
+                                                })
+                                                .map((transaction) => (
+                                                    <Tr onClick={() => openTransactionModal(transaction)} cursor="pointer" key={transaction._id}>
+                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                            {transaction.transactionType}
+                                                        </Td>
+                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                            {globalVars.timeSince(
+                                                                new Date(transaction.completionDate ? transaction.completionDate : transaction.created)
+                                                            )}
+                                                        </Td>
+                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                            {transaction.assetType}
+                                                        </Td>
+                                                        <Td color="gray.500" fontSize="14">
+                                                            {transaction.value
+                                                                ? `${globalVars.formatBalanceSmall(transaction.value)} ${transaction.assetType}`
+                                                                : "N/A"}
+                                                        </Td>
+                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                            {transaction.state}
+                                                        </Td>
+                                                    </Tr>
+                                                ))
+                                        ) : (
+                                            <Tr>
+                                                <Td pt="3" pb="3" color="gray.500">
+                                                    Any transactions you make will appear here.
+                                                </Td>
+                                            </Tr>
+                                        )}
+                                    </Tbody>
+                                </Table>
+                            </Box>
+                        </VStack>
+                    </Flex>
                 </Flex>
             </SimpleGrid>
         </>

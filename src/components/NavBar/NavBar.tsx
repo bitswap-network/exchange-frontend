@@ -134,7 +134,6 @@ function NavBarFunc() {
                     <Logo as={Link} to="/" ml={4} mr={4} />
                     <NavLink as={Link} to="/" label={"Home"} />
                     <NavLink as={Link} to="/orders" label={"Orders"} />
-                    <NavLink as={Link} to="/wallet" label={"Wallet"} />
                     <NavLink as={Link} to="/profile" label={"Account"} />
                     <NotifPopover />
                 </HStack>

@@ -16,7 +16,7 @@ interface BalanceCardProps {
 
 export const BalanceCard: React.FC<BalanceCardProps> = ({ imageUrl, currency, amount, usdValue, openWithdrawModal, openDepositModal }: BalanceCardProps) => {
     return (
-        <Box boxShadow="xs" maxW="sm" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="full" pos="relative">
+        <Box boxShadow="xs" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="full" pos="relative">
             <Flex flexDir="column" p="6" w="full">
                 <Image htmlWidth="70px" objectFit="cover" pos="absolute" top="4" right="4" src={imageUrl} />
                 <Box>
@@ -33,7 +33,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ imageUrl, currency, am
                         </Tooltip>
                         {usdValue != null ? (
                             <Tooltip label={usdValue.toString() + " $USD"} aria-label="USD Value">
-                                <Text fontSize="1xl" color="gray.500" h="30px">
+                                <Text fontSize="1xl" color="gray.500" h="30px" mt="1">
                                     ~${usdValue.toFixed(2)} USD
                                 </Text>
                             </Tooltip>
@@ -41,7 +41,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ imageUrl, currency, am
                     </Box>
                 </Box>
                 <Spacer />
-                <Flex w="full" justify="space-between">
+                <Flex w="full" justify="space-between" mt="6">
                     <BlueButton onClick={openWithdrawModal} text={"Withdraw"} width="45%" />
                     <BlueButton onClick={openDepositModal} text={"Deposit"} width="45%" />
                 </Flex>
