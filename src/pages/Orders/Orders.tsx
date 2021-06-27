@@ -86,7 +86,7 @@ export function Orders(): React.ReactElement {
                     <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} />
                 </Flex>
                 <Flex w="full" flexDirection={{ base: "column", md: "row" }}>
-                    <Flex flex={{ base: "1", md: "0.75" }}>
+                    <Flex flex={{ base: "1", md: "0.6" }}>
                         <Tabs w="full" variant="order" h="70vh">
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
@@ -133,20 +133,22 @@ export function Orders(): React.ReactElement {
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex={{ base: "1", md: "0.25" }} flexDir="column">
-                        <Box pb="4" w="full">
-                            <CryptoCard
-                                size="xs"
-                                active={true}
-                                border={false}
-                                imageUrl={globalVars.BITCLOUT_LOGO}
-                                currency={BCLT.currency}
-                                amount={BCLT.amount}
-                            />
-                        </Box>
-                        <Box w="full" mb="4">
-                            <CryptoCard size="xs" active={true} border={false} imageUrl={globalVars.ETHER_LOGO} currency={ETH.currency} amount={ETH.amount} />
-                        </Box>
+                    <Flex w="full" flex={{ base: "1", md: "0.4" }} flexDir="column">
+                        <Flex flexDir="row" spacing={2} w="full" justify="space-between" mb="4">
+                            <Box w="49%">
+                                <CryptoCard
+                                    size="xs"
+                                    active={true}
+                                    imageUrl={globalVars.BITCLOUT_LOGO}
+                                    currency={globalVars.BITCLOUT}
+                                    amount={BCLT.amount}
+                                    border={true}
+                                />
+                            </Box>
+                            <Box w="49%">
+                                <CryptoCard active={true} imageUrl={globalVars.ETHER_LOGO} currency={globalVars.ETHER} amount={ETH.amount} border={true} />
+                            </Box>
+                        </Flex>
 
                         <Box bg="white" w="full" borderRadius="8" boxShadow="xs" p="6" alignSelf="flex-start">
                             <HStack ml="3" mr="3">
