@@ -16,19 +16,19 @@ interface BalanceCardProps {
 
 export const BalanceCard: React.FC<BalanceCardProps> = ({ imageUrl, currency, amount, usdValue, openWithdrawModal, openDepositModal }: BalanceCardProps) => {
     return (
-        <Box boxShadow="xs" borderRadius="lg" overflow="hidden" bg="white" d="flex" w="full" pos="relative">
+        <Box overflow="hidden" bg="white" d="flex" w="full" pos="relative" borderRadius="8" borderColor="#DDE2E5" borderWidth="1px">
             <Flex flexDir="column" p="6" w="full">
-                <Image htmlWidth="70px" objectFit="cover" pos="absolute" top="4" right="4" src={imageUrl} />
+                <Image htmlWidth="100px" objectFit="cover" pos="absolute" top="4" right="4" src={imageUrl} />
                 <Box>
                     <Box w="100%">
-                        <Box color="gray.600" fontWeight="semibold" letterSpacing="wide" fontSize="xs" textTransform="uppercase">
+                        <Box color="gray.600" fontWeight="normal" letterSpacing="wide" fontSize="sm" textTransform="uppercase">
                             Your Balance
                         </Box>
                     </Box>
                     <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated>
                         <Tooltip label={amount?.toString() + " " + currency} aria-label="">
                             <Text fontSize="3xl" color="gray.600">
-                                ~{globalVars.formatBalanceSmall(amount ?? 0)} {currency}
+                                {globalVars.formatBalanceLarge(amount ?? 0)} {currency}
                             </Text>
                         </Tooltip>
                         {usdValue != null ? (

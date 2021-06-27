@@ -36,10 +36,10 @@ export function timeSince(date: Date) {
 }
 
 export const formatBalanceSmall = (balance: number) => {
-    return +balance?.toFixed(4);
+    return +balance?.toFixed(2);
 };
 export const formatBalanceLarge = (balance: number) => {
-    return +balance?.toFixed(6);
+    return +balance?.toFixed(4);
 };
 
 export const formateDateTime = (date: Date) => {

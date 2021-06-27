@@ -42,36 +42,34 @@ export const App = (): ReactElement => {
                 <ChakraProvider theme={bitswapTheme} resetCSS>
                     {/* <CSSReset /> */}
                     <BrowserRouter>
-                        <Grid templateRows={"74px 1fr"}>
-                            {/* TODO: implement auth to set loggedOut */}
-                            <Suspense fallback={DefaultNavBar()}>
-                                <NavBar />
-                            </Suspense>
+                        {/* TODO: implement auth to set loggedOut */}
+                        <Suspense fallback={DefaultNavBar()}>
+                            <NavBar />
+                        </Suspense>
 
-                            <Box p={{ base: 0, md: 8, lg: 12 }}>
-                                <Suspense fallback={<></>}>
-                                    <Container maxW="container.xl">
-                                        <Switch>
-                                            <Route path="/login">
-                                                <Login />
-                                            </Route>
-                                            <PrivateRoute path="/orders">
-                                                <Orders />
-                                            </PrivateRoute>
-                                            <PrivateRoute path="/profile">
-                                                <Profile />
-                                            </PrivateRoute>
-                                            <Route path="/home">
-                                                <Redirect to="/" />
-                                            </Route>
-                                            <Route path="/">
-                                                <Home />
-                                            </Route>
-                                        </Switch>
-                                    </Container>
-                                </Suspense>
-                            </Box>
-                        </Grid>
+                        <Box p={{ base: 4, md: 8 }}>
+                            <Suspense fallback={<></>}>
+                                <Container maxW="container.xl">
+                                    <Switch>
+                                        <Route path="/login">
+                                            <Login />
+                                        </Route>
+                                        <PrivateRoute path="/orders">
+                                            <Orders />
+                                        </PrivateRoute>
+                                        <PrivateRoute path="/profile">
+                                            <Profile />
+                                        </PrivateRoute>
+                                        <Route path="/home">
+                                            <Redirect to="/" />
+                                        </Route>
+                                        <Route path="/">
+                                            <Home />
+                                        </Route>
+                                    </Switch>
+                                </Container>
+                            </Suspense>
+                        </Box>
                     </BrowserRouter>
                 </ChakraProvider>
             </RecoilRoot>
