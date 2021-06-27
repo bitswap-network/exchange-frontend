@@ -28,7 +28,7 @@ export const NotifPopover: React.FC<any> = (props: any) => {
                     <MdNotificationsActive size="20" />
                 </Box>
             </PopoverTrigger>
-            <PopoverContent bg="brand.100" w="max">
+            <PopoverContent bg="brand.100" w="max" zIndex="100">
                 <PopoverHeader py={3} borderRadius={"4px 4px 0px 0px"}>
                     <Text color="white">Notifications</Text>
                 </PopoverHeader>

@@ -19,13 +19,19 @@ import {
     ModalCloseButton,
     VStack,
     HStack,
-    SimpleGrid,
+    Spacer,
     Box,
     Heading,
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
 } from "@chakra-ui/react";
 import { BalanceCard } from "../../components/BalanceCard";
 import { CryptoCard } from "../../components/CryptoCard";
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { tokenState } from "../../store";
 import { getEthUSD, getBitcloutUSD } from "../../services/utility";
 import { TransactionSchema } from "../../interfaces/Transaction";
@@ -39,7 +45,10 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../../store";
 import { BlueButton } from "../../components/BlueButton/BlueButton";
 import { updateEmail, updateName, resendVerificationEmail } from "../../services/user";
-import { logout } from "../../helpers/persistence";
+import { FaCircle } from "react-icons/fa";
+import { FiEdit3 } from "react-icons/fi";
+import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
+
 import * as globalVars from "../../globalVars";
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
@@ -52,8 +61,7 @@ export function Profile(): React.ReactElement {
     const [emailErr, setEmailErr] = useState(false);
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
-    const [userPfp, setUserPfp] = useState("https://bitclout.com/assets/img/default_profile_pic.png");
-    const [currentPage, setCurrentPage] = useState("profile");
+
     const [loading, setLoading] = useState(false);
     const { isOpen: isEmailVerificationOpen, onOpen: onEmailVerificationOpen, onClose: onEmailVerificationClose } = useDisclosure();
     const { isOpen: isTierOpen, onOpen: onTierOpen, onClose: onTierClose } = useDisclosure();
@@ -121,7 +129,19 @@ export function Profile(): React.ReactElement {
             amount: user2?.balance.ether,
             usdValue: ethUsd ? ethUsd * user2?.balance.ether : null,
         });
+        if (user) {
+            setUserEmail(user.email);
+            setUserName(user.name);
+        }
     }, [user, ethUsd, cloutUsd]);
+    useEffect(() => {
+        if (!regEmail.test(userEmail)) {
+            setEmailErr(true);
+        } else {
+            setEmailErr(false);
+        }
+    }, [userEmail]);
+
     //make it into an est. gas fees field
     const getMaxBitclout = async (): Promise<number> => {
         return new Promise<number>((resolve, reject) => {
@@ -178,29 +198,6 @@ export function Profile(): React.ReactElement {
 
     const nameInputHandler = (e: any) => {
         setUserName(e.target.value);
-    };
-
-    useEffect(() => {
-        if (!regEmail.test(userEmail)) {
-            setEmailErr(true);
-        } else {
-            setEmailErr(false);
-        }
-    }, [userEmail]);
-
-    useEffect(() => {
-        if (user) {
-            setUserEmail(user.email);
-            setUserName(user.name);
-            setUserPfp(
-                `https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}?fallback=https://bitclout.com/assets/img/default_profile_pic.png`
-            );
-        }
-    }, [user]);
-
-    const handleLogout = () => {
-        logout();
-        window.location.assign("/");
     };
 
     const resendEmailVerification = () => {
@@ -271,35 +268,93 @@ export function Profile(): React.ReactElement {
     };
     const profilePage = user ? (
         <>
-            <SimpleGrid columns={{ base: 1, xl: 2 }} bgColor="white" spacing={10} mt="6">
-                <Flex bgColor="white" justify={{ base: "center", xl: "start" }}>
-                    <Modal isOpen={isEmailVerificationOpen} onClose={onEmailVerificationClose}>
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalHeader>Verification Email Sent</ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
+            <>
+                <Modal isOpen={isEmailVerificationOpen} onClose={onEmailVerificationClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Verification Email Sent</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>An email was sent to {user.email} for verification. Check your spam folder if you cannot find the email.</ModalBody>
 
-                            <ModalFooter>
-                                <BlueButton text={`   Close   `} onClick={onEmailVerificationClose} mr="3" />
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
-                    <Modal isOpen={isTierOpen} onClose={onTierClose}>
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalHeader>BitSwap Tiers</ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>Insert content here</ModalBody>
-                            <ModalFooter>
-                                <BlueButton text={`   Close   `} onClick={onTierClose} mr="3" />
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
-                    <VStack spacing={8} align={{ base: "center", xl: "self-start" }}>
-                        <HStack align="start">
-                            <Image src={userPfp} w="80px" fit="cover" alignSelf="center" borderRadius="80px" mr="4" />
-                            <VStack align="start" spacing="0" alignSelf="center">
+                        <ModalFooter>
+                            <BlueButton text={`   Close   `} onClick={onEmailVerificationClose} mr="3" />
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+                <Modal isOpen={isTierOpen} onClose={onTierClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>BitSwap Tiers</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>Insert content here</ModalBody>
+                        <ModalFooter>
+                            <BlueButton text={`   Close   `} onClick={onTierClose} mr="3" />
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+                <TransactionModal
+                    disclosure={{
+                        isOpen: isOpenTransactionModal,
+                        onOpen: onOpenTransactionModal,
+                        onClose: onCloseTransactionModal,
+                    }}
+                    transaction={currentTransaction}
+                />
+                {selectedCurrency.type == globalVars.BITCLOUT ? (
+                    <>
+                        <BitcloutDepositModal
+                            disclosure={{
+                                isOpen: isOpenDepositModal,
+                                onOpen: onOpenDepositModal,
+                                onClose: onCloseDepositModal,
+                            }}
+                        />
+                        <BitcloutWithdrawModal
+                            maxWithdraw={selectedCurrency.maxWithdraw}
+                            disclosure={{
+                                isOpen: isOpenWithdrawModal,
+                                onOpen: onOpenWithdrawModal,
+                                onClose: onCloseWithdrawModal,
+                            }}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <EthDepositModal
+                            disclosure={{
+                                isOpen: isOpenDepositModal,
+                                onOpen: onOpenDepositModal,
+                                onClose: onCloseDepositModal,
+                            }}
+                        />
+                        <EthWithdrawModal
+                            maxWithdraw={selectedCurrency.maxWithdraw}
+                            disclosure={{
+                                isOpen: isOpenWithdrawModal,
+                                onOpen: onOpenWithdrawModal,
+                                onClose: onCloseWithdrawModal,
+                            }}
+                        />
+                    </>
+                )}
+            </>
+            <Flex flexDirection={{ base: "column", sm: "column", md: "row" }} w="full" p={4} justify={{ base: "start", md: "space-between" }} mt={4}>
+                <Flex flexDirection="column" w={{ base: "100%", md: "55%" }} m={6} ml={10}>
+                    <VStack spacing={6} align={{ base: "center", md: "flex-start" }} w="full">
+                        <HStack align="start" mb="2" spacing={4}>
+                            {/* <Box borderRadius="full" boxSize={{base: "100px"}} minW="100px" minH="100px" mr="4" bg="#FFC634" d="flex"> */}
+                            <Image
+                                src={`https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}`}
+                                boxSize={{ base: "100px" }}
+                                borderStyle="solid"
+                                borderColor="#FFC634"
+                                borderWidth="6px"
+                                fallbackSrc="https://bitclout.com/assets/img/default_profile_pic.png"
+                                fit="cover"
+                                borderRadius="full"
+                            />
+                            {/* </Box> */}
+                            <VStack align="start" spacing={2} alignSelf="center">
                                 <Link
                                     isExternal
                                     href={`https://bitclout.com/u/${user.bitclout.username ? user.bitclout.username : "anonymous"}`}
@@ -310,24 +365,27 @@ export function Profile(): React.ReactElement {
                                     @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
                                 </Link>
                                 {!nameEdit ? (
-                                    <Text color="gray.700" fontWeight="600" fontSize="16" mt="1" display="inline">
-                                        {user.name !== "" ? user.name : "Please add your name"}{" "}
-                                        <MdModeEdit style={{ display: "inline", marginTop: -4 }} onClick={() => setNameEdit(true)} />
-                                    </Text>
+                                    <HStack onDoubleClick={() => setNameEdit(true)}>
+                                        <Text color="#5B5B5B" fontWeight="500" fontSize="16">
+                                            {user.name !== "" ? user.name : "Please add your name"}
+                                        </Text>
+                                        <FiEdit3 onClick={() => setNameEdit(true)} color="#5B5B5B" size="18" cursor="pointer" />
+                                    </HStack>
                                 ) : (
-                                    <HStack spacing="1">
+                                    <HStack spacing="2" justify="flex-start">
                                         <Input
                                             isInvalid={userName.length <= 1}
                                             errorBorderColor="red.300"
                                             variant="outline"
-                                            size="sm"
+                                            size="md"
                                             p="2"
                                             value={userName}
                                             onChange={nameInputHandler}
+                                            w="50%"
                                         />
                                         <Button
                                             bg="gray.400"
-                                            w={250}
+                                            w="25%"
                                             p="10px 0"
                                             color="white"
                                             fontWeight="600"
@@ -342,7 +400,7 @@ export function Profile(): React.ReactElement {
                                         <BlueButton
                                             isDisabled={userName.length <= 1}
                                             text={`Update`}
-                                            w={250}
+                                            w="25%"
                                             fontSize="sm"
                                             h="35px"
                                             onClick={updateNameFunc}
@@ -350,52 +408,57 @@ export function Profile(): React.ReactElement {
                                         />
                                     </HStack>
                                 )}
-                                <Text color="gray.700" fontWeight="400" fontSize="16" mt="1">
+                                <Text color="#5B5B5B" fontWeight="400" fontSize="16" mt="1">
                                     {user.bitclout.bio}
                                 </Text>
                             </VStack>
                         </HStack>
                         <Flex
-                            mt="20px"
-                            w={{ base: "80%", md: "550px" }}
-                            p="20px"
+                            w={{ base: "80%", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
-                            borderRadius="10"
-                            boxShadow="1px 4px 6px 0px #00000040"
-                            background="whiteAlpha.700"
+                            p="6"
+                            borderRadius="8"
+                            borderColor="#DDE2E5"
+                            borderWidth="1px"
                         >
-                            <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
-                                <Text color="#44423D" fontWeight="700" fontSize="18">
-                                    Tier <HiBadgeCheck style={{ display: "inline" }} color="#FFC634" size="20" />
-                                </Text>
+                            <Flex flex="0.65" align={{ base: "center", md: "flex-start" }} justify="center" flexDir="column">
+                                <HStack>
+                                    <Text color="#44423D" fontWeight="700" fontSize="18">
+                                        Tier
+                                    </Text>
+                                    <FaCircle color="#FFC634" size="16" />
+                                </HStack>
+
                                 <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
                                     You are a <span style={{ fontWeight: 600 }}>Gold Tier</span> BitSwap user.
                                     <br />
                                     Enjoy unlimited trading on BitSwap!
                                 </Text>
                             </Flex>
-                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
+                            <Flex flex="0.35" justify={{ base: "center", md: "flex-end" }} align="center" mt={{ base: "15px", md: "0" }}>
                                 <BlueButton text={`   View   `} w={{ base: "45%", md: "90%" }} fontSize="sm" onClick={onTierOpen} />
                             </Flex>
                         </Flex>
                         <Flex
-                            mt="20px"
-                            w={{ base: "80%", md: "550px" }}
-                            p="20px"
+                            w={{ base: "80%", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
-                            borderRadius="10"
-                            boxShadow="1px 4px 6px 0px #00000040"
-                            background="whiteAlpha.700"
+                            p="6"
+                            borderRadius="8"
+                            borderColor="#DDE2E5"
+                            borderWidth="1px"
                         >
-                            <Flex flex="0.65" align="flex-start" justify="center" flexDir="column">
-                                <Text color="#44423D" fontWeight="700" fontSize="18">
-                                    Email{" "}
+                            <Flex flex="0.65" align={{ base: "center", md: "flex-start" }} justify="center" flexDir="column">
+                                <HStack>
+                                    <Text color="#44423D" fontWeight="700" fontSize="18">
+                                        Email
+                                    </Text>
                                     {user.verification.email ? (
                                         <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
                                     ) : (
                                         <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
                                     )}
-                                </Text>
+                                </HStack>
+
                                 {user.verification.email ? (
                                     <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
                                         Your email is verified.
@@ -411,7 +474,7 @@ export function Profile(): React.ReactElement {
                                 )}
 
                                 {!emailEdit ? (
-                                    <Text color="#44423D" fontWeight="500" fontSize="sm" mt="12px">
+                                    <Text color="#44423D" fontWeight="500" fontSize="md" mt="12px" onDoubleClick={() => setEmailEdit(true)}>
                                         {user.email}
                                     </Text>
                                 ) : (
@@ -424,10 +487,17 @@ export function Profile(): React.ReactElement {
                                         mt="3"
                                         value={userEmail}
                                         onChange={emailInputHandler}
+                                        w={{ base: "70%", md: "90%" }}
                                     />
                                 )}
                             </Flex>
-                            <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
+                            <Flex
+                                flex="0.35"
+                                justify={{ base: "center" }}
+                                align={{ base: "center", md: "flex-end" }}
+                                flexDir={{ base: "row", md: "column" }}
+                                mt={{ base: "15px", md: "0" }}
+                            >
                                 {!emailEdit ? (
                                     <>
                                         <BlueButton text={`   Edit   `} w={{ base: "45%", md: "90%" }} fontSize="sm" onClick={() => setEmailEdit(true)} />
@@ -442,54 +512,63 @@ export function Profile(): React.ReactElement {
                                     </>
                                 ) : (
                                     <>
-                                        <Button
-                                            bg="gray.400"
+                                        <Flex
+                                            flexDir={{ base: "row", md: "column" }}
+                                            align="center"
+                                            justify="space-evenly"
                                             w={{ base: "45%", md: "90%" }}
-                                            p="10px 0"
-                                            color="white"
-                                            fontWeight="600"
-                                            fontSize="sm"
-                                            borderRadius="6"
-                                            boxShadow="0px 2px 6px 0px #00000030"
-                                            onClick={() => setEmailEdit(false)}
+                                            h="80%"
                                         >
-                                            Cancel
-                                        </Button>
-                                        <BlueButton
-                                            isDisabled={emailErr}
-                                            text={`   Update   `}
-                                            w={{ base: "45%", md: "90%" }}
-                                            fontSize="sm"
-                                            onClick={updateEmailFunc}
-                                            loading={loading}
-                                        />
+                                            <Button
+                                                bg="gray.400"
+                                                w={{ base: "45%", md: "90%" }}
+                                                p="10px 0"
+                                                color="white"
+                                                fontWeight="600"
+                                                fontSize="sm"
+                                                borderRadius="6"
+                                                boxShadow="0px 2px 6px 0px #00000030"
+                                                onClick={() => setEmailEdit(false)}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Spacer />
+                                            <BlueButton
+                                                isDisabled={emailErr}
+                                                text={`   Update   `}
+                                                w={{ base: "45%", md: "90%" }}
+                                                fontSize="sm"
+                                                onClick={updateEmailFunc}
+                                                loading={loading}
+                                            />
+                                        </Flex>
                                     </>
                                 )}
                             </Flex>
                         </Flex>
                         <Flex
                             mt="20px"
-                            w={{ base: "80%", md: "550px" }}
-                            p="20px"
+                            w={{ base: "80%", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
-                            borderRadius="10"
-                            boxShadow="1px 4px 6px 0px #00000040"
-                            background="whiteAlpha.700"
+                            p="6"
+                            borderRadius="8"
+                            borderColor="#DDE2E5"
+                            borderWidth="1px"
                         >
-                            <Flex flex={user.verification.personaVerified ? "1" : "0.65"} align="flex-start" justify="center" flexDir="column">
-                                <Text color="#44423D" fontWeight="700" fontSize="18">
-                                    Identity Verification{" "}
+                            <Flex flex={"0.65"} align={{ base: "center", md: "flex-start" }} justify="center" flexDir="column">
+                                <HStack>
+                                    <Text color="#44423D" fontWeight="700" fontSize="18" isTruncated>
+                                        Identity Verification
+                                    </Text>
                                     {user.verification.personaVerified ? (
                                         <HiBadgeCheck style={{ display: "inline" }} color="#5388fe" size="20" />
                                     ) : (
                                         <HiExclamationCircle style={{ display: "inline" }} color="#EE0004" size="20" />
                                     )}
-                                </Text>
+                                </HStack>
                                 {user.verification.personaVerified ? (
                                     <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
-                                        Your identity is verified.
-                                        <br />
-                                        enjoy full access to the platform.
+                                        Your identity is verified. Enjoy full access to the platform.
                                     </Text>
                                 ) : (
                                     <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
@@ -497,81 +576,44 @@ export function Profile(): React.ReactElement {
                                     </Text>
                                 )}
                             </Flex>
-                            {!user.verification.personaVerified && (
-                                <Flex
-                                    flex="0.35"
-                                    align="flex-end"
-                                    justify="space-between"
-                                    flexDir={{ base: "row", md: "column" }}
-                                    mt={{ base: "15px", md: "0" }}
-                                >
-                                    {startedVerification ? (
-                                        <BlueButton
-                                            onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
-                                            fontSize="sm"
-                                            text={`  Resume Verification   `}
-                                        />
-                                    ) : (
-                                        <BlueButton fontSize="sm" onClick={createClient} text={`  Start Verification   `} />
-                                    )}
-                                </Flex>
-                            )}
+                            {/* {!user.verification.personaVerified && ( */}
+                            <Flex
+                                flex="0.35"
+                                justify={{ base: "center" }}
+                                align={{ base: "center", md: "flex-end" }}
+                                flexDir={{ base: "row", md: "column" }}
+                                mt={{ base: "15px", md: "0" }}
+                            >
+                                {startedVerification ? (
+                                    <BlueButton
+                                        onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
+                                        fontSize="sm"
+                                        text={`  Resume Verification   `}
+                                        w={{ base: "45%", md: "90%" }}
+                                        disabled={user.verification.personaVerified}
+                                    />
+                                ) : (
+                                    <BlueButton
+                                        fontSize="sm"
+                                        onClick={createClient}
+                                        text={`  Start Verification   `}
+                                        w={{ base: "45%", md: "90%" }}
+                                        disabled={user.verification.personaVerified}
+                                    />
+                                )}
+                            </Flex>
+                            {/* )} */}
                         </Flex>
                     </VStack>
                 </Flex>
 
                 {/* WALLET SECTION */}
-                <Flex bgColor="white" justify={{ base: "center", xl: "start" }}>
-                    <TransactionModal
-                        disclosure={{
-                            isOpen: isOpenTransactionModal,
-                            onOpen: onOpenTransactionModal,
-                            onClose: onCloseTransactionModal,
-                        }}
-                        transaction={currentTransaction}
-                    />
-                    {selectedCurrency.type == globalVars.BITCLOUT ? (
-                        <>
-                            <BitcloutDepositModal
-                                disclosure={{
-                                    isOpen: isOpenDepositModal,
-                                    onOpen: onOpenDepositModal,
-                                    onClose: onCloseDepositModal,
-                                }}
-                            />
-                            <BitcloutWithdrawModal
-                                maxWithdraw={selectedCurrency.maxWithdraw}
-                                disclosure={{
-                                    isOpen: isOpenWithdrawModal,
-                                    onOpen: onOpenWithdrawModal,
-                                    onClose: onCloseWithdrawModal,
-                                }}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <EthDepositModal
-                                disclosure={{
-                                    isOpen: isOpenDepositModal,
-                                    onOpen: onOpenDepositModal,
-                                    onClose: onCloseDepositModal,
-                                }}
-                            />
-                            <EthWithdrawModal
-                                maxWithdraw={selectedCurrency.maxWithdraw}
-                                disclosure={{
-                                    isOpen: isOpenWithdrawModal,
-                                    onOpen: onOpenWithdrawModal,
-                                    onClose: onCloseWithdrawModal,
-                                }}
-                            />
-                        </>
-                    )}
+                <Flex justify={{ base: "space-between", xl: "start" }} flexDirection="column" w={{ base: "full", md: "45%" }} m={6} mr={10}>
                     <Flex flexDir="column" alignItems="center" w="full">
-                        <Flex direction="column" bg="background.primary" w="full">
+                        <Flex direction="column" bg="white" w="full">
                             <VStack>
-                                <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={2} w="full">
-                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
+                                <Flex flexDir="row" spacing={2} w="full" justify="space-between" mb="4">
+                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="49%">
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.BITCLOUT}
                                             imageUrl={globalVars.BITCLOUT_LOGO}
@@ -580,7 +622,7 @@ export function Profile(): React.ReactElement {
                                             border={true}
                                         />
                                     </Box>
-                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="full" maxW="sm">
+                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="49%">
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.ETHER}
                                             imageUrl={globalVars.ETHER_LOGO}
@@ -589,113 +631,113 @@ export function Profile(): React.ReactElement {
                                             border={true}
                                         />
                                     </Box>
-                                </SimpleGrid>
-                                {selectedCurrency.type == globalVars.BITCLOUT ? (
-                                    <BalanceCard
-                                        openWithdrawModal={onOpenWithdrawModal}
-                                        openDepositModal={onOpenDepositModal}
-                                        imageUrl={globalVars.BITCLOUT_LOGO}
-                                        currency={globalVars.BITCLOUT}
-                                        amount={BCLT.amount}
-                                        usdValue={BCLT.usdValue ? BCLT.usdValue : 0}
-                                    />
-                                ) : (
-                                    <BalanceCard
-                                        openWithdrawModal={onOpenWithdrawModal}
-                                        openDepositModal={onOpenDepositModal}
-                                        imageUrl={globalVars.ETHER_LOGO}
-                                        currency={globalVars.ETHER}
-                                        amount={ETH.amount}
-                                        usdValue={ETH.usdValue ? ETH.usdValue : 0}
-                                    />
-                                )}
+                                </Flex>
+                                <BalanceCard
+                                    openWithdrawModal={onOpenWithdrawModal}
+                                    openDepositModal={onOpenDepositModal}
+                                    imageUrl={selectedCurrency.type == globalVars.BITCLOUT ? globalVars.BITCLOUT_LOGO : globalVars.ETHER_LOGO}
+                                    currency={selectedCurrency.type == globalVars.BITCLOUT ? globalVars.BITCLOUT : globalVars.ETHER}
+                                    amount={selectedCurrency.type == globalVars.BITCLOUT ? BCLT.amount : ETH.amount}
+                                    usdValue={
+                                        selectedCurrency.type == globalVars.BITCLOUT ? (BCLT.usdValue ? BCLT.usdValue : 0) : ETH.usdValue ? ETH.usdValue : 0
+                                    }
+                                />
                             </VStack>
                         </Flex>
-                        <VStack alignItems="flex-start" mt="8" spacing={5} w="full" mb="10">
-                            <Heading as="h2" size="md" color="gray.700">
-                                Transaction History
-                            </Heading>
-                            <Box bg="white" w="full" borderRadius="lg" boxShadow="md" maxH="400px" overflowY="auto">
-                                <Table variant="simple" colorScheme="blackAlpha" w="full">
-                                    <Thead position="sticky" top="0" zIndex="100" bgColor="whiteAlpha.900" pb="4">
-                                        <Tr>
-                                            <Th color="gray.700" pt="5">
-                                                Transaction Type
-                                            </Th>
-                                            <Th color="gray.700" pt="5">
-                                                Timestamp
-                                            </Th>
-                                            <Th color="gray.700" pt="5">
-                                                Asset
-                                            </Th>
-                                            <Th color="gray.700" pt="5">
-                                                Value
-                                            </Th>
-                                            <Th color="gray.700" pt="5">
-                                                Status
-                                            </Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {transactions.filter((transaction) => {
-                                            if (selectedCurrency.type === globalVars.BITCLOUT) {
-                                                return transaction.assetType === "BCLT";
-                                            } else {
-                                                return transaction.assetType === "ETH";
-                                            }
-                                        }).length > 0 ? (
-                                            transactions
-                                                .filter((transaction) => {
-                                                    if (selectedCurrency.type === globalVars.BITCLOUT) {
-                                                        return transaction.assetType === "BCLT";
-                                                    } else {
-                                                        return transaction.assetType === "ETH";
-                                                    }
-                                                })
-                                                .sort((a, b) => {
-                                                    return (
-                                                        new Date(b.completionDate ?? b.created).getTime() - new Date(a.completionDate ?? a.created).getTime()
-                                                    );
-                                                })
-                                                .map((transaction) => (
-                                                    <Tr onClick={() => openTransactionModal(transaction)} cursor="pointer" key={transaction._id}>
-                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
-                                                            {transaction.transactionType}
-                                                        </Td>
-                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
-                                                            {globalVars.timeSince(
-                                                                new Date(transaction.completionDate ? transaction.completionDate : transaction.created)
-                                                            )}
-                                                        </Td>
-                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
-                                                            {transaction.assetType}
-                                                        </Td>
-                                                        <Td color="gray.500" fontSize="14">
+
+                        <Table
+                            w="full"
+                            maxH="400px"
+                            maxW="full"
+                            variant="simple"
+                            colorScheme="blackAlpha"
+                            bg="white"
+                            overflowY="auto"
+                            overflowX="auto"
+                            borderRadius="8"
+                            borderColor="#DDE2E5"
+                            borderWidth="1px"
+                            as={Box}
+                            size="md"
+                            m="6"
+                        >
+                            <Thead position="sticky" top="0" zIndex="5" bgColor="white" pb="4">
+                                <Tr>
+                                    <Th color="gray.700" pt="5">
+                                        Asset
+                                    </Th>
+                                    <Th color="gray.700" pt="5">
+                                        Type
+                                    </Th>
+                                    <Th color="gray.700" pt="5">
+                                        Value
+                                    </Th>
+                                    <Th color="gray.700" pt="5">
+                                        Status
+                                    </Th>
+                                    <Th color="gray.700" pt="5">
+                                        Timestamp
+                                    </Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {transactions.length > 0 ? (
+                                    transactions
+                                        .sort((a, b) => {
+                                            return new Date(b.completionDate ?? b.created).getTime() - new Date(a.completionDate ?? a.created).getTime();
+                                        })
+                                        .map((transaction) => (
+                                            <Tr onClick={() => openTransactionModal(transaction)} cursor="pointer" key={transaction._id}>
+                                                <Td>
+                                                    {transaction.assetType === "BCLT" ? (
+                                                        <Image src={globalVars.BITCLOUT_LOGO} boxSize="32px" />
+                                                    ) : (
+                                                        <Image src={globalVars.ETHER_LOGO} boxSize="32px" />
+                                                    )}
+                                                </Td>
+                                                <Td color="#ACB5BD" fontSize="14" textTransform="capitalize">
+                                                    {transaction.transactionType}
+                                                </Td>
+                                                <Td color="gray.500" fontSize="14" textTransform="capitalize">
+                                                    <HStack justify="flex-start" spacing={1}>
+                                                        {transaction.transactionType === "withdraw" ? (
+                                                            <VscTriangleDown color="#8692A6" size="14px" />
+                                                        ) : (
+                                                            <VscTriangleUp color="#407BFF" size="14px" />
+                                                        )}
+                                                        <Text fontSize="12px" whiteSpace="nowrap" color="#8692A6">
                                                             {transaction.value
                                                                 ? `${globalVars.formatBalanceSmall(transaction.value)} ${transaction.assetType}`
                                                                 : "N/A"}
-                                                        </Td>
-                                                        <Td color="gray.500" fontSize="14" textTransform="capitalize">
-                                                            {transaction.state}
-                                                        </Td>
-                                                    </Tr>
-                                                ))
-                                        ) : (
-                                            <Tr>
-                                                <Td pt="3" pb="3" color="gray.500">
-                                                    No transactions yet...
+                                                        </Text>
+                                                    </HStack>
+                                                </Td>
+                                                <Td fontSize="14" textTransform="capitalize" color="#ACB5BD">
+                                                    {transaction.state}
+                                                </Td>
+                                                <Td color="#ACB5BD" fontSize="14" textTransform="none">
+                                                    {globalVars.timeSince(
+                                                        new Date(transaction.completionDate ? transaction.completionDate : transaction.created)
+                                                    )}
                                                 </Td>
                                             </Tr>
-                                        )}
-                                    </Tbody>
-                                </Table>
-                            </Box>
-                        </VStack>
+                                        ))
+                                ) : (
+                                    <Tr>
+                                        <Td pt="3" pb="3" color="#ACB5BD">
+                                            No transactions yet...
+                                        </Td>
+                                    </Tr>
+                                )}
+                            </Tbody>
+                        </Table>
+                        {/* </Box> */}
+                        {/* </VStack> */}
                     </Flex>
                 </Flex>
-            </SimpleGrid>
+            </Flex>
         </>
     ) : null;
 
-    return profilePage;
+    return profilePage ? profilePage : <></>;
 }

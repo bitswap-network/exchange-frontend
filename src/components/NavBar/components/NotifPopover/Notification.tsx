@@ -58,12 +58,18 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                     {complete ? "Order Completed" : "Order Partial Filled"}
                 </Text>
                 <HStack w="full" spacing={2}>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
-                        <VscTriangleUp color="var(--chakra-colors-brand-100)" style={{ display: "inline" }} /> {orderDetails?.cloutValue} {globalVars.BITCLOUT}
-                    </Text>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
-                        <VscTriangleDown color="#8692A6" style={{ display: "inline" }} /> {orderDetails?.ethValue} {globalVars.ETHER}
-                    </Text>
+                    <HStack justify="flex-start" spacing={1}>
+                        <VscTriangleUp color="var(--chakra-colors-brand-100)" size="12px" />
+                        <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
+                            {orderDetails?.cloutValue} {globalVars.BITCLOUT}
+                        </Text>
+                    </HStack>
+                    <HStack justify="flex-start" spacing={1}>
+                        <VscTriangleDown color="#8692A6" size="12px" />
+                        <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
+                            {orderDetails?.ethValue} {globalVars.ETHER}
+                        </Text>
+                    </HStack>
                 </HStack>
             </VStack>
             <FaCircle size="8" color={notifRead ? "white" : "var(--chakra-colors-brand-100)"} />
@@ -102,12 +108,18 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                     {complete ? "Order Completed" : "Order Partial Filled"}
                 </Text>
                 <HStack w="full" spacing={2}>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
-                        <VscTriangleUp color="var(--chakra-colors-brand-100)" style={{ display: "inline" }} /> {orderDetails?.ethValue} {globalVars.ETHER}
-                    </Text>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
-                        <VscTriangleDown color="#8692A6" style={{ display: "inline" }} /> {orderDetails?.cloutValue} {globalVars.BITCLOUT}
-                    </Text>
+                    <HStack justify="flex-start" spacing={1}>
+                        <VscTriangleUp color="var(--chakra-colors-brand-100)" size="12px" />
+                        <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
+                            {orderDetails?.ethValue} {globalVars.ETHER}
+                        </Text>
+                    </HStack>
+                    <HStack justify="flex-start" spacing={1}>
+                        <VscTriangleDown color="#8692A6" size="12px" />
+                        <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6">
+                            {orderDetails?.cloutValue} {globalVars.BITCLOUT}
+                        </Text>
+                    </HStack>
                 </HStack>
             </VStack>
             <FaCircle size="8" color={notifRead ? "white" : "var(--chakra-colors-brand-100)"} />

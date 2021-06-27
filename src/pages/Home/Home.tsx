@@ -16,6 +16,11 @@ import {
     Text,
     HStack,
     Image,
+    Tabs,
+    Tab,
+    TabList,
+    TabPanels,
+    TabPanel,
 } from "@chakra-ui/react";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useUser } from "../../hooks";
@@ -109,7 +114,6 @@ export function Home(): React.ReactElement {
                             </Popover>
                         </Flex>
                         <Flex
-                            // bgColor="#dbe6ff"
                             p="4"
                             color="brand.100"
                             fontWeight="500"
@@ -129,6 +133,20 @@ export function Home(): React.ReactElement {
             </Flex>
             <Spacer />
             <Flex flexDirection="column" w={{ base: "100%", md: "45%" }} padding={4} justify="">
+                {/* <Tabs variant="enclosed">
+                    <TabList>
+                        <Tab>Buy</Tab>
+                        <Tab>Sell</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            <p>one!</p>
+                        </TabPanel>
+                        <TabPanel>
+                            <p>two!</p>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs> */}
                 <Image src="./home_placeholder.png" fit="cover" htmlWidth="100%" />
                 {/* <Heading as="h2" size="lg">
                     Order Book

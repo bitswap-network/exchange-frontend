@@ -92,7 +92,7 @@ function NavBarFunc() {
                     <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth="1px">
                         <VStack alignItems="center">
-                            <Logo as={Link} to="/" htmlWidth="220" />
+                            <Logo boxSize="200px" my="-8" />
                             <Text>Mobile Exchange</Text>
                         </VStack>
                     </DrawerHeader>

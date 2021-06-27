@@ -133,7 +133,7 @@ export function Orders(): React.ReactElement {
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex={{ base: "1", lg: "0.25" }} mb={{base:'40px', lg:'0px'}} flexDir="column">
+                    <Flex flex={{ base: "1", lg: "0.25" }} mb={{ base: "40px", lg: "0px" }} flexDir="column">
                         <SimpleGrid columns={{ base: 2, lg: 1 }} spacing={2} w={{ base: "90%", lg: "full" }} alignSelf="center">
                             <Box pb="4" w="full">
                                 <CryptoCard
@@ -194,7 +194,7 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box maxH="325px" w={{base:'full', lg:'440px'}} mt="2">
+                            <Box maxH="325px" w={{ base: "full", lg: "440px" }} mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
