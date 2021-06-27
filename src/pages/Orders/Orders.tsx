@@ -22,22 +22,22 @@ import {
     Skeleton,
     SimpleGrid,
 } from "@chakra-ui/react";
-import React, { useEffect, useState, useMemo } from "react";
-import { Column } from "react-table";
-import { BlueButton } from "../../components/BlueButton";
-import { OrderTableDataInterface, OrderTableColumns } from "../../interfaces/Order";
-import { Chart } from "../../components/BitCloutChart/Chart";
-import { OrderTable } from "./OrderTable";
-import { OrderModal } from "./OrderModal";
-import { useOrderBook, useOrders } from "../../hooks";
-import { getOrders } from "../../services/user";
+import React, {useEffect, useState, useMemo} from "react";
+import {Column} from "react-table";
+import {BlueButton} from "../../components/BlueButton";
+import {OrderTableDataInterface, OrderTableColumns} from "../../interfaces/Order";
+import {Chart} from "../../components/BitCloutChart/Chart";
+import {OrderTable} from "./OrderTable";
+import {OrderModal} from "./OrderModal";
+import {useOrderBook, useOrders} from "../../hooks";
+import {getOrders} from "../../services/user";
 import * as globalVars from "../../globalVars";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { orderModalState, tokenState } from "../../store";
-import { CryptoCard } from "../../components/CryptoCard";
-import { useUser } from "../../hooks";
-import { getEthUSD } from "../../services/utility";
-import { getMarketPrice } from "../../services/order";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {orderModalState, tokenState} from "../../store";
+import {CryptoCard} from "../../components/CryptoCard";
+import {useUser} from "../../hooks";
+import {getEthUSD} from "../../services/utility";
+import {getMarketPrice} from "../../services/order";
 
 export function Orders(): React.ReactElement {
     const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState);
@@ -45,13 +45,13 @@ export function Orders(): React.ReactElement {
     // const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
     const token = useRecoilValue(tokenState);
 
-    const { orders, ordersIsLoading, ordersIsError } = useOrders(token);
-    const { user, userIsLoading, userIsError } = useUser(token);
+    const {orders, ordersIsLoading, ordersIsError} = useOrders(token);
+    const {user, userIsLoading, userIsError} = useUser(token);
 
-    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook();
+    const {orderbook, orderbookIsLoading, orderbookIsError} = useOrderBook();
     const [marketBuy, setMarketBuy] = useState<number | null>(null);
     const [marketSell, setMarketSell] = useState<number | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const BCLT = {
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
@@ -80,14 +80,14 @@ export function Orders(): React.ReactElement {
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
             <VStack spacing={8}>
-                <Flex w="full" flexDirection="row" pl="4" mt={{ base: "10", md: "0" }}>
+                <Flex w="full" flexDirection="row" pl="4" mt={{base: "10", md: "0"}}>
                     <Heading> Your Orders </Heading>
                     <Spacer />
-                    <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} mr="4" />
+                    <BlueButton text="New Order" onClick={onOpen} w={{base: "25%", md: "auto"}} mr="4" />
                 </Flex>
-                <Flex w="full" flexDirection={{ base: "column-reverse", lg: "row" }}>
-                    <Flex flex={{ base: "1", lg: "0.75" }}>
-                        <Tabs w="full" variant="order" minH="280px" maxH={{ base: "400px", lg: "700px", xl: "1000px" }}>
+                <Flex w="full" flexDirection={{base: "column-reverse", lg: "row"}}>
+                    <Flex flex={{base: "1", lg: "0.75"}}>
+                        <Tabs w="full" variant="order" minH="280px" maxH={{base: "400px", lg: "700px", xl: "1000px"}}>
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
                                     <Tab w="25%">Active Orders ({orders ? orders.filter((order) => order.complete === false).length : 0})</Tab>
@@ -133,30 +133,23 @@ export function Orders(): React.ReactElement {
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex={{ base: "1", lg: "0.25" }} mb={{ base: "40px", lg: "0px" }} flexDir="column">
-                        <SimpleGrid columns={{ base: 2, lg: 1 }} spacing={2} w={{ base: "90%", lg: "full" }} alignSelf="center">
-                            <Box pb="4" w="full">
+                    <Flex flex={{base: "1", lg: "0.25"}} mb={{base: "40px", lg: "0px"}} flexDir="column">
+                        <Flex flexDir="row" spacing={2} w="full" justify="space-between" mb="4">
+                            <Box w="49%">
                                 <CryptoCard
                                     size="xs"
                                     active={true}
-                                    border={false}
                                     imageUrl={globalVars.BITCLOUT_LOGO}
-                                    currency={BCLT.currency}
+                                    currency={globalVars.BITCLOUT}
                                     amount={BCLT.amount}
+                                    border={true}
                                 />
                             </Box>
-                            <Box w="full" mb="4">
-                                <CryptoCard
-                                    size="xs"
-                                    active={true}
-                                    border={false}
-                                    imageUrl={globalVars.ETHER_LOGO}
-                                    currency={ETH.currency}
-                                    amount={ETH.amount}
-                                />
+                            <Box w="49%">
+                                <CryptoCard active={true} imageUrl={globalVars.ETHER_LOGO} currency={globalVars.ETHER} amount={ETH.amount} border={true} />
                             </Box>
-                        </SimpleGrid>
-                        <Box bg="white" borderRadius="8" boxShadow="xs" p="6" alignSelf="center" w={{ base: "90%", lg: "full" }}>
+                        </Flex>
+                        <Box bg="white" borderRadius="8" boxShadow="xs" p="6" alignSelf="center" w={{base: "90%", lg: "full"}}>
                             <HStack ml="3" mr="3">
                                 <Flex
                                     bgColor="#dbe6ff"
@@ -194,7 +187,7 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box maxH="325px" w={{ base: "full", lg: "440px" }} mt="2">
+                            <Box maxH="325px" w={{base: "full", lg: "440px"}} mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
