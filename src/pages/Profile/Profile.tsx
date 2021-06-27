@@ -271,8 +271,8 @@ export function Profile(): React.ReactElement {
     };
     const profilePage = user ? (
         <>
-            <SimpleGrid columns={{base:1, xl:2}} bgColor="white" spacing={10} mt="6">
-                <Flex bgColor="white" justify={{base:'center', xl:'start'}}>
+            <SimpleGrid columns={{ base: 1, xl: 2 }} bgColor="white" spacing={10} mt="6">
+                <Flex bgColor="white" justify={{ base: "center", xl: "start" }}>
                     <Modal isOpen={isEmailVerificationOpen} onClose={onEmailVerificationClose}>
                         <ModalOverlay />
                         <ModalContent>
@@ -296,7 +296,7 @@ export function Profile(): React.ReactElement {
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
-                    <VStack spacing={8} align={{base:'center', xl:'self-start'}}>
+                    <VStack spacing={8} align={{ base: "center", xl: "self-start" }}>
                         <HStack align="start">
                             <Image src={userPfp} w="80px" fit="cover" alignSelf="center" borderRadius="80px" mr="4" />
                             <VStack align="start" spacing="0" alignSelf="center">
@@ -498,7 +498,13 @@ export function Profile(): React.ReactElement {
                                 )}
                             </Flex>
                             {!user.verification.personaVerified && (
-                                <Flex flex="0.35" align="flex-end" justify="space-between" flexDir={{ base: "row", md: "column" }} mt={{ base: "15px", md: "0" }}>
+                                <Flex
+                                    flex="0.35"
+                                    align="flex-end"
+                                    justify="space-between"
+                                    flexDir={{ base: "row", md: "column" }}
+                                    mt={{ base: "15px", md: "0" }}
+                                >
                                     {startedVerification ? (
                                         <BlueButton
                                             onClick={() => (embeddedClientRef.current ? embeddedClientRef.current.open() : createClient())}
@@ -515,7 +521,7 @@ export function Profile(): React.ReactElement {
                 </Flex>
 
                 {/* WALLET SECTION */}
-                <Flex bgColor="white" justify={{base:'center', xl:'start'}}>
+                <Flex bgColor="white" justify={{ base: "center", xl: "start" }}>
                     <TransactionModal
                         disclosure={{
                             isOpen: isOpenTransactionModal,
@@ -564,7 +570,7 @@ export function Profile(): React.ReactElement {
                     <Flex flexDir="column" alignItems="center" w="full">
                         <Flex direction="column" bg="background.primary" w="full">
                             <VStack>
-                                <SimpleGrid columns={{base:1, lg:2}} spacing={2} w="full">
+                                <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={2} w="full">
                                     <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="full" maxW="sm">
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.BITCLOUT}

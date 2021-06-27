@@ -20,7 +20,7 @@ import {
     Td,
     HStack,
     Skeleton,
-    SkeletonText,
+    SimpleGrid,
 } from "@chakra-ui/react";
 import React, { useEffect, useState, useMemo } from "react";
 import { Column } from "react-table";
@@ -80,14 +80,14 @@ export function Orders(): React.ReactElement {
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
             <VStack spacing={8}>
-                <Flex w="full" flexDirection={{ base: "column", md: "row" }} pl="4">
-                    <Heading mb="2"> Your Orders </Heading>
-                    <Spacer display={{ base: "none", md: "block" }} />
-                    <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} />
+                <Flex w="full" flexDirection="row" pl="4" mt={{ base: "10", md: "0" }}>
+                    <Heading> Your Orders </Heading>
+                    <Spacer />
+                    <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} mr="4" />
                 </Flex>
-                <Flex w="full" flexDirection={{ base: "column", md: "row" }}>
-                    <Flex flex={{ base: "1", md: "0.75" }}>
-                        <Tabs w="full" variant="order" h="70vh">
+                <Flex w="full" flexDirection={{ base: "column-reverse", lg: "row" }}>
+                    <Flex flex={{ base: "1", lg: "0.75" }}>
+                        <Tabs w="full" variant="order" minH="280px" maxH={{ base: "400px", lg: "700px", xl: "1000px" }}>
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
                                     <Tab w="25%">Active Orders ({orders ? orders.filter((order) => order.complete === false).length : 0})</Tab>
@@ -133,22 +133,30 @@ export function Orders(): React.ReactElement {
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex={{ base: "1", md: "0.25" }} flexDir="column">
-                        <Box pb="4" w="full">
-                            <CryptoCard
-                                size="xs"
-                                active={true}
-                                border={false}
-                                imageUrl={globalVars.BITCLOUT_LOGO}
-                                currency={BCLT.currency}
-                                amount={BCLT.amount}
-                            />
-                        </Box>
-                        <Box w="full" mb="4">
-                            <CryptoCard size="xs" active={true} border={false} imageUrl={globalVars.ETHER_LOGO} currency={ETH.currency} amount={ETH.amount} />
-                        </Box>
-
-                        <Box bg="white" w="full" borderRadius="8" boxShadow="xs" p="6" alignSelf="flex-start">
+                    <Flex flex={{ base: "1", lg: "0.25" }} mb={{base:'40px', lg:'0px'}} flexDir="column">
+                        <SimpleGrid columns={{ base: 2, lg: 1 }} spacing={2} w={{ base: "90%", lg: "full" }} alignSelf="center">
+                            <Box pb="4" w="full">
+                                <CryptoCard
+                                    size="xs"
+                                    active={true}
+                                    border={false}
+                                    imageUrl={globalVars.BITCLOUT_LOGO}
+                                    currency={BCLT.currency}
+                                    amount={BCLT.amount}
+                                />
+                            </Box>
+                            <Box w="full" mb="4">
+                                <CryptoCard
+                                    size="xs"
+                                    active={true}
+                                    border={false}
+                                    imageUrl={globalVars.ETHER_LOGO}
+                                    currency={ETH.currency}
+                                    amount={ETH.amount}
+                                />
+                            </Box>
+                        </SimpleGrid>
+                        <Box bg="white" borderRadius="8" boxShadow="xs" p="6" alignSelf="center" w={{ base: "90%", lg: "full" }}>
                             <HStack ml="3" mr="3">
                                 <Flex
                                     bgColor="#dbe6ff"
@@ -186,7 +194,7 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box w="full" maxH="325px" mt="2">
+                            <Box maxH="325px" w={{base:'full', lg:'440px'}} mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
