@@ -1,4 +1,4 @@
-import {extendTheme, ThemeConfig} from "@chakra-ui/react";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import Button from "./components/Button";
 import Link from "./components/Link";
 import Tabs from "./components/Tabs";
