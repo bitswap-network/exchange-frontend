@@ -364,6 +364,9 @@ export function Profile(): React.ReactElement {
                                 >
                                     @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey}
                                 </Link>
+                                <Text color="#5B5B5B" fontWeight="400" fontSize="16" mt="1">
+                                    {user.bitclout.bio}
+                                </Text>
                                 {!nameEdit ? (
                                     <HStack onDoubleClick={() => setNameEdit(true)}>
                                         <Text color="#5B5B5B" fontWeight="500" fontSize="16">
@@ -408,9 +411,6 @@ export function Profile(): React.ReactElement {
                                         />
                                     </HStack>
                                 )}
-                                <Text color="#5B5B5B" fontWeight="400" fontSize="16" mt="1">
-                                    {user.bitclout.bio}
-                                </Text>
                             </VStack>
                         </HStack>
                         <Flex
