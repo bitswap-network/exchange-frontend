@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     Popover,
     PopoverBody,
@@ -16,11 +16,19 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import { MdNotificationsNone, MdNotificationsActive } from "react-icons/md";
-import { Notification } from "./Notification";
-// type NotifProps = Partial<LinkProps & PopoverProps>;
-
+import {MdNotificationsActive} from "react-icons/md";
+import {Notification} from "./Notification";
+import {getNotifs} from "../../../../services/user";
+import {Order} from "../../../../interfaces/Order"
 export const NotifPopover: React.FC<any> = (props: any) => {
+    const [notifications, setNotifications] = useState<Array<Order>>([])
+    useEffect(() => {
+        getNotifs().then((response) => {
+            setNotifications(response.data.data)
+        }).catch((error) => {
+            console.error(error)
+        })
+    }, [])
     return (
         <Popover size="lg" boundary="scrollParent" preventOverflow={false}>
             <PopoverTrigger>
@@ -35,30 +43,18 @@ export const NotifPopover: React.FC<any> = (props: any) => {
                 <PopoverArrow bg="brand.100" />
                 <PopoverBody bg="white" w="full" p="0">
                     <VStack divider={<StackDivider borderColor="gray.200" />} w="max" spacing={0}>
-                        <Notification
-                            type={0}
-                            notifRead={false}
-                            orderId="11111"
-                            timestamp={new Date("06/24/2021")}
-                            complete={true}
-                            orderDetails={{ cloutValue: 6.9, ethValue: 4.2 }}
-                        />
-                        <Notification
-                            type={1}
-                            notifRead={false}
-                            orderId="111121"
-                            timestamp={new Date("06/23/2021")}
-                            complete={true}
-                            orderDetails={{ cloutValue: 6.9, ethValue: 4.2 }}
-                        />
-                        <Notification
-                            type={2}
-                            notifRead={true}
-                            orderId="111121"
-                            timestamp={new Date("06/23/2021")}
-                            complete={true}
-                            orderDetails={{ cloutValue: 6.9, ethValue: 4.2 }}
-                        />
+                        {notifications.map((order, i) => (
+                            <Notification
+                                key={order._id}
+                                type={order.error ? 2 : order.orderType == "buy" ? 0 : 1}
+                                notifRead={false}
+                                orderId={order.orderID}
+                                timestamp={order.completeTime ? new Date(order.completeTime) : new Date(order.created)}
+                                complete={order.complete}
+                                orderDetails={{cloutValue: +order.orderQuantityProcessed.toFixed(2), ethValue: +order.etherQuantity.toFixed(2)}}
+                                error={order.error !== "" ? order.error : undefined}
+                            />
+                        ))}
                     </VStack>
                 </PopoverBody>
                 <PopoverFooter bg="white" border="hidden" d="flex" alignItems="center" justifyContent="space-between" pb={4} />

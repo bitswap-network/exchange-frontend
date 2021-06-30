@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link, Button, Text, VStack, HStack, Image } from "@chakra-ui/react";
-import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
-import { FaCircle } from "react-icons/fa";
+import React, {useState} from "react";
+import {Link, Button, Text, VStack, HStack, Image} from "@chakra-ui/react";
+import {VscTriangleDown, VscTriangleUp} from "react-icons/vsc";
+import {FaCircle} from "react-icons/fa";
 import * as globalVars from "../../../../globalVars";
 
 const nWidth = "400px";
@@ -23,7 +23,7 @@ interface NotifProps {
     };
 }
 
-export function Notification({ type, notifRead, orderId, timestamp, complete, error, orderDetails }: NotifProps): React.ReactElement {
+export function Notification({type, notifRead, orderId, timestamp, complete, error, orderDetails}: NotifProps): React.ReactElement {
     const [active, setActive] = useState(false);
     const [activeButton, setActiveButton] = useState(false);
     const renderHandler = () => {
@@ -72,13 +72,13 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                     </HStack>
                 </HStack>
             </VStack>
-            <FaCircle size="8" color={notifRead ? "white" : "var(--chakra-colors-brand-100)"} />
+            <FaCircle size="8" color={notifRead ? "white" : "white"} />
             <Button
                 size="sm"
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{ bg: "brand.150" }}
+                _hover={{bg: "brand.150"}}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
@@ -122,14 +122,14 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                     </HStack>
                 </HStack>
             </VStack>
-            <FaCircle size="8" color={notifRead ? "white" : "var(--chakra-colors-brand-100)"} />
+            <FaCircle size="8" color={notifRead ? "white" : "white"} />
             <Button
                 size="sm"
                 fontSize="sm"
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{ bg: "brand.150" }}
+                _hover={{bg: "brand.150"}}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
@@ -158,22 +158,18 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                 <Text whiteSpace="nowrap" color="#696F79" fontSize="sm" fontWeight="bold">
                     {"Order Deactivated"}
                 </Text>
-                <Text whiteSpace="nowrap" color="#8692A6" fontSize="xs" fontWeight="light">
+                <Text whiteSpace="nowrap" color="#8692A6" fontSize="xs" fontWeight="light" textOverflow="clip" maxW="147px" overflow="hidden">
                     {error ? error : "Placeholder error text."}
                 </Text>
-                {/* <HStack w="full" spacing={2}>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6"><VscTriangleUp color="var(--chakra-colors-brand-100)" style={{display: "inline"}} /> {orderDetails?.ethValue} {globalVars.ETHER}</Text>
-                    <Text fontSize="xs" whiteSpace="nowrap" color="#8692A6"><VscTriangleDown color="#8692A6" style={{display: "inline"}} /> {orderDetails?.cloutValue} {globalVars.BITCLOUT}</Text>
-                </HStack> */}
             </VStack>
-            <FaCircle size="8" color={notifRead ? "white" : "var(--chakra-colors-brand-100)"} />
+            <FaCircle size="8" color={notifRead ? "white" : "white"} />
             <Button
                 size="sm"
                 fontSize="sm"
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{ bg: "brand.150" }}
+                _hover={{bg: "brand.150"}}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >

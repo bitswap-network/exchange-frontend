@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 import {
     Flex,
@@ -19,7 +19,6 @@ import {
     Input,
     InputGroup,
     SimpleGrid,
-    Button,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -33,21 +32,26 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
+    Button,
+    InputRightAddon
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { AiFillInfoCircle } from "react-icons/ai";
-import { useUser } from "../../hooks";
-import { useRecoilValue } from "recoil";
-import { Chart } from "../../components/BitCloutChart/Chart";
-import { getMarketPrice } from "../../services/order";
-import { tokenState } from "../../store";
-import { MdLoop } from "react-icons/md";
+import {ExternalLinkIcon} from "@chakra-ui/icons";
+import {AiFillInfoCircle} from "react-icons/ai";
+import {useUser} from "../../hooks";
+import {useOrderBook} from "../../hooks";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {Chart} from "../../components/BitCloutChart/Chart";
+import {getMarketPrice, getMarketQuantity} from "../../services/order";
+import {tokenState} from "../../store";
+import {MdLoop} from "react-icons/md";
 import * as globalVars from "../../globalVars";
-import { BlueButton } from "../../components/BlueButton";
+import {BlueButton} from "../../components/BlueButton";
+import {getEthUSD, getBitcloutUSD} from "../../services/utility";
+
 
 export function Home(): React.ReactElement {
     const token = useRecoilValue(tokenState);
-    const { user, userIsLoading, userIsError } = useUser(token);
+    const {user, userIsLoading, userIsError} = useUser(token);
     const [marketBuy, setMarketBuy] = useState<number | null>(null);
     const [marketSell, setMarketSell] = useState<number | null>(null);
     const [orderSide, setOrderSide] = useState<string>("buy");
@@ -59,17 +63,38 @@ export function Home(): React.ReactElement {
     const [customSlippage, setCustomSlippage] = useState<string>("0.10");
     const [ethErr, setEthErr] = useState<string>("");
     const [cloutErr, setCloutErr] = useState<string>("");
+    const [ethUsd, setEthUsd] = useState<number | null>(null);
+    const [cloutUsd, setCloutUsd] = useState<number | null>(null);
     const precision = 4;
-    const { isOpen: slippageIsOpen, onOpen: slippageOnOpen, onClose: slippageOnClose } = useDisclosure();
+    const {isOpen: slippageIsOpen, onOpen: slippageOnOpen, onClose: slippageOnClose} = useDisclosure();
     useEffect(() => {
+        getEthUSD().then((response) => {
+            setEthUsd(response.data.data);
+        });
+        getBitcloutUSD().then((response) => {
+            setCloutUsd(response.data.data);
+        });
         getMarketPrice(0.05, "buy").then((response) => {
             setMarketBuy(response.data.price * 20);
         });
         getMarketPrice(0.05, "sell").then((response) => {
             setMarketSell(response.data.price * 20);
         });
-        setExchangeRate(18.34345);
-    });
+    }, []);
+
+
+    useEffect(() => {
+        if (ethUsd) {
+            getMarketQuantity(parseFloat(orderEthQuantity) * ethUsd, orderSide).then((response) => {
+                setCloutOrderQuantity(globalVars.parseNum((response.data.quantity).toFixed(precision)));
+            });
+
+            getMarketPrice(parseFloat(orderCloutQuantity), orderSide).then((response) => {
+                setEthOrderQuantity(globalVars.parseNum((response.data.price / ethUsd).toFixed(precision)));
+            });
+
+        }
+    }, [orderSide])
 
     const toggleOrderSide = () => {
         if (orderSide === "buy") {
@@ -83,19 +108,22 @@ export function Home(): React.ReactElement {
         setEthOrderQuantity(globalVars.parseNum(e.target.value));
         setCloutErr("");
         setEthErr("");
-        if (exchangeRate) {
-            setCloutOrderQuantity(globalVars.parseNum((exchangeRate * parseFloat(globalVars.parseNum(e.target.value))).toFixed(precision).toString()));
-        }
+        ethUsd && getMarketQuantity(parseFloat(e.target.value) * ethUsd, orderSide).then((response) => {
+            setCloutOrderQuantity(globalVars.parseNum((response.data.quantity).toFixed(precision)));
+        }).catch((error) => {
+            setEthErr("Insufficient Market Volume.");
+        })
     };
 
     const handleCloutChange = (e: any) => {
         setCloutOrderQuantity(globalVars.parseNum(e.target.value));
         setCloutErr("");
         setEthErr("");
-        if (exchangeRate) {
-            const inverse = (1 / exchangeRate).toFixed(8);
-            setEthOrderQuantity(globalVars.parseNum((inverse * parseFloat(globalVars.parseNum(e.target.value))).toFixed(precision).toString()));
-        }
+        ethUsd && getMarketPrice(parseFloat(e.target.value), orderSide).then((response) => {
+            setEthOrderQuantity(globalVars.parseNum((response.data.price / ethUsd).toFixed(precision)));
+        }).catch((error) => {
+            setCloutErr("Insufficient Market Volume.")
+        })
     };
 
     const handleSwap = () => {
@@ -164,9 +192,9 @@ export function Home(): React.ReactElement {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
+            <SimpleGrid columns={{base: 1, md: 2}} spacing={4} w="full">
                 <Flex flexDirection="column" w="full" padding={4}>
-                    <Heading fontSize={{ base: "32px", md: "52px" }} mb={4}>
+                    <Heading fontSize={{base: "32px", md: "52px"}} mb={4}>
                         Buy and Sell BitClout for Ethereum
                     </Heading>
                     <Heading fontSize="18px" color="#696F79" fontWeight="medium" lineHeight="8">
@@ -185,11 +213,11 @@ export function Home(): React.ReactElement {
                     >
                         <HStack justify="space-evenly">
                             <Text>
-                                <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{ display: "inline" }} />{" "}
+                                <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{display: "inline"}} />{" "}
                                 {user ? +user.balance.bitclout.toFixed(2) : "-"} CLOUT
                             </Text>
                             <Text>
-                                <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{ display: "inline" }} /> {user ? +user.balance.ether.toFixed(2) : "-"}{" "}
+                                <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{display: "inline"}} /> {user ? +user.balance.ether.toFixed(2) : "-"}{" "}
                                 ETHER
                             </Text>
                         </HStack>
@@ -204,7 +232,7 @@ export function Home(): React.ReactElement {
                         borderWidth="2px"
                         borderColor="#DDE2E5"
                     >
-                        <HStack w="full" justify="space-evenly" mt="2" display={{ base: "none", md: "flex" }}>
+                        <HStack w="full" justify="space-evenly" mt="2" display={{base: "none", md: "flex"}}>
                             <Flex
                                 p="4"
                                 color="brand.100"
@@ -256,15 +284,15 @@ export function Home(): React.ReactElement {
                     </Box>
                 </Flex>
                 <Flex flexDirection="column" w="full" padding={4} justify="center" align="center">
-                    <Box maxW={{ base: "450px" }}>
+                    <Box maxW={{base: "450px"}}>
                         <VStack w="full" borderColor="#DDE2E5" borderWidth="2px" borderRadius="6" boxShadow="0px 0px 30px 12px rgba(0,0,0,0.07)">
                             <HStack spacing={0} borderRadius="inherit" w="full" justify="space-evenly" textAlign="center" fontSize="20" fontWeight="bold">
-                                <Box borderRadius="inherit" w="full" bg="white" py="4" onClick={() => setOrderSide("buy")} cursor="pointer">
+                                <Box borderRadius="inherit" w="full" bg={orderSide === "buy" ? "white" : "#F9FBFF"} py="4" onClick={() => setOrderSide("buy")} cursor="pointer">
                                     <Text color={orderSide === "buy" ? "#2E6DED" : "#ACB5BD"} fontSize="17">
                                         Buy
                                     </Text>
                                 </Box>
-                                <Box borderRadius="inherit" w="full" bg="#F9FBFF" py="4" onClick={() => setOrderSide("sell")} cursor="pointer">
+                                <Box borderRadius="inherit" w="full" bg={orderSide === "sell" ? "white" : "#F9FBFF"} py="4" onClick={() => setOrderSide("sell")} cursor="pointer">
                                     <Text fontSize="17" color={orderSide === "sell" ? "#2E6DED" : "#ACB5BD"}>
                                         Sell
                                     </Text>
@@ -339,7 +367,7 @@ export function Home(): React.ReactElement {
                                     onClick={toggleOrderSide}
                                     cursor="pointer"
                                 >
-                                    <MdLoop color="#7E91BA" size="28px" style={{ margin: "auto" }} />
+                                    <MdLoop color="#7E91BA" size="28px" style={{margin: "auto"}} />
                                 </Box>
                                 <Box p="4" pos="relative" borderWidth="2px" borderColor="rgba(221, 226, 229, 0.5)" borderRadius="10">
                                     <HStack
@@ -453,11 +481,9 @@ export function Home(): React.ReactElement {
                             <HStack w="full" justify="space-between" px="6" color="#81868C">
                                 <Text fontSize="14px">Exchange Rate:</Text>
                                 <Text fontSize="14px" fontWeight="bold">
-                                    {!exchangeRate
-                                        ? "-------"
-                                        : orderSide == "buy"
-                                        ? `1 ETH ~ ${exchangeRate} CLOUT`
-                                        : `1 CLOUT ~ ${(1 / exchangeRate).toFixed(precision)} ETH`}
+                                    {orderSide == "buy"
+                                        ? `1 ETH ~ ${+(orderCloutQuantity / orderEthQuantity).toFixed(precision)} CLOUT`
+                                        : `1 CLOUT ~ ${+(orderEthQuantity / orderCloutQuantity).toFixed(precision)} ETH`}
                                 </Text>
                             </HStack>
                             <HStack w="full" justify="space-between" px="6" color="#81868C">

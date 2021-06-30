@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Box,
     Flex,
@@ -17,22 +17,22 @@ import {
     DrawerContent,
     DrawerCloseButton,
 } from "@chakra-ui/react";
-import { HiMenu } from "react-icons/hi";
-import { FiLogOut, FiLogIn } from "react-icons/fi";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Logo } from "./components/Logo";
-import { NavLink } from "./components/NavLink";
-import { NotifPopover } from "./components/NotifPopover";
-import { Link } from "react-router-dom";
-import { loggedInState, orderModalState, userState } from "../../store";
-import { logout } from "../../helpers/persistence";
+import {HiMenu} from "react-icons/hi";
+import {FiLogOut, FiLogIn} from "react-icons/fi";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {Logo} from "./components/Logo";
+import {NavLink} from "./components/NavLink";
+import {NotifPopover} from "./components/NotifPopover";
+import {Link} from "react-router-dom";
+import {loggedInState, orderModalState, userState} from "../../store";
+import {logout} from "../../helpers/persistence";
 
 export function DefaultNavBar() {
     return (
         <Flex alignItems={"center"} justifyContent={"space-between"} p={4} boxShadow="md" h="8vh" w="full">
-            <Logo as={Link} to="/" ml={{ base: 2, sm: 4, md: 8 }} />
-            <Flex mr={{ base: 2, sm: 4, md: 8 }}>
-                <Box _hover={{ backgroundColor: "background.primary", cursor: "pointer" }} borderRadius="sm" p={1} as={Link} to="/login">
+            <Logo as={Link} to="/" ml={{base: 2, sm: 4, md: 8}} />
+            <Flex mr={{base: 2, sm: 4, md: 8}}>
+                <Box _hover={{backgroundColor: "background.primary", cursor: "pointer"}} borderRadius="sm" p={1} as={Link} to="/login">
                     <HStack>
                         <Text>Login</Text>
                         <FiLogIn size="20" />
@@ -44,14 +44,12 @@ export function DefaultNavBar() {
 }
 
 function NavBarFunc() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const isLoggedIn = useRecoilValue(loggedInState);
     const user = useRecoilValue(userState);
     const setOrderModalState = useSetRecoilState(orderModalState);
     const emailToast = useToast();
-    const deviceToast = useToast();
     const [emailToastOpened, setEmailToastOpened] = useState(false);
-    const [deviceToastOpened, setDeviceToastOpened] = useState(false);
 
     console.log(window.location.pathname);
     useEffect(() => {
@@ -70,20 +68,7 @@ function NavBarFunc() {
             emailToast.closeAll();
         }
     }, [user?.verification]);
-    useEffect(() => {
-        if (window.innerWidth < 768 && !deviceToastOpened) {
-            setDeviceToastOpened(true);
-            deviceToast({
-                title: "Mobile device detected.",
-                description: "Access BitSwap on a desktop or laptop for the best experience.",
-                status: "warning",
-                duration: 10000,
-                isClosable: true,
-                position: "top",
-            });
-        }
-    }, []);
-    // 📌 TODO: Connect all functionality
+
     const loggedInMarkup = (
         <>
             <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -118,26 +103,26 @@ function NavBarFunc() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Flex justifyContent={{ base: "flex-start", md: "space-between" }} px={{ base: 8, md: 4 }} boxShadow="md" h="8vh">
-                <HStack spacing={2} display={{ base: "inline-flex", md: "none" }}>
+            <Flex justifyContent={{base: "flex-start", md: "space-between"}} px={{base: 8, md: 4}} boxShadow="md" h="8vh">
+                <HStack spacing={2} display={{base: "inline-flex", md: "none"}}>
                     <IconButton
                         size="lg"
                         icon={isOpen ? <></> : <HiMenu size="30" />}
                         aria-label={"Open Menu"}
-                        display={{ md: "none" }}
+                        display={{md: "none"}}
                         onClick={isOpen ? () => onClose() : () => onOpen()}
                     />
                     <Spacer />
                     <Logo as={Link} to="/" />
                 </HStack>
-                <HStack spacing={8} display={{ base: "none", md: "flex" }} ml="16">
+                <HStack spacing={8} display={{base: "none", md: "flex"}} ml="16">
                     <Logo as={Link} to="/" ml={4} mr={4} />
                     <NavLink as={Link} to="/" label={"Home"} />
                     <NavLink as={Link} to="/orders" label={"Orders"} />
                     <NavLink as={Link} to="/profile" label={"Account"} />
                     <NotifPopover />
                 </HStack>
-                <HStack spacing={8} display={{ base: "none", md: "flex" }} mr="6">
+                <HStack spacing={8} display={{base: "none", md: "flex"}} mr="6">
                     {/* <Button
                                 as={Link}
                                 to={{
@@ -154,7 +139,7 @@ function NavBarFunc() {
                                 </Text>
                             </Button> */}
                     <Box
-                        _hover={{ backgroundColor: "background.primary", cursor: "pointer" }}
+                        _hover={{backgroundColor: "background.primary", cursor: "pointer"}}
                         onClick={() => {
                             logout();
                             window.location.assign("/");

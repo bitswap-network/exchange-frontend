@@ -1,4 +1,4 @@
-import { authClient } from "../index";
+import {authClient} from "../index";
 
 export const getUserData = async () => {
     return await authClient.get("/user/data");
@@ -17,6 +17,10 @@ export const getTransactionById = async (id: string) => {
 
 export const getOrders = async () => {
     return await authClient.get(`/user/orders`);
+};
+
+export const getNotifs = async () => {
+    return await authClient.get(`/user/notifications`);
 };
 
 export const updateName = async (name: string) => {

@@ -8,10 +8,11 @@ export type Order = {
     orderID: string;
     orderSide: string;
     orderType: string;
+    etherQuantity: number;
     orderQuantity: number;
-    orderPrice: number | undefined;
-    execPrice: number | undefined;
+    orderPrice: number;
     fees: number | undefined;
+    execPrice: number | undefined;
     orderQuantityProcessed: number;
     complete: boolean;
     error: string | undefined;
