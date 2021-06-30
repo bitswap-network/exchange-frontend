@@ -314,7 +314,9 @@ export function Profile(): React.ReactElement {
                                 <FiArrowDown size={50} color="#C4C4C4" style={{ marginTop: 20 }} />
                                 <Flex mt="6" flexDir="column" alignItems="center">
                                     <Text fontWeight="600" textAlign="center" width="200px">
-                                        Verify your identity to advance to the next tier.
+                                        {user.tier == 0
+                                            ? "Verify your identity to advance to the next tier."
+                                            : "You have already verified your identity and are a Gold Tier user"}
                                     </Text>
                                     <Text
                                         fontSize="lg"
