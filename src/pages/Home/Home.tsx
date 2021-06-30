@@ -207,27 +207,29 @@ export function Home(): React.ReactElement {
                         BitSwap is the easiest and fastest way to buy and sell BitClout. Join the world&apos;s first BitClout exchange and start trading today!
                     </Heading>
 
-                    <Box
-                        boxShadow="0px 0px 30px 12px rgba(0,0,0,0.07)"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        bg="white"
-                        p="2"
-                        mt="4"
-                        borderWidth="2px"
-                        borderColor="#DDE2E5"
-                    >
-                        <HStack justify="space-evenly">
-                            <Text>
-                                <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{ display: "inline" }} /> CLOUT Balance:{" "}
-                                {user ? +user.balance.bitclout.toFixed(2) : "-"}
-                            </Text>
-                            <Text>
-                                <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{ display: "inline" }} /> ETHER Balance:{" "}
-                                {user ? +user.balance.ether.toFixed(2) : "-"}
-                            </Text>
-                        </HStack>
-                    </Box>
+                    {user ? (
+                        <Box
+                            boxShadow="0px 0px 30px 12px rgba(0,0,0,0.07)"
+                            borderRadius="lg"
+                            overflow="hidden"
+                            bg="white"
+                            p="2"
+                            mt="4"
+                            borderWidth="2px"
+                            borderColor="#DDE2E5"
+                        >
+                            <HStack justify="space-evenly">
+                                <Text>
+                                    <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{ display: "inline" }} /> CLOUT Balance:{" "}
+                                    {user ? +user.balance.bitclout.toFixed(2) : "-"}
+                                </Text>
+                                <Text>
+                                    <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{ display: "inline" }} /> ETHER Balance:{" "}
+                                    {user ? +user.balance.ether.toFixed(2) : "-"}
+                                </Text>
+                            </HStack>
+                        </Box>
+                    ) : null}
                     <Box
                         boxShadow="0px 0px 30px 12px rgba(0,0,0,0.07)"
                         borderRadius="lg"
