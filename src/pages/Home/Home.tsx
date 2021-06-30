@@ -160,7 +160,8 @@ export function Home(): React.ReactElement {
                     <ModalHeader>Custom Slippage</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Enter a custom maximum slippage amount
+                    <Text>Enter a custom maximum slippage amount (%)</Text>
+                        <Text color="gray.500" fontSize="sm" mb="4">For example, a value of 2.5 means your max slippage tolerance will be 2.5%</Text>
                         <NumberInput
                             min={0.1}
                             value={customSlippage}
@@ -213,12 +214,11 @@ export function Home(): React.ReactElement {
                     >
                         <HStack justify="space-evenly">
                             <Text>
-                                <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{display: "inline"}} />{" "}
-                                {user ? +user.balance.bitclout.toFixed(2) : "-"} CLOUT
+                                <Image src={globalVars.BITCLOUT_LOGO} htmlWidth="32" style={{display: "inline"}} />
+                                {" "}CLOUT Balance: {user ? +user.balance.bitclout.toFixed(2) : "-"}
                             </Text>
                             <Text>
-                                <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{display: "inline"}} /> {user ? +user.balance.ether.toFixed(2) : "-"}{" "}
-                                ETHER
+                                <Image src={globalVars.ETHER_LOGO} htmlWidth="30" style={{display: "inline"}} />{" "}ETHER Balance: {user ? +user.balance.ether.toFixed(2) : "-"}
                             </Text>
                         </HStack>
                     </Box>
