@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     Popover,
     PopoverBody,
@@ -16,19 +16,21 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import {MdNotificationsActive} from "react-icons/md";
-import {Notification} from "./Notification";
-import {getNotifs} from "../../../../services/user";
-import {Order} from "../../../../interfaces/Order"
+import { MdNotificationsActive } from "react-icons/md";
+import { Notification } from "./Notification";
+import { getNotifs } from "../../../../services/user";
+import { Order } from "../../../../interfaces/Order";
 export const NotifPopover: React.FC<any> = (props: any) => {
-    const [notifications, setNotifications] = useState<Array<Order>>([])
+    const [notifications, setNotifications] = useState<Array<Order>>([]);
     useEffect(() => {
-        getNotifs().then((response) => {
-            setNotifications(response.data.data)
-        }).catch((error) => {
-            console.error(error)
-        })
-    }, [])
+        getNotifs()
+            .then((response) => {
+                setNotifications(response.data.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
     return (
         <Popover size="lg" boundary="scrollParent" preventOverflow={false}>
             <PopoverTrigger>
@@ -51,7 +53,7 @@ export const NotifPopover: React.FC<any> = (props: any) => {
                                 orderId={order.orderID}
                                 timestamp={order.completeTime ? new Date(order.completeTime) : new Date(order.created)}
                                 complete={order.complete}
-                                orderDetails={{cloutValue: +order.orderQuantityProcessed.toFixed(2), ethValue: +order.etherQuantity.toFixed(2)}}
+                                orderDetails={{ cloutValue: +order.orderQuantityProcessed.toFixed(2), ethValue: +order.etherQuantity.toFixed(2) }}
                                 error={order.error !== "" ? order.error : undefined}
                             />
                         ))}

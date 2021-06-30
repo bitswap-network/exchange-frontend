@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {Link, Button, Text, VStack, HStack, Image} from "@chakra-ui/react";
-import {VscTriangleDown, VscTriangleUp} from "react-icons/vsc";
-import {FaCircle} from "react-icons/fa";
+import React, { useState } from "react";
+import { Link, Button, Text, VStack, HStack, Image } from "@chakra-ui/react";
+import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
+import { FaCircle } from "react-icons/fa";
 import * as globalVars from "../../../../globalVars";
 
 const nWidth = "400px";
@@ -23,7 +23,7 @@ interface NotifProps {
     };
 }
 
-export function Notification({type, notifRead, orderId, timestamp, complete, error, orderDetails}: NotifProps): React.ReactElement {
+export function Notification({ type, notifRead, orderId, timestamp, complete, error, orderDetails }: NotifProps): React.ReactElement {
     const [active, setActive] = useState(false);
     const [activeButton, setActiveButton] = useState(false);
     const renderHandler = () => {
@@ -78,7 +78,7 @@ export function Notification({type, notifRead, orderId, timestamp, complete, err
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{bg: "brand.150"}}
+                _hover={{ bg: "brand.150" }}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
@@ -129,7 +129,7 @@ export function Notification({type, notifRead, orderId, timestamp, complete, err
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{bg: "brand.150"}}
+                _hover={{ bg: "brand.150" }}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
@@ -169,7 +169,7 @@ export function Notification({type, notifRead, orderId, timestamp, complete, err
                 bg="brand.100"
                 color="white"
                 w="25%"
-                _hover={{bg: "brand.150"}}
+                _hover={{ bg: "brand.150" }}
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >

@@ -29,7 +29,13 @@ import {
     Th,
     Td,
     TableCaption,
+    List,
+    ListItem,
+    ListIcon,
+    OrderedList,
+    UnorderedList,
 } from "@chakra-ui/react";
+import { FiArrowDown } from "react-icons/fi";
 import { BalanceCard } from "../../components/BalanceCard";
 import { CryptoCard } from "../../components/CryptoCard";
 import { tokenState } from "../../store";
@@ -105,6 +111,9 @@ export function Profile(): React.ReactElement {
             setTransactions(response.data.data);
         });
     }, []);
+    useEffect(() => {
+        console.log(user);
+    }, [user]);
     useEffect(() => {
         if (selectedCurrency.type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
@@ -281,15 +290,52 @@ export function Profile(): React.ReactElement {
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
-                <Modal isOpen={isTierOpen} onClose={onTierClose}>
+                <Modal isOpen={isTierOpen} onClose={onTierClose} isCentered size="sm">
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader>BitSwap Tiers</ModalHeader>
                         <ModalCloseButton />
-                        <ModalBody>Insert content here</ModalBody>
-                        <ModalFooter>
-                            <BlueButton text={`   Close   `} onClick={onTierClose} mr="3" />
-                        </ModalFooter>
+                        <ModalBody>
+                            <Flex flexDir="column" alignItems="center" mt="6" mb="8">
+                                <Text fontSize="2xl" fontWeight="700">
+                                    BitSwap Tiers
+                                </Text>
+                                <Text fontSize="md" fontWeight="500" color={user.tier == 0 ? "#7F7F7F" : "#F6B100"}>
+                                    @{user.bitclout.username ? user.bitclout.username : user.bitclout.publicKey} - {user.tier == 0 ? "Silver" : "Gold"} Tier
+                                </Text>
+                                <Flex mt="6" flexDir="column" alignItems="center">
+                                    <Text fontSize="lg" fontWeight="600" border="2px solid #C4C4C4" pl="2" pr="2" borderRadius="5px" color="#7F7F7F ">
+                                        Silver Tier
+                                    </Text>
+                                    <UnorderedList mt="2" display="flex" flexDir="column" alignItems="center">
+                                        <ListItem fontWeight="500">$2000 Withdraw Limit</ListItem>
+                                        <ListItem fontWeight="500">Market Orders Only</ListItem>
+                                    </UnorderedList>
+                                </Flex>
+                                <FiArrowDown size={50} color="#C4C4C4" style={{ marginTop: 20 }} />
+                                <Flex mt="6" flexDir="column" alignItems="center">
+                                    <Text fontWeight="600" textAlign="center" width="200px">
+                                        Verify your identity to advance to the next tier.
+                                    </Text>
+                                    <Text
+                                        fontSize="lg"
+                                        fontWeight="500"
+                                        border="2px solid #F6B100"
+                                        pl="2"
+                                        pr="2"
+                                        borderRadius="5px"
+                                        color="white"
+                                        mt="4"
+                                        bgColor="#F6B100"
+                                    >
+                                        Gold Tier
+                                    </Text>
+                                    <UnorderedList mt="2" display="flex" flexDir="column" alignItems="center">
+                                        <ListItem fontWeight="500">Unlimited Trading</ListItem>
+                                        <ListItem fontWeight="500">Market and Limit Orders</ListItem>
+                                    </UnorderedList>
+                                </Flex>
+                            </Flex>
+                        </ModalBody>
                     </ModalContent>
                 </Modal>
                 <TransactionModal
@@ -338,16 +384,15 @@ export function Profile(): React.ReactElement {
                     </>
                 )}
             </>
-            <Flex flexDirection={{ base: "column", sm: "column", md: "row" }} w="full" p={4} justify={{ base: "start", md: "space-between" }} mt={4}>
-                <Flex flexDirection="column" w={{ base: "100%", md: "55%" }} m={6} ml={10}>
-                    <VStack spacing={6} align={{ base: "center", md: "flex-start" }} w="full">
+            <Flex flexDirection={{ base: "column", md: "row" }} w="full" p={4} justify={{ base: "start", md: "space-between" }} mt={4}>
+                <Flex flexDirection="column" w={{ base: "100%", md: "55%" }} m={6} ml={{ base: 0, md: 10 }}>
+                    <VStack spacing={6} align={{ base: "flex-start", md: "flex-start" }} w="full">
                         <HStack align="start" mb="2" spacing={4}>
-                            {/* <Box borderRadius="full" boxSize={{base: "100px"}} minW="100px" minH="100px" mr="4" bg="#FFC634" d="flex"> */}
                             <Image
                                 src={`https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}`}
                                 boxSize={{ base: "100px" }}
                                 borderStyle="solid"
-                                borderColor="#FFC634"
+                                borderColor={user.tier == 0 ? "#C4C4C4" : "#FFC634"}
                                 borderWidth="6px"
                                 fallbackSrc="https://bitclout.com/assets/img/default_profile_pic.png"
                                 fit="cover"
@@ -414,7 +459,7 @@ export function Profile(): React.ReactElement {
                             </VStack>
                         </HStack>
                         <Flex
-                            w={{ base: "80%", md: "full" }}
+                            w={{ base: "full", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
                             p="6"
                             borderRadius="8"
@@ -426,13 +471,13 @@ export function Profile(): React.ReactElement {
                                     <Text color="#44423D" fontWeight="700" fontSize="18">
                                         Tier
                                     </Text>
-                                    <FaCircle color="#FFC634" size="16" />
+                                    <FaCircle color={user.tier == 0 ? "#C4C4C4" : "#FFC634"} size="16" />
                                 </HStack>
 
                                 <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
-                                    You are a <span style={{ fontWeight: 600 }}>Gold Tier</span> BitSwap user.
+                                    You are a <span style={{ fontWeight: 600 }}>{user.tier == 0 ? "Silver" : "Gold"} Tier</span> BitSwap user.
                                     <br />
-                                    Enjoy unlimited trading on BitSwap!
+                                    {user.tier == 0 ? "Verify your identity to advance to the next tier." : "Enjoy unlimited trading on BitSwap!"}
                                 </Text>
                             </Flex>
                             <Flex flex="0.35" justify={{ base: "center", md: "flex-end" }} align="center" mt={{ base: "15px", md: "0" }}>
@@ -440,7 +485,7 @@ export function Profile(): React.ReactElement {
                             </Flex>
                         </Flex>
                         <Flex
-                            w={{ base: "80%", md: "full" }}
+                            w={{ base: "full", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
                             p="6"
                             borderRadius="8"
@@ -493,7 +538,7 @@ export function Profile(): React.ReactElement {
                             </Flex>
                             <Flex
                                 flex="0.35"
-                                justify={{ base: "center" }}
+                                justify={{ base: "center", md: "space-between" }}
                                 align={{ base: "center", md: "flex-end" }}
                                 flexDir={{ base: "row", md: "column" }}
                                 mt={{ base: "15px", md: "0" }}
@@ -548,7 +593,7 @@ export function Profile(): React.ReactElement {
                         </Flex>
                         <Flex
                             mt="20px"
-                            w={{ base: "80%", md: "full" }}
+                            w={{ base: "full", md: "full" }}
                             flexDir={{ base: "column", md: "row" }}
                             p="6"
                             borderRadius="8"
@@ -608,7 +653,13 @@ export function Profile(): React.ReactElement {
                 </Flex>
 
                 {/* WALLET SECTION */}
-                <Flex justify={{ base: "space-between", xl: "start" }} flexDirection="column" w={{ base: "full", md: "45%" }} m={6} mr={10}>
+                <Flex
+                    justify={{ base: "space-between", xl: "start" }}
+                    flexDirection="column"
+                    w={{ base: "full", md: "45%" }}
+                    m={{ base: 0, md: 6 }}
+                    mr={{ base: 0, md: 10 }}
+                >
                     <Flex flexDir="column" alignItems="center" w="full">
                         <Flex direction="column" bg="white" w="full">
                             <VStack>

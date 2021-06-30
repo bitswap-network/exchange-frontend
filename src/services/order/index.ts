@@ -1,4 +1,4 @@
-import {authClient, client} from "../index";
+import { authClient, client } from "../index";
 
 export const getOrder = async (id: string) => {
     return await authClient.get(`/order/${id}`);
