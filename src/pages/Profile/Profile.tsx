@@ -255,7 +255,7 @@ export function Profile(): React.ReactElement {
             language: "en",
             templateId: "tmpl_pSp6SHUWLXufK4PRnvDW9ov1",
             accountId: user?.verification.personaAccountId ? user.verification.personaAccountId : "",
-            environment: "production",
+            environment: globalVars.isTest ? "sandbox" : "production",
             onLoad: (error) => {
                 if (error) {
                     console.error(`Failed with code: ${error.code} and message ${error.message}`);
