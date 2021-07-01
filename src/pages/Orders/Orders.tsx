@@ -42,7 +42,7 @@ import { getMarketPrice } from "../../services/order";
 export function Orders(): React.ReactElement {
     const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState);
     const [orderInfoModalOpenOnLoad, setOrderInfoModalOpenOnLoad] = useRecoilState(orderInfoModalState);
-    const [tab, setTab] = useState(0)
+    const [tab, setTab] = useState(0);
     const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[];
     // const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
     const token = useRecoilValue(tokenState);
@@ -77,13 +77,13 @@ export function Orders(): React.ReactElement {
             setOrderOpenOnLoad(false);
         }
         if (orderInfoModalOpenOnLoad[0]) {
-            setTab(3)
+            setTab(3);
         }
     }, [orderModalOpenOnLoad, orderInfoModalOpenOnLoad]);
 
-    const handleTabsChange = (tab:number) => {
-        setTab(tab)
-    }
+    const handleTabsChange = (tab: number) => {
+        setTab(tab);
+    };
 
     return (
         <>

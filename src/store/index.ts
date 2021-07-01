@@ -12,7 +12,7 @@ export const orderModalState = atom({
 export const orderInfoModalState = atom({
     key: "orderInfoModalState",
     default: [false, null],
-})
+});
 
 export const userState = atom({
     key: "userState",

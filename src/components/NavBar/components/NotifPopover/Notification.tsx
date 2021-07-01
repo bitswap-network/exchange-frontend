@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, Button, Text, VStack, HStack, Image } from "@chakra-ui/react";
 import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
 import { FaCircle } from "react-icons/fa";
-import { useSetRecoilState} from "recoil";
+import { useSetRecoilState } from "recoil";
 import { orderInfoModalState } from "../../../../store";
 import * as globalVars from "../../../../globalVars";
 import { Link as RouterLink } from "react-router-dom";

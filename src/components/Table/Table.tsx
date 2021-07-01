@@ -3,7 +3,7 @@
 
 import React, { PropsWithChildren, useState, useEffect } from "react";
 import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, chakra, useDisclosure } from "@chakra-ui/react";
-import {orderInfoModalState } from "../../store";
+import { orderInfoModalState } from "../../store";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { useTable, useSortBy, TableOptions } from "react-table";
 import { OrderInfoModal } from "../OrderInfoModal";
@@ -20,14 +20,12 @@ export function Table<T extends Record<string, unknown>>({ data, columns, type }
     useEffect(() => {
         if (orderInfoModalOpenOnLoad[0]) {
             rows.map((row) => {
-                console.log(row.original.timestamp, orderInfoModalOpenOnLoad[1])
-                if (row.original.timestamp == orderInfoModalOpenOnLoad[1]) {
+                if (row.original.timestamp.getTime() == orderInfoModalOpenOnLoad[1].getTime()) {
                     setSelectOrder(row.original);
-                    console.log("NIASDASD")
+                    modalDisclosure.onOpen();
+                    setOrderInfoModalOpenOnLoad([false, null]);
                 }
-            })
-                modalDisclosure.onOpen();
-                setOrderInfoModalOpenOnLoad([false, null])
+            });
         }
     }, [orderInfoModalOpenOnLoad]);
 
