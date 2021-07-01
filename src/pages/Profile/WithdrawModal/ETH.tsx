@@ -36,9 +36,10 @@ interface WithdrawModalProps {
         onClose: () => void;
     };
     maxWithdraw: number;
+    withdrawRemaining: number | null;
 }
 
-export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw }: WithdrawModalProps) => {
+export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw, withdrawRemaining }: WithdrawModalProps) => {
     const user = useRecoilValue(userState);
     const [checked, setChecked] = useState<boolean>(false);
     const [withdrawValue, setWithdrawValue] = useState<string>("0.004");
@@ -169,6 +170,11 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             Max
                         </Button>
                     </Text>
+                    {withdrawRemaining && (
+                        <Text color="gray.600" fontSize="sm" mt="2">
+                            ${withdrawRemaining?.toFixed(2)} USD remaining for withdrawal
+                        </Text>
+                    )}
                     <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0.004} max={maxWithdraw}>
                         <NumberInputField />
                         <NumberInputStepper>

@@ -77,6 +77,7 @@ export function Profile(): React.ReactElement {
     const [emailErr, setEmailErr] = useState(false);
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
+    const [withdrawRemaining, setWithdrawRemaining] = useState(globalVars.UNVERIFIED_WITHDRAW_LIMIT);
 
     const [loading, setLoading] = useState(false);
     const { isOpen: isEmailVerificationOpen, onOpen: onEmailVerificationOpen, onClose: onEmailVerificationClose } = useDisclosure();
@@ -122,22 +123,63 @@ export function Profile(): React.ReactElement {
         });
     }, []);
     useEffect(() => {
+        if (transactions.length > 0) {
+            let temp = 0;
+            transactions.map((transaction) => {
+                if (transaction.transactionType == "withdraw") {
+                    temp += transaction.usdValueAtTime;
+                }
+            });
+            setWithdrawRemaining(globalVars.UNVERIFIED_WITHDRAW_LIMIT - temp);
+        }
+    }, [transactions]);
+    useEffect(() => {
         console.log(user);
     }, [user]);
     useEffect(() => {
         if (selectedCurrency.type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
-                setSelectedCurrency({
-                    type: globalVars.BITCLOUT,
-                    maxWithdraw: max,
-                });
+                if (user?.tier == 0) {
+                    console.log(cloutUsd);
+                    if (cloutUsd && withdrawRemaining / cloutUsd < max) {
+                        setSelectedCurrency({
+                            type: globalVars.BITCLOUT,
+                            maxWithdraw: withdrawRemaining / cloutUsd,
+                        });
+                    } else {
+                        setSelectedCurrency({
+                            type: globalVars.BITCLOUT,
+                            maxWithdraw: max,
+                        });
+                    }
+                } else {
+                    setSelectedCurrency({
+                        type: globalVars.BITCLOUT,
+                        maxWithdraw: max,
+                    });
+                }
             });
         } else {
             getMaxEth().then((max) => {
-                setSelectedCurrency({
-                    type: globalVars.ETHER,
-                    maxWithdraw: max,
-                });
+                if (user?.tier == 0) {
+                    console.log(ethUsd);
+                    if (ethUsd && withdrawRemaining / ethUsd < max) {
+                        setSelectedCurrency({
+                            type: globalVars.ETHER,
+                            maxWithdraw: withdrawRemaining / ethUsd,
+                        });
+                    } else {
+                        setSelectedCurrency({
+                            type: globalVars.ETHER,
+                            maxWithdraw: max,
+                        });
+                    }
+                } else {
+                    setSelectedCurrency({
+                        type: globalVars.ETHER,
+                        maxWithdraw: max,
+                    });
+                }
             });
         }
         setBCLT({
@@ -152,7 +194,7 @@ export function Profile(): React.ReactElement {
             setUserEmail(user.email);
             setUserName(user.name);
         }
-    }, [user, ethUsd, cloutUsd]);
+    }, [withdrawRemaining, user, ethUsd, cloutUsd, selectedCurrency.type]);
     useEffect(() => {
         if (!regEmail.test(userEmail)) {
             setEmailErr(true);
@@ -368,6 +410,7 @@ export function Profile(): React.ReactElement {
                             }}
                         />
                         <BitcloutWithdrawModal
+                            withdrawRemaining={user.tier == 0 ? withdrawRemaining : null}
                             maxWithdraw={selectedCurrency.maxWithdraw}
                             disclosure={{
                                 isOpen: isOpenWithdrawModal,
@@ -386,6 +429,7 @@ export function Profile(): React.ReactElement {
                             }}
                         />
                         <EthWithdrawModal
+                            withdrawRemaining={user.tier == 0 ? withdrawRemaining : null}
                             maxWithdraw={selectedCurrency.maxWithdraw}
                             disclosure={{
                                 isOpen: isOpenWithdrawModal,
@@ -488,6 +532,8 @@ export function Profile(): React.ReactElement {
 
                                 <Text color="#44423D" fontWeight="300" fontSize="sm" mt="12px">
                                     You are a <span style={{ fontWeight: 600 }}>{user.tier == 0 ? "Silver" : "Gold"} Tier</span> BitSwap user.
+                                    <br />
+                                    {user.tier == 0 && `$${withdrawRemaining.toFixed(2)} USD withdrawal remaining.`}
                                     <br />
                                     {user.tier == 0 ? "Verify your identity to advance to the next tier." : "Enjoy unlimited trading on BitSwap!"}
                                 </Text>

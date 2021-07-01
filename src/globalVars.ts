@@ -11,6 +11,7 @@ export const BITCLOUT = "CLOUT";
 export const ETHER = "ETH";
 
 export const UNVERIFIED_MAX_USD_LIMIT = 2000;
+export const UNVERIFIED_WITHDRAW_LIMIT = 2000;
 export const BITCLOUT_LOGO = "./bitcloutLogo.png";
 export const ETHER_LOGO = "./etherLogo.png";
 
