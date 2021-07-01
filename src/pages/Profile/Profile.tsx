@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HiExclamationCircle, HiBadgeCheck } from "react-icons/hi";
-import { MdModeEdit } from "react-icons/md";
 import { Client } from "persona";
 import {
     Flex,
@@ -21,14 +20,12 @@ import {
     HStack,
     Spacer,
     Box,
-    Heading,
-    Table,
     Thead,
     Tbody,
     Tr,
     Th,
     Td,
-    TableCaption,
+    Table,
     List,
     ListItem,
     ListIcon,
@@ -58,6 +55,19 @@ import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
 import * as globalVars from "../../globalVars";
 
 const regEmail = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
+
+const tiers = [
+    {
+        name: "Silver",
+        color: "#cccccc",
+        pageText: "You are a Silver Tier BitSwap user. Please verify your identity to get full platform access.",
+    },
+    {
+        name: "Gold",
+        color: "#FFC634",
+        pageText: "You are a Gold Tier BitSwap user. Enjoy unlimited trading on BitSwap!",
+    },
+];
 
 export function Profile(): React.ReactElement {
     const user = useRecoilValue(userState);
@@ -245,7 +255,7 @@ export function Profile(): React.ReactElement {
             language: "en",
             templateId: "tmpl_pSp6SHUWLXufK4PRnvDW9ov1",
             accountId: user?.verification.personaAccountId ? user.verification.personaAccountId : "",
-            environment: globalVars.isTest ? "sandbox" : "production",
+            environment: "production",
             onLoad: (error) => {
                 if (error) {
                     console.error(`Failed with code: ${error.code} and message ${error.message}`);
@@ -394,7 +404,7 @@ export function Profile(): React.ReactElement {
                                 src={`https://bitclout.com/api/v0/get-single-profile-picture/${user.bitclout.publicKey}`}
                                 boxSize={{ base: "100px" }}
                                 borderStyle="solid"
-                                borderColor={user.tier == 0 ? "#C4C4C4" : "#FFC634"}
+                                borderColor={user ? tiers[user.tier].color : "white"}
                                 borderWidth="6px"
                                 fallbackSrc="https://bitclout.com/assets/img/default_profile_pic.png"
                                 fit="cover"

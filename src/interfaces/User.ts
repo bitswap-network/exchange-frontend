@@ -3,6 +3,7 @@ export interface User {
     name: string;
     email: string;
     password: string;
+    tier: number;
     balance: {
         bitclout: number;
         ether: number;
