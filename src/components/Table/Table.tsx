@@ -1,18 +1,36 @@
 /* eslint-disable react/jsx-key */
 // jsx-key is disabled because it fails to apply to the spread operator with typed object [as of May 2021]
 
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useState, useEffect } from "react";
 import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, chakra, useDisclosure } from "@chakra-ui/react";
+import {orderInfoModalState } from "../../store";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { useTable, useSortBy, TableOptions } from "react-table";
 import { OrderInfoModal } from "../OrderInfoModal";
+import { useRecoilState } from "recoil";
 import { OrderTableDataInterface } from "../../interfaces/Order";
 
 export function Table<T extends Record<string, unknown>>({ data, columns, type }: PropsWithChildren<TableOptions<T>>): React.ReactElement {
     const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>();
+    const [orderInfoModalOpenOnLoad, setOrderInfoModalOpenOnLoad] = useRecoilState(orderInfoModalState);
     const isOrderTable = type === 0;
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>({ columns, data, autoResetPage: true }, useSortBy);
     const modalDisclosure = useDisclosure();
+
+    useEffect(() => {
+        if (orderInfoModalOpenOnLoad[0]) {
+            rows.map((row) => {
+                console.log(row.original.timestamp, orderInfoModalOpenOnLoad[1])
+                if (row.original.timestamp == orderInfoModalOpenOnLoad[1]) {
+                    setSelectOrder(row.original);
+                    console.log("NIASDASD")
+                }
+            })
+                modalDisclosure.onOpen();
+                setOrderInfoModalOpenOnLoad([false, null])
+        }
+    }, [orderInfoModalOpenOnLoad]);
+
     return (
         <>
             {isOrderTable && <OrderInfoModal disclosure={modalDisclosure} order={selectOrder} />}

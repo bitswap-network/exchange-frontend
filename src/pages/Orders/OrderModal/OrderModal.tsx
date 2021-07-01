@@ -231,9 +231,6 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                         <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
                             Create Order
                         </Text>
-                        {/* <Text color="gray.500" fontSize="sm" mb="4">
-                            Place a new order to buy or sell BitClout!
-                        </Text> */}
                         <Tabs
                             variant="enclosed"
                             colorScheme="messenger"

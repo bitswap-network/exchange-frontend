@@ -7,7 +7,6 @@ import { bitswapTheme } from "./theme";
 
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-import { Wallet } from "./pages/Wallet";
 import { Orders } from "./pages/Orders";
 import { Profile } from "./pages/Profile";
 

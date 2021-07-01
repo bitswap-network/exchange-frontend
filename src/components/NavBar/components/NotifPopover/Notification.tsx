@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Link, Button, Text, VStack, HStack, Image } from "@chakra-ui/react";
 import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
 import { FaCircle } from "react-icons/fa";
+import { useSetRecoilState} from "recoil";
+import { orderInfoModalState } from "../../../../store";
 import * as globalVars from "../../../../globalVars";
+import { Link as RouterLink } from "react-router-dom";
 
 const nWidth = "400px";
 const nHeight = "70px";
@@ -24,6 +27,7 @@ interface NotifProps {
 }
 
 export function Notification({ type, notifRead, orderId, timestamp, complete, error, orderDetails }: NotifProps): React.ReactElement {
+    const setOrderModalState = useSetRecoilState(orderInfoModalState);
     const [active, setActive] = useState(false);
     const [activeButton, setActiveButton] = useState(false);
     const renderHandler = () => {
@@ -49,8 +53,11 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
             onMouseEnter={() => setActive(true)}
             onMouseLeave={() => setActive(false)}
             px="4"
-            as={Link}
-            to="/"
+            as={RouterLink}
+            to={{
+                pathname: "/orders",
+            }}
+            onClick={() => setOrderModalState(() => [true, timestamp])}
         >
             <Image src="./notif_buy.png" htmlWidth="85" />
             <VStack align="left" justify="start" spacing={0} left={0} pr={4} minW="147px">
@@ -82,7 +89,7 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
-                <Text fontSize="sm" fontWeight="light">
+                <Text fontSize="xs" fontWeight="light">
                     {activeButton ? "View" : globalVars.timeSince(timestamp)}
                 </Text>
             </Button>
@@ -99,8 +106,11 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
             onMouseEnter={() => setActive(true)}
             onMouseLeave={() => setActive(false)}
             px="4"
-            as={Link}
-            to="/"
+            as={RouterLink}
+            to={{
+                pathname: "/orders",
+            }}
+            onClick={() => setOrderModalState(() => [true, timestamp])}
         >
             <Image src="./notif_sell.png" htmlWidth="85" />
             <VStack align="left" justify="start" spacing={0} left={0} pr={4} minW="147px">
@@ -133,7 +143,7 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
-                <Text fontSize="sm" fontWeight="light">
+                <Text fontSize="xs" fontWeight="light">
                     {activeButton ? "View" : globalVars.timeSince(timestamp)}
                 </Text>
             </Button>
@@ -150,8 +160,11 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
             onMouseEnter={() => setActive(true)}
             onMouseLeave={() => setActive(false)}
             px="4"
-            as={Link}
-            to="/"
+            as={RouterLink}
+            to={{
+                pathname: "/orders",
+            }}
+            onClick={() => setOrderModalState(() => [true, timestamp])}
         >
             <Image src="./notif_cancelled.png" htmlWidth="85" />
             <VStack align="left" justify="start" spacing={0} left={0} minW="147px">
@@ -173,7 +186,7 @@ export function Notification({ type, notifRead, orderId, timestamp, complete, er
                 onMouseEnter={() => setActiveButton(true)}
                 onMouseLeave={() => setActiveButton(false)}
             >
-                <Text fontSize="sm" fontWeight="light">
+                <Text fontSize="xs" fontWeight="light">
                     {activeButton ? "View" : globalVars.timeSince(timestamp)}
                 </Text>
             </Button>

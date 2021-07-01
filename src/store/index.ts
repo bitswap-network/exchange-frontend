@@ -9,6 +9,11 @@ export const orderModalState = atom({
     default: false,
 });
 
+export const orderInfoModalState = atom({
+    key: "orderInfoModalState",
+    default: [false, null],
+})
+
 export const userState = atom({
     key: "userState",
     default: getData("user") ? (getData("user") as User) : null,

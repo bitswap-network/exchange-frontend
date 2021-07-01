@@ -33,7 +33,7 @@ import { useOrderBook, useOrders } from "../../hooks";
 import { getOrders } from "../../services/user";
 import * as globalVars from "../../globalVars";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { orderModalState, tokenState } from "../../store";
+import { orderModalState, orderInfoModalState, tokenState } from "../../store";
 import { CryptoCard } from "../../components/CryptoCard";
 import { useUser } from "../../hooks";
 import { getEthUSD } from "../../services/utility";
@@ -41,6 +41,8 @@ import { getMarketPrice } from "../../services/order";
 
 export function Orders(): React.ReactElement {
     const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState);
+    const [orderInfoModalOpenOnLoad, setOrderInfoModalOpenOnLoad] = useRecoilState(orderInfoModalState);
+    const [tab, setTab] = useState(0)
     const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[];
     // const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
     const token = useRecoilValue(tokenState);
@@ -74,7 +76,14 @@ export function Orders(): React.ReactElement {
             onOpen();
             setOrderOpenOnLoad(false);
         }
-    }, [orderModalOpenOnLoad]);
+        if (orderInfoModalOpenOnLoad[0]) {
+            setTab(3)
+        }
+    }, [orderModalOpenOnLoad, orderInfoModalOpenOnLoad]);
+
+    const handleTabsChange = (tab:number) => {
+        setTab(tab)
+    }
 
     return (
         <>
@@ -87,7 +96,7 @@ export function Orders(): React.ReactElement {
                 </Flex>
                 <Flex w="full" flexDirection={{ base: "column-reverse", lg: "row" }}>
                     <Flex flex={{ base: "1", lg: "0.75" }}>
-                        <Tabs w="full" variant="order" minH="280px" maxH={{ base: "400px", lg: "700px", xl: "1000px" }}>
+                        <Tabs w="full" index={tab} onChange={handleTabsChange} variant="order" minH="280px" maxH={{ base: "400px", lg: "700px", xl: "1000px" }}>
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
                                     <Tab w="25%">Active Orders ({orders ? orders.filter((order) => order.complete === false).length : 0})</Tab>

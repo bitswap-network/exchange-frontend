@@ -35,14 +35,15 @@ import {
     Button,
     InputRightAddon,
 } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useUser } from "../../hooks";
 import { useOrderBook } from "../../hooks";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { Chart } from "../../components/BitCloutChart/Chart";
 import { getMarketPrice, getMarketQuantity } from "../../services/order";
-import { tokenState } from "../../store";
+import { tokenState, orderModalState } from "../../store";
 import { MdLoop } from "react-icons/md";
 import * as globalVars from "../../globalVars";
 import { BlueButton } from "../../components/BlueButton";
@@ -50,6 +51,7 @@ import { getEthUSD, getBitcloutUSD } from "../../services/utility";
 
 export function Home(): React.ReactElement {
     const token = useRecoilValue(tokenState);
+    const setOrderModalState = useSetRecoilState(orderModalState);
     const { user, userIsLoading, userIsError } = useUser(token);
     const [marketBuy, setMarketBuy] = useState<number | null>(null);
     const [marketSell, setMarketSell] = useState<number | null>(null);
@@ -516,9 +518,17 @@ export function Home(): React.ReactElement {
                             </HStack>
                             <VStack p="2" px="5" w="full">
                                 <BlueButton text={"Swap"} w="full" size="lg" onClick={handleSwap} />
-                                <Link href="/orders" color="#81868C" pt="2" pb="2">
-                                    Advanced Options
-                                </Link>
+                                <Button
+                                    as={RouterLink}
+                                    to={{
+                                        pathname: "/orders",
+                                    }}
+                                    pt="2"
+                                    pb="2"
+                                    onClick={() => setOrderModalState(() => true)}
+                                >
+                                    <Text color="#81868C">Advanced Options</Text>
+                                </Button>
                             </VStack>
                         </VStack>
                     </Box>
