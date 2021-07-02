@@ -33,13 +33,11 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Button,
-    InputRightAddon,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useUser } from "../../hooks";
-import { useOrderBook } from "../../hooks";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { Chart } from "../../components/BitCloutChart/Chart";
 import { getMarketPrice, getMarketQuantity } from "../../services/order";
@@ -145,8 +143,22 @@ export function Home(): React.ReactElement {
             setCloutErr("Invalid CLOUT Quantity");
             error = true;
         }
+        switch (orderSide) {
+            case "buy":
+                if (parseFloat(orderEthQuantity) > user.balance.ether) {
+                    setEthErr("Insufficient ETH Balance to place this order.");
+                    error = true;
+                }
+                break;
+            case "sell":
+                if (parseFloat(orderCloutQuantity) > user.balance.bitclout) {
+                    setCloutErr("Insufficient CLOUT Balance to place this order.");
+                    error = true;
+                }
+                break;
+        }
         if (error) {
-            return false;
+            return;
         }
         // handle logic here
         console.log("side:", orderSide);
@@ -154,7 +166,7 @@ export function Home(): React.ReactElement {
         console.log("eth order quantity:", orderEthQuantity);
         console.log("clout order quantity:", orderCloutQuantity);
         console.log("slippage:", slippage);
-        return true;
+        return;
     };
 
     return (

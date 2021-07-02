@@ -79,7 +79,7 @@ export function BuyTab({
                 </Tooltip>
                 <NumberInput
                     min={globalVars.MIN_LIMIT}
-                    max={user.verification.personaVerified ? 500 : globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd}
+                    // max={user.verification.personaVerified ? 500 : globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd}
                     value={orderQuantity}
                     onChange={(valueString) => {
                         setOrderQuantity(globalVars.parseNum(valueString));

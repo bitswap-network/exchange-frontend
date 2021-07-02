@@ -83,15 +83,7 @@ export function SellTab({
                     }}
                     step={0.1}
                     precision={2}
-                    max={
-                        user.verification.personaVerified
-                            ? user.balance.bitclout < 500
-                                ? user.balance.bitclout
-                                : 500
-                            : user.balance.bitclout < globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd
-                            ? user.balance.bitclout
-                            : globalVars.UNVERIFIED_MAX_USD_LIMIT / cloutUsd
-                    }
+                    max={user.balance.bitclout}
                 >
                     <NumberInputField />
                     <NumberInputStepper>
