@@ -34,6 +34,8 @@ import {
     NumberDecrementStepper,
     Button,
 } from "@chakra-ui/react";
+import { FiArrowDown, FiArrowRight, FiCheckCircle } from "react-icons/fi";
+import { BiCheckCircle } from "react-icons/bi";
 import { Link as RouterLink } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { AiFillInfoCircle } from "react-icons/ai";
@@ -134,11 +136,11 @@ export function Home(): React.ReactElement {
             window.location.href = "/login";
             error = true;
         }
-        if (orderEthQuantity == "NaN" || parseFloat(orderEthQuantity) <= 0) {
+        if (isNaN(parseFloat(orderEthQuantity)) || parseFloat(orderEthQuantity) <= 0) {
             setEthErr("Invalid ETH Quantity");
             error = true;
         }
-        if (orderCloutQuantity == "NaN" || parseFloat(orderCloutQuantity) <= 0) {
+        if (isNaN(parseFloat(orderCloutQuantity)) || parseFloat(orderCloutQuantity) <= 0) {
             setCloutErr("Invalid CLOUT Quantity");
             error = true;
         }
@@ -161,222 +163,336 @@ export function Home(): React.ReactElement {
         if (error) {
             return;
         }
-        // handle logic here
+        // handle error checking logic here before proceeding to confirmation
         console.log("side:", orderSide);
         console.log("eth order quantity:", orderEthQuantity);
         console.log("clout order quantity:", orderCloutQuantity);
         console.log("slippage:", slippage);
+        setTabPage(1);
         return;
+    };
+
+    const confirmSwap = () => {
+        // perform logic here to execute swap
+        setTabPage(2);
     };
 
     const buySellTabs = (
         <>
-            <Box w="full" align="center" py="2">
-                <Text fontSize="13" fontWeight="black">
-                    Instantly buy or sell{" "}
-                    <span>
-                        <Link href="http://bitclout.com/" isExternal>
-                            CLOUT
-                            <ExternalLinkIcon mx="2px" mb="4px" />
-                        </Link>
-                    </span>{" "}
-                    at the best price.
-                </Text>
-            </Box>
-
-            <Flex flexDir={orderSide === "buy" ? "column" : "column-reverse"} align="center" p="2" overflow="auto" h="max" px="5">
-                <Box pos="relative" borderWidth="2px" borderColor="rgba(221, 226, 229, 0.5)" borderRadius="10" p="4">
-                    <HStack pos="absolute" top="10px" right="10px" bg="#F9FBFF" h="40px" borderRadius="6" borderWidth="1px" borderColor="#F3F3F3" p="1">
-                        <Image src={globalVars.ETHER_LOGO} boxSize="20px" />
-                        <Text color="#495057" fontSize="20px" pr="2px">
-                            ETH
-                        </Text>
-                    </HStack>
-                    <Text color="#81868C" fontSize="18" fontWeight="regular">
-                        {orderSide === "buy" ? "From" : "To"}
-                    </Text>
-                    <InputGroup mt="2">
-                        <Input
-                            type="number"
-                            placeholder="6.90"
-                            fontSize="40px"
-                            height="62px"
-                            borderWidth="0px"
-                            pl="2"
-                            colorScheme="gray"
-                            value={orderEthQuantity}
-                            onChange={handleEthChange}
-                            isInvalid={parseFloat(orderEthQuantity) <= 0}
-                            onBlur={() => {
-                                const temp = orderEthQuantity;
-                                setEthOrderQuantity(parseFloat(temp).toFixed(precision).toString());
-                            }}
-                        />
-                    </InputGroup>
-                    <Text color="tomato" fontSize="14" fontWeight="regular" mt="2">
-                        {ethErr}
+            <HStack spacing={0} borderRadius="inherit" w="full" justify="space-evenly" textAlign="center" fontSize="20" fontWeight="bold">
+                <Box borderRadius="inherit" w="full" bg={orderSide === "buy" ? "white" : "#F9FBFF"} py="4" onClick={() => setOrderSide("buy")} cursor="pointer">
+                    <Text color={orderSide === "buy" ? "#2E6DED" : "#ACB5BD"} fontSize="17">
+                        Buy
                     </Text>
                 </Box>
                 <Box
-                    mt="-3"
-                    mb="-3"
-                    bg="white"
-                    borderRadius="5"
-                    boxSize="38px"
-                    borderWidth="2px"
-                    borderColor="rgba(221, 226, 229, 0.5)"
-                    zIndex="overlay"
-                    d="flex"
-                    onClick={toggleOrderSide}
+                    borderRadius="inherit"
+                    w="full"
+                    bg={orderSide === "sell" ? "white" : "#F9FBFF"}
+                    py="4"
+                    onClick={() => setOrderSide("sell")}
                     cursor="pointer"
                 >
-                    <MdLoop color="#7E91BA" size="28px" style={{ margin: "auto" }} />
+                    <Text fontSize="17" color={orderSide === "sell" ? "#2E6DED" : "#ACB5BD"}>
+                        Sell
+                    </Text>
                 </Box>
-                <Box p="4" pos="relative" borderWidth="2px" borderColor="rgba(221, 226, 229, 0.5)" borderRadius="10">
-                    <HStack pos="absolute" top="10px" right="10px" bg="#F9FBFF" h="40px" borderRadius="6" borderWidth="1px" borderColor="#F3F3F3" p="1">
-                        <Image src={globalVars.BITCLOUT_LOGO} boxSize="20px" />
-                        <Text color="#495057" fontSize="20px" pr="2px">
-                            CLOUT
+            </HStack>
+            <>
+                <Box w="full" align="center" py="2">
+                    <Text fontSize="13" fontWeight="black">
+                        Instantly buy or sell{" "}
+                        <span>
+                            <Link href="http://bitclout.com/" isExternal>
+                                CLOUT
+                                <ExternalLinkIcon mx="2px" mb="4px" />
+                            </Link>
+                        </span>{" "}
+                        at the best price.
+                    </Text>
+                </Box>
+
+                <Flex flexDir={orderSide === "buy" ? "column" : "column-reverse"} align="center" p="2" overflow="auto" h="max" px="5">
+                    <Box pos="relative" borderWidth="2px" borderColor="rgba(221, 226, 229, 0.5)" borderRadius="10" p="4">
+                        <HStack pos="absolute" top="10px" right="10px" bg="#F9FBFF" h="40px" borderRadius="6" borderWidth="1px" borderColor="#F3F3F3" p="1">
+                            <Image src={globalVars.ETHER_LOGO} boxSize="20px" />
+                            <Text color="#495057" fontSize="20px" pr="2px">
+                                ETH
+                            </Text>
+                        </HStack>
+                        <Text color="#81868C" fontSize="18" fontWeight="regular">
+                            {orderSide === "buy" ? "From" : "To"}
+                        </Text>
+                        <InputGroup mt="2">
+                            <Input
+                                type="number"
+                                placeholder="6.90"
+                                fontSize="40px"
+                                height="62px"
+                                borderWidth="0px"
+                                pl="2"
+                                colorScheme="gray"
+                                value={orderEthQuantity}
+                                onChange={handleEthChange}
+                                isInvalid={parseFloat(orderEthQuantity) <= 0}
+                                onBlur={() => {
+                                    const temp = orderEthQuantity;
+                                    setEthOrderQuantity(parseFloat(temp).toFixed(precision).toString());
+                                }}
+                            />
+                        </InputGroup>
+                        <Text color="tomato" fontSize="14" fontWeight="regular" mt="2">
+                            {ethErr}
+                        </Text>
+                    </Box>
+                    <Box
+                        mt="-3"
+                        mb="-3"
+                        bg="white"
+                        borderRadius="5"
+                        boxSize="38px"
+                        borderWidth="2px"
+                        borderColor="rgba(221, 226, 229, 0.5)"
+                        zIndex="overlay"
+                        d="flex"
+                        onClick={toggleOrderSide}
+                        cursor="pointer"
+                    >
+                        <MdLoop color="#7E91BA" size="28px" style={{ margin: "auto" }} />
+                    </Box>
+                    <Box p="4" pos="relative" borderWidth="2px" borderColor="rgba(221, 226, 229, 0.5)" borderRadius="10">
+                        <HStack pos="absolute" top="10px" right="10px" bg="#F9FBFF" h="40px" borderRadius="6" borderWidth="1px" borderColor="#F3F3F3" p="1">
+                            <Image src={globalVars.BITCLOUT_LOGO} boxSize="20px" />
+                            <Text color="#495057" fontSize="20px" pr="2px">
+                                CLOUT
+                            </Text>
+                        </HStack>
+                        <Text color="#81868C" fontSize="18" fontWeight="regular">
+                            {orderSide === "sell" ? "From" : "To"}
+                        </Text>
+                        <InputGroup mt="2">
+                            <Input
+                                type="number"
+                                placeholder="420"
+                                fontSize="40px"
+                                height="62px"
+                                borderWidth="0px"
+                                pl="2"
+                                colorScheme="gray"
+                                value={orderCloutQuantity}
+                                onChange={handleCloutChange}
+                                isInvalid={parseFloat(orderCloutQuantity) <= 0}
+                                onBlur={() => {
+                                    const temp = orderCloutQuantity;
+                                    setCloutOrderQuantity(parseFloat(temp).toFixed(precision).toString());
+                                }}
+                            />
+                        </InputGroup>
+                        <Text color="tomato" fontSize="14" fontWeight="regular" mt="2">
+                            {cloutErr}
+                        </Text>
+                    </Box>
+                </Flex>
+                <HStack w="full" justify="space-between" px="6" color="#81868C">
+                    <HStack>
+                        <Text fontSize="14px">Maximum Slippage:</Text>
+                        <Popover placement="top-start" trigger="hover">
+                            <PopoverTrigger>
+                                <Box>
+                                    <AiFillInfoCircle color="#C4C4C4" />
+                                </Box>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverHeader fontSize="sm" fontWeight="600">
+                                    Maximum Slippage
+                                </PopoverHeader>
+                                <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
+                                    “Slippage” is when prices change between the time you create your order and the time it’s confirmed. Your order will
+                                    automatically cancel if slippage exceeds your max slippage setting.
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
+                    </HStack>
+                    <HStack spacing={1}>
+                        <Text
+                            cursor="pointer"
+                            onClick={() => setSlippage(1)}
+                            borderRadius="100"
+                            bgColor={slippage == 1 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage == 1 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            1%
+                        </Text>
+                        <Text
+                            cursor="pointer"
+                            onClick={() => setSlippage(2)}
+                            borderRadius="100"
+                            bgColor={slippage == 2 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage == 2 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            2%
+                        </Text>
+                        <Text
+                            cursor="pointer"
+                            onClick={slippageOnOpen}
+                            borderRadius="100"
+                            bgColor={slippage != 1 && slippage != 2 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage != 1 && slippage != 2 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            {slippage != 1 && slippage != 2 ? `${slippage}%` : "custom"}
                         </Text>
                     </HStack>
-                    <Text color="#81868C" fontSize="18" fontWeight="regular">
-                        {orderSide === "sell" ? "From" : "To"}
+                </HStack>
+                <HStack w="full" justify="space-between" px="6" color="#81868C">
+                    <Text fontSize="14px">Exchange Rate:</Text>
+                    <Text fontSize="14px" fontWeight="bold">
+                        {orderSide == "buy"
+                            ? `1 ${globalVars.ETHER} ~ ${+(parseFloat(orderCloutQuantity) / parseFloat(orderEthQuantity)).toFixed(precision)} ${
+                                  globalVars.BITCLOUT
+                              }`
+                            : `1 ${globalVars.BITCLOUT} ~ ${+(parseFloat(orderEthQuantity) / parseFloat(orderCloutQuantity)).toFixed(precision)} ${
+                                  globalVars.ETHER
+                              }`}
                     </Text>
-                    <InputGroup mt="2">
-                        <Input
-                            type="number"
-                            placeholder="420"
-                            fontSize="40px"
-                            height="62px"
-                            borderWidth="0px"
-                            pl="2"
-                            colorScheme="gray"
-                            value={orderCloutQuantity}
-                            onChange={handleCloutChange}
-                            isInvalid={parseFloat(orderCloutQuantity) <= 0}
-                            onBlur={() => {
-                                const temp = orderCloutQuantity;
-                                setCloutOrderQuantity(parseFloat(temp).toFixed(precision).toString());
-                            }}
-                        />
-                    </InputGroup>
-                    <Text color="tomato" fontSize="14" fontWeight="regular" mt="2">
-                        {cloutErr}
+                </HStack>
+                <HStack w="full" justify="space-between" px="6" color="#81868C">
+                    <Text fontSize="14px">Est. Fees:</Text>
+                    <Text fontSize="14px" fontWeight="bold">
+                        0.0069 {globalVars.ETHER}
                     </Text>
-                </Box>
+                </HStack>
+                <VStack p="2" px="5" w="full">
+                    <BlueButton text={"Swap"} w="full" size="lg" onClick={handleSwap} />
+                    <Button
+                        as={RouterLink}
+                        to={{
+                            pathname: "/orders",
+                        }}
+                        pt="2"
+                        pb="2"
+                        onClick={() => setOrderModalState(() => true)}
+                    >
+                        <Text color="#81868C">Advanced Options</Text>
+                    </Button>
+                </VStack>
+            </>
+        </>
+    );
+
+    const confirmTabs = (
+        <Flex boxSize="md" flexDir="column" align="center" p="2" pt="12" overflow="auto" h="max" px="5">
+            <Text fontSize="2xl" fontWeight="700" color="gray.700">
+                Confirm Swap
+            </Text>
+            <Flex my="10" spacing={2} flexDir={orderSide === "buy" ? "column" : "column-reverse"} alignItems="center">
+                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+                    {orderEthQuantity} {globalVars.ETHER}
+                </Text>
+                <FiArrowDown size={40} color="#718096" />
+                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+                    {orderCloutQuantity} {globalVars.BITCLOUT}
+                </Text>
             </Flex>
             <HStack w="full" justify="space-between" px="6" color="#81868C">
-                <HStack>
-                    <Text fontSize="14px">Maximum Slippage:</Text>
-                    <Popover placement="top-start" trigger="hover">
-                        <PopoverTrigger>
-                            <Box>
-                                <AiFillInfoCircle color="#C4C4C4" />
-                            </Box>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverHeader fontSize="sm" fontWeight="600">
-                                Maximum Slippage
-                            </PopoverHeader>
-                            <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
-                                “Slippage” is when prices change between the time you create your order and the time it’s confirmed. Your order will
-                                automatically cancel if slippage exceeds your max slippage setting.
-                            </PopoverBody>
-                        </PopoverContent>
-                    </Popover>
-                </HStack>
-                <HStack spacing={1}>
-                    <Text
-                        cursor="pointer"
-                        onClick={() => setSlippage(1)}
-                        borderRadius="100"
-                        bgColor={slippage == 1 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage == 1 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        1%
-                    </Text>
-                    <Text
-                        cursor="pointer"
-                        onClick={() => setSlippage(2)}
-                        borderRadius="100"
-                        bgColor={slippage == 2 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage == 2 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        2%
-                    </Text>
-                    <Text
-                        cursor="pointer"
-                        onClick={slippageOnOpen}
-                        borderRadius="100"
-                        bgColor={slippage != 1 && slippage != 2 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage != 1 && slippage != 2 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        {slippage != 1 && slippage != 2 ? `${slippage}%` : "custom"}
-                    </Text>
-                </HStack>
+                <Text fontSize="14px">Maximum Slippage:</Text>
+                <Text fontSize="14px" fontWeight="bold">
+                    {slippage}%
+                </Text>
             </HStack>
             <HStack w="full" justify="space-between" px="6" color="#81868C">
                 <Text fontSize="14px">Exchange Rate:</Text>
                 <Text fontSize="14px" fontWeight="bold">
                     {orderSide == "buy"
-                        ? `1 ETH ~ ${+(parseFloat(orderCloutQuantity) / parseFloat(orderEthQuantity)).toFixed(precision)} CLOUT`
-                        : `1 CLOUT ~ ${+(parseFloat(orderEthQuantity) / parseFloat(orderCloutQuantity)).toFixed(precision)} ETH`}
+                        ? `1 ${globalVars.ETHER} ~ ${+(parseFloat(orderCloutQuantity) / parseFloat(orderEthQuantity)).toFixed(precision)} ${
+                              globalVars.BITCLOUT
+                          }`
+                        : `1 ${globalVars.BITCLOUT} ~ ${+(parseFloat(orderEthQuantity) / parseFloat(orderCloutQuantity)).toFixed(precision)} ${
+                              globalVars.ETHER
+                          }`}
                 </Text>
             </HStack>
             <HStack w="full" justify="space-between" px="6" color="#81868C">
                 <Text fontSize="14px">Est. Fees:</Text>
                 <Text fontSize="14px" fontWeight="bold">
-                    0.0069 ETH
+                    0.0069 {globalVars.ETHER}
                 </Text>
             </HStack>
-            <VStack p="2" px="5" w="full">
-                <BlueButton text={"Swap"} w="full" size="lg" onClick={handleSwap} />
-                <Button
-                    as={RouterLink}
-                    to={{
-                        pathname: "/orders",
-                    }}
-                    pt="2"
-                    pb="2"
-                    onClick={() => setOrderModalState(() => true)}
-                >
-                    <Text color="#81868C">Advanced Options</Text>
+            <VStack p="2" px="5" pt="6" w="full">
+                <BlueButton text={"Confirm"} w="full" size="lg" onClick={confirmSwap} />
+                <Button pt="2" pb="2" onClick={() => setTabPage(0)}>
+                    <Text color="#81868C">Modify</Text>
                 </Button>
             </VStack>
-        </>
+        </Flex>
     );
 
-    const confirmTabs = (
-        <>
-            <Box w="full" align="center" py="2">
-                <Text fontSize="13" fontWeight="black">
-                    Instantly buy or sell{" "}
-                    <span>
-                        <Link href="https://bitclout.com/" isExternal>
-                            CLOUT
-                            <ExternalLinkIcon mx="2px" mb="4px" />
-                        </Link>
-                    </span>{" "}
-                    at the best price.
+    const completeTabs = (
+        <Flex boxSize="md" flexDir="column" align="center" p="2" pt="12" overflow="auto" h="max" px="5">
+            <Text fontSize="2xl" fontWeight="700" color="gray.700">
+                Swap Successful
+            </Text>
+            <FiCheckCircle size={100} color="#94b5ff" style={{ marginTop: 30 }} />
+            <Flex my="10" spacing={2} flexDir={orderSide === "buy" ? "row" : "row-reverse"}>
+                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+                    {orderEthQuantity} {globalVars.ETHER}
                 </Text>
-            </Box>
-        </>
+                <FiArrowRight size={40} color="#718096" />
+                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+                    {orderCloutQuantity} {globalVars.BITCLOUT}
+                </Text>
+            </Flex>
+            <HStack w="full" justify="space-between" px="6" color="#81868C">
+                <Text fontSize="14px">Maximum Slippage:</Text>
+                <Text fontSize="14px" fontWeight="bold">
+                    {slippage}%
+                </Text>
+            </HStack>
+            <HStack w="full" justify="space-between" px="6" color="#81868C">
+                <Text fontSize="14px">Exchange Rate:</Text>
+                <Text fontSize="14px" fontWeight="bold">
+                    {orderSide == "buy"
+                        ? `1 ${globalVars.ETHER} ~ ${+(parseFloat(orderCloutQuantity) / parseFloat(orderEthQuantity)).toFixed(precision)} ${
+                              globalVars.BITCLOUT
+                          }`
+                        : `1 ${globalVars.BITCLOUT} ~ ${+(parseFloat(orderEthQuantity) / parseFloat(orderCloutQuantity)).toFixed(precision)} ${
+                              globalVars.ETHER
+                          }`}
+                </Text>
+            </HStack>
+            <HStack w="full" justify="space-between" px="6" color="#81868C">
+                <Text fontSize="14px">Est. Fees:</Text>
+                <Text fontSize="14px" fontWeight="bold">
+                    0.0069 {globalVars.ETHER}
+                </Text>
+            </HStack>
+            <Button
+                as={RouterLink}
+                to={{
+                    pathname: "/orders",
+                }}
+                my="6"
+                pt="2"
+                pb="2"
+            >
+                <Text color="#407bff">View Orders</Text>
+            </Button>
+        </Flex>
     );
 
     return (
@@ -484,34 +600,9 @@ export function Home(): React.ReactElement {
                 <Flex flexDirection="column" w="full" padding={4} justify="center" align="center">
                     <Box maxW={{ base: "450px" }}>
                         <VStack w="full" borderColor="#DDE2E5" borderWidth="2px" borderRadius="6" boxShadow="0px 0px 30px 12px rgba(0,0,0,0.07)">
-                            <HStack spacing={0} borderRadius="inherit" w="full" justify="space-evenly" textAlign="center" fontSize="20" fontWeight="bold">
-                                <Box
-                                    borderRadius="inherit"
-                                    w="full"
-                                    bg={orderSide === "buy" ? "white" : "#F9FBFF"}
-                                    py="4"
-                                    onClick={() => setOrderSide("buy")}
-                                    cursor="pointer"
-                                >
-                                    <Text color={orderSide === "buy" ? "#2E6DED" : "#ACB5BD"} fontSize="17">
-                                        Buy
-                                    </Text>
-                                </Box>
-                                <Box
-                                    borderRadius="inherit"
-                                    w="full"
-                                    bg={orderSide === "sell" ? "white" : "#F9FBFF"}
-                                    py="4"
-                                    onClick={() => setOrderSide("sell")}
-                                    cursor="pointer"
-                                >
-                                    <Text fontSize="17" color={orderSide === "sell" ? "#2E6DED" : "#ACB5BD"}>
-                                        Sell
-                                    </Text>
-                                </Box>
-                            </HStack>
                             {tabPage === 0 && buySellTabs}
                             {tabPage === 1 && confirmTabs}
+                            {tabPage === 2 && completeTabs}
                         </VStack>
                     </Box>
                 </Flex>
