@@ -447,13 +447,13 @@ export function Home(): React.ReactElement {
             <Text fontSize="2xl" fontWeight="700" color="gray.700">
                 Swap Successful
             </Text>
-            <FiCheckCircle size={100} color="#94b5ff" style={{ marginTop: 30 }} />
-            <Flex my="10" spacing={2} flexDir={orderSide === "buy" ? "row" : "row-reverse"}>
-                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+            <FiCheckCircle size={100} color="#94b5ff" style={{ marginTop: 20 }} />
+            <Flex mt="8" mb="10" spacing={2} flexDir={orderSide === "buy" ? "row" : "row-reverse"} alignItems="center" justifyContent="center">
+                <Text fontSize="xl" color="gray.500" fontWeight="400">
                     {orderEthQuantity} {globalVars.ETHER}
                 </Text>
-                <FiArrowRight size={40} color="#718096" />
-                <Text fontSize="2xl" color="gray.500" fontWeight="400">
+                <FiArrowRight size={30} color="#718096" />
+                <Text fontSize="xl" color="gray.500" fontWeight="400">
                     {orderCloutQuantity} {globalVars.BITCLOUT}
                 </Text>
             </Flex>
