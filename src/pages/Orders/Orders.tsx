@@ -20,7 +20,6 @@ import {
     Td,
     HStack,
     Skeleton,
-    SimpleGrid,
 } from "@chakra-ui/react";
 import React, { useEffect, useState, useMemo } from "react";
 import { Column } from "react-table";
@@ -30,13 +29,11 @@ import { Chart } from "../../components/BitCloutChart/Chart";
 import { OrderTable } from "./OrderTable";
 import { OrderModal } from "./OrderModal";
 import { useOrderBook, useOrders } from "../../hooks";
-import { getOrders } from "../../services/user";
 import * as globalVars from "../../globalVars";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { orderModalState, orderInfoModalState, tokenState } from "../../store";
 import { CryptoCard } from "../../components/CryptoCard";
 import { useUser } from "../../hooks";
-import { getEthUSD } from "../../services/utility";
 import { getMarketPrice } from "../../services/order";
 
 export function Orders(): React.ReactElement {

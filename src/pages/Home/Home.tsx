@@ -19,19 +19,7 @@ import {
     Input,
     InputGroup,
     SimpleGrid,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
     useDisclosure,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
     Button,
 } from "@chakra-ui/react";
 import { FiArrowDown, FiArrowRight, FiCheckCircle } from "react-icons/fi";
@@ -50,6 +38,7 @@ import { BlueButton } from "../../components/BlueButton";
 import { getEthUSD, getBitcloutUSD } from "../../services/utility";
 import { SlippageModal } from "./SlippageModal";
 import { InsufficientFundModal } from "./InsufficientFundModal";
+import { createMarketOrder } from "../../services/order";
 
 export function Home(): React.ReactElement {
     const token = useRecoilValue(tokenState);
@@ -60,6 +49,8 @@ export function Home(): React.ReactElement {
     const [orderSide, setOrderSide] = useState<string>("buy");
     const [orderCloutQuantity, setCloutOrderQuantity] = useState<string>("");
     const [orderEthQuantity, setEthOrderQuantity] = useState<string>("");
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [confirmError, setConfirmError] = useState<string | null>(null);
     // # of bitclout given for 1 eth
     const [slippage, setSlippage] = useState<number>(2);
 
@@ -136,6 +127,10 @@ export function Home(): React.ReactElement {
             window.location.href = "/login";
             error = true;
         }
+        if (ethErr || cloutErr) {
+            error = true;
+            return;
+        }
         if (isNaN(parseFloat(orderEthQuantity)) || parseFloat(orderEthQuantity) <= 0) {
             setEthErr("Invalid ETH Quantity");
             error = true;
@@ -143,6 +138,9 @@ export function Home(): React.ReactElement {
         if (isNaN(parseFloat(orderCloutQuantity)) || parseFloat(orderCloutQuantity) <= 0) {
             setCloutErr("Invalid CLOUT Quantity");
             error = true;
+        }
+        if (error) {
+            return;
         }
         switch (orderSide) {
             case "buy":
@@ -173,8 +171,17 @@ export function Home(): React.ReactElement {
     };
 
     const confirmSwap = () => {
-        // perform logic here to execute swap
-        setTabPage(2);
+        setConfirmLoading(true);
+        setConfirmError(null);
+        createMarketOrder(+parseFloat(orderCloutQuantity).toFixed(2), orderSide)
+            .then(() => {
+                setConfirmLoading(false);
+                setTabPage(2);
+            })
+            .catch((error) => {
+                setConfirmLoading(false);
+                setConfirmError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
+            });
     };
 
     const buySellTabs = (
@@ -374,7 +381,9 @@ export function Home(): React.ReactElement {
                 <HStack w="full" justify="space-between" px="6" color="#81868C">
                     <Text fontSize="14px">Est. Fees:</Text>
                     <Text fontSize="14px" fontWeight="bold">
-                        0.0069 {globalVars.ETHER}
+                        {orderSide === "buy"
+                            ? `${+(parseFloat(orderCloutQuantity) * 0.01).toFixed(4)} ${globalVars.BITCLOUT}`
+                            : `${+(parseFloat(orderEthQuantity) * 0.01).toFixed(4)} ${globalVars.ETHER}`}
                     </Text>
                 </HStack>
                 <VStack p="2" px="5" w="full">
@@ -430,14 +439,21 @@ export function Home(): React.ReactElement {
             <HStack w="full" justify="space-between" px="6" color="#81868C">
                 <Text fontSize="14px">Est. Fees:</Text>
                 <Text fontSize="14px" fontWeight="bold">
-                    0.0069 {globalVars.ETHER}
+                    {orderSide === "buy"
+                        ? `${+(parseFloat(orderCloutQuantity) * 0.01).toFixed(4)} ${globalVars.BITCLOUT}`
+                        : `${+(parseFloat(orderEthQuantity) * 0.01).toFixed(4)} ${globalVars.ETHER}`}
                 </Text>
             </HStack>
             <VStack p="2" px="5" pt="6" w="full">
-                <BlueButton text={"Confirm"} w="full" size="lg" onClick={confirmSwap} />
+                <BlueButton text={"Confirm"} w="full" size="lg" onClick={confirmSwap} loading={confirmLoading} />
                 <Button pt="2" pb="2" onClick={() => setTabPage(0)}>
                     <Text color="#81868C">Modify</Text>
                 </Button>
+                {confirmError && (
+                    <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mt="6">
+                        {confirmError}
+                    </Text>
+                )}
             </VStack>
         </Flex>
     );
@@ -478,7 +494,9 @@ export function Home(): React.ReactElement {
             <HStack w="full" justify="space-between" px="6" color="#81868C">
                 <Text fontSize="14px">Est. Fees:</Text>
                 <Text fontSize="14px" fontWeight="bold">
-                    0.0069 {globalVars.ETHER}
+                    {orderSide === "buy"
+                        ? `${+(parseFloat(orderCloutQuantity) * 0.01).toFixed(4)} ${globalVars.BITCLOUT}`
+                        : `${+(parseFloat(orderEthQuantity) * 0.01).toFixed(4)} ${globalVars.ETHER}`}
                 </Text>
             </HStack>
             <Button

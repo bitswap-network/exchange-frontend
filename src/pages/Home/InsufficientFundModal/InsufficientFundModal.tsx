@@ -1,21 +1,5 @@
-import {
-    Button,
-    Modal,
-    HStack,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    Text,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Button, Modal, HStack, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Divider, Text } from "@chakra-ui/react";
+import React from "react";
 import * as globalVars from "../../../globalVars";
 import { BlueButton } from "../../../components/BlueButton";
 import { Link as RouterLink } from "react-router-dom";
@@ -67,6 +51,7 @@ export const InsufficientFundModal: React.FC<InsufficientFundModalProps> = ({
                                 : `${+orderAmount.bitclout.toFixed(2)} ${globalVars.BITCLOUT}`}
                         </Text>
                     </HStack>
+                    <Divider />
                     <HStack justify="space-between">
                         <Text fontWeight="bold">Current Balance</Text>
                         <Text color="gray.500" fontSize="sm" mb="4">
