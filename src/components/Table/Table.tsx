@@ -10,7 +10,7 @@ import { OrderInfoModal } from "../OrderInfoModal";
 import { useRecoilState } from "recoil";
 import { OrderTableDataInterface } from "../../interfaces/Order";
 
-export function Table<T extends Record<string, unknown>>({ data, columns, type }: PropsWithChildren<TableOptions<T>>): React.ReactElement {
+export function Table<T extends Record<string, unknown>>({ data, columns, type, filter }: PropsWithChildren<TableOptions<T>>): React.ReactElement {
     const [selectOrder, setSelectOrder] = useState<OrderTableDataInterface>();
     const [orderInfoModalOpenOnLoad, setOrderInfoModalOpenOnLoad] = useRecoilState(orderInfoModalState);
     const isOrderTable = type === 0;
@@ -18,7 +18,7 @@ export function Table<T extends Record<string, unknown>>({ data, columns, type }
     const modalDisclosure = useDisclosure();
 
     useEffect(() => {
-        if (orderInfoModalOpenOnLoad[0]) {
+        if (orderInfoModalOpenOnLoad[0] && filter == "all") {
             rows.map((row) => {
                 if (row.original.timestamp.getTime() == orderInfoModalOpenOnLoad[1].getTime()) {
                     setSelectOrder(row.original);

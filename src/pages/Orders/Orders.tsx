@@ -132,7 +132,7 @@ export function Orders(): React.ReactElement {
                                     </TabPanel>
                                     <TabPanel>
                                         <Stack w="full">
-                                            <OrderTable data={orders ? orders : []} columns={columns} />
+                                            <OrderTable filter={"all"} data={orders ? orders : []} columns={columns} />
                                         </Stack>
                                     </TabPanel>
                                 </TabPanels>

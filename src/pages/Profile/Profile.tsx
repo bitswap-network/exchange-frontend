@@ -721,8 +721,8 @@ export function Profile(): React.ReactElement {
                     <Flex flexDir="column" alignItems="center" w="full">
                         <Flex direction="column" bg="white" w="full">
                             <VStack>
-                                <Flex flexDir="row" spacing={2} w="full" justify="space-between" mb="4">
-                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w="49%">
+                                <Flex flexDir={{ base: "column", md: "row" }} spacing={2} w="full" justify="space-between" mb="4">
+                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w={{ base: "full", md: "49%" }}>
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.BITCLOUT}
                                             imageUrl={globalVars.BITCLOUT_LOGO}
@@ -731,7 +731,7 @@ export function Profile(): React.ReactElement {
                                             border={true}
                                         />
                                     </Box>
-                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w="49%">
+                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w={{ base: "full", md: "49%" }} mt={{ base: "4", md: "0" }}>
                                         <CryptoCard
                                             active={selectedCurrency.type == globalVars.ETHER}
                                             imageUrl={globalVars.ETHER_LOGO}

@@ -85,7 +85,6 @@ function NavBarFunc() {
                         <VStack spacing={6} alignItems="center" mt="2">
                             <NavLink as={Link} to="/" label={"Home"} onClick={onClose} />
                             <NavLink as={Link} to="/orders" label={"Orders"} onClick={onClose} />
-                            <NavLink as={Link} to="/wallet" label={"Wallet"} />
                             <NavLink as={Link} to="/profile" label={"Account"} onClick={onClose} />
 
                             <Box
@@ -123,21 +122,6 @@ function NavBarFunc() {
                     <NotifPopover />
                 </HStack>
                 <HStack spacing={8} display={{ base: "none", md: "flex" }} mr="6">
-                    {/* <Button
-                                as={Link}
-                                to={{
-                                    pathname: "/orders",
-                                }}
-                                onClick={() => setOrderModalState(() => true)}
-                                h="30px"
-                                bgColor="#DBE6FF"
-                                borderRadius="4"
-                                mr="4"
-                            >
-                                <Text textTransform="capitalize" fontWeight="500" color="brand.100" fontSize="sm">
-                                    New Order
-                                </Text>
-                            </Button> */}
                     <Box
                         _hover={{ backgroundColor: "background.primary", cursor: "pointer" }}
                         onClick={() => {
