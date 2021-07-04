@@ -20,8 +20,12 @@ import { MdNotificationsActive } from "react-icons/md";
 import { Notification } from "./Notification";
 import { getNotifs } from "../../../../services/user";
 import { Order } from "../../../../interfaces/Order";
+import NotifIcon from "./notification-icon.svg";
+import NotifUnreadIcon from "./notification-unread-icon.svg";
+
 export const NotifPopover: React.FC<any> = (props: any) => {
     const [notifications, setNotifications] = useState<Array<Order>>([]);
+    const [opened, setOpened] = useState(false);
     useEffect(() => {
         getNotifs()
             .then((response) => {
@@ -34,9 +38,15 @@ export const NotifPopover: React.FC<any> = (props: any) => {
     return (
         <Popover size="lg" boundary="scrollParent" preventOverflow={false}>
             <PopoverTrigger>
-                <Box as={Button}>
-                    <MdNotificationsActive size="20" />
-                </Box>
+                {!opened ? (
+                    <Box as={Button} onClick={() => setOpened(true)}>
+                        <img src={NotifUnreadIcon} alt="Notification" width={20} />
+                    </Box>
+                ) : (
+                    <Box as={Button}>
+                        <img src={NotifIcon} alt="Notification" width={15} />
+                    </Box>
+                )}
             </PopoverTrigger>
             <PopoverContent bg="brand.100" w="max" zIndex="100">
                 <PopoverHeader py={3} borderRadius={"4px 4px 0px 0px"}>
