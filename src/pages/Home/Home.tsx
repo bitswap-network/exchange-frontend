@@ -36,7 +36,7 @@ import { MdLoop } from "react-icons/md";
 import * as globalVars from "../../globalVars";
 import { BlueButton } from "../../components/BlueButton";
 import { getEthUSD, getBitcloutUSD } from "../../services/utility";
-import { SlippageModal } from "./SlippageModal";
+import { SlippageModal } from "../../components/SlippageModal";
 import { InsufficientFundModal } from "./InsufficientFundModal";
 import { createMarketOrder } from "../../services/order";
 
@@ -75,13 +75,16 @@ export function Home(): React.ReactElement {
 
     useEffect(() => {
         if (ethUsd) {
-            getMarketQuantity(parseFloat(orderEthQuantity) * ethUsd, orderSide).then((response) => {
-                setCloutOrderQuantity(globalVars.parseNum(response.data.quantity.toFixed(precision)));
-            });
-
-            getMarketPrice(parseFloat(orderCloutQuantity), orderSide).then((response) => {
-                setEthOrderQuantity(globalVars.parseNum((response.data.price / ethUsd).toFixed(precision)));
-            });
+            getMarketQuantity(parseFloat(orderEthQuantity) * ethUsd, orderSide)
+                .then((response) => {
+                    const temp = globalVars.parseNum(response.data.quantity.toFixed(precision));
+                    handleCloutChange(temp);
+                })
+                .catch((error) => {
+                    setCloutOrderQuantity("0");
+                    setCloutErr("Insufficient Market Volume.");
+                    setEthErr("Insufficient Market Volume.");
+                });
         }
     }, [orderSide]);
 
@@ -93,31 +96,35 @@ export function Home(): React.ReactElement {
         }
     };
 
-    const handleEthChange = (e: any) => {
-        setEthOrderQuantity(globalVars.parseNum(e.target.value));
+    const handleEthChange = (value: any) => {
+        setEthOrderQuantity(globalVars.parseNum(value));
         setCloutErr("");
         setEthErr("");
         ethUsd &&
-            getMarketQuantity(parseFloat(e.target.value) * ethUsd, orderSide)
+            getMarketQuantity(parseFloat(value) * ethUsd, orderSide)
                 .then((response) => {
                     setCloutOrderQuantity(globalVars.parseNum(response.data.quantity.toFixed(precision)));
                 })
                 .catch((error) => {
+                    setCloutOrderQuantity("0");
+                    setCloutErr("Insufficient Market Volume.");
                     setEthErr("Insufficient Market Volume.");
                 });
     };
 
-    const handleCloutChange = (e: any) => {
-        setCloutOrderQuantity(globalVars.parseNum(e.target.value));
+    const handleCloutChange = (value: any) => {
+        setCloutOrderQuantity(globalVars.parseNum(value));
         setCloutErr("");
         setEthErr("");
         ethUsd &&
-            getMarketPrice(parseFloat(e.target.value), orderSide)
+            getMarketPrice(parseFloat(value), orderSide)
                 .then((response) => {
                     setEthOrderQuantity(globalVars.parseNum((response.data.price / ethUsd).toFixed(precision)));
                 })
                 .catch((error) => {
+                    setEthOrderQuantity("0");
                     setCloutErr("Insufficient Market Volume.");
+                    setEthErr("Insufficient Market Volume.");
                 });
     };
 
@@ -240,7 +247,7 @@ export function Home(): React.ReactElement {
                                 pl="2"
                                 colorScheme="gray"
                                 value={orderEthQuantity}
-                                onChange={handleEthChange}
+                                onChange={(e) => handleEthChange(e.target.value)}
                                 isInvalid={parseFloat(orderEthQuantity) <= 0}
                                 onBlur={() => {
                                     const temp = orderEthQuantity;
@@ -287,7 +294,7 @@ export function Home(): React.ReactElement {
                                 pl="2"
                                 colorScheme="gray"
                                 value={orderCloutQuantity}
-                                onChange={handleCloutChange}
+                                onChange={(e) => handleCloutChange(e.target.value)}
                                 isInvalid={parseFloat(orderCloutQuantity) <= 0}
                                 onBlur={() => {
                                     const temp = orderCloutQuantity;

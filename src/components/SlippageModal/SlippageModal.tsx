@@ -15,8 +15,8 @@ import {
     Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import * as globalVars from "../../../globalVars";
-import { BlueButton } from "../../../components/BlueButton";
+import * as globalVars from "../../globalVars";
+import { BlueButton } from "../BlueButton";
 interface SlippageModalProps {
     disclosure: {
         isOpen: boolean;

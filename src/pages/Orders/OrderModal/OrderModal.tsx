@@ -18,11 +18,13 @@ import {
     HStack,
     Spacer,
     Divider,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { BlueButton } from "../../../components/BlueButton";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "../../../store";
 import { createMarketOrder, createLimitOrder, getMarketPrice } from "../../../services/order";
+import { SlippageModal } from "../../../components/SlippageModal";
 
 import { getEthUSD, getBitcloutUSD } from "../../../services/utility";
 import * as globalVars from "../../../globalVars";
@@ -46,6 +48,9 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     const [totalUsd, setTotalUsd] = useState<number>(0);
     const [page, setPage] = useState<number>(0);
     const [advanced, setAdvanced] = useState<boolean>(false);
+
+    const [slippage, setSlippage] = useState<number>(2);
+    const { isOpen: slippageIsOpen, onOpen: slippageOnOpen, onClose: slippageOnClose } = useDisclosure();
 
     const marketBuyText = "Market Buy: Instantly buy $" + globalVars.BITCLOUT + " at the best market price.";
     const marketSellText = "Market Sell: Instantly sell $" + globalVars.BITCLOUT + " at the best market price.";
@@ -222,100 +227,109 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
     };
 
     const createOrder = (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Flex w="full" pl="4" pr="4" mt="8" flexDir="column">
-                        <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
-                            Create Order
-                        </Text>
-                        <Tabs
-                            variant="enclosed"
-                            colorScheme="messenger"
-                            mt="0.5em"
-                            size="md"
-                            onChange={handleTabsChange}
-                            index={tabIndex}
-                            isFitted
-                            isLazy
-                            lazyBehavior="keepMounted"
-                        >
-                            <TabList background="transparent">
-                                <Tab fontWeight="bold" fontSize="xl">
-                                    Buy
-                                </Tab>
-                                <Tab fontWeight="bold" fontSize="xl">
-                                    Sell
-                                </Tab>
-                            </TabList>
-                            <TabPanels>
-                                <TabPanel>
-                                    <BuyTab
-                                        user={user}
-                                        toolTipText={tooltipText}
-                                        orderType={orderType}
-                                        setOrderType={setOrderType}
-                                        orderQuantity={orderQuantity}
-                                        setOrderQuantity={setOrderQuantity}
-                                        limitPrice={limitPrice}
-                                        setLimitPrice={setLimitPrice}
-                                        totalUsd={totalUsd ? totalUsd : 0}
-                                        ethUsd={ethUsd ? ethUsd : 0}
-                                        cloutUsd={cloutUsd ? cloutUsd : 0}
-                                        advanced={advanced}
-                                        setAdvanced={setAdvanced}
-                                    />
-                                </TabPanel>
-                                <TabPanel>
-                                    <SellTab
-                                        user={user}
-                                        toolTipText={tooltipText}
-                                        orderType={orderType}
-                                        setOrderType={setOrderType}
-                                        orderQuantity={orderQuantity}
-                                        setOrderQuantity={setOrderQuantity}
-                                        limitPrice={limitPrice}
-                                        setLimitPrice={setLimitPrice}
-                                        totalUsd={totalUsd ? totalUsd : 0}
-                                        ethUsd={ethUsd ? ethUsd : 0}
-                                        cloutUsd={cloutUsd ? cloutUsd : 0}
-                                        advanced={advanced}
-                                        setAdvanced={setAdvanced}
-                                    />
-                                </TabPanel>
-                            </TabPanels>
-                        </Tabs>
-                        {marketError && (
-                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mt="6">
-                                {marketError}
+        <>
+            <SlippageModal disclosure={{ isOpen: slippageIsOpen, onClose: slippageOnClose, onOpen: slippageOnOpen }} setSlippage={setSlippage} />
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Flex w="full" pl="4" pr="4" mt="8" flexDir="column">
+                            <Text fontSize="2xl" fontWeight="700" mb="2" color="gray.700">
+                                Create Order
                             </Text>
-                        )}
-                        <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="6">
-                            <BlueButton w="47%" onClick={onClose} ghost text={`   Cancel   `} />
-                            <BlueButton
-                                w="47%"
-                                text={`   Continue   `}
-                                loading={continueLoading}
-                                onClick={handleContinue}
-                                disabled={!user || !ethUsd || marketError !== null || validateError !== null || balanceError !== null}
-                            />
+                            <Tabs
+                                variant="enclosed"
+                                colorScheme="messenger"
+                                mt="0.5em"
+                                size="md"
+                                onChange={handleTabsChange}
+                                index={tabIndex}
+                                isFitted
+                                isLazy
+                                lazyBehavior="keepMounted"
+                            >
+                                <TabList background="transparent">
+                                    <Tab fontWeight="bold" fontSize="xl">
+                                        Buy
+                                    </Tab>
+                                    <Tab fontWeight="bold" fontSize="xl">
+                                        Sell
+                                    </Tab>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        <BuyTab
+                                            user={user}
+                                            toolTipText={tooltipText}
+                                            orderType={orderType}
+                                            setOrderType={setOrderType}
+                                            orderQuantity={orderQuantity}
+                                            setOrderQuantity={setOrderQuantity}
+                                            limitPrice={limitPrice}
+                                            setLimitPrice={setLimitPrice}
+                                            totalUsd={totalUsd ? totalUsd : 0}
+                                            ethUsd={ethUsd ? ethUsd : 0}
+                                            cloutUsd={cloutUsd ? cloutUsd : 0}
+                                            advanced={advanced}
+                                            setAdvanced={setAdvanced}
+                                            slippage={slippage}
+                                            setSlippage={setSlippage}
+                                            slippageOnOpen={slippageOnOpen}
+                                        />
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <SellTab
+                                            user={user}
+                                            toolTipText={tooltipText}
+                                            orderType={orderType}
+                                            setOrderType={setOrderType}
+                                            orderQuantity={orderQuantity}
+                                            setOrderQuantity={setOrderQuantity}
+                                            limitPrice={limitPrice}
+                                            setLimitPrice={setLimitPrice}
+                                            totalUsd={totalUsd ? totalUsd : 0}
+                                            ethUsd={ethUsd ? ethUsd : 0}
+                                            cloutUsd={cloutUsd ? cloutUsd : 0}
+                                            advanced={advanced}
+                                            setAdvanced={setAdvanced}
+                                            slippage={slippage}
+                                            setSlippage={setSlippage}
+                                            slippageOnOpen={slippageOnOpen}
+                                        />
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
+                            {marketError && (
+                                <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mt="6">
+                                    {marketError}
+                                </Text>
+                            )}
+                            <Flex flexDir="row" justifyContent="space-between" w="full" mt="6" mb="6">
+                                <BlueButton w="47%" onClick={onClose} ghost text={`   Cancel   `} />
+                                <BlueButton
+                                    w="47%"
+                                    text={`   Continue   `}
+                                    loading={continueLoading}
+                                    onClick={handleContinue}
+                                    disabled={!user || !ethUsd || marketError !== null || validateError !== null || balanceError !== null}
+                                />
+                            </Flex>
+                            {balanceError && (
+                                <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
+                                    {balanceError}
+                                </Text>
+                            )}
+                            {validateError && (
+                                <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
+                                    {validateError}
+                                </Text>
+                            )}
                         </Flex>
-                        {balanceError && (
-                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
-                                {balanceError}
-                            </Text>
-                        )}
-                        {validateError && (
-                            <Text color="red.400" fontSize="sm" fontWeight="400" w="full" textAlign="center" mb="4">
-                                {validateError}
-                            </Text>
-                        )}
-                    </Flex>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+        </>
     );
 
     const confirmOrder = (
