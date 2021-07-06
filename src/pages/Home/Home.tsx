@@ -75,13 +75,13 @@ export function Home(): React.ReactElement {
 
     useEffect(() => {
         if (ethUsd) {
-            getMarketQuantity(parseFloat(orderEthQuantity) * ethUsd, orderSide)
+            getMarketPrice(parseFloat(orderCloutQuantity), orderSide)
                 .then((response) => {
-                    const temp = globalVars.parseNum(response.data.quantity.toFixed(precision));
-                    handleCloutChange(temp);
+                    const temp = globalVars.parseNum((response.data.price / ethUsd).toFixed(precision));
+                    handleEthChange(temp);
                 })
                 .catch((error) => {
-                    setCloutOrderQuantity("0");
+                    setEthOrderQuantity("0");
                     setCloutErr("Insufficient Market Volume.");
                     setEthErr("Insufficient Market Volume.");
                 });
