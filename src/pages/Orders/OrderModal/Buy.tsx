@@ -107,76 +107,78 @@ export function BuyTab({
                     </NumberInputStepper>
                 </NumberInput>
             </FormControl>
-            <HStack w="full" justify="space-between" color="#81868C">
-                <HStack>
-                    <Text fontSize="14px">
-                        Maximum
-                        <br />
-                        Slippage:
-                    </Text>
-                    <Popover placement="top-start" trigger="hover">
-                        <PopoverTrigger>
-                            <Box>
-                                <AiFillInfoCircle color="#C4C4C4" />
-                            </Box>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <PopoverArrow />
-                            <PopoverHeader fontSize="sm" fontWeight="600">
-                                Maximum Slippage
-                            </PopoverHeader>
-                            <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
-                                “Slippage” is when prices change between the time you create your order and the time it’s confirmed. Your order will
-                                automatically cancel if slippage exceeds your max slippage setting.
-                            </PopoverBody>
-                        </PopoverContent>
-                    </Popover>
+            {orderType === "market" && (
+                <HStack w="full" justify="space-between" color="#81868C">
+                    <HStack>
+                        <Text fontSize="14px">
+                            Maximum
+                            <br />
+                            Slippage:
+                        </Text>
+                        <Popover placement="top-start" trigger="hover">
+                            <PopoverTrigger>
+                                <Box>
+                                    <AiFillInfoCircle color="#C4C4C4" />
+                                </Box>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <PopoverArrow />
+                                <PopoverHeader fontSize="sm" fontWeight="600">
+                                    Maximum Slippage
+                                </PopoverHeader>
+                                <PopoverBody fontSize="xs" fontWeight="400" color="gray.600">
+                                    “Slippage” is when prices change between the time you create your order and the time it’s confirmed. Your order will
+                                    automatically cancel if slippage exceeds your max slippage setting.
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
+                    </HStack>
+                    <HStack spacing={1}>
+                        <Text
+                            cursor="pointer"
+                            onClick={() => setSlippage(1)}
+                            borderRadius="100"
+                            bgColor={slippage == 1 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage == 1 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            1%
+                        </Text>
+                        <Text
+                            cursor="pointer"
+                            onClick={() => setSlippage(2)}
+                            borderRadius="100"
+                            bgColor={slippage == 2 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage == 2 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            2%
+                        </Text>
+                        <Text
+                            cursor="pointer"
+                            onClick={slippageOnOpen}
+                            borderRadius="100"
+                            bgColor={slippage != 1 && slippage != 2 ? "#407BFF" : "white"}
+                            p="2px"
+                            pl="4"
+                            pr="4"
+                            color={slippage != 1 && slippage != 2 ? "white" : "#ACB5BD"}
+                            fontSize="12px"
+                            border="1px solid #DDE2E5"
+                        >
+                            {slippage != 1 && slippage != 2 ? `${slippage}%` : "custom"}
+                        </Text>
+                    </HStack>
                 </HStack>
-                <HStack spacing={1}>
-                    <Text
-                        cursor="pointer"
-                        onClick={() => setSlippage(1)}
-                        borderRadius="100"
-                        bgColor={slippage == 1 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage == 1 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        1%
-                    </Text>
-                    <Text
-                        cursor="pointer"
-                        onClick={() => setSlippage(2)}
-                        borderRadius="100"
-                        bgColor={slippage == 2 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage == 2 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        2%
-                    </Text>
-                    <Text
-                        cursor="pointer"
-                        onClick={slippageOnOpen}
-                        borderRadius="100"
-                        bgColor={slippage != 1 && slippage != 2 ? "#407BFF" : "white"}
-                        p="2px"
-                        pl="4"
-                        pr="4"
-                        color={slippage != 1 && slippage != 2 ? "white" : "#ACB5BD"}
-                        fontSize="12px"
-                        border="1px solid #DDE2E5"
-                    >
-                        {slippage != 1 && slippage != 2 ? `${slippage}%` : "custom"}
-                    </Text>
-                </HStack>
-            </HStack>
+            )}
             {!advanced ? (
                 <HStack onClick={() => handleModeToggle(true)} cursor="pointer">
                     <Text fontSize="sm" color="brand.100">

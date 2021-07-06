@@ -31,7 +31,7 @@ import { useUser } from "../../hooks";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { Chart } from "../../components/BitCloutChart/Chart";
 import { getMarketPrice, getMarketQuantity } from "../../services/order";
-import { tokenState, orderModalState } from "../../store";
+import { tokenState, orderModalState, orderInfoModalState } from "../../store";
 import { MdLoop } from "react-icons/md";
 import * as globalVars from "../../globalVars";
 import { BlueButton } from "../../components/BlueButton";
@@ -43,6 +43,7 @@ import { createMarketOrder } from "../../services/order";
 export function Home(): React.ReactElement {
     const token = useRecoilValue(tokenState);
     const setOrderModalState = useSetRecoilState(orderModalState);
+    const setOrderInfoModalState = useSetRecoilState(orderInfoModalState);
     const { user, userIsLoading, userIsError } = useUser(token);
     const [marketBuy, setMarketBuy] = useState<number | null>(null);
     const [marketSell, setMarketSell] = useState<number | null>(null);
@@ -514,6 +515,7 @@ export function Home(): React.ReactElement {
                 my="6"
                 pt="2"
                 pb="2"
+                onClick={() => setOrderInfoModalState(() => [true, null])}
             >
                 <Text color="#407bff">View Orders</Text>
             </Button>

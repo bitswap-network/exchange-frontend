@@ -11,6 +11,7 @@ import {
     Center,
     Stack,
     useDisclosure,
+    Button,
     Table,
     Thead,
     Tbody,
@@ -21,6 +22,7 @@ import {
     HStack,
     Skeleton,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import React, { useEffect, useState, useMemo } from "react";
 import { Column } from "react-table";
 import { BlueButton } from "../../components/BlueButton";
@@ -73,10 +75,13 @@ export function Orders(): React.ReactElement {
             onOpen();
             setOrderOpenOnLoad(false);
         }
+    }, [orderModalOpenOnLoad]);
+
+    useEffect(() => {
         if (orderInfoModalOpenOnLoad[0]) {
             setTab(3);
         }
-    }, [orderModalOpenOnLoad, orderInfoModalOpenOnLoad]);
+    }, [orderInfoModalOpenOnLoad]);
 
     const handleTabsChange = (tab: number) => {
         setTab(tab);
@@ -89,6 +94,9 @@ export function Orders(): React.ReactElement {
                 <Flex w="full" flexDirection="row" pl="4" mt={{ base: "10", md: "0" }}>
                     <Heading> Your Orders </Heading>
                     <Spacer />
+                    <Button variant="solid" bgColor="#dbe6ff" color="brand.100" as={Link} to="/profile" w={{ base: "25%", md: "auto" }} mr="4">
+                        View Wallet
+                    </Button>
                     <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} mr="4" />
                 </Flex>
                 <Flex w="full" flexDirection={{ base: "column-reverse", lg: "row" }}>

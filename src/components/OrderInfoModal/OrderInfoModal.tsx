@@ -28,6 +28,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
             setCancelError(null);
             setPage(0);
         }
+        console.log(order);
     }, [disclosure.isOpen]);
     const cancelOrderHandler = () => {
         setCancelError(null);
@@ -124,7 +125,7 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                 ORDER QUANTITY
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {+order.orderQuantity.toFixed(2)} {globalVars.BITCLOUT}
+                                {+order.orderQuantity.toFixed(2)} {globalVars.BITCLOUT} / {+order.etherQuantity.toFixed(4)} {globalVars.ETHER}
                             </Text>
                             <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                 QUANTITY PROCESSED

@@ -16,18 +16,34 @@ export function Table<T extends Record<string, unknown>>({ data, columns, type, 
     const isOrderTable = type === 0;
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>({ columns, data, autoResetPage: true }, useSortBy);
     const modalDisclosure = useDisclosure();
+    const [prevOpenState, setPrevOpenState] = useState(false);
 
     useEffect(() => {
         if (orderInfoModalOpenOnLoad[0] && filter == "all") {
-            rows.map((row) => {
-                if (row.original.timestamp.getTime() == orderInfoModalOpenOnLoad[1].getTime()) {
-                    setSelectOrder(row.original);
-                    modalDisclosure.onOpen();
-                    setOrderInfoModalOpenOnLoad([false, null]);
-                }
-            });
+            console.log(orderInfoModalOpenOnLoad[1]);
+            console.log(!orderInfoModalOpenOnLoad[1]);
+            if (!orderInfoModalOpenOnLoad[1] && rows[0]) {
+                console.log(rows);
+                setSelectOrder(rows[0].original);
+                modalDisclosure.onOpen();
+            } else {
+                rows.map((row) => {
+                    if (row.original.timestamp.getTime() == orderInfoModalOpenOnLoad[1].getTime()) {
+                        setSelectOrder(row.original);
+                        modalDisclosure.onOpen();
+                        setOrderInfoModalOpenOnLoad([false, null]);
+                    }
+                });
+            }
         }
-    }, [orderInfoModalOpenOnLoad]);
+    }, [rows, orderInfoModalOpenOnLoad]);
+
+    useEffect(() => {
+        if (!modalDisclosure.isOpen && prevOpenState) {
+            setOrderInfoModalOpenOnLoad([false, null]);
+        }
+        setPrevOpenState(modalDisclosure.isOpen);
+    }, [modalDisclosure.isOpen]);
 
     return (
         <>
