@@ -52,9 +52,7 @@ export function Home(): React.ReactElement {
     const [orderEthQuantity, setEthOrderQuantity] = useState<string>("");
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [confirmError, setConfirmError] = useState<string | null>(null);
-    // # of bitclout given for 1 eth
     const [slippage, setSlippage] = useState<number>(2);
-
     const [ethErr, setEthErr] = useState<string>("");
     const [cloutErr, setCloutErr] = useState<string>("");
     const [ethUsd, setEthUsd] = useState<number | null>(null);
@@ -241,7 +239,13 @@ export function Home(): React.ReactElement {
                         <InputGroup mt="2">
                             <Input
                                 type="number"
-                                placeholder="6.90"
+                                placeholder={
+                                    marketBuy && marketSell && ethUsd
+                                        ? orderSide === "buy"
+                                            ? (marketBuy / ethUsd).toFixed(precision).toString()
+                                            : (marketSell / ethUsd).toFixed(precision).toString()
+                                        : "0.0000"
+                                }
                                 fontSize="40px"
                                 height="62px"
                                 borderWidth="0px"
@@ -288,7 +292,7 @@ export function Home(): React.ReactElement {
                         <InputGroup mt="2">
                             <Input
                                 type="number"
-                                placeholder="420"
+                                placeholder={(1).toFixed(precision).toString()}
                                 fontSize="40px"
                                 height="62px"
                                 borderWidth="0px"
