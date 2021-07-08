@@ -78,6 +78,7 @@ export function SellTab({
         } else {
             handleModeToggle(false);
         }
+        console.log(user.balance.bitclout);
     }, [advanced]);
     return (
         <Stack spacing={4}>
@@ -95,8 +96,10 @@ export function SellTab({
                         setOrderQuantity(globalVars.parseNum(valueString));
                     }}
                     step={0.1}
-                    precision={2}
-                    max={user.balance.bitclout}
+                    onBlur={() => {
+                        setOrderQuantity((+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION)).toString());
+                    }}
+                    max={+user.balance.bitclout.toFixed(globalVars.ROUNDING_PRECISION)}
                 >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -269,7 +272,7 @@ export function SellTab({
                     </Tooltip>
                     <Spacer />
                     <Text color="gray.900" fontSize="xs" fontWeight="600">
-                        {ethUsd && (+(totalUsd / ethUsd) * 0.01).toFixed(6)} {globalVars.ETHER}
+                        {ethUsd && (+(totalUsd / ethUsd) * 0.01).toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.ETHER}
                     </Text>
                 </HStack>
                 <HStack>

@@ -57,7 +57,7 @@ export function Home(): React.ReactElement {
     const [cloutErr, setCloutErr] = useState<string>("");
     const [ethUsd, setEthUsd] = useState<number | null>(null);
     const [tabPage, setTabPage] = useState<number>(0);
-    const precision = 4;
+    const precision = globalVars.ROUNDING_PRECISION;
     const { isOpen: slippageIsOpen, onOpen: slippageOnOpen, onClose: slippageOnClose } = useDisclosure();
     const { isOpen: insufficientFundModalIsOpen, onOpen: insufficientFundModalOnOpen, onClose: insufficientFundModalOnClose } = useDisclosure();
     useEffect(() => {
@@ -242,9 +242,9 @@ export function Home(): React.ReactElement {
                                 placeholder={
                                     marketBuy && marketSell && ethUsd
                                         ? orderSide === "buy"
-                                            ? (marketBuy / ethUsd).toFixed(precision).toString()
-                                            : (marketSell / ethUsd).toFixed(precision).toString()
-                                        : "0.0000"
+                                            ? (+(marketBuy / ethUsd).toFixed(precision)).toString()
+                                            : (+(marketSell / ethUsd).toFixed(precision)).toString()
+                                        : "0"
                                 }
                                 fontSize="40px"
                                 height="62px"
@@ -255,8 +255,7 @@ export function Home(): React.ReactElement {
                                 onChange={(e) => handleEthChange(e.target.value)}
                                 isInvalid={parseFloat(orderEthQuantity) <= 0}
                                 onBlur={() => {
-                                    const temp = orderEthQuantity;
-                                    setEthOrderQuantity(parseFloat(temp).toFixed(precision).toString());
+                                    setEthOrderQuantity((+parseFloat(orderEthQuantity).toFixed(precision)).toString());
                                 }}
                             />
                         </InputGroup>
@@ -292,7 +291,7 @@ export function Home(): React.ReactElement {
                         <InputGroup mt="2">
                             <Input
                                 type="number"
-                                placeholder={(1).toFixed(precision).toString()}
+                                placeholder={(+(1).toFixed(precision)).toString()}
                                 fontSize="40px"
                                 height="62px"
                                 borderWidth="0px"
@@ -302,8 +301,7 @@ export function Home(): React.ReactElement {
                                 onChange={(e) => handleCloutChange(e.target.value)}
                                 isInvalid={parseFloat(orderCloutQuantity) <= 0}
                                 onBlur={() => {
-                                    const temp = orderCloutQuantity;
-                                    setCloutOrderQuantity(parseFloat(temp).toFixed(precision).toString());
+                                    setCloutOrderQuantity((+parseFloat(orderCloutQuantity).toFixed(precision)).toString());
                                 }}
                             />
                         </InputGroup>

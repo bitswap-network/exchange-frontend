@@ -98,7 +98,9 @@ export function BuyTab({
                         setOrderQuantity(globalVars.parseNum(valueString));
                     }}
                     step={0.1}
-                    precision={2}
+                    onBlur={() => {
+                        setOrderQuantity((+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION)).toString());
+                    }}
                 >
                     <NumberInputField />
                     <NumberInputStepper>
@@ -271,7 +273,7 @@ export function BuyTab({
                     </Tooltip>
                     <Spacer />
                     <Text color="gray.900" fontSize="xs" fontWeight="600">
-                        {+(parseFloat(orderQuantity) * 0.01).toFixed(6)} {globalVars.BITCLOUT}
+                        {+(parseFloat(orderQuantity) * 0.01).toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.BITCLOUT}
                     </Text>
                 </HStack>
                 <HStack>

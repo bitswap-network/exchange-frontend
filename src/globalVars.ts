@@ -17,6 +17,7 @@ export const ETHER_LOGO = "./etherLogo.png";
 
 export const MAX_LIMIT = 1000;
 export const MIN_LIMIT = 0.01;
+export const ROUNDING_PRECISION = 6;
 
 export const parseNum = (val: string) => val.replace(/^\$/, "");
 

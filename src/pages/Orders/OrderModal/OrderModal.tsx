@@ -107,7 +107,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
             getMarketPrice(parseFloat(orderQuantity), orderSide)
                 .then((response) => {
                     setMarketError(null);
-                    setTotalUsd(+response.data.price.toFixed(2));
+                    setTotalUsd(+response.data.price.toFixed(globalVars.ROUNDING_PRECISION));
                 })
                 .catch((error) => {
                     console.error(error);
@@ -187,7 +187,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setContinueLoading(true);
         setValidateError(null);
         if (orderType === "market") {
-            createMarketOrder(+parseFloat(orderQuantity).toFixed(2), orderSide)
+            createMarketOrder(+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION), orderSide)
                 .then(() => {
                     setContinueLoading(false);
                     setPage(2);
@@ -197,7 +197,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                     setValidateError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
                 });
         } else {
-            createLimitOrder(+parseFloat(orderQuantity).toFixed(2), +parseFloat(limitPrice).toFixed(2), orderSide)
+            createLimitOrder(+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION), +parseFloat(limitPrice).toFixed(2), orderSide)
                 .then(() => {
                     setContinueLoading(false);
                     setPage(2);
@@ -372,7 +372,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
                                 </Text>
                                 <Spacer />
                                 <Text color="gray.900" fontWeight="600" fontSize="md">
-                                    {+parseFloat(orderQuantity).toFixed(4)} {globalVars.BITCLOUT}
+                                    {+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.BITCLOUT}
                                 </Text>
                             </HStack>
                             <Divider />
