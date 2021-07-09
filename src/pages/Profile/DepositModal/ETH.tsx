@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Modal,
     Text,
@@ -42,6 +42,14 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
     const [depositSuccessful, setDepositSuccessful] = useState(false);
     const [depositTransaction, setDepositTransaction] = useState<TransactionSchema | null>(null);
     const [page, setPage] = useState<number>(0);
+    const [currentOpenState, setCurrentOpenState] = useState<boolean>(disclosure.isOpen);
+
+    useEffect(() => {
+        if (currentOpenState === true && disclosure.isOpen === false && page === 1) {
+            location.reload();
+        }
+        setCurrentOpenState(disclosure.isOpen);
+    }, [disclosure.isOpen]);
 
     const cancelDepositHandler = () => {
         if (depositTransaction) {
@@ -165,7 +173,6 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                         text={`   Close   `}
                         onClick={() => {
                             disclosure.onClose();
-                            setPage(0);
                         }}
                     />
                 </Flex>
@@ -188,7 +195,7 @@ export const EthDepositModal: React.FC<DepositModalProps> = ({ disclosure }: Dep
                         Deposit Funds
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Add ETH to your BitSwap wallet! Click confirm below to generate a transfer address.
+                        Add ETH to your BitSwap wallet! Click continue below to generate a transfer address.
                     </Text>
                     {depositAddress ? (
                         <>

@@ -14,6 +14,9 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Tooltip,
+    InputGroup,
+    Input,
+    InputRightElement,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { userState, identityUsers } from "../../../store";
@@ -41,6 +44,8 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
     const [page, setPage] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
     const [preflightError, setPreflightError] = useState<string | null>(null);
+    const [textCopied, setTextCopied] = useState<string>("copy");
+    let BITCLOUTPublicKey: HTMLInputElement | null = null;
 
     const getPreflight = () => {
         setLoading(true);
@@ -98,6 +103,16 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
             default:
                 return depositStartView;
         }
+    };
+
+    const copyToClipboard = (e: any) => {
+        BITCLOUTPublicKey && BITCLOUTPublicKey.select();
+        document.execCommand("copy");
+        setTextCopied("Copied!");
+        setTimeout(function () {
+            setTextCopied("Copy");
+        }, 3000);
+        e.target.focus();
     };
 
     const depositCompleteView = (
@@ -175,7 +190,29 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                     </Text>
                     <Text color="gray.500" fontSize="sm">
                         Add funds to your BitSwap wallet!
-                    </Text>{" "}
+                    </Text>
+                    <Tooltip label={`You can deposit funds in your BitSwap wallet by sending BitClout to this address`} aria-label="">
+                        <Text color="gray.700" fontSize="sm" mt="4" fontWeight="600">
+                            Your BitSwap Wallet Address:
+                            <AiFillInfoCircle style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
+                        </Text>
+                    </Tooltip>
+                    <InputGroup size="md" mt="2">
+                        <Input
+                            pr="4.5rem"
+                            ref={(input) => {
+                                BITCLOUTPublicKey = input;
+                            }}
+                            type="text"
+                            isReadOnly={true}
+                            value={user?.bitclout.publicKey}
+                        />
+                        <InputRightElement width="4.5rem">
+                            <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
+                                {textCopied}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
                     <Flex flexDir="row" mt="6">
                         <Tooltip label={`You can deposit up to 500 ${globalVars.BITCLOUT} per transaction.`} aria-label="">
                             <Text color="gray.600" fontSize="sm" fontWeight="600">
