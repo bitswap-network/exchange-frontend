@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Modal,
     Text,
@@ -25,6 +25,7 @@ import { handleBitcloutDeposit } from "../../../services/identity/helper";
 import { BlueButton } from "../../../components/BlueButton";
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { getData } from "../../../helpers/persistence";
 
 import * as globalVars from "../../../globalVars";
 
@@ -45,7 +46,16 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
     const [loading, setLoading] = useState<boolean>(false);
     const [preflightError, setPreflightError] = useState<string | null>(null);
     const [textCopied, setTextCopied] = useState<string>("copy");
+    const [BitcloutPublicKey, setBitcloutPublicKey] = useState<string>("");
     let BITCLOUTPublicKey: HTMLInputElement | null = null;
+
+    useEffect(() => {
+        async function getKey() {
+            const temp = await getData("publicKey");
+            setBitcloutPublicKey(temp);
+        }
+        getKey();
+    }, []);
 
     const getPreflight = () => {
         setLoading(true);
@@ -205,7 +215,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             }}
                             type="text"
                             isReadOnly={true}
-                            value={user?.bitclout.publicKey}
+                            value={BitcloutPublicKey}
                         />
                         <InputRightElement width="4.5rem">
                             <Button h="1.75rem" size="sm" onClick={copyToClipboard}>

@@ -18,6 +18,7 @@ export const login = async (publicKey: string, identityJWT: string) => {
         })
         .then((response) => {
             if (response.status === 200) {
+                saveData("publicKey", response.data.wallet.bitclout.publicKey);
                 saveData("user", response.data.user);
                 saveData("token", response.data.token);
             }
