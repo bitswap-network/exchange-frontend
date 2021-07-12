@@ -28,7 +28,7 @@ import {
     Table,
     List,
     ListItem,
-    ListIcon,
+    Select,
     OrderedList,
     UnorderedList,
 } from "@chakra-ui/react";
@@ -721,26 +721,25 @@ export function Profile(): React.ReactElement {
                     <Flex flexDir="column" alignItems="center" w="full">
                         <Flex direction="column" bg="white" w="full">
                             <VStack>
-                                <Flex flexDir={{ base: "column", md: "row" }} spacing={2} w="full" justify="space-between" mb="4">
-                                    <Box onClick={() => handleCurrencyChange(globalVars.BITCLOUT)} w={{ base: "full", md: "49%" }}>
-                                        <CryptoCard
-                                            active={selectedCurrency.type == globalVars.BITCLOUT}
-                                            imageUrl={globalVars.BITCLOUT_LOGO}
-                                            currency={globalVars.BITCLOUT}
-                                            amount={BCLT.amount}
-                                            border={true}
-                                        />
-                                    </Box>
-                                    <Box onClick={() => handleCurrencyChange(globalVars.ETHER)} w={{ base: "full", md: "49%" }} mt={{ base: "4", md: "0" }}>
-                                        <CryptoCard
-                                            active={selectedCurrency.type == globalVars.ETHER}
-                                            imageUrl={globalVars.ETHER_LOGO}
-                                            currency={globalVars.ETHER}
-                                            amount={ETH.amount}
-                                            border={true}
-                                        />
-                                    </Box>
-                                </Flex>
+                                <Select
+                                    onChange={(e) => handleCurrencyChange(e.target.value)}
+                                    size="lg"
+                                    mb="2"
+                                    color="#495057"
+                                    fontFamily="Inter"
+                                    fontWeight={600}
+                                >
+                                    <option value={globalVars.BITCLOUT} style={{ color: "#495057", fontWeight: 500 }}>
+                                        CLOUT BALANCE
+                                    </option>
+                                    <option value={globalVars.ETHER} style={{ color: "#495057", fontWeight: 500 }}>
+                                        ETHER BALANCE
+                                    </option>
+                                    <option value={globalVars.ETHER} style={{ color: "#495057", fontWeight: 500 }}>
+                                        USDC BALANCE
+                                    </option>
+                                </Select>
+                                ={" "}
                                 <BalanceCard
                                     openWithdrawModal={onOpenWithdrawModal}
                                     openDepositModal={onOpenDepositModal}
