@@ -159,6 +159,8 @@ export function Profile(): React.ReactElement {
                     });
                 }
             });
+        } else if (selectedCurrency.type == globalVars.USDC) {
+            // usdc stuff here
         } else {
             getMaxEth().then((max) => {
                 if (user?.tier == 0) {
@@ -232,6 +234,7 @@ export function Profile(): React.ReactElement {
     };
 
     const handleCurrencyChange = (type: string) => {
+        console.log(type, selectedCurrency.type);
         if (type === globalVars.BITCLOUT) {
             getMaxBitclout().then((max) => {
                 setSelectedCurrency({
@@ -239,6 +242,13 @@ export function Profile(): React.ReactElement {
                     maxWithdraw: max,
                 });
             });
+        } else if (type === globalVars.USDC) {
+            // getMaxEth().then((max) => {
+            setSelectedCurrency({
+                type: globalVars.USDC,
+                maxWithdraw: 10,
+            });
+            // });
         } else {
             getMaxEth().then((max) => {
                 setSelectedCurrency({
@@ -735,16 +745,27 @@ export function Profile(): React.ReactElement {
                                     <option value={globalVars.ETHER} style={{ color: "#495057", fontWeight: 500 }}>
                                         ETHER BALANCE
                                     </option>
-                                    <option value={globalVars.ETHER} style={{ color: "#495057", fontWeight: 500 }}>
+                                    <option value={globalVars.USDC} style={{ color: "#495057", fontWeight: 500 }}>
                                         USDC BALANCE
                                     </option>
                                 </Select>
-                                ={" "}
                                 <BalanceCard
                                     openWithdrawModal={onOpenWithdrawModal}
                                     openDepositModal={onOpenDepositModal}
-                                    imageUrl={selectedCurrency.type == globalVars.BITCLOUT ? globalVars.BITCLOUT_LOGO : globalVars.ETHER_LOGO}
-                                    currency={selectedCurrency.type == globalVars.BITCLOUT ? globalVars.BITCLOUT : globalVars.ETHER}
+                                    imageUrl={
+                                        selectedCurrency.type == globalVars.BITCLOUT
+                                            ? globalVars.BITCLOUT_LOGO
+                                            : selectedCurrency.type == globalVars.USDC
+                                            ? globalVars.USDC_LOGO
+                                            : globalVars.ETHER_LOGO
+                                    }
+                                    currency={
+                                        selectedCurrency.type == globalVars.BITCLOUT
+                                            ? globalVars.BITCLOUT
+                                            : selectedCurrency.type == globalVars.USDC
+                                            ? globalVars.USDC
+                                            : globalVars.ETHER
+                                    }
                                     amount={selectedCurrency.type == globalVars.BITCLOUT ? BCLT.amount : ETH.amount}
                                     usdValue={
                                         selectedCurrency.type == globalVars.BITCLOUT ? (BCLT.usdValue ? BCLT.usdValue : 0) : ETH.usdValue ? ETH.usdValue : 0

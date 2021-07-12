@@ -9,11 +9,13 @@ export const etherscanPrefix = isTest ? "kovan." : "";
 
 export const BITCLOUT = "CLOUT";
 export const ETHER = "ETH";
+export const USDC = "USDC";
 
 export const UNVERIFIED_MAX_USD_LIMIT = 2000;
 export const UNVERIFIED_WITHDRAW_LIMIT = 2000;
 export const BITCLOUT_LOGO = "./bitcloutLogo.png";
 export const ETHER_LOGO = "./etherLogo.png";
+export const USDC_LOGO = "./usdcLogo.png";
 
 export const MAX_LIMIT = 1000;
 export const MIN_LIMIT = 0.01;
