@@ -1,0 +1,1 @@
+export { SlippageModal } from "./SlippageModal";

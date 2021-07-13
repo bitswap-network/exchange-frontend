@@ -1,28 +1,27 @@
-import React, { ReactElement, Suspense } from "react"
-import { Box, Container, ChakraProvider, Grid } from "@chakra-ui/react"
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
-import { RecoilRoot } from "recoil"
+import React, { ReactElement, Suspense } from "react";
+import { Box, Container, ChakraProvider } from "@chakra-ui/react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import { bitswapTheme } from "./theme"
+import { bitswapTheme } from "./theme";
 
-import { Home } from "./pages/Home"
-import { Login } from "./pages/Login"
-import { Wallet } from "./pages/Wallet"
-import { Orders } from "./pages/Orders"
-import { Profile } from "./pages/Profile"
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { Orders } from "./pages/Orders";
+import { Profile } from "./pages/Profile";
 
-import { DefaultNavBar, NavBar } from "./components/NavBar"
-import { PrivateRoute } from "./components/PrivateRoute"
+import { DefaultNavBar, NavBar } from "./components/NavBar";
+import { PrivateRoute } from "./components/PrivateRoute";
 
-import * as config from "./globalVars"
-import { identityHandler } from "./services/identity"
+import * as config from "./globalVars";
+import { identityHandler } from "./services/identity";
 
-window.addEventListener("message", identityHandler)
+window.addEventListener("message", identityHandler);
 
 if (!localStorage.getItem("nulledState")) {
-    console.log("nulling")
-    localStorage.clear()
-    localStorage.setItem("nulledState", JSON.stringify(true))
+    console.log("nulling");
+    localStorage.clear();
+    localStorage.setItem("nulledState", JSON.stringify(true));
 }
 
 export const App = (): ReactElement => {
@@ -40,44 +39,38 @@ export const App = (): ReactElement => {
             />
             <RecoilRoot>
                 <ChakraProvider theme={bitswapTheme} resetCSS>
-                    {/* <CSSReset /> */}
                     <BrowserRouter>
-                        <Grid h="100vh" templateRows={"64px 1fr"}>
-                            {/* TODO: implement auth to set loggedOut */}
-                            <Suspense fallback={DefaultNavBar(true)}>
-                                <NavBar />
-                            </Suspense>
+                        {/* TODO: implement auth to set loggedOut */}
+                        <Suspense fallback={DefaultNavBar()}>
+                            <NavBar />
+                        </Suspense>
 
-                            <Box p={8} bg={"background.primary"}>
-                                <Suspense fallback={<></>}>
-                                    <Container maxW="container.xl">
-                                        <Switch>
-                                            <Route path="/login">
-                                                <Login />
-                                            </Route>
-                                            <PrivateRoute path="/orders">
-                                                <Orders />
-                                            </PrivateRoute>
-                                            <PrivateRoute path="/wallet">
-                                                <Wallet />
-                                            </PrivateRoute>
-                                            <PrivateRoute path="/profile">
-                                                <Profile />
-                                            </PrivateRoute>
-                                            <Route path="/home">
-                                                <Redirect to="/" />
-                                            </Route>
-                                            <Route path="/">
-                                                <Home />
-                                            </Route>
-                                        </Switch>
-                                    </Container>
-                                </Suspense>
-                            </Box>
-                        </Grid>
+                        <Box p={{ base: 4, md: 8 }}>
+                            <Suspense fallback={<></>}>
+                                <Container maxW="container.xl">
+                                    <Switch>
+                                        <Route path="/login">
+                                            <Login />
+                                        </Route>
+                                        <PrivateRoute path="/orders">
+                                            <Orders />
+                                        </PrivateRoute>
+                                        <PrivateRoute path="/profile">
+                                            <Profile />
+                                        </PrivateRoute>
+                                        <Route path="/home">
+                                            <Redirect to="/" />
+                                        </Route>
+                                        <Route path="/">
+                                            <Home />
+                                        </Route>
+                                    </Switch>
+                                </Container>
+                            </Suspense>
+                        </Box>
                     </BrowserRouter>
                 </ChakraProvider>
             </RecoilRoot>
         </>
-    )
-}
+    );
+};

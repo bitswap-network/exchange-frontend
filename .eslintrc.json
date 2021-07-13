@@ -14,12 +14,7 @@
     },
     "plugins": ["react", "@typescript-eslint", "prettier"],
     "rules": {
-        "prettier/prettier": [
-            "error",
-            {
-                "endOfLine": "auto"
-            }
-        ],
-        "@typescript-eslint/ban-ts-comment": "off"
+        "@typescript-eslint/ban-ts-comment": "off",
+        "prettier/prettier": 0
     }
 }

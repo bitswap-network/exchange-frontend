@@ -5,8 +5,8 @@ const Button = {
         default: {},
     },
     defaultProps: {
-        variant: "default",
+        variant: "ghost",
     },
-}
+};
 
-export default Button
+export default Button;

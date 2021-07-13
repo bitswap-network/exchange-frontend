@@ -54,7 +54,7 @@ import {
     UseSortByInstanceProps,
     UseSortByOptions,
     UseSortByState,
-} from "react-table"
+} from "react-table";
 
 declare module "react-table" {
     // take this file as-is, or comment out the sections that don't apply to your plugin configuration
@@ -74,11 +74,7 @@ declare module "react-table" {
             // feature set, this is a safe default.
             Record<string, any> {}
 
-    export interface Hooks<D extends object = {}>
-        extends UseExpandedHooks<D>,
-            UseGroupByHooks<D>,
-            UseRowSelectHooks<D>,
-            UseSortByHooks<D> {}
+    export interface Hooks<D extends object = {}> extends UseExpandedHooks<D>, UseGroupByHooks<D>, UseRowSelectHooks<D>, UseSortByHooks<D> {}
 
     export interface TableInstance<D extends object = {}>
         extends UseColumnOrderInstanceProps<D>,
@@ -109,7 +105,7 @@ declare module "react-table" {
             UseGroupByColumnOptions<D>,
             UseResizeColumnsColumnOptions<D>,
             UseSortByColumnOptions<D> {
-        isNumeric?: boolean
+        isNumeric?: boolean;
     }
 
     export interface ColumnInstance<D extends object = {}>
@@ -117,14 +113,10 @@ declare module "react-table" {
             UseGroupByColumnProps<D>,
             UseResizeColumnsColumnProps<D>,
             UseSortByColumnProps<D> {
-        isNumeric?: boolean
+        isNumeric?: boolean;
     }
 
     export interface Cell<D extends object = {}, V = any> extends UseGroupByCellProps<D>, UseRowStateCellProps<D> {}
 
-    export interface Row<D extends object = {}>
-        extends UseExpandedRowProps<D>,
-            UseGroupByRowProps<D>,
-            UseRowSelectRowProps<D>,
-            UseRowStateRowProps<D> {}
+    export interface Row<D extends object = {}> extends UseExpandedRowProps<D>, UseGroupByRowProps<D>, UseRowSelectRowProps<D>, UseRowStateRowProps<D> {}
 }

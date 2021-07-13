@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Flex,
     HStack,
     useToast,
     IconButton,
-    Button,
     useDisclosure,
     Spacer,
     Text,
-    Skeleton,
     Drawer,
     DrawerBody,
     VStack,
@@ -18,177 +16,131 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
-} from "@chakra-ui/react"
-import { RiCloseFill } from "react-icons/ri"
-import { HiMenu } from "react-icons/hi"
-import { useRecoilValue, useSetRecoilState } from "recoil"
-import { Logo } from "./components/Logo"
+} from "@chakra-ui/react";
+import { HiMenu } from "react-icons/hi";
+import { FiLogOut, FiLogIn } from "react-icons/fi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Logo } from "./components/Logo";
+import { NavLink } from "./components/NavLink";
+import { NotifPopover } from "./components/NotifPopover";
+import { Link } from "react-router-dom";
+import { loggedInState, orderModalState, userState } from "../../store";
+import { logout } from "../../helpers/persistence";
 
-import { Link } from "react-router-dom"
-import { loggedInState, orderModalState, userState } from "../../store"
-import { AiOutlineUser } from "react-icons/ai"
-
-const LINKS = ["home", "orders", "wallet"]
-// 📌 TO DO: This is just the skeleton (no links or connections)
-export const DefaultNavBar = (loading: boolean) => (
-    <Box px={4} bg={"background.primary"}>
-        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-            <Skeleton isLoaded={!loading} m="4">
-                <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
-                    <Link to="/">
-                        <Logo />
-                    </Link>
-                </HStack>
-            </Skeleton>
-            <Flex alignItems={"center"} mr="5">
-                <Skeleton isLoaded={!loading} m="4">
-                    <Button
-                        bg="#4978F0"
-                        p="0px 40px"
-                        color="white"
-                        fontWeight="600"
-                        fontSize="16"
-                        borderRadius="6"
-                        boxShadow="0px 3px 6px 0px #00000040"
-                        as={Link}
-                        to="/login"
-                    >
-                        Login
-                    </Button>
-                </Skeleton>
-                <Spacer />
+export function DefaultNavBar() {
+    return (
+        <Flex alignItems={"center"} justifyContent={"space-between"} p={4} boxShadow="md" h="8vh" w="full">
+            <Logo as={Link} to="/" ml={{ base: 2, sm: 4, md: 8 }} />
+            <Flex mr={{ base: 2, sm: 4, md: 8 }}>
+                <Box _hover={{ backgroundColor: "background.primary", cursor: "pointer" }} borderRadius="sm" p={1} as={Link} to="/login">
+                    <HStack>
+                        <Text>Login</Text>
+                        <FiLogIn size="20" />
+                    </HStack>
+                </Box>
             </Flex>
         </Flex>
-    </Box>
-)
+    );
+}
 
 function NavBarFunc() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const isLoggedIn = useRecoilValue(loggedInState)
-    const user = useRecoilValue(userState)
-    const setOrderModalState = useSetRecoilState(orderModalState)
-    const emailToast = useToast()
-    const deviceToast = useToast()
-    const chartWarningToast = useToast()
-    const [emailToastOpened, setEmailToastOpened] = useState(false)
-    const [deviceToastOpened, setDeviceToastOpened] = useState(false)
-    const [chartWarningToastOpened, setChartWarningToastOpened] = useState(false)
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const isLoggedIn = useRecoilValue(loggedInState);
+    const user = useRecoilValue(userState);
+    const setOrderModalState = useSetRecoilState(orderModalState);
+    const emailToast = useToast();
+    const [emailToastOpened, setEmailToastOpened] = useState(false);
+
+    console.log(window.location.pathname);
     useEffect(() => {
         if (user && !user.verification.email && !emailToastOpened) {
-            setEmailToastOpened(true)
+            setEmailToastOpened(true);
             emailToast({
                 title: "Email not verified.",
                 description: "Verify your email to gain complete access to the platform.",
                 status: "error",
                 duration: 60000,
                 isClosable: true,
-                position: "bottom-right",
-            })
+                position: "bottom-left",
+            });
         }
-    }, [user])
-    useEffect(() => {
-        if (window.innerWidth < 768 && !deviceToastOpened) {
-            setDeviceToastOpened(true)
-            deviceToast({
-                title: "Mobile device detected.",
-                description: "Access the website on a desktop or laptop for a better experience.",
-                status: "warning",
-                duration: 10000,
-                isClosable: true,
-                position: "top",
-            })
+        if (user && user.verification.email) {
+            emailToast.closeAll();
         }
-    }, [])
-    // 📌 TODO: Connect all functionality
+    }, [user?.verification]);
+
     const loggedInMarkup = (
         <>
             <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>
-                        <Flex alignItems="flex-start" ml="-40px">
-                            <Logo as={Link} to="/" />
-                        </Flex>
+                    <DrawerHeader borderBottomWidth="1px">
+                        <VStack alignItems="center">
+                            <Logo boxSize="200px" my="-8" />
+                            <Text>Mobile Exchange</Text>
+                        </VStack>
                     </DrawerHeader>
                     <DrawerBody>
-                        <VStack spacing={4} alignItems="flex-start">
-                            {LINKS.map((link) => (
-                                <Text
-                                    textTransform="capitalize"
-                                    as={Link}
-                                    to={`/${link}`}
-                                    key={link}
-                                    onClick={() => onClose()}
-                                >
-                                    {link}
-                                </Text>
-                            ))}
+                        <VStack spacing={6} alignItems="center" mt="2">
+                            <NavLink as={Link} to="/" label={"Home"} onClick={onClose} />
+                            <NavLink as={Link} to="/orders" label={"Orders"} onClick={onClose} />
+                            <NavLink as={Link} to="/profile" label={"Account"} onClick={onClose} />
+
+                            <Box
+                                onClick={() => {
+                                    logout();
+                                    window.location.assign("/");
+                                }}
+                            >
+                                <HStack>
+                                    <Text>Logout</Text>
+                                    <FiLogOut size="16" />
+                                </HStack>
+                            </Box>
                         </VStack>
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Box px={4}>
-                <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+            <Flex justifyContent={{ base: "flex-start", md: "space-between" }} px={{ base: 8, md: 4 }} boxShadow="md" h="8vh">
+                <HStack spacing={2} display={{ base: "inline-flex", md: "none" }}>
                     <IconButton
-                        size={"lg"}
-                        icon={isOpen ? <RiCloseFill /> : <HiMenu />}
+                        size="lg"
+                        icon={isOpen ? <></> : <HiMenu size="30" />}
                         aria-label={"Open Menu"}
                         display={{ md: "none" }}
                         onClick={isOpen ? () => onClose() : () => onOpen()}
                     />
-                    <HStack as={"nav"} spacing={5} display={{ base: "none", md: "flex" }}>
-                        <Logo as={Link} to="/" />
-                        {LINKS.map((link) => (
-                            <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link} pt="3px">
-                                {link}
-                            </Text>
-                        ))}
-                    </HStack>
-                    <Flex mr={{ sm: "5px", md: "20px" }}>
-                        <HStack as={"nav"} spacing={1} display={{ base: "none", md: "flex" }}>
-                            <Button
-                                as={Link}
-                                to={{
-                                    pathname: "/orders",
-                                }}
-                                onClick={() => setOrderModalState(() => true)}
-                                h="30px"
-                                bgColor="#DBE6FF"
-                                borderRadius="4"
-                                mr="4"
-                            >
-                                <Text textTransform="capitalize" fontWeight="500" color="brand.100" fontSize="sm">
-                                    New Order
-                                </Text>
-                            </Button>
-                            <Link to="/profile">
-                                <HStack spacing="5px" color="black" fontWeight="400" mr="4">
-                                    <AiOutlineUser size="20" />
-                                    <Text textTransform="capitalize" pt="2px">
-                                        Profile
-                                    </Text>
-                                </HStack>
-                            </Link>
+                    <Spacer />
+                    <Logo as={Link} to="/" />
+                </HStack>
+                <HStack spacing={8} display={{ base: "none", md: "flex" }} ml="16">
+                    <Logo as={Link} to="/" ml={4} mr={4} />
+                    <NavLink as={Link} to="/" label={"Home"} />
+                    <NavLink as={Link} to="/orders" label={"Orders"} />
+                    <NavLink as={Link} to="/profile" label={"Account"} />
+                    <NotifPopover />
+                </HStack>
+                <HStack spacing={8} display={{ base: "none", md: "flex" }} mr="6">
+                    <Box
+                        _hover={{ backgroundColor: "background.primary", cursor: "pointer" }}
+                        onClick={() => {
+                            logout();
+                            window.location.assign("/");
+                        }}
+                        borderRadius="sm"
+                        p={1}
+                    >
+                        <HStack>
+                            <Text>Logout</Text>
+                            <FiLogOut size="20" />
                         </HStack>
-                    </Flex>
-                </Flex>
-
-                {/* {isOpen && (
-                    <Box pb={4} display={{ base: "flex", md: "none" }}>
-                        <Stack as={"nav"} spacing={4}>
-                            {LINKS.map((link) => (
-                                <Text textTransform="capitalize" as={Link} to={`/${link}`} key={link}>
-                                    {link}
-                                </Text>
-                            ))}
-                        </Stack>
                     </Box>
-                )} */}
-            </Box>
+                </HStack>
+            </Flex>
         </>
-    )
+    );
 
-    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar(false)}</>
+    return <>{isLoggedIn ? loggedInMarkup : DefaultNavBar()}</>;
 }
-export const NavBar = React.memo(NavBarFunc)
+export const NavBar = React.memo(NavBarFunc);

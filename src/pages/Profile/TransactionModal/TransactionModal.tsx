@@ -1,39 +1,26 @@
-import React from "react"
-import {
-    Flex,
-    Modal,
-    Text,
-    ModalOverlay,
-    ModalContent,
-    ModalBody,
-    Link,
-    ModalCloseButton,
-    Button,
-} from "@chakra-ui/react"
-import { BlueButton } from "../../../components/BlueButton"
-import { TransactionSchema } from "../../../interfaces/Transaction"
-import * as globalVars from "../../../globalVars"
+import React from "react";
+import { Flex, Modal, Text, ModalOverlay, ModalContent, ModalBody, Link, ModalCloseButton, Button } from "@chakra-ui/react";
+import { BlueButton } from "../../../components/BlueButton";
+import { TransactionSchema } from "../../../interfaces/Transaction";
+import * as globalVars from "../../../globalVars";
 
 interface TransactionModalProps {
     disclosure: {
-        isOpen: boolean
-        onOpen: () => void
-        onClose: () => void
-    }
-    transaction: TransactionSchema | null
+        isOpen: boolean;
+        onOpen: () => void;
+        onClose: () => void;
+    };
+    transaction: TransactionSchema | null;
 }
 
-export const TransactionModal: React.FC<TransactionModalProps> = ({
-    disclosure,
-    transaction,
-}: TransactionModalProps) => {
+export const TransactionModal: React.FC<TransactionModalProps> = ({ disclosure, transaction }: TransactionModalProps) => {
     if (!transaction) {
-        return null
+        return null;
     }
-    const created = new Date(transaction.created)
-    let completed
+    const created = new Date(transaction.created);
+    let completed;
     if (transaction.completionDate) {
-        completed = new Date(transaction.completionDate)
+        completed = new Date(transaction.completionDate);
     }
     return (
         <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
@@ -134,14 +121,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         ) : null}
                         <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                             <BlueButton w="47%" text={`   Close   `} onClick={disclosure.onClose} />
-                            <Button
-                                w="47%"
-                                variant="solid"
-                                as={Link}
-                                isExternal
-                                href={"https://discord.com/invite/bitswap"}
-                                onClick={disclosure.onClose}
-                            >
+                            <Button w="47%" variant="solid" as={Link} isExternal href={"https://discord.com/invite/bitswap"} onClick={disclosure.onClose}>
                                 Support
                             </Button>
                         </Flex>
@@ -149,5 +129,5 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </ModalBody>
             </ModalContent>
         </Modal>
-    )
-}
+    );
+};

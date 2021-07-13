@@ -1,1 +1,1 @@
-export { OrderInfoModal } from "./OrderInfoModal"
+export { OrderInfoModal } from "./OrderInfoModal";

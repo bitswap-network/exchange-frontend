@@ -11,6 +11,7 @@ import {
     Center,
     Stack,
     useDisclosure,
+    Button,
     Table,
     Thead,
     Tbody,
@@ -20,103 +21,94 @@ import {
     Td,
     HStack,
     Skeleton,
-    SkeletonText,
-} from "@chakra-ui/react"
-import React, { useEffect, useState, useMemo } from "react"
-import { Column } from "react-table"
-import { BlueButton } from "../../components/BlueButton"
-import { OrderTableDataInterface, OrderTableColumns } from "../../interfaces/Order"
-import { Chart } from "../../components/BitCloutChart/Chart"
-import { OrderTable } from "./OrderTable"
-import { OrderModal } from "./OrderModal"
-import { useOrderBook, useOrders } from "../../hooks"
-import { getOrders } from "../../services/user"
-import * as globalVars from "../../globalVars"
-import { useRecoilState, useRecoilValue } from "recoil"
-import { orderModalState, tokenState } from "../../store"
-import { CryptoCard } from "../../components/CryptoCard"
-import { useUser } from "../../hooks"
-import { getEthUSD } from "../../services/utility"
-import { getMarketPrice } from "../../services/order"
+} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { Column } from "react-table";
+import { BlueButton } from "../../components/BlueButton";
+import { OrderTableDataInterface, OrderTableColumns } from "../../interfaces/Order";
+import { Chart } from "../../components/BitCloutChart/Chart";
+import { OrderTable } from "./OrderTable";
+import { OrderModal } from "./OrderModal";
+import { useOrderBook, useOrders } from "../../hooks";
+import * as globalVars from "../../globalVars";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { orderModalState, orderInfoModalState, tokenState } from "../../store";
+import { CryptoCard } from "../../components/CryptoCard";
+import { useUser } from "../../hooks";
+import { getMarketPrice } from "../../services/order";
 
 export function Orders(): React.ReactElement {
-    const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState)
-    const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[]
+    const [orderModalOpenOnLoad, setOrderOpenOnLoad] = useRecoilState(orderModalState);
+    const [orderInfoModalOpenOnLoad, setOrderInfoModalOpenOnLoad] = useRecoilState(orderInfoModalState);
+    const [tab, setTab] = useState(0);
+    const columns = useMemo(() => OrderTableColumns, []) as Column<OrderTableDataInterface>[];
     // const [ordersHot, setOrders] = useState<OrderTableDataInterface[]>([])
-    const token = useRecoilValue(tokenState)
+    const token = useRecoilValue(tokenState);
 
-    const { orders, ordersIsLoading, ordersIsError } = useOrders(token)
-    const { user, userIsLoading, userIsError } = useUser(token)
-    const [ethUsd, setEthUsd] = useState<number | null>(null)
+    const { orders, ordersIsLoading, ordersIsError } = useOrders(token);
+    const { user, userIsLoading, userIsError } = useUser(token);
 
-    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook()
-    const [marketBuy, setMarketBuy] = useState<number | null>(null)
-    const [marketSell, setMarketSell] = useState<number | null>(null)
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { orderbook, orderbookIsLoading, orderbookIsError } = useOrderBook();
+    const [marketBuy, setMarketBuy] = useState<number | null>(null);
+    const [marketSell, setMarketSell] = useState<number | null>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const BCLT = {
-        imageUri: "./bitcloutLogo.png",
         currency: globalVars.BITCLOUT,
         amount: user?.balance.bitclout,
-        publicKey: user?.bitclout.publicKey,
-    }
-    useEffect(() => {
-        getEthUSD().then((response) => {
-            setEthUsd(response.data.data)
-        })
-        getMarketPrice(0.05, "buy").then((response) => {
-            setMarketBuy(response.data.price * 20)
-        })
-        getMarketPrice(0.05, "sell").then((response) => {
-            setMarketSell(response.data.price * 20)
-        })
-    }, [])
-
+    };
     const ETH = {
-        imageUri:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/1200px-Ethereum-icon-purple.svg.png",
         currency: globalVars.ETHER,
         amount: user?.balance.ether,
-        usdValue: ethUsd ? ethUsd * user?.balance.ether : null,
-        publicKey: "",
-    }
+    };
+    useEffect(() => {
+        getMarketPrice(0.05, "buy").then((response) => {
+            setMarketBuy(response.data.price * 20);
+        });
+        getMarketPrice(0.05, "sell").then((response) => {
+            setMarketSell(response.data.price * 20);
+        });
+    }, []);
 
     useEffect(() => {
         if (orderModalOpenOnLoad) {
-            onOpen()
-            setOrderOpenOnLoad(false)
+            onOpen();
+            setOrderOpenOnLoad(false);
         }
-    }, [orderModalOpenOnLoad])
+    }, [orderModalOpenOnLoad]);
+
+    useEffect(() => {
+        if (orderInfoModalOpenOnLoad[0]) {
+            setTab(3);
+        }
+    }, [orderInfoModalOpenOnLoad]);
+
+    const handleTabsChange = (tab: number) => {
+        setTab(tab);
+    };
 
     return (
         <>
             <OrderModal isOpen={isOpen} onClose={onClose} />
-            <VStack spacing={6}>
-                <Flex w="full" flexdir="row" pl="4">
+            <VStack spacing={8}>
+                <Flex w="full" flexDirection="row" pl="4" mt={{ base: "10", md: "0" }}>
                     <Heading> Your Orders </Heading>
                     <Spacer />
-                    <BlueButton text="New Order" onClick={onOpen} />
+                    <Button variant="solid" bgColor="#dbe6ff" color="brand.100" as={Link} to="/profile" w={{ base: "25%", md: "auto" }} mr="4">
+                        View Wallet
+                    </Button>
+                    <BlueButton text="New Order" onClick={onOpen} w={{ base: "25%", md: "auto" }} mr="4" />
                 </Flex>
-                <Flex w="full" dir="row">
-                    <Flex flex="0.75" maxW="75%">
-                        <Tabs w="full" variant="order" h="70vh">
+                <Flex w="full" flexDirection={{ base: "column-reverse", lg: "row" }}>
+                    <Flex flex={{ base: "1", lg: "0.75" }}>
+                        <Tabs w="full" index={tab} onChange={handleTabsChange} variant="order" minH="280px" maxH={{ base: "400px", lg: "700px", xl: "1000px" }}>
                             <Center>
                                 <TabList w="full" ml="4" mr="4" justifyContent="space-evenly">
+                                    <Tab w="25%">Active Orders ({orders ? orders.filter((order) => order.complete === false).length : 0})</Tab>
                                     <Tab w="25%">
-                                        Active Orders (
-                                        {orders ? orders.filter((order) => order.complete === false).length : 0})
+                                        Completed Orders ({orders ? orders.filter((order) => order.complete === true && order.error === "").length : 0})
                                     </Tab>
-                                    <Tab w="25%">
-                                        Completed Orders (
-                                        {orders
-                                            ? orders.filter((order) => order.complete === true && order.error === "")
-                                                  .length
-                                            : 0}
-                                        )
-                                    </Tab>
-                                    <Tab w="25%">
-                                        Cancelled Orders (
-                                        {orders ? orders.filter((order) => order.error !== "").length : 0})
-                                    </Tab>
+                                    <Tab w="25%">Cancelled Orders ({orders ? orders.filter((order) => order.error !== "").length : 0})</Tab>
                                     <Tab w="25%">All Orders ({orders ? orders.length : 0})</Tab>
                                 </TabList>
                             </Center>
@@ -130,66 +122,48 @@ export function Orders(): React.ReactElement {
                                 <TabPanels w="full">
                                     <TabPanel>
                                         <Stack w="100%">
+                                            <OrderTable data={orders ? orders.filter((order) => order.complete === false) : []} columns={columns} />
+                                        </Stack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <Stack w="100%">
                                             <OrderTable
-                                                data={orders ? orders.filter((order) => order.complete === false) : []}
+                                                data={orders ? orders.filter((order) => order.complete === true && order.error === "") : []}
                                                 columns={columns}
                                             />
                                         </Stack>
                                     </TabPanel>
                                     <TabPanel>
                                         <Stack w="100%">
-                                            <OrderTable
-                                                data={
-                                                    orders
-                                                        ? orders.filter(
-                                                              (order) => order.complete === true && order.error === ""
-                                                          )
-                                                        : []
-                                                }
-                                                columns={columns}
-                                            />
-                                        </Stack>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <Stack w="100%">
-                                            <OrderTable
-                                                data={orders ? orders.filter((order) => order.error !== "") : []}
-                                                columns={columns}
-                                            />
+                                            <OrderTable data={orders ? orders.filter((order) => order.error !== "") : []} columns={columns} />
                                         </Stack>
                                     </TabPanel>
                                     <TabPanel>
                                         <Stack w="full">
-                                            <OrderTable data={orders ? orders : []} columns={columns} />
+                                            <OrderTable filter={"all"} data={orders ? orders : []} columns={columns} />
                                         </Stack>
                                     </TabPanel>
                                 </TabPanels>
                             </Skeleton>
                         </Tabs>
                     </Flex>
-                    <Flex flex="0.25" flexDir="column">
-                        <Box pb="4" w="full">
-                            <CryptoCard
-                                size="xs"
-                                active={true}
-                                border={false}
-                                imageUrl={BCLT.imageUri}
-                                currency={BCLT.currency}
-                                amount={BCLT.amount}
-                            />
-                        </Box>
-                        <Box w="full" mb="4">
-                            <CryptoCard
-                                size="xs"
-                                active={true}
-                                border={false}
-                                imageUrl={ETH.imageUri}
-                                currency={ETH.currency}
-                                amount={ETH.amount}
-                            />
-                        </Box>
-
-                        <Box bg="white" w="full" borderRadius="8" boxShadow="xs" p="6" alignSelf="flex-start">
+                    <Flex flex={{ base: "1", lg: "0.25" }} mb={{ base: "40px", lg: "0px" }} flexDir="column">
+                        <Flex flexDir="row" spacing={2} w="full" justify="space-between" mb="4">
+                            <Box w="49%">
+                                <CryptoCard
+                                    size="xs"
+                                    active={true}
+                                    imageUrl={globalVars.BITCLOUT_LOGO}
+                                    currency={globalVars.BITCLOUT}
+                                    amount={BCLT.amount}
+                                    border={true}
+                                />
+                            </Box>
+                            <Box w="49%">
+                                <CryptoCard active={true} imageUrl={globalVars.ETHER_LOGO} currency={globalVars.ETHER} amount={ETH.amount} border={true} />
+                            </Box>
+                        </Flex>
+                        <Box bg="white" borderRadius="8" boxShadow="xs" p="6" alignSelf="center" w={{ base: "90%", lg: "full" }}>
                             <HStack ml="3" mr="3">
                                 <Flex
                                     bgColor="#dbe6ff"
@@ -227,7 +201,7 @@ export function Orders(): React.ReactElement {
                                     Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " - "}
                                 </Flex>
                             </HStack>
-                            <Box w="full" maxH="325px" mt="2">
+                            <Box maxH="325px" w={{ base: "full", lg: "440px" }} mt="2">
                                 <Chart ticks={6} dateTicks={5} />
                             </Box>
                             <Box w="full" maxH="300px" overflowY="auto" mt="4">
@@ -293,5 +267,5 @@ export function Orders(): React.ReactElement {
                 </Flex>
             </VStack>
         </>
-    )
+    );
 }

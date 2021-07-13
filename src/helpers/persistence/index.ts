@@ -1,33 +1,34 @@
-import { IdentityUser } from "../../interfaces/identity/User"
+import { IdentityUser } from "../../interfaces/identity/User";
 export const saveData = (key: string, data: any) => {
-    localStorage.setItem(key, JSON.stringify(data))
-}
+    localStorage.setItem(key, JSON.stringify(data));
+};
 
 export const getData = (key: string) => {
-    const data: string | null = localStorage.getItem(key)
+    const data: string | null = localStorage.getItem(key);
     if (data) {
         try {
-            const parsed = JSON.parse(data)
-            return parsed
+            const parsed = JSON.parse(data);
+            return parsed;
         } catch (e) {
-            console.error(e)
-            removeData(key)
+            console.error(e);
+            removeData(key);
         }
     } else {
-        return null
+        return null;
     }
-}
+};
 
 export const removeData = (key: string) => {
-    localStorage.removeItem(key)
-}
+    localStorage.removeItem(key);
+};
 
 export const setIdentityUsers = (users: IdentityUser) => {
-    saveData("identityUsers", users)
-}
+    saveData("identityUsers", users);
+};
 
 export const logout = () => {
-    removeData("user")
-    removeData("identityUsers")
-    removeData("token")
-}
+    console.log("log out");
+    removeData("user");
+    removeData("identityUsers");
+    removeData("token");
+};
