@@ -235,7 +235,7 @@ export function Login(): ReactElement {
                 Your account has been created 🚀
             </Text>
             <Text fontSize="md" color="gray.600" textAlign="center">
-                We sent an email to {createProfile.email}. Please check your inbox for intructions on how to verify your account. If you made a typo or would
+                We sent an email to {createProfile.email}. Please check your inbox for instructions on how to verify your account. If you made a typo or would
                 like to change your email{" "}
                 <Link href={"/profile"} color="brand.100">
                     click here.
