@@ -745,9 +745,9 @@ export function Profile(): React.ReactElement {
                                     <option value={globalVars.ETHER} style={{ color: "#495057", fontWeight: 500 }}>
                                         ETHER BALANCE
                                     </option>
-                                    <option value={globalVars.USDC} style={{ color: "#495057", fontWeight: 500 }}>
+                                    {/* <option value={globalVars.USDC} style={{ color: "#495057", fontWeight: 500 }}>
                                         USDC BALANCE
-                                    </option>
+                                    </option> */}
                                 </Select>
                                 <BalanceCard
                                     openWithdrawModal={onOpenWithdrawModal}
