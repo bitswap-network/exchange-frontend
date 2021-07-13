@@ -134,7 +134,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        Your transaction has been completed successfully.
+                        You should see your deposit reflected in your account within a few minutes (once the transfer is confirmed on the BitClout blockchain).
                     </Text>
                     <BlueButton
                         w="100%"
