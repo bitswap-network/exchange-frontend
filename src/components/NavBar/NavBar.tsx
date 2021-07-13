@@ -26,7 +26,7 @@ import { NotifPopover } from "./components/NotifPopover";
 import { Link } from "react-router-dom";
 import { loggedInState, orderModalState, userState } from "../../store";
 import { logout } from "../../helpers/persistence";
-
+import { getIsHolder } from "../../services/user";
 export function DefaultNavBar() {
     return (
         <Flex alignItems={"center"} justifyContent={"space-between"} p={4} boxShadow="md" h="8vh" w="full">
@@ -49,8 +49,9 @@ function NavBarFunc() {
     const user = useRecoilValue(userState);
     const setOrderModalState = useSetRecoilState(orderModalState);
     const emailToast = useToast();
+    const hodlToast = useToast();
     const [emailToastOpened, setEmailToastOpened] = useState(false);
-
+    const [hodlToastOpened, setHodlToastOpened] = useState(false);
     console.log(window.location.pathname);
     useEffect(() => {
         if (user && !user.verification.email && !emailToastOpened) {
@@ -59,7 +60,7 @@ function NavBarFunc() {
                 title: "Email not verified.",
                 description: "Verify your email to gain complete access to the platform.",
                 status: "error",
-                duration: 60000,
+                duration: 30000,
                 isClosable: true,
                 position: "bottom-left",
             });
@@ -67,7 +68,36 @@ function NavBarFunc() {
         if (user && user.verification.email) {
             emailToast.closeAll();
         }
-    }, [user?.verification]);
+        if (user && !hodlToastOpened) {
+            getIsHolder()
+                .then((response) => {
+                    if (!response.data.holder) {
+                        setHodlToastOpened(true);
+                        hodlToast({
+                            title: "Not a BitSwap Coin Holder.",
+                            description: "Purchase BitSwap coin to gain complete access to the platform.",
+                            status: "error",
+                            duration: 30000,
+                            isClosable: true,
+                            position: "bottom-left",
+                        });
+                    } else {
+                        setHodlToastOpened(true);
+                        hodlToast({
+                            title: "You're hodling BitSwap Coin!",
+                            description: "Enjoy full platform access.",
+                            status: "success",
+                            duration: 30000,
+                            isClosable: true,
+                            position: "bottom-left",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [user]);
 
     const loggedInMarkup = (
         <>

@@ -23,6 +23,10 @@ export const getNotifs = async () => {
     return await authClient.get(`/user/notifications`);
 };
 
+export const getIsHolder = async () => {
+    return await authClient.get(`/user/isCoinHolder`);
+};
+
 export const updateName = async (name: string) => {
     return await authClient.put(`/user/update-name`, {
         name: name,
