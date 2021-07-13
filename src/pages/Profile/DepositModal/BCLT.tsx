@@ -134,7 +134,11 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
+<<<<<<< HEAD
                         You should see your deposit reflected in your account within a few minutes (once the transfer is confirmed on the BitClout blockchain).
+=======
+                        Your transaction has been completed successfully. Funds will reflect in your balance after the transaction is confirmed on our nodes.
+>>>>>>> 958a3c6605b2a865d46291d66da57c25af8b99bd
                     </Text>
                     <BlueButton
                         w="100%"
@@ -145,6 +149,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                             disclosure.onClose();
                             setPage(0);
                             setDepositValue("0");
+                            window.location.reload();
                         }}
                     />
                 </Flex>
@@ -161,7 +166,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Confirm Deposit
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-                        You must approve transaction in the bitclout deposit window for the following funds to be transferred to your account.
+                        You must approve transaction in the Bitclout Identity window for the following funds to be transferred to your account.
                     </Text>
                     <Text color="gray.700" fontSize="md" fontWeight="400" mt="4" mb="2">
                         <b>Total Amount: </b>

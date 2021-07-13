@@ -588,7 +588,7 @@ export function Home(): React.ReactElement {
                                 borderWidth="2px"
                                 borderColor="#DDE2E5"
                             >
-                                Market Ask: {marketBuy ? `$${marketBuy.toFixed(2)}` : " $170.00 "}
+                                Buy Price: {marketBuy ? `$${marketBuy.toFixed(2)}` : " ... "}
                             </Flex>
                             <Flex>
                                 <Popover placement="top-start" trigger="hover">
@@ -620,7 +620,7 @@ export function Home(): React.ReactElement {
                                 borderWidth="2px"
                                 borderColor="#DDE2E5"
                             >
-                                Market Bid: {marketSell ? `$${marketSell.toFixed(2)}` : " $150.00 "}
+                                Sell Price: {marketSell ? `$${marketSell.toFixed(2)}` : "..."}
                             </Flex>
                         </HStack>
                         <Chart ticks={4} dateTicks={10} />
