@@ -290,7 +290,7 @@ export function BuyTab({
                         fontSize="xs"
                         fontWeight="600"
                     >
-                        {ethUsd ? `${globalVars.formatBalanceSmall(totalUsd / ethUsd)} ETH` : "Loading..."}
+                        {ethUsd ? `${globalVars.formatBalanceLarge(totalUsd / ethUsd)} ETH` : "Loading..."}
                     </Text>
                 </HStack>
                 <HStack>
