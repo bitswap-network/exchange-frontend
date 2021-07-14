@@ -360,7 +360,7 @@ export function Profile(): React.ReactElement {
                                     </Text>
                                     <UnorderedList mt="2" display="flex" flexDir="column" alignItems="center">
                                         <ListItem fontWeight="500">$2000 Withdraw Limit</ListItem>
-                                        <ListItem fontWeight="500">Market Orders Only</ListItem>
+                                        {/* <ListItem fontWeight="500">Market Orders Only</ListItem> */}
                                     </UnorderedList>
                                 </Flex>
                                 <FiArrowDown size={50} color="#C4C4C4" style={{ marginTop: 20 }} />
