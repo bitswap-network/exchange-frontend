@@ -141,7 +141,7 @@ export function Home(): React.ReactElement {
             setEthErr("Invalid ETH Quantity");
             error = true;
         }
-        if (isNaN(parseFloat(orderCloutQuantity)) || parseFloat(orderCloutQuantity) <= 0) {
+        if (isNaN(parseFloat(orderCloutQuantity)) || parseFloat(orderCloutQuantity) <= 0.01) {
             setCloutErr("Invalid CLOUT Quantity");
             error = true;
         }
