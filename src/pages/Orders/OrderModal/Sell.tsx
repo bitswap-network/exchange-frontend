@@ -282,7 +282,7 @@ export function SellTab({
                     </Text>
                     <Spacer />
                     <Text color={"gray.900"} fontSize="xs" fontWeight="600">
-                        {ethUsd ? `${globalVars.formatBalanceSmall(totalUsd / ethUsd)} ETH` : "Loading..."}
+                        {ethUsd ? `${globalVars.formatBalanceLarge(totalUsd / ethUsd)} ETH` : "Loading..."}
                     </Text>
                 </HStack>
                 <HStack>

@@ -125,13 +125,14 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({ disclosure, orde
                                 ORDER QUANTITY
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {+order.orderQuantity.toFixed(2)} {globalVars.BITCLOUT} / {+order.etherQuantity.toFixed(4)} {globalVars.ETHER}
+                                {+order.orderQuantity.toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.BITCLOUT} /{" "}
+                                {+order.etherQuantity.toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.ETHER}
                             </Text>
                             <Text color="gray.600" fontSize="sm" fontWeight="600" mt="2">
                                 QUANTITY PROCESSED
                             </Text>
                             <Text color="gray.500" fontSize="sm" mt="1">
-                                {+order.orderQuantityProcessed.toFixed(2)} {globalVars.BITCLOUT}
+                                {+order.orderQuantityProcessed.toFixed(globalVars.ROUNDING_PRECISION)} {globalVars.BITCLOUT}
                             </Text>
                         </Box>
                     </Flex>

@@ -17,6 +17,8 @@ import {
     InputGroup,
     Input,
     InputRightElement,
+    HStack,
+    VStack,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { userState, identityUsers } from "../../../store";
@@ -26,6 +28,7 @@ import { BlueButton } from "../../../components/BlueButton";
 import { TransactionAPIInterface } from "../../../interfaces/bitclout/Transaction";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { getData } from "../../../helpers/persistence";
+import { FiChevronsDown, FiChevronsUp } from "react-icons/fi";
 
 import * as globalVars from "../../../globalVars";
 
@@ -47,6 +50,8 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
     const [preflightError, setPreflightError] = useState<string | null>(null);
     const [textCopied, setTextCopied] = useState<string>("copy");
     const [BitcloutPublicKey, setBitcloutPublicKey] = useState<string>("");
+    const [manual, setManual] = useState<boolean>(false);
+    const [height, setHeight] = useState<string>("0");
     let BITCLOUTPublicKey: HTMLInputElement | null = null;
 
     useEffect(() => {
@@ -125,6 +130,15 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
         e.target.focus();
     };
 
+    const handleModeToggle = (advancedMode: boolean) => {
+        setManual(advancedMode);
+        if (advancedMode) {
+            setHeight("120px");
+        } else {
+            setHeight("0");
+        }
+    };
+
     const depositCompleteView = (
         <ModalContent>
             <ModalCloseButton />
@@ -134,11 +148,7 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                         Transaction Completed
                     </Text>
                     <Text color="gray.500" fontSize="sm">
-<<<<<<< HEAD
-                        You should see your deposit reflected in your account within a few minutes (once the transfer is confirmed on the BitClout blockchain).
-=======
                         Your transaction has been completed successfully. Funds will reflect in your balance after the transaction is confirmed on our nodes.
->>>>>>> 958a3c6605b2a865d46291d66da57c25af8b99bd
                     </Text>
                     <BlueButton
                         w="100%"
@@ -206,28 +216,6 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                     <Text color="gray.500" fontSize="sm">
                         Add funds to your BitSwap wallet!
                     </Text>
-                    <Tooltip label={`You can deposit funds in your BitSwap wallet by sending BitClout to this address`} aria-label="">
-                        <Text color="gray.700" fontSize="sm" mt="4" fontWeight="600">
-                            Your BitSwap Wallet Address:
-                            <AiFillInfoCircle style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
-                        </Text>
-                    </Tooltip>
-                    <InputGroup size="md" mt="2">
-                        <Input
-                            pr="4.5rem"
-                            ref={(input) => {
-                                BITCLOUTPublicKey = input;
-                            }}
-                            type="text"
-                            isReadOnly={true}
-                            value={BitcloutPublicKey}
-                        />
-                        <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
-                                {textCopied}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
                     <Flex flexDir="row" mt="6">
                         <Tooltip label={`You can deposit up to 500 ${globalVars.BITCLOUT} per transaction.`} aria-label="">
                             <Text color="gray.600" fontSize="sm" fontWeight="600">
@@ -246,6 +234,45 @@ export const BitcloutDepositModal: React.FC<DepositModalProps> = ({ disclosure }
                     <Text color="gray.500" fontSize="sm" mt="6">
                         You will be able to review this transaction before it’s complete.
                     </Text>
+                    {!manual ? (
+                        <HStack onClick={() => handleModeToggle(true)} cursor="pointer" mt="2">
+                            <Text fontSize="sm" color="brand.100">
+                                Deposit with a Manual Transfer
+                            </Text>
+                            <FiChevronsDown size={16} color="#2e6ded" />
+                        </HStack>
+                    ) : (
+                        <HStack onClick={() => handleModeToggle(false)} cursor="pointer" mt="2">
+                            <Text fontSize="sm" color="brand.100">
+                                Hide
+                            </Text>
+                            <FiChevronsUp size={16} color="#2e6ded" />
+                        </HStack>
+                    )}
+                    <VStack maxH={height} overflowY="hidden" transition="max-height 0.6s cubic-bezier(.17,.67,.59,.99)" alignItems="flex-start">
+                        <Tooltip label={`You can deposit funds in your BitSwap wallet by sending BitClout to this address`} aria-label="">
+                            <Text color="gray.700" fontSize="sm" mt="4" fontWeight="600">
+                                Your BitSwap Wallet Address:
+                                <AiFillInfoCircle style={{ marginLeft: "4px", marginBottom: "2px", display: "inline" }} />
+                            </Text>
+                        </Tooltip>
+                        <InputGroup size="md" mt="2">
+                            <Input
+                                pr="4.5rem"
+                                ref={(input) => {
+                                    BITCLOUTPublicKey = input;
+                                }}
+                                type="text"
+                                isReadOnly={true}
+                                value={BitcloutPublicKey}
+                            />
+                            <InputRightElement width="4.5rem">
+                                <Button h="1.75rem" size="sm" onClick={copyToClipboard}>
+                                    {textCopied}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </VStack>
                     <Flex flexDir="row" justifyContent="space-between" w="full" mt="6%" mb="8%">
                         <Button
                             w="47%"
