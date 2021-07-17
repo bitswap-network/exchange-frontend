@@ -392,14 +392,14 @@ export function Home(): React.ReactElement {
                               }`}
                     </Text>
                 </HStack>
-                <HStack w="full" justify="space-between" px="6" color="#81868C">
-                    {/* <Text fontSize="14px">Est. Fees:</Text> */}
+                {/* <HStack w="full" justify="space-between" px="6" color="#81868C">
+                    <Text fontSize="14px">Est. Fees:</Text>
                     <Text fontSize="14px" fontWeight="bold">
                         {orderSide === "buy"
                             ? `${+(parseFloat(orderCloutQuantity) * 0.01).toFixed(4)} ${globalVars.BITCLOUT}`
                             : `${+(parseFloat(orderEthQuantity) * 0.01).toFixed(4)} ${globalVars.ETHER}`}
                     </Text>
-                </HStack>
+                </HStack> */}
                 <VStack p="2" px="5" w="full">
                     <BlueButton text={"Swap"} w="full" size="lg" onClick={handleSwap} />
                     <Button
