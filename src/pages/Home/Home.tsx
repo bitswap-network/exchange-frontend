@@ -393,7 +393,7 @@ export function Home(): React.ReactElement {
                     </Text>
                 </HStack>
                 <HStack w="full" justify="space-between" px="6" color="#81868C">
-                    <Text fontSize="14px">Est. Fees:</Text>
+                    {/* <Text fontSize="14px">Est. Fees:</Text> */}
                     <Text fontSize="14px" fontWeight="bold">
                         {orderSide === "buy"
                             ? `${+(parseFloat(orderCloutQuantity) * 0.01).toFixed(4)} ${globalVars.BITCLOUT}`
