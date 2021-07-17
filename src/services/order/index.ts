@@ -13,10 +13,12 @@ export const createLimitOrder = async (orderQuantity: number, orderPrice: number
         orderSide: orderSide,
     });
 };
-export const createMarketOrder = async (orderQuantity: number, orderSide: string) => {
+export const createMarketOrder = async (orderQuantity: number, orderSide: string, orderQuote: number, orderSlippage: number) => {
     return await authClient.post(`/order/market`, {
         orderQuantity: orderQuantity,
         orderSide: orderSide,
+        orderQuote: orderQuote,
+        orderSlippage: orderSlippage,
     });
 };
 
