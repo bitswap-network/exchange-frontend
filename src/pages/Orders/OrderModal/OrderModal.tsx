@@ -187,7 +187,7 @@ export function OrderModal({ isOpen, onClose }: OrderModalProps): React.ReactEle
         setContinueLoading(true);
         setValidateError(null);
         if (orderType === "market") {
-            createMarketOrder(+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION), orderSide)
+            createMarketOrder(+parseFloat(orderQuantity).toFixed(globalVars.ROUNDING_PRECISION), orderSide, totalUsd, +(slippage / 100).toFixed(2))
                 .then(() => {
                     setContinueLoading(false);
                     setPage(2);

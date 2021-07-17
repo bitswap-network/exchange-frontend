@@ -50,6 +50,7 @@ export function Home(): React.ReactElement {
     const [orderSide, setOrderSide] = useState<string>("buy");
     const [orderCloutQuantity, setCloutOrderQuantity] = useState<string>("");
     const [orderEthQuantity, setEthOrderQuantity] = useState<string>("");
+    const [totalUsd, setTotalUsd] = useState<number | null>(null);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [confirmError, setConfirmError] = useState<string | null>(null);
     const [slippage, setSlippage] = useState<number>(2);
@@ -99,6 +100,7 @@ export function Home(): React.ReactElement {
         setEthOrderQuantity(globalVars.parseNum(value));
         setCloutErr("");
         setEthErr("");
+        ethUsd && setTotalUsd(+(parseFloat(value) * ethUsd).toFixed(2));
         ethUsd &&
             getMarketQuantity(parseFloat(value) * ethUsd, orderSide)
                 .then((response) => {
@@ -119,6 +121,7 @@ export function Home(): React.ReactElement {
             getMarketPrice(parseFloat(value), orderSide)
                 .then((response) => {
                     setEthOrderQuantity(globalVars.parseNum((response.data.price / ethUsd).toFixed(precision)));
+                    setTotalUsd(+response.data.price.toFixed(2));
                 })
                 .catch((error) => {
                     setEthOrderQuantity("0");
@@ -179,15 +182,16 @@ export function Home(): React.ReactElement {
     const confirmSwap = () => {
         setConfirmLoading(true);
         setConfirmError(null);
-        createMarketOrder(+parseFloat(orderCloutQuantity).toFixed(2), orderSide)
-            .then(() => {
-                setConfirmLoading(false);
-                setTabPage(2);
-            })
-            .catch((error) => {
-                setConfirmLoading(false);
-                setConfirmError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
-            });
+        totalUsd &&
+            createMarketOrder(+parseFloat(orderCloutQuantity).toFixed(2), orderSide, totalUsd, +(slippage / 100).toFixed(2))
+                .then(() => {
+                    setConfirmLoading(false);
+                    setTabPage(2);
+                })
+                .catch((error) => {
+                    setConfirmLoading(false);
+                    setConfirmError(error.response.data.message ? `${error.response.status}: ${error.response.data.message}` : "Error Placing Order");
+                });
     };
 
     const buySellTabs = (
