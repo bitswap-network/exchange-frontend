@@ -359,7 +359,7 @@ export function Profile(): React.ReactElement {
                                         Silver Tier
                                     </Text>
                                     <UnorderedList mt="2" display="flex" flexDir="column" alignItems="center">
-                                        <ListItem fontWeight="500">$2000 Withdraw Limit</ListItem>
+                                        <ListItem fontWeight="500">$10000 Withdraw Limit</ListItem>
                                         {/* <ListItem fontWeight="500">Market Orders Only</ListItem> */}
                                     </UnorderedList>
                                 </Flex>
