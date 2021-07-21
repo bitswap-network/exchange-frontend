@@ -62,11 +62,11 @@ export function Orders(): React.ReactElement {
         amount: user?.balance.ether,
     };
     useEffect(() => {
-        getMarketPrice(0.05, "buy").then((response) => {
-            setMarketBuy(response.data.price * 20);
+        getMarketPrice(0.01, "buy").then((response) => {
+            setMarketBuy(response.data.price * 100);
         });
-        getMarketPrice(0.05, "sell").then((response) => {
-            setMarketSell(response.data.price * 20);
+        getMarketPrice(0.01, "sell").then((response) => {
+            setMarketSell(response.data.price * 100);
         });
     }, []);
 
