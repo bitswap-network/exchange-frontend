@@ -42,7 +42,7 @@ interface WithdrawModalProps {
 export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw, withdrawRemaining }: WithdrawModalProps) => {
     const user = useRecoilValue(userState);
     const [checked, setChecked] = useState<boolean>(false);
-    const [withdrawValue, setWithdrawValue] = useState<string>("0.004");
+    const [withdrawValue, setWithdrawValue] = useState<string>("0.005");
     const [page, setPage] = useState(0);
     const [ethAddressInput, setEthAddressInput] = useState<string>("");
     const [ethAddressInputErr, setEthAddressInputErr] = useState<string>("");
@@ -137,7 +137,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             onClick={() => {
                                 disclosure.onClose();
                                 setPage(0);
-                                setWithdrawValue("0");
+                                setWithdrawValue("0.005");
                             }}
                             icon
                         />
@@ -175,7 +175,7 @@ export const EthWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, max
                             ${withdrawRemaining?.toFixed(2)} USD remaining for withdrawal
                         </Text>
                     )}
-                    <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0.004} max={maxWithdraw}>
+                    <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0.005} max={maxWithdraw}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />

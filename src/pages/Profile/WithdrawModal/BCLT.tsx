@@ -33,7 +33,7 @@ interface WithdrawModalProps {
 
 export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure, maxWithdraw, withdrawRemaining }: WithdrawModalProps) => {
     const user = useRecoilValue(userState);
-    const [withdrawValue, setWithdrawValue] = useState<string>("0");
+    const [withdrawValue, setWithdrawValue] = useState<string>("0.01");
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(0);
 
@@ -163,7 +163,7 @@ export const BitcloutWithdrawModal: React.FC<WithdrawModalProps> = ({ disclosure
                             ${withdrawRemaining?.toFixed(2)} USD remaining for withdrawal
                         </Text>
                     )}
-                    <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0} max={maxWithdraw}>
+                    <NumberInput mt="4" type="text" placeholder="0.0" value={withdrawValue} onChange={valueHandler} step={0.1} min={0.01} max={maxWithdraw}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
